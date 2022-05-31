@@ -46,4 +46,4 @@ clean:
 clean-all:
 	find ./* ! -name Makefile -exec rm -rf {} \+
 
-include ../M1.inc
+include ../TRACE.inc

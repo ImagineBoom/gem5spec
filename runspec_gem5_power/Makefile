@@ -12,6 +12,10 @@ gem5: log-pre gem5_500 gem5_502 gem5_503 gem5_505 gem5_507 gem5_508 gem5_510 gem
 
 trace: trace_500 trace_502 trace_503 trace_505 trace_507 trace_508 trace_510 trace_511 trace_519 trace_520 trace_521 trace_523 trace_525 trace_526 trace_527 trace_531 trace_538 trace_541 trace_544 trace_548 trace_549 trace_554 trace_557 trace_999
 
+checkpoints: checkpoints_500 checkpoints_502 checkpoints_503 checkpoints_505 checkpoints_507 checkpoints_508 checkpoints_510 checkpoints_511 checkpoints_519 checkpoints_520 checkpoints_521 checkpoints_523 checkpoints_525 checkpoints_526 checkpoints_527 checkpoints_531 checkpoints_538 checkpoints_541 checkpoints_544 checkpoints_548 checkpoints_549 checkpoints_554 checkpoints_557 checkpoints_999
+
+restore: restore_500 restore_502 restore_503 restore_505 restore_507 restore_508 restore_510 restore_511 restore_519 restore_520 restore_521 restore_523 restore_525 restore_526 restore_527 restore_531 restore_538 restore_541 restore_544 restore_548 restore_549 restore_554 restore_557 restore_999
+
 log-pre:
 	@LOG_DIR=$(DATE); \
 	echo $(DATE) > DATE.log; \
@@ -134,6 +138,32 @@ gem5_557:
 gem5_999:
 	@-make gem5 -C 999.specrand_ir
 
+inst_count:
+	@- nohup make inst_count -C 500.perlbench_r &
+	@- nohup make inst_count -C 502.gcc_r       &
+	@- nohup make inst_count -C 503.bwaves_r    &
+	@- nohup make inst_count -C 505.mcf_r       &
+	@- nohup make inst_count -C 507.cactuBSSN_r &
+	@- nohup make inst_count -C 508.namd_r      &
+	@- nohup make inst_count -C 510.parest_r    &
+	@- nohup make inst_count -C 511.povray_r    &
+	@- nohup make inst_count -C 519.lbm_r       &
+	@- nohup make inst_count -C 520.omnetpp_r   &
+	@- nohup make inst_count -C 521.wrf_r       &
+	@- nohup make inst_count -C 523.xalancbmk_r &
+	@- nohup make inst_count -C 525.x264_r      &
+	@- nohup make inst_count -C 526.blender_r   &
+	@- nohup make inst_count -C 527.cam4_r      &
+	@- nohup make inst_count -C 531.deepsjeng_r &
+	@- nohup make inst_count -C 538.imagick_r   &
+	@- nohup make inst_count -C 541.leela_r     &
+	@- nohup make inst_count -C 544.nab_r       &
+	@- nohup make inst_count -C 548.exchange2_r &
+	@- nohup make inst_count -C 549.fotonik3d_r &
+	@- nohup make inst_count -C 554.roms_r      &
+	@- nohup make inst_count -C 557.xz_r        &
+	@- nohup make inst_count -C 999.specrand_ir &
+
 trace_500:
 	@-make trace -C 500.perlbench_r
 trace_502:
@@ -182,6 +212,104 @@ trace_557:
 	@-make trace -C 557.xz_r
 trace_999:
 	@-make trace -C 999.specrand_ir
+
+checkpoints_500:
+	@-make checkpoints -C 500.perlbench_r
+checkpoints_502:
+	@-make checkpoints -C 502.gcc_r
+checkpoints_503:
+	@-make checkpoints -C 503.bwaves_r
+checkpoints_505:
+	@-make checkpoints -C 505.mcf_r
+checkpoints_507:
+	@-make checkpoints -C 507.cactuBSSN_r
+checkpoints_508:
+	@-make checkpoints -C 508.namd_r
+checkpoints_510:
+	@-make checkpoints -C 510.parest_r
+checkpoints_511:
+	@-make checkpoints -C 511.povray_r
+checkpoints_519:
+	@-make checkpoints -C 519.lbm_r
+checkpoints_520:
+	@-make checkpoints -C 520.omnetpp_r
+checkpoints_521:
+	@-make checkpoints -C 521.wrf_r
+checkpoints_523:
+	@-make checkpoints -C 523.xalancbmk_r
+checkpoints_525:
+	@-make checkpoints -C 525.x264_r
+checkpoints_526:
+	@-make checkpoints -C 526.blender_r
+checkpoints_527:
+	@-make checkpoints -C 527.cam4_r
+checkpoints_531:
+	@-make checkpoints -C 531.deepsjeng_r
+checkpoints_538:
+	@-make checkpoints -C 538.imagick_r
+checkpoints_541:
+	@-make checkpoints -C 541.leela_r
+checkpoints_544:
+	@-make checkpoints -C 544.nab_r
+checkpoints_548:
+	@-make checkpoints -C 548.exchange2_r
+checkpoints_549:
+	@-make checkpoints -C 549.fotonik3d_r
+checkpoints_554:
+	@-make checkpoints -C 554.roms_r
+checkpoints_557:
+	@-make checkpoints -C 557.xz_r
+checkpoints_999:
+	@-make checkpoints -C 999.specrand_ir
+
+restore_500:
+	@-make restore -C 500.perlbench_r
+restore_502:
+	@-make restore -C 502.gcc_r
+restore_503:
+	@-make restore -C 503.bwaves_r
+restore_505:
+	@-make restore -C 505.mcf_r
+restore_507:
+	@-make restore -C 507.cactuBSSN_r
+restore_508:
+	@-make restore -C 508.namd_r
+restore_510:
+	@-make restore -C 510.parest_r
+restore_511:
+	@-make restore -C 511.povray_r
+restore_519:
+	@-make restore -C 519.lbm_r
+restore_520:
+	@-make restore -C 520.omnetpp_r
+restore_521:
+	@-make restore -C 521.wrf_r
+restore_523:
+	@-make restore -C 523.xalancbmk_r
+restore_525:
+	@-make restore -C 525.x264_r
+restore_526:
+	@-make restore -C 526.blender_r
+restore_527:
+	@-make restore -C 527.cam4_r
+restore_531:
+	@-make restore -C 531.deepsjeng_r
+restore_538:
+	@-make restore -C 538.imagick_r
+restore_541:
+	@-make restore -C 541.leela_r
+restore_544:
+	@-make restore -C 544.nab_r
+restore_548:
+	@-make restore -C 548.exchange2_r
+restore_549:
+	@-make restore -C 549.fotonik3d_r
+restore_554:
+	@-make restore -C 554.roms_r
+restore_557:
+	@-make restore -C 557.xz_r
+restore_999:
+	@-make restore -C 999.specrand_ir
 
 diff:
 	find -maxdepth 1 -type d -regex ".*r" -exec make diff -C {} \;

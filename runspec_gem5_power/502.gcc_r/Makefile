@@ -14,6 +14,16 @@ gem5: $(EXECUTABLE)
 	@chmod -x *gem5.log
 	@grep -nr "^Error" stderr_gem5.log && echo $$(basename $(BENCH_PATH)) >> ../fail_gem5_crash.log ; true
 
+#checkpoints: $(EXECUTABLE)
+#    @echo ---------------------cpts handle $(FILE) beginning ---------------------->$(FILE)_trace.log
+#    $(TIMEH) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoint=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -c $(EXECUTABLE) -o " $(ARGS4GEM5)"
+#    @-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log > $(FILE)_trace_err.log ; true
+
+#restore: $(EXECUTABLE)
+#    @echo ---------------------rscpt handle $(FILE) beginning ---------------------->$(FILE)_trace.log
+#    $(TIMEH) $(GEM5) $(GEM5_PY) --restore-simpoint-checkpoint -r $(num_ckp) --checkpoint-dir ./m5out --restore-with-cpus=DerivO3CPU -c $(EXECUTABLE) -o " $(ARGS4GEM5)"
+#    @-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log > $(FILE)_trace_err.log ; true
+
 $(EXECUTABLE):
 	ln -s $(BENCH_PATH)/exe/$(EXECUTABLE)
 
@@ -39,4 +49,4 @@ clean:
 clean-all:
 	find ./* ! -name Makefile -exec rm -rf {} \+
 
-include ../M1.inc
+include ../TRACE.inc
