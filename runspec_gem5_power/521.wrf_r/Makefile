@@ -10,7 +10,7 @@ host: $(EXECUTABLE)
 	@mv wrfout_d01_2000-01-24_12_10_00 wrfout_d01_2000-01-24_12_10_00-host
 
 gem5: $(EXECUTABLE)
-	$(TIMEG) $(GEM5) $(GEM5_OPT) $(GEM5_PY) -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT)
+	$(TIMEG) $(GEM5) $(GEM5_OPT) $(GEM5_PY) -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >>../consume_time.log 2>&1
 	@chmod -x *gem5.log
 	@grep -nr "^Error" stderr_gem5.log && echo $$(basename $(BENCH_PATH)) >> ../fail_gem5_crash.log ; true
 

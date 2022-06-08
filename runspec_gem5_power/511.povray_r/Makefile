@@ -10,7 +10,7 @@ host: $(EXECUTABLE)
 	@[ -e SPEC-benchmark.log ] && mv SPEC-benchmark.log SPEC-benchmark_host.log
 
 gem5: $(EXECUTABLE)
-	$(TIMEG) $(GEM5) $(GEM5_OPT) $(GEM5_PY) -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT)
+	$(TIMEG) $(GEM5) $(GEM5_OPT) $(GEM5_PY) -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >>../consume_time.log 2>&1
 	@chmod -x *gem5.log
 	@grep -nr "^Error" stderr_gem5.log && echo $$(basename $(BENCH_PATH)) >> ../fail_gem5_crash.log ; true
 	@[ -e SPEC-benchmark.log ] && mv SPEC-benchmark.log SPEC-benchmark_gem5.log
