@@ -59,5 +59,18 @@ m1_pipeview: $(EXECUTABLE)
 	@echo ---------------------spv handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
 
+itrace: $(EXECUTABLE)
+ @echo ---------------------m1 handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
+ $(TIMEH) $(VALGRIND_EXE) --tool=itrace --trace-extent=all --trace-children=no --binary-outfile=$(FILE).vgi --g-num-insns-before-start=$(NUM_INSNS_BEFORE_START) --num-insns-to-collect=$(NUM_INSNS_TO_COLLECT) ./$(EXECUTABLE) $(ARGS) >>$(FILE)_trace.log 2>&1 ; \
+ echo itrace-ok
 
+qtrace: $(EXECUTABLE)
+ $(VGI2QT_EXE) -f $(FILE).vgi -o $(FILE).qt  >>$(FILE)_trace.log 2>&1 ; \
+ echo vgi2qt-ok
+
+m1: $(EXECUTABLE)
+ /opt/ibm/sim_ppc/sim_p8/bin/run_timer $(FILE).qt $(NUM_INST) $(CPI_INTERVAL) $(RESET_STATS) $(FILE) -p $(SCROLL_PIPE) -b $(SCROLL_BEGIN) -e $(SCROLL_END) -maximize  >>$(FILE)_trace.log 2>&1
+ echo timer-ok
+ @echo ---------------------m1 handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+ @-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
 
