@@ -41,3 +41,25 @@ clean-all:
 	find ./* ! -name Makefile -exec rm -rf {} \+
 
 include ../TRACE.inc
+
+checkpoints: $(EXECUTABLE)
+ @echo ---------------------cpts handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
+ $(TIMEH) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoint=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_checkpoints.log 2>&1
+ @cat $(FILE)_checkpoints.log >> $(FILE)_trace.log
+ @echo ---------------------cpts handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+ @-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
+
+restore: $(EXECUTABLE)
+ @echo ---------------------rscpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
+ $(TIMEH) $(GEM5) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out --restore-with-cpu=DerivO3CPU -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore.log 2>&1
+ @cat $(FILE)_restore.log >> $(FILE)_trace.log
+ @echo ---------------------rscpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+ @-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
+
+gem5_pipeview: $(EXECUTABLE)
+ @echo ---------------------gem5pv handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
+ tick_nums=(`grep -oP 'Entering event queue @ \d+' $(FILE)_restore.log|grep -oP '\d+'`);\
+ $(TIMEG) $(GEM5) --debug-flags=O3PipeView --debug-start=$${tick_nums[0]} --debug-file=trace.out $(GEM5_PY) -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) $(GEM5_PY_OPT) -m $${tick_nums[-1]}
+ $(GEM5_REPO_PATH)/util/o3-pipeview.py -c 500 -o pipeview.out --color m5out/trace.out
+ less -r pipeview.out
+ @echo ---------------------gem5pv handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
