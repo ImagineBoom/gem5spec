@@ -47,7 +47,7 @@ include ../TRACE.inc
 
 checkpoints: $(EXECUTABLE)
 	@echo ---------------------cpts handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIMEH) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoint=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -c $(EXECUTABLE) -o " $(ARGS)" >$(FILE)_checkpoints.log 2>&1
+	$(TIMEH) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoints=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -c $(EXECUTABLE) -o " $(ARGS)" >$(FILE)_checkpoints.log 2>&1
 	@cat $(FILE)_checkpoints.log >> $(FILE)_trace.log
 	@echo ---------------------cpts handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
