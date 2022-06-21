@@ -20,6 +20,8 @@ NUM_INSNS_BEFORE_START = 0
 #if CONVERT_NUM_Vgi_RECS ==0 -> convert all itrace
 JUMP_NUM               = 0
 CONVERT_NUM_Vgi_RECS   = 0
+qtFILE                 = $(FILE)
+
 
 #Runtimer
 NUM_INST        = 250000
@@ -70,11 +72,11 @@ itrace: $(EXECUTABLE)
 	@echo itrace-ok
 
 qtrace: $(EXECUTABLE)
-	$(TIME) $(VGI2QT_EXE) -f $(FILE).vgi -o $(FILE).qt -j $(JUMP_NUM) -c $(CONVERT_NUM_Vgi_RECS) >>$(FILE)_trace.log 2>&1
+	$(TIME) $(VGI2QT_EXE) -f $(FILE).vgi -o $(qtFILE).qt -j $(JUMP_NUM) -c $(CONVERT_NUM_Vgi_RECS) >>$(FILE)_trace.log 2>&1
 	@echo vgi2qt-ok
 
 m1: $(EXECUTABLE)
-	$(TIME) /opt/ibm/sim_ppc/sim_p8/bin/run_timer $(FILE).qt $(NUM_INST) $(CPI_INTERVAL) $(RESET_STATS) $(FILE) -p $(SCROLL_PIPE) -b $(SCROLL_BEGIN) -e $(SCROLL_END) -maximize  >>$(FILE)_trace.log 2>&1
+	$(TIME) /opt/ibm/sim_ppc/sim_p8/bin/run_timer $(qtFILE).qt $(NUM_INST) $(CPI_INTERVAL) $(RESET_STATS) $(FILE) -p $(SCROLL_PIPE) -b $(SCROLL_BEGIN) -e $(SCROLL_END) -maximize  >>$(FILE)_trace.log 2>&1
 	@echo timer-ok
 	@echo ---------------------m1 handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
