@@ -40,7 +40,7 @@ clean:
 clean-all:
 	find ./* ! -name Makefile -exec rm -rf {} \+
 
-include ../TRACE.inc
+include ../TRACE.mk
 
 
 checkpoints: $(EXECUTABLE)
