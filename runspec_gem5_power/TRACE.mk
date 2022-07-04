@@ -32,6 +32,9 @@ SCROLL_PIPE     = 1
 SCROLL_BEGIN    = 1
 SCROLL_END      = 200
 
+CPU_TYPE = O3CPU
+CACHE_OPT += --ruby --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128
+
 TIME = /usr/bin/time --format="Consumed Time: %E  --  $$(basename $${PWD})"
 
 inst_count:$(EXECUTABLE)

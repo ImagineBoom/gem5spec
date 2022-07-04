@@ -49,7 +49,7 @@ checkpoints: $(EXECUTABLE)
 
 restore: $(EXECUTABLE)
 	@echo ---------------------rscpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIMEH) $(GEM5) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out --restore-with-cpu=DerivO3CPU -c $(EXECUTABLE) -o " $(ARGS)" >$(FILE)_restore.log 2>&1
+	$(TIMEH) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out --restore-with-cpu=DerivO3CPU -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1
 	@cat $(FILE)_restore.log >> $(FILE)_trace.log
 	@echo ---------------------rscpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true

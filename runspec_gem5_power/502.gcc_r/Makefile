@@ -43,7 +43,7 @@ include ../TRACE.mk
 
 checkpoints: $(EXECUTABLE)
 	@echo ---------------------cpts handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIMEH) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoints=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -c $(EXECUTABLE) -o " $(ARGS4GEM5)" >$(FILE)_checkpoints.log 2>&1
+	$(TIMEH) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --take-simpoint-checkpoints=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_checkpoints.log 2>&1
 	@cat $(FILE)_checkpoints.log >> $(FILE)_trace.log
 	@echo ---------------------cpts handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
