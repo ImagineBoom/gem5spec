@@ -213,53 +213,104 @@ trace_557:
 trace_999:
 	@-make trace -C 999.specrand_ir
 
-checkpoints_500:
+
+simpoint_500:
+	@-make simpoint -C 500.perlbench_r
+simpoint_502:
+	@-make simpoint -C 502.gcc_r
+simpoint_503:
+	@-make simpoint -C 503.bwaves_r
+simpoint_505:
+	@-make simpoint -C 505.mcf_r
+simpoint_507:
+	@-make simpoint -C 507.cactuBSSN_r
+simpoint_508:
+	@-make simpoint -C 508.namd_r
+simpoint_510:
+	@-make simpoint -C 510.parest_r
+simpoint_511:
+	@-make simpoint -C 511.povray_r
+simpoint_519:
+	@-make simpoint -C 519.lbm_r
+simpoint_520:
+	@-make simpoint -C 520.omnetpp_r
+simpoint_521:
+	@-make simpoint -C 521.wrf_r
+simpoint_523:
+	@-make simpoint -C 523.xalancbmk_r
+simpoint_525:
+	@-make simpoint -C 525.x264_r
+simpoint_526:
+	@-make simpoint -C 526.blender_r
+simpoint_527:
+	@-make simpoint -C 527.cam4_r
+simpoint_531:
+	@-make simpoint -C 531.deepsjeng_r
+simpoint_538:
+	@-make simpoint -C 538.imagick_r
+simpoint_541:
+	@-make simpoint -C 541.leela_r
+simpoint_544:
+	@-make simpoint -C 544.nab_r
+simpoint_548:
+	@-make simpoint -C 548.exchange2_r
+simpoint_549:
+	@-make simpoint -C 549.fotonik3d_r
+simpoint_554:
+	@-make simpoint -C 554.roms_r
+simpoint_557:
+	@-make simpoint -C 557.xz_r
+simpoint_999:
+	@-make simpoint -C 999.specrand_ir
+
+
+checkpoints_500:simpoint_500
 	@-make checkpoints -C 500.perlbench_r
-checkpoints_502:
+checkpoints_502:simpoint_502
 	@-make checkpoints -C 502.gcc_r
-checkpoints_503:
+checkpoints_503:simpoint_503
 	@-make checkpoints -C 503.bwaves_r
-checkpoints_505:
+checkpoints_505:simpoint_505
 	@-make checkpoints -C 505.mcf_r
-checkpoints_507:
+checkpoints_507:simpoint_507
 	@-make checkpoints -C 507.cactuBSSN_r
-checkpoints_508:
+checkpoints_508:simpoint_508
 	@-make checkpoints -C 508.namd_r
-checkpoints_510:
+checkpoints_510:simpoint_510
 	@-make checkpoints -C 510.parest_r
-checkpoints_511:
+checkpoints_511:simpoint_511
 	@-make checkpoints -C 511.povray_r
-checkpoints_519:
+checkpoints_519:simpoint_519
 	@-make checkpoints -C 519.lbm_r
-checkpoints_520:
+checkpoints_520:simpoint_520
 	@-make checkpoints -C 520.omnetpp_r
-checkpoints_521:
+checkpoints_521:simpoint_521
 	@-make checkpoints -C 521.wrf_r
-checkpoints_523:
+checkpoints_523:simpoint_523
 	@-make checkpoints -C 523.xalancbmk_r
-checkpoints_525:
+checkpoints_525:simpoint_525
 	@-make checkpoints -C 525.x264_r
-checkpoints_526:
+checkpoints_526:simpoint_526
 	@-make checkpoints -C 526.blender_r
-checkpoints_527:
+checkpoints_527:simpoint_527
 	@-make checkpoints -C 527.cam4_r
-checkpoints_531:
+checkpoints_531:simpoint_531
 	@-make checkpoints -C 531.deepsjeng_r
-checkpoints_538:
+checkpoints_538:simpoint_538
 	@-make checkpoints -C 538.imagick_r
-checkpoints_541:
+checkpoints_541:simpoint_541
 	@-make checkpoints -C 541.leela_r
-checkpoints_544:
+checkpoints_544:simpoint_544
 	@-make checkpoints -C 544.nab_r
-checkpoints_548:
+checkpoints_548:simpoint_548
 	@-make checkpoints -C 548.exchange2_r
-checkpoints_549:
+checkpoints_549:simpoint_549
 	@-make checkpoints -C 549.fotonik3d_r
-checkpoints_554:
+checkpoints_554:simpoint_554
 	@-make checkpoints -C 554.roms_r
-checkpoints_557:
+checkpoints_557:simpoint_557
 	@-make checkpoints -C 557.xz_r
-checkpoints_999:
+checkpoints_999:simpoint_999
 	@-make checkpoints -C 999.specrand_ir
 
 restore_500:
