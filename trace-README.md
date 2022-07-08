@@ -34,7 +34,7 @@ make qtrace JUMP_NUM=0 CONVERT_NUM_Vgi_RECS=0
 
 `CONVERT_NUM_Vgi_RECS`-生成qtrace的指令数
 
-- **step3** run otimer
+- **step3** run otimer 生成.results .config .pipe
 
 ```bash
 make m1 NUM_INST=20000 CPI_INTERVAL=20000 SCROLL_BEGIN=1 SCROLL_END=200
@@ -55,6 +55,8 @@ make m1_pipeview
 ```
 
 #### 1.2 一步到位
+
+生成.results .config .pipe；查看流水线还需要执行前述**step4** 
 
 ```bash
 make trace \
