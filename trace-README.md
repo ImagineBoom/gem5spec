@@ -1,99 +1,76 @@
-# Run benchmark
+repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 
-------
+### 1. 全部执行
 
-## Environment
+#### 1.1 m1-执行spec2017
 
-**Arch**: ppc64le
+##### 执行单个benchmark
 
-**OS:** Ubuntu 20.04
-
-## Run m1
-
-### 1. Run SPEC2017
-
-------
-
-#### 1.1 分步执行
-
-- **step1** 生成itrace
+- 以999为例, 运行m1的整个流程，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看[0,400]条指令的流水线
 
 ```bash
-make itrace NUM_INSNS_TO_COLLECT=20m 
+./run.sh --m1 --spec2017 999 --all --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=0 --r_pipe_end=400
 ```
 
-`NUM_INSNS_TO_COLLECT`-代表要采集的总指令数，不带单位或者k|m|g
+| 选项                          | 解释                                                 |
+| :---------------------------- | ---------------------------------------------------- |
+| --spec2017 999                | 代表选择的benchmark                                  |
+| all                           | 代表执行全部流程（itrace\qtrace\run_timer\pipeview） |
+| i_insts=2000000               | 转换2000000条指令的itrace                            |
+| q_jump=9999                   | 跳过前9999条指令开始转换为qtrace                     |
+| q_convert=10000               | 转换10000条指令的qtrace                              |
+| r_insts=10000                 | run_timer执行10000条指令                             |
+| r_pipe_begin=0 r_pipe_end=400 | 生成从[0,400]条指令区间的流水线文件.pipe .config     |
 
-- **step2** 将itrace转换为qtrace
+程序结果保存在.results文件中
+
+##### 执行全部benchmark
+
+- 所有的benchmark执行指令数均为5,000,000（i_insts\r_insts）,流水线区间为[0,400]
 
 ```bash
-make qtrace JUMP_NUM=0 CONVERT_NUM_Vgi_RECS=0
+./run.sh --m1 --spec2017 --all_benchmarks --insts=5000000 --r_pipe_begin=0 --r_pipe_end=400
 ```
 
-`JUMP_NUM`-生成qtrace时跳过的指令数,当指定为0时默认转换整个itrace
-
-`CONVERT_NUM_Vgi_RECS`-生成qtrace的指令数
-
-- **step3** run otimer 生成.results .config .pipe
+- 所有的benchmark按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
 
 ```bash
-make m1 NUM_INST=20000 CPI_INTERVAL=20000 SCROLL_BEGIN=1 SCROLL_END=200
+./run.sh --m1 --spec2017 --entire_all_benchmarks
 ```
 
-`NUM_INST`-m1执行的指令数(最大约700,000,000)
+#### 1.2 m1-执行自定义程序
 
-`CPI_INTERVAL`-据此大小划分NUM_INST，显示每段的CPI
-
-`SCROLL_BEGIN`-指定起始位置（第XXX条指令）查看流水线
-
-`SCROLL_END`-指定结束位置（第XXX条指令）查看流水线
-
-- **step4** 查看流水线
+- 此处编译后程序为test-p8,使用步骤与1.1中运行benchmark相同，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看[0,400]条指令的流水线
+- 注意将 --spec2017 999 换成 --myexe test-p8
 
 ```bash
-make m1_pipeview
+./run.sh --m1 --myexe --test-p8 --all --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=0 --r_pipe_end=400
 ```
 
-#### 1.2 一步到位
+### 2. 单步执行
 
-生成.results .config .pipe；查看流水线还需要执行前述**step4** 
+- 单步执行-itrace
 
 ```bash
-make trace \
-NUM_INSNS_TO_COLLECT=20m \
-JUMP_NUM=0 CONVERT_NUM_Vgi_RECS=0 \
-NUM_INST=20000 CPI_INTERVAL=20000 SCROLL_BEGIN=1 SCROLL_END=200 
+./run.sh --m1 --spec2017 999 --itrace --i_insts=2000000
 ```
 
-### 2. Run custom programs
-
-------
+- 单步执行-qtrace
 
 ```bash
-./p8-m1.sh EXEPATH SCROLL_BEGIN SCROLL_END SIG
+./run.sh --m1 --spec2017 999 --qtrace --q_jump=0 --q_convert=200000
 ```
 
-**example**：`./p8-m1.sh /home/lizongping/power8-m1test/test_power8_pipeline/test_power8_pipeline_loop_only_v1 1 500`
+- 单步执行-run_timer（设置流水线范围）
 
-`EXEPATH`-程序的路径
+```bash
+./run.sh --m1 --spec2017 999 --run_timer --r_insts=10000 --r_pipe_begin=0 --r_pipe_end=400
+```
 
-`SCROLL_BEGIN`-指定起始位置（第XXX条指令）查看流水线
+- 单步执行-pipe_view（只能查看）
 
-`SCROLL_END`-指定结束位置（第XXX条指令）查看流水线
+```bash
+./run.sh --m1 --spec2017 999 --pipe_view
+```
 
-`SIG`-表示执行哪几步
-
-| SIG  | 对应步骤             | 说明                                   |
-| ---- | -------------------- | -------------------------------------- |
-| 0    | 全部执行             |                                        |
-| 1    | 生成itrace           | 全部转换                               |
-| 2    | 将itrace转换为qtrace | 全部转换                               |
-| 3    | run otimer           |                                        |
-| 4    | 查看流水线           | 由`SCROLL_BEGIN`和`SCROLL_END`指定范围 |
-
-全部执行-输出文件保存在 basename EXEPATH
-
-单步执行-输出文件保存在当前目录
-
-## Run Simpoint
-
+## 
