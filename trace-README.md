@@ -31,7 +31,7 @@ repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 - 缺省模式1
 
 ```
-./run.sh --m1 --spec2017 999 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+
 ```
 
 - 缺省模式2
