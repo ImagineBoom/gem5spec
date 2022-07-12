@@ -8,33 +8,31 @@ repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 
 ##### 执行单个benchmark
 
-- 以999为例, 运行m1的整个流程，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看[1,400]条指令的流水线
+- 以999为例, 运行m1的整个流程，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看qtrace中前400条指令的流水线
 
 ```bash
-./run.sh --m1 --spec2017 999 --all --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=0 --r_pipe_end=400
+./run.sh --m1 --spec2017 999 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
-| 选项                          | 解释                                                 |
-| :---------------------------- | ---------------------------------------------------- |
-| --spec2017 999                | 代表选择的benchmark                                  |
-| all_steps                     | 代表执行全部流程（itrace\qtrace\run_timer\pipeview） |
-| i_insts=2000000               | 转换2000000条指令的itrace                            |
-| q_jump=9999                   | 跳过前9999条指令开始转换为qtrace                     |
-| q_convert=10000               | 转换10000条指令的qtrace                              |
-| r_insts=10000                 | run_timer执行10000条指令                             |
-| r_pipe_begin=1 r_pipe_end=400 | 生成从[1,400]条指令区间的流水线文件.pipe .config     |
+| 选项                              | 解释                                                         |
+| :-------------------------------- | ------------------------------------------------------------ |
+| --spec2017 999                    | 代表选择的benchmark                                          |
+| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）         |
+| --i_insts=2000000                 | 生成2000000条指令的itrace                                    |
+| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert] |
+| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                |
+| --r_pipe_begin=1 --r_pipe_end=400 | 用于查看[10000,10399]指令区间的流水线图；流水线图指令区间为[jump+1,jump+400]，相对于jump |
 
 程序结果保存在.results文件中
 
-**以上为完整模式，提供缺省模式**
+**以上为完整参数模式，提供缺省参数模式**
 
-- 缺省模式1
+- [缺省模式1]
+- 运行m1的整个流程，生成前最大指令数的itrace，qtrace区间为[begin,end]，执行400条（end-begin+1），流水线区间为[begin,end]
 
+```bash
+./run.sh --m1 --spec2017 999 --r_pipe_begin=1 --r_pipe_end=400
 ```
-
-```
-
-- 缺省模式2
 
 ##### 执行全部benchmark
 
@@ -61,29 +59,32 @@ repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 
 ### 2. 单步骤执行
 
+benchmark和自定义程序皆可
+
 - 单步执行-itrace
 
 ```bash
-./run.sh --m1 --spec2017 999 --itrace --i_insts=2000000
+./run.sh --m1 --myexe test-p8 --itrace --i_insts=2000000
 ```
 
 - 单步执行-qtrace
 
 ```bash
-./run.sh --m1 --spec2017 999 --qtrace --q_jump=0 --q_convert=200000
+./run.sh --m1 --myexe test-p8 --qtrace --q_jump=0 --q_convert=200000
 ```
 
 - 单步执行-run_timer（设置流水线范围）
 
 ```bash
-./run.sh --m1 --spec2017 999 --run_timer --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --myexe test-p8 --run_timer --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
 - 单步执行-pipe_view（只能查看）
 
 ```bash
-./run.sh --m1 --spec2017 999 --pipe_view
+./run.sh --m1 --myexe test-p8 --pipe_view
 ```
+
 
 
 
