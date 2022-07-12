@@ -50,11 +50,22 @@ repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 
 #### 1.2 m1-执行自定义程序
 
-- 此处编译后程序为test-p8,使用步骤与1.1中运行benchmark相同，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看[1,400]条指令的流水线
+**完整参数模式**
+
+- 此处编译后程序为test-p8,使用步骤与1.1中运行benchmark相同
 - 注意将 --spec2017 999 换成 --myexe test-p8
 
 ```bash
 ./run.sh --m1 --myexe test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+```
+
+**缺省参数模式**
+
+- [缺省模式1]
+- 运行m1的整个流程，生成前最大指令数的itrace，qtrace区间为[begin,end]，执行400条（end-begin+1），流水线区间为[begin,end]
+
+```bash
+./run.sh --m1 --myexe test-p8 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
 ### 2. 单步骤执行
@@ -84,7 +95,6 @@ benchmark和自定义程序皆可
 ```bash
 ./run.sh --m1 --myexe test-p8 --pipe_view
 ```
-
 
 
 
