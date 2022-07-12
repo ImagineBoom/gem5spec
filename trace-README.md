@@ -88,4 +88,46 @@ repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 
 
 ------
+# Simpoint
 
+### 1. 生成BBV文件并使用Simpoint分类
+
+在使用simpoint前，需要进入`runspec_gem5_power`目录下编辑`TRACE.mk`文件，指定`interval_size`、`maxK`、`Warmup`参数的值(第8-10行)。其中`maxK`的大小，默认设定为通过获取interval的个数，并对该值开根后设为`maxK`的值。如果不想使用该方式设定`maxK`，可以将`TRACK.mk`中的48、49注释掉，并将50行的注释取消，在第9行可以指定`maxK`的大小。
+
+进入到某个spec2017测例的目录后，执行如下命令
+
+```shell
+make simpoint
+```
+
+该命令会自动完成使用Valgrind对程序分割片段生成BBV文件，Simpoint对该文件进行分类生成.simpts和.weights文件。同时脚本中还会对Simpoint结果进行合并排序操作，并将结果保存到.merge文件中，方便阅读Simpoint分类后的结果。
+
+另外，对于一些不知道指令数目的程序，可以使用下面的命令，通过使用Valgrind获取程序的指令数，以便决定interval的大小。
+
+```shell
+make inst_count
+```
+
+### 2. 读取Simpoint结果使用Gem5生成Checkpoints
+
+得到Simpoint的结果后，可以使用Gem5去生成对应的checkpoints。在同一个测例的目录，执行如下命令
+
+```shell
+make checkpoints
+```
+
+该命令会使用Gem5读取.simpts和.weights文件，Gem5在完整执行完一遍程序后，会生成对应的checkpoints在m5out目录下。
+
+### 3. 使用Gem5恢复Checkpoints
+
+得到checkpoints后，使用Gem5恢复某一个checkpoint可以使用如下命令
+
+```shell
+make restore NUM_CKP=1 CPU_TYPE=O3CPU
+```
+
+参数`NUM_CKP`用于指定restore哪一个checkpoint，注意该参数的值从1开始，而m5out目录下的checkpoint是从0开始，因此在指定该参数时需要加偏移量1。
+
+参数`CPU_TYPE`用于指定resotre checkpoint使用哪种类型的CPU模型，默认类型是O3CPU。注意，这里不能使用AtomicSimpleCPU来恢复Checkpoints。
+
+恢复结束后的输出文件会重定向到当前目录下的`output_ckp'n'`目录下，其中`n`与`NUM_CKP`的值相同。
