@@ -11,7 +11,7 @@ repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 - 以999为例, 运行m1的整个流程，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看[1,400]条指令的流水线
 
 ```bash
-./run.sh --m1 --spec2017 502 --all_steps --i_insts=50000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --spec2017 999 --all --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=0 --r_pipe_end=400
 ```
 
 | 选项                          | 解释                                                 |
