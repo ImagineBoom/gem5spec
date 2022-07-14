@@ -32,6 +32,9 @@ SCROLL_PIPE     = 1
 SCROLL_BEGIN    = 1
 SCROLL_END      = 200
 
+#scrollpv
+pipeFILE        =$(resultsFILE)
+
 CPU_TYPE = O3CPU
 CACHE_OPT += --ruby --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128
 
@@ -66,7 +69,7 @@ trace: $(EXECUTABLE)
 
 m1_pipeview: $(EXECUTABLE)
 	@echo ---------------------spv handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIME) /opt/ibm/sim_ppc/bin/scrollpv -pipe $(FILE).pipe -config $(FILE).config  >>$(FILE)_trace.log 2>&1
+	$(TIME) /opt/ibm/sim_ppc/bin/scrollpv -pipe $(pipeFILE).pipe -config $(pipeFILE).config  >>$(FILE)_trace.log 2>&1
 	@echo ---------------------spv handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
 
