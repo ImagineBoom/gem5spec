@@ -136,7 +136,7 @@ EOF
     exit 0
 }
 
-case "${1}" in
+case "${1#*=}" in
   -v|-h|--help|--verbose)
     func_help
     shift
@@ -147,7 +147,7 @@ case "${1}" in
     ;;
 esac
 
-case "${1}" in
+case "${1#*=}" in
   --m1)
     is_m1=true
     shift
@@ -155,11 +155,11 @@ case "${1}" in
 esac
 
 
-case "${1}" in
+case "${1#*=}" in
   --myexe)
     is_myexe=true
     WORK_DIR=$(cd "$(dirname "${0}")" && pwd )
-    EXE="${2}"
+    EXE="${2#*=}"
     #OUTPUT="${WORK_DIR}"/$(basename "$EXE")
     EXE=$(dirname "$EXE")/$(basename "$EXE")
     shift 2
@@ -167,31 +167,31 @@ case "${1}" in
   --spec2017)
     is_spec2017=true
     WORK_DIR=$(cd "$(dirname "${0}")" && pwd )/runspec_gem5_power
-    case "${2}" in
+    case "${2#*=}" in
       502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527)
-        spec2017_bm="${2}"
+        spec2017_bm="${2#*=}"
         shift 2
         ;;
       --all_benchmarks)
         with_all_benchmarks=true
         shift 2
-        while [ -n "${1}" ]; do
-            case "${1}" in
+        while [ -n "${1#*=}" ]; do
+            case "${1#*=}" in
               -j|--q_jump|--JUMP_NUM)
-                JUMP_NUM="${2}"
+                JUMP_NUM="${2#*=}"
                 shift
                 ;;
               -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
-                CONVERT_NUM_Vgi_RECS="${2}"
-                NUM_INST="${2}"
+                CONVERT_NUM_Vgi_RECS="${2#*=}"
+                NUM_INST="${2#*=}"
                 shift
                 ;;
               -b|--r_pipe_begin|--SCROLL_BEGIN)
-                SCROLL_BEGIN="${2}"
+                SCROLL_BEGIN="${2#*=}"
                 shift
                 ;;
               -e|--r_pipe_end|--SCROLL_END)
-                SCROLL_END="${2}"
+                SCROLL_END="${2#*=}"
                 shift
                 ;;
               --)
@@ -228,9 +228,9 @@ esac
 if [[ $is_myexe == true ]]; then
   target=""
   args=""
-  while [[ -n "$1" ]]
+  while [[ -n "${1#*=}" ]]
   do
-    case "${1}" in
+    case "${1#*=}" in
       -a|--all|--all_steps)
         with_all_steps=true
         target=all
@@ -253,47 +253,47 @@ if [[ $is_myexe == true ]]; then
         ;;
       --i_insts|--NUM_INSNS_TO_COLLECT)
         with_i_insts=true
-        NUM_INSNS_TO_COLLECT=$2
+        NUM_INSNS_TO_COLLECT="${2#*=}"
         shift
         ;;
       -j|--q_jump|--JUMP_NUM)
         with_q_jump=true
-        JUMP_NUM=$2
+        JUMP_NUM="${2#*=}"
         shift
         ;;
       -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
         with_q_convert=true
-        CONVERT_NUM_Vgi_RECS=$2
+        CONVERT_NUM_Vgi_RECS="${2#*=}"
         shift
         ;;
       --r_insts|--NUM_INST)
         with_r_insts=true
-        NUM_INST=$2
+        NUM_INST="${2#*=}"
         shift
         ;;
       --r_cpi_interval|--CPI_INTERVAL)
         with_r_cpi_interval=true
-        CPI_INTERVAL=$2
+        CPI_INTERVAL="${2#*=}"
         shift
         ;;
       --r_reset_stats|--RESET_STATS)
         with_r_reset_stats=true
-        RESET_STATS=$2
+        RESET_STATS="${2#*=}"
         shift
         ;;
       --r_pipe_type|--SCROLL_PIPE)
         with_r_pipe_type=true
-        SCROLL_PIPE=$2
+        SCROLL_PIPE="${2#*=}"
         shift
         ;;
       -b|--r_pipe_begin|--SCROLL_BEGIN)
         with_r_pipe_begin=true
-        SCROLL_BEGIN=$2
+        SCROLL_BEGIN="${2#*=}"
         shift
         ;;
       -e|--r_pipe_end|--SCROLL_END)
         with_r_pipe_end=true
-        SCROLL_END=$2
+        SCROLL_END="${2#*=}"
         shift
         ;;
       --)
@@ -314,12 +314,17 @@ if [[ $is_myexe == true ]]; then
     ./p8-m1.sh "${EXE}" --${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
   #缺省参数模式1
   elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
-    (( insts = SCROLL_END - SCROLL_BEGIN + 1 ))
-    JUMP_NUM=0
+    (( SCROLL_BEGIN = SCROLL_BEGIN - 1 ))
+    (( insts = SCROLL_END - SCROLL_BEGIN ))
+    JUMP_NUM=${SCROLL_BEGIN}
     CONVERT_NUM_Vgi_RECS=${insts}
     NUM_INST=${insts}
     CPI_INTERVAL="${NUM_INST}"
+    SCROLL_BEGIN=1
+    SCROLL_END=${insts}
     ./p8-m1.sh "${EXE}" -- "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
+#      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_BEGIN=1 SCROLL_END=${insts}"
+#      make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
   fi
 elif [[ $is_spec2017 == true ]]; then
   if [[ $with_all_benchmarks == true ]]; then
@@ -375,9 +380,9 @@ elif [[ $is_spec2017 == true ]]; then
   else
     target=""
     args=""
-    while [[ -n "$1" ]]
+    while [[ -n "${1#*=}" ]]
     do
-      case "${1}" in
+      case "${1#*=}" in
         -a|--all|--all_steps)
           with_all_steps=true
           target=trace
@@ -400,47 +405,47 @@ elif [[ $is_spec2017 == true ]]; then
           ;;
         --i_insts|--NUM_INSNS_TO_COLLECT)
           with_i_insts=true
-          args+="NUM_INSNS_TO_COLLECT=$2 "
+          args+="NUM_INSNS_TO_COLLECT="${2#*=}" "
           shift
           ;;
         -j|--q_jump|--JUMP_NUM)
           with_q_jump=true
-          args+="JUMP_NUM=$2 "
+          args+="JUMP_NUM="${2#*=}" "
           shift
           ;;
         -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
           with_q_convert=true
-          args+="CONVERT_NUM_Vgi_RECS=$2 "
+          args+="CONVERT_NUM_Vgi_RECS="${2#*=}" "
           shift
           ;;
         --r_insts|--NUM_INST)
           with_r_insts=true
-          args+="NUM_INST=$2 "
+          args+="NUM_INST="${2#*=}" "
           shift
           ;;
         --r_cpi_interval|--CPI_INTERVAL)
           with_r_cpi_interval=true
-          args+="CPI_INTERVAL=$2 "
+          args+="CPI_INTERVAL="${2#*=}" "
           shift
           ;;
         --r_reset_stats|--RESET_STATS)
           with_r_reset_stats=true
-          args+="RESET_STATS=$2 "
+          args+="RESET_STATS="${2#*=}" "
           shift
           ;;
         --r_pipe_type|--SCROLL_PIPE)
           with_r_pipe_type=true
-          args+="SCROLL_PIPE=$2 "
+          args+="SCROLL_PIPE="${2#*=}" "
           shift
           ;;
         -b|--r_pipe_begin|--SCROLL_BEGIN)
           with_r_pipe_begin=true
-          args+="SCROLL_BEGIN=$2 "
+          args+="SCROLL_BEGIN="${2#*=}" "
           shift
           ;;
         -e|--r_pipe_end|--SCROLL_END)
           with_r_pipe_end=true
-          args+="SCROLL_END=$2 "
+          args+="SCROLL_END="${2#*=}" "
           shift
           ;;
         --)
@@ -464,9 +469,10 @@ elif [[ $is_spec2017 == true ]]; then
       #pipe_b="${args[0]##*=}"
       #pipe_e="${args[1]##*=}"
       pipe_b=$(echo "${args[@]}" | grep -oP "SCROLL_BEGIN=\d+" | grep -oP "\d+")
+      (( pipe_b=pipe_b-1 ))
       pipe_e=$(echo "${args[@]}" | grep -oP "SCROLL_END=\d+" | grep -oP "\d+")
-      (( insts = pipe_e - pipe_b +1 ))
-      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=0 NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1" "${args}"
+      (( insts = pipe_e - pipe_b ))
+      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_BEGIN=1 SCROLL_END=${insts}"
       make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
     fi
   fi
