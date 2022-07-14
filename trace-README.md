@@ -4,6 +4,16 @@ repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 
 ### 1. 全部执行
 
+**脚本自动补全**
+
+```bash
+source auto_cmpl.sh
+```
+
+```bash
+./run.sh [tab][tab]
+```
+
 #### 1.1 m1-执行spec2017
 
 ##### 执行单个benchmark
@@ -162,6 +172,7 @@ benchmark和自定义程序皆可
   END
 
 ```
+
 
 
 ------
