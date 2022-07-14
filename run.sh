@@ -405,46 +405,55 @@ elif [[ $is_spec2017 == true ]]; then
           ;;
         --i_insts|--NUM_INSNS_TO_COLLECT)
           with_i_insts=true
+          NUM_INSNS_TO_COLLECT="${2#*=}"
           args+="NUM_INSNS_TO_COLLECT="${2#*=}" "
           shift
           ;;
         -j|--q_jump|--JUMP_NUM)
           with_q_jump=true
+          JUMP_NUM="${2#*=}"
           args+="JUMP_NUM="${2#*=}" "
           shift
           ;;
         -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
           with_q_convert=true
+          CONVERT_NUM_Vgi_RECS="${2#*=}"
           args+="CONVERT_NUM_Vgi_RECS="${2#*=}" "
           shift
           ;;
         --r_insts|--NUM_INST)
           with_r_insts=true
+          NUM_INST="${2#*=}"
           args+="NUM_INST="${2#*=}" "
           shift
           ;;
         --r_cpi_interval|--CPI_INTERVAL)
           with_r_cpi_interval=true
+          CPI_INTERVAL="${2#*=}"
           args+="CPI_INTERVAL="${2#*=}" "
           shift
           ;;
         --r_reset_stats|--RESET_STATS)
           with_r_reset_stats=true
+          RESET_STATS="${2#*=}"
           args+="RESET_STATS="${2#*=}" "
           shift
           ;;
         --r_pipe_type|--SCROLL_PIPE)
           with_r_pipe_type=true
+          SCROLL_PIPE="${2#*=}"
           args+="SCROLL_PIPE="${2#*=}" "
           shift
           ;;
         -b|--r_pipe_begin|--SCROLL_BEGIN)
           with_r_pipe_begin=true
+          SCROLL_BEGIN="${2#*=}"
           args+="SCROLL_BEGIN="${2#*=}" "
           shift
           ;;
         -e|--r_pipe_end|--SCROLL_END)
           with_r_pipe_end=true
+          SCROLL_END="${2#*=}"
           args+="SCROLL_END="${2#*=}" "
           shift
           ;;
@@ -459,7 +468,10 @@ elif [[ $is_spec2017 == true ]]; then
     done
     #完整参数模式
     if [[ $with_all_steps == true ]] ; then
-      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "${args}"
+      if [[ ${CPI_INTERVAL} == -1 ]];then
+        CPI_INTERVAL=${NUM_INST}
+      fi
+      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${NUM_INSNS_TO_COLLECT} JUMP_NUM=${JUMP_NUM} CONVERT_NUM_Vgi_RECS=${CONVERT_NUM_Vgi_RECS} NUM_INST=${NUM_INST} CPI_INTERVAL=${CPI_INTERVAL} RESET_STATS=${RESET_STATS} SCROLL_PIPE=${SCROLL_PIPE} SCROLL_BEGIN=${SCROLL_BEGIN} SCROLL_END=${SCROLL_END}
       make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "${args}"
     elif [[ $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true  ]]; then
       make ${target} -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "${args}"
