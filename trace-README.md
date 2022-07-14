@@ -14,6 +14,13 @@ source auto_cmpl.sh
 ./run.sh [tab][tab]
 ```
 
+==example==
+
+```bash
+./run.sh --m1 --spec2017 999 -b=1 -e=400
+./run.sh --m1 --myexe ./test -b=1 -e=400
+```
+
 #### 1.1 m1-执行spec2017
 
 ##### 执行单个benchmark
@@ -66,7 +73,7 @@ source auto_cmpl.sh
 - 注意将 --spec2017 999 换成 --myexe test-p8
 
 ```bash
-./run.sh --m1 --myexe test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --myexe ./test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
 **缺省参数模式**
@@ -75,7 +82,7 @@ source auto_cmpl.sh
 - 运行m1的整个流程，生成前最大指令数的itrace，qtrace区间为[begin,end]，执行400条(end-begin+1)，流水线区间为[begin,end]
 
 ```bash
-./run.sh --m1 --myexe test-p8 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --myexe ./test-p8 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
 ### 2. 单步骤执行
@@ -85,25 +92,25 @@ benchmark和自定义程序皆可
 - 单步执行-itrace
 
 ```bash
-./run.sh --m1 --myexe test-p8 --itrace --i_insts=2000000
+./run.sh --m1 --myexe ./test-p8 --itrace --i_insts=2000000
 ```
 
 - 单步执行-qtrace
 
 ```bash
-./run.sh --m1 --myexe test-p8 --qtrace --q_jump=0 --q_convert=200000
+./run.sh --m1 --myexe ./test-p8 --qtrace --q_jump=0 --q_convert=200000
 ```
 
 - 单步执行-run_timer（设置流水线范围）
 
 ```bash
-./run.sh --m1 --myexe test-p8 --run_timer --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --myexe ./test-p8 --run_timer --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
 - 单步执行-pipe_view（只能查看）
 
 ```bash
-./run.sh --m1 --myexe test-p8 --pipe_view
+./run.sh --m1 --myexe ./test-p8 --pipe_view
 ```
 
 ### 3. NOTION
@@ -172,6 +179,9 @@ benchmark和自定义程序皆可
   END
 
 ```
+
+
+
 
 
 
