@@ -110,7 +110,8 @@ cmd_m1_myexe(){
   local pre=${COMP_WORDS[COMP_CWORD-1]};
   cmd_control
   if [[ $pre == "--myexe" ]];then
-    options=""
+    COMPREPLY=( $(compgen -f -- ${cur} ) )
+    return
   elif [[ ${COMP_WORDS[COMP_CWORD-2]} == "--myexe" ]];then
     options="--all_steps --itrace --qtrace --run_timer --pipe_view -b -e"
   elif [[ $pre == -a || $pre == --all || $pre == --all_steps ]]; then
@@ -218,4 +219,3 @@ cmd_hub(){
 }
 
 complete -F cmd_hub run.sh
-
