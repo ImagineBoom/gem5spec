@@ -251,6 +251,10 @@ if [[ $is_myexe == true ]]; then
         with_pipe_view=true
         target=m1_pipeview
         ;;
+      --entire)
+        with_entire=true
+        target=entire
+        ;;
       --i_insts|--NUM_INSNS_TO_COLLECT)
         with_i_insts=true
         NUM_INSNS_TO_COLLECT="${2#*=}"
@@ -306,7 +310,7 @@ if [[ $is_myexe == true ]]; then
     shift
   done
   #完整参数模式
-  if [[ $with_all_steps == true || $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true ]] ; then
+  if [[ $with_all_steps == true || $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true || $with_entire == true ]] ; then
     if [[ "${CPI_INTERVAL}" == "-1" ]];then
       CPI_INTERVAL="${NUM_INST}"
     fi

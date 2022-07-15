@@ -113,7 +113,7 @@ cmd_m1_myexe(){
     COMPREPLY=( $(compgen -f -- ${cur} ) )
     return
   elif [[ ${COMP_WORDS[COMP_CWORD-2]} == "--myexe" ]];then
-    options="--all_steps --itrace --qtrace --run_timer --pipe_view -b -e"
+    options="--entire --all_steps --itrace --qtrace --run_timer --pipe_view -b -e"
   elif [[ $pre == -a || $pre == --all || $pre == --all_steps ]]; then
     options="--i_insts --q_jump --q_convert --r_insts --r_pipe_type --r_pipe_begin --r_pipe_end"
   elif [[ $pre == -i || $pre == --itrace ]]; then

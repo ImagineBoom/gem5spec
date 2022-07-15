@@ -20,7 +20,7 @@ SCROLL_PIPE=$9
 SCROLL_BEGIN="${10}"
 SCROLL_END="${11}"
 
-echo ${@}
+#echo ${@}
 
 #输出文件位置p8-m1.sh同级目录下 /OUTPUT/*
 OUTPUT=$(basename "$EXE")
@@ -175,6 +175,49 @@ case "${SIG}" in
     func_run_timer
     func_m1_pipeview
    ;;
+  --entire)
+    func_inst_count
+    NUM_INSNS_TO_COLLECT=${insts}
+    JUMP_NUM=0
+    CONVERT_NUM_Vgi_RECS=0
+    if [[ ${insts} -gt 700000000 ]];then
+      (( segment_count = insts/700000000+1 ))
+      lenseg=700000000
+      dirname=${segment_count}_seg_${lenseg}_len
+      mkdir -p "${WORK_DIR}/${dirname}"
+      for ((i=0;i<insts;i=i+lenseg));do
+      {
+        i_add_lenseg=$((i+lenseg))
+        if [[ ${i_add_lenseg} -gt ${insts} ]];then
+          i_add_lenseg=${insts}
+        fi
+        OUTPUT=${segment_count}_${i}_${i_add_lenseg}
+        NUM_INST=${lenseg}
+        CPI_INTERVAL=${lenseg}
+        RESET_STATS=1
+        SCROLL_PIPE=1
+        SCROLL_BEGIN=1
+        SCROLL_END=400
+        func_itrace
+        func_qtrace
+        func_run_timer
+        rm -rf "${OUTPUT}".qt
+        mv "${OUTPUT}".* "${dirname}"
+      } &
+      done
+    else
+      #Runtimer
+      NUM_INST=${insts}
+      CPI_INTERVAL=${insts}
+      RESET_STATS=1
+      SCROLL_PIPE=1
+      SCROLL_BEGIN=1
+      SCROLL_END=400
+      func_itrace
+      func_qtrace
+      func_run_timer
+    fi
+    ;;
   --all)
     func_m1
     ;;
