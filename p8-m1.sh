@@ -27,6 +27,9 @@ OUTPUT=$(basename "$EXE")
 #当前脚本同目录下的
 WORK_DIR=$(cd "$(dirname "${0}")" && pwd )/${OUTPUT}
 
+#给当前目录的文件加上./
+EXE=$(cd $(dirname "${EXE}") && pwd )/$(basename "${EXE}")
+
 if [[ ! -e "${WORK_DIR}" ]];then
   mkdir -p "${WORK_DIR}"
   #cp -r "${EXE}" "${WORK_DIR}/"
@@ -35,10 +38,6 @@ else
   #cp -r "${EXE}" "${WORK_DIR}/"
   cd "${WORK_DIR}" || exit
 fi
-
-#给当前目录的文件加上./
-EXE="$(dirname "${EXE}")/$(basename "${EXE}")"
-
 ######################################################
 #pre
 ######################################################
