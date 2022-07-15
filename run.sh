@@ -132,9 +132,8 @@ func_help(){
     |  运行m1的整个流程,生成前最大指令数的itrace,qtrace区间为[begin,end],执行400条(end-begin+1),流水线区间为[begin,end]
        ./run.sh --m1 --spec2017 999 -b=1 -e=400
        ./run.sh --m1 --myexe ./test -b=1 -e=400
-
     
-  END
+  :)END
 EOF
     exit 0
 }
