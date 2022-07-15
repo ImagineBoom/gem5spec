@@ -45,7 +45,7 @@ source auto_cmpl.sh
 **以上为完整参数模式，提供缺省参数模式**
 
 - [缺省模式1]
-- 运行m1的整个流程，生成前最大指令数的itrace，qtrace区间为[begin,end]，执行400条(end-begin+1)，流水线区间为[begin,end]
+- 运行m1的整个流程，执行并查看流水线区间[begin,end]
 
 ```bash
 ./run.sh --m1 --spec2017 999 --r_pipe_begin=1 --r_pipe_end=400
@@ -76,10 +76,16 @@ source auto_cmpl.sh
 ./run.sh --m1 --myexe ./test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
+- test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
+
+```bash
+./run.sh --m1 --myexe ./test-p8 --entire
+```
+
 **缺省参数模式**
 
 - [缺省模式1]
-- 运行m1的整个流程，生成前最大指令数的itrace，qtrace区间为[begin,end]，执行400条(end-begin+1)，流水线区间为[begin,end]
+- 运行m1的整个流程，执行并查看流水线区间[begin,end]
 
 ```bash
 ./run.sh --m1 --myexe ./test-p8 --r_pipe_begin=1 --r_pipe_end=400
@@ -179,6 +185,7 @@ benchmark和自定义程序皆可
   END
 
 ```
+
 
 
 
