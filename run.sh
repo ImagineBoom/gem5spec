@@ -472,9 +472,9 @@ elif [[ $is_spec2017 == true ]]; then
         CPI_INTERVAL=${NUM_INST}
       fi
       make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${NUM_INSNS_TO_COLLECT} JUMP_NUM=${JUMP_NUM} CONVERT_NUM_Vgi_RECS=${CONVERT_NUM_Vgi_RECS} NUM_INST=${NUM_INST} CPI_INTERVAL=${CPI_INTERVAL} RESET_STATS=${RESET_STATS} SCROLL_PIPE=${SCROLL_PIPE} SCROLL_BEGIN=${SCROLL_BEGIN} SCROLL_END=${SCROLL_END}
-      make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "${args}"
+      make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
     elif [[ $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true  ]]; then
-      make ${target} -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "${args}"
+      make ${target} -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
     #缺省参数模式1
     elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
       #args=("${args}")
@@ -484,7 +484,7 @@ elif [[ $is_spec2017 == true ]]; then
       (( pipe_b=pipe_b-1 ))
       pipe_e=$(echo "${args[@]}" | grep -oP "SCROLL_END=\d+" | grep -oP "\d+")
       (( insts = pipe_e - pipe_b ))
-      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_BEGIN=1 SCROLL_END=${insts}"
+      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
       make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
     fi
   fi
