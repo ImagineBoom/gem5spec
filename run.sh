@@ -7,7 +7,7 @@ version="1.0.0"
 getopt_cmd=$(getopt \
 -o aiqrphvVj:c:b:e: \
 -l m1,spec2017:,myexe:,\
-all,all_steps,itrace,qtrace,run_timer,pipe_view,\
+all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
