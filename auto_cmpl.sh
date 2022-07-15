@@ -218,4 +218,4 @@ cmd_hub(){
   esac
 }
 
-complete -F cmd_hub run.sh
+complete -F cmd_hub ./run.sh
