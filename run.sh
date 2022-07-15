@@ -74,17 +74,18 @@ SCROLL_END=-1
 func_help(){
   cat <<- EOF
   Desc: run some spec2017 benchmarks and custom programs help
-  Notion: []内表示可选，｜内表示选择一个，<>内表示必须填
+  Notion: []内表示可选，｜表示选择一个，<>内表示必须填
   Usage: ./run.sh MAIN_OPTS FIR_OPTS SEC_OPTS
 
     MAIN_OPTS:
     |  --m1,                                                                     使用power8模拟器
     FIR_OPTS:
-    |  --myexe <exepath>                                                         使用自定义的程序(编译后的)
+    |  --myexe <exepath> [--entire]                                              使用自定义的程序(编译后的)
+                          --entire                                               按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
     |  --spec2017 <benchmark num>|--all_benchmarks|--entire_all_benchmarks       使用spec2017某一个或者全部
-    |             --all_benchmarks -j=<num> -c=<num> -b=<num> -e=<num>           所有的benchmark执行指令数均为-c指定,itrace按最大指令数转换,流水线图指令区间为[j+b,j+e-b+1]
-    |             --entire_all_benchmarks                                        所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
-    |             <benchmark num>                                                [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
+                  --all_benchmarks -j=<num> -c=<num> -b=<num> -e=<num>           所有的benchmark执行指令数均为-c指定,itrace按最大指令数转换,流水线图指令区间为[j+b,j+e-b+1]
+                  --entire_all_benchmarks                                        所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
+                  <benchmark num>                                                [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
 
     SEC_OPTS:
     |  -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
@@ -112,24 +113,26 @@ func_help(){
 
     运行:
     PATTERN-1: 完整参数模式
-    |
+
     |  运行m1的整个流程,生成前2000000条指令的itrace,转换[9999,19999]条指令的qtrace,执行10000条,查看qtrace中前400条指令的流水线
-    |  ./run.sh --m1 --spec2017 999 -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
-    |  ./run.sh --m1 --myexe ./test -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
-    |
+       ./run.sh --m1 --spec2017 999 -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
+       ./run.sh --m1 --myexe ./test -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
+
     |  所有的benchmark执行指令数均为5,000,000(q_convert\r_insts),itrace按最大指令数转换,流水线区间为[jump+1,jump+400]
-    |  ./run.sh --m1 --spec2017 --all_benchmarks --q_jump=9999 --q_convert=5000000 --r_pipe_begin=1 --r_pipe_end=400
-    |
+       ./run.sh --m1 --spec2017 --all_benchmarks --q_jump=9999 --q_convert=5000000 --r_pipe_begin=1 --r_pipe_end=400
+
     |  所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
-    |  ./run.sh --m1 --spec2017 --entire_all_benchmarks
-    |
+       ./run.sh --m1 --spec2017 --entire_all_benchmarks
+
+    |  test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
+       ./run.sh --m1 --myexe ./test-p8 --entire
+
     PATTERN-2: 缺省参数模式【推荐】
-    |
+
     |  运行m1的整个流程,生成前最大指令数的itrace,qtrace区间为[begin,end],执行400条(end-begin+1),流水线区间为[begin,end]
-    |
-    |  ./run.sh --m1 --spec2017 999 -b=1 -e=400
-    |  ./run.sh --m1 --myexe ./test -b=1 -e=400
-    |
+       ./run.sh --m1 --spec2017 999 -b=1 -e=400
+       ./run.sh --m1 --myexe ./test -b=1 -e=400
+
     
   END
 EOF
