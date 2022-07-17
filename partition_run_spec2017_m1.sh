@@ -29,7 +29,7 @@ echo "$lenseg"
 echo "$dirname"
 
 mkdir -p "${workdir}/${dirname}"
-if [[ ! -e file_name_append.vgi ]];then
+if [[ ! -e "${workdir}"/"${file_name_append}".vgi ]];then
   make itrace -C "${workdir}" NUM_INSNS_TO_COLLECT="${INSTS}"
 fi
 for ((i=0;i<INSTS;i=i+lenseg))
@@ -39,8 +39,8 @@ do
     m1file=${file_prefix}_${i}_${i_add_lenseg}_${file_name_append}
     make qtrace -C "${workdir}" JUMP_NUM="${i}" CONVERT_NUM_Vgi_RECS=${lenseg} qtFILE="${m1file}"
     make m1 -C "${workdir}" NUM_INST=${lenseg} CPI_INTERVAL=${lenseg} qtFILE="${m1file}"
-    rm -rf "${m1file}".qt
-    mv "${workdir}"/"${m1file}".* "${workdir}/${dirname}"
+    rm -rf "${workdir}"/"${m1file}".qt
+    mv "${workdir}"/"${m1file}"* "${workdir}/${dirname}"
   } &
 done
 wait
