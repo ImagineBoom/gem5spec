@@ -364,25 +364,25 @@ elif [[ $is_spec2017 == true ]]; then
     nohup make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT="${bm_insts[538]}" JUMP_NUM=0 NUM_INST="${bm_insts[538]}" CPI_INTERVAL="${bm_insts[538]}" RESET_STATS=1 &
     nohup make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT="${bm_insts[523]}" JUMP_NUM=0 NUM_INST="${bm_insts[523]}" CPI_INTERVAL="${bm_insts[523]}" RESET_STATS=1 &
     nohup make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT="${bm_insts[557]}" JUMP_NUM=0 NUM_INST="${bm_insts[557]}" CPI_INTERVAL="${bm_insts[557]}" RESET_STATS=1 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[526]}" "${bm_insts[526]}" 2 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[525]}" "${bm_insts[525]}" 4 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[511]}" "${bm_insts[511]}" 4 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[500]}" "${bm_insts[500]}" 5 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[519]}" "${bm_insts[519]}" 10 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[544]}" "${bm_insts[544]}" 10 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[503]}" "${bm_insts[503]}" 20 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[520]}" "${bm_insts[520]}" 21 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[554]}" "${bm_insts[554]}" 25 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[507]}" "${bm_insts[507]}" 27 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[541]}" "${bm_insts[541]}" 41 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[505]}" "${bm_insts[505]}" 45 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[510]}" "${bm_insts[510]}" 46 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[531]}" "${bm_insts[531]}" 64 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[521]}" "${bm_insts[521]}" 65 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[549]}" "${bm_insts[549]}" 68 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[508]}" "${bm_insts[508]}" 102 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[548]}" "${bm_insts[548]}" 143 &
-    nohup ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[527]}" "${bm_insts[527]}" 184 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[526]}" "${bm_insts[526]}" 2 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[525]}" "${bm_insts[525]}" 4 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[511]}" "${bm_insts[511]}" 4 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[500]}" "${bm_insts[500]}" 5 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[519]}" "${bm_insts[519]}" 10 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[544]}" "${bm_insts[544]}" 10 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[503]}" "${bm_insts[503]}" 20 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[520]}" "${bm_insts[520]}" 21 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[554]}" "${bm_insts[554]}" 25 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[507]}" "${bm_insts[507]}" 27 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[541]}" "${bm_insts[541]}" 41 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[505]}" "${bm_insts[505]}" 45 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[510]}" "${bm_insts[510]}" 46 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[531]}" "${bm_insts[531]}" 64 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[521]}" "${bm_insts[521]}" 65 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[549]}" "${bm_insts[549]}" 68 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[508]}" "${bm_insts[508]}" 102 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[548]}" "${bm_insts[548]}" 143 &
+    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[527]}" "${bm_insts[527]}" 184 &
   else
     target=""
     args=""
