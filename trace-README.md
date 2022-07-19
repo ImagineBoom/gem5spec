@@ -45,7 +45,7 @@ source auto_cmpl.sh
 **以上为完整参数模式，提供缺省参数模式**
 
 - [缺省模式1]
-- 运行m1的整个流程，执行并查看流水线区间[begin,end]
+- 运行m1的整个流程，执行并查看流水线区间[begin,end]，区间不超过5000条
 
 ```bash
 ./run.sh --m1 --spec2017 999 --r_pipe_begin=1 --r_pipe_end=400
@@ -85,7 +85,7 @@ source auto_cmpl.sh
 **缺省参数模式**
 
 - [缺省模式1]
-- 运行m1的整个流程，执行并查看流水线区间[begin,end]
+- 运行m1的整个流程，执行并查看流水线区间[begin,end],区间不超过5000条
 
 ```bash
 ./run.sh --m1 --myexe ./test-p8 --r_pipe_begin=1 --r_pipe_end=400
