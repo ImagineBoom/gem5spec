@@ -334,55 +334,55 @@ if [[ $is_myexe == true ]]; then
   fi
 elif [[ $is_spec2017 == true ]]; then
   if [[ $with_all_benchmarks == true ]]; then
-    nohup make trace -C runspec_gem5_power/500.perlbench_r NUM_INSNS_TO_COLLECT="${bm_insts[500]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT="${bm_insts[502]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/503.bwaves_r    NUM_INSNS_TO_COLLECT="${bm_insts[503]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/505.mcf_r       NUM_INSNS_TO_COLLECT="${bm_insts[505]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/507.cactuBSSN_r NUM_INSNS_TO_COLLECT="${bm_insts[507]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/508.namd_r      NUM_INSNS_TO_COLLECT="${bm_insts[508]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/510.parest_r    NUM_INSNS_TO_COLLECT="${bm_insts[510]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/511.povray_r    NUM_INSNS_TO_COLLECT="${bm_insts[511]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/519.lbm_r       NUM_INSNS_TO_COLLECT="${bm_insts[519]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/520.omnetpp_r   NUM_INSNS_TO_COLLECT="${bm_insts[520]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/521.wrf_r       NUM_INSNS_TO_COLLECT="${bm_insts[521]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT="${bm_insts[523]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/525.x264_r      NUM_INSNS_TO_COLLECT="${bm_insts[525]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/526.blender_r   NUM_INSNS_TO_COLLECT="${bm_insts[526]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/527.cam4_r      NUM_INSNS_TO_COLLECT="${bm_insts[527]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/531.deepsjeng_r NUM_INSNS_TO_COLLECT="${bm_insts[531]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT="${bm_insts[538]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/541.leela_r     NUM_INSNS_TO_COLLECT="${bm_insts[541]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/544.nab_r       NUM_INSNS_TO_COLLECT="${bm_insts[544]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/548.exchange2_r NUM_INSNS_TO_COLLECT="${bm_insts[548]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/549.fotonik3d_r NUM_INSNS_TO_COLLECT="${bm_insts[549]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/554.roms_r      NUM_INSNS_TO_COLLECT="${bm_insts[554]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT="${bm_insts[557]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
-    nohup make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT="${bm_insts[999]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" &
+    (make trace -C runspec_gem5_power/500.perlbench_r NUM_INSNS_TO_COLLECT="${bm_insts[500]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT="${bm_insts[502]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/503.bwaves_r    NUM_INSNS_TO_COLLECT="${bm_insts[503]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/505.mcf_r       NUM_INSNS_TO_COLLECT="${bm_insts[505]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/507.cactuBSSN_r NUM_INSNS_TO_COLLECT="${bm_insts[507]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/508.namd_r      NUM_INSNS_TO_COLLECT="${bm_insts[508]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/510.parest_r    NUM_INSNS_TO_COLLECT="${bm_insts[510]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/511.povray_r    NUM_INSNS_TO_COLLECT="${bm_insts[511]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/519.lbm_r       NUM_INSNS_TO_COLLECT="${bm_insts[519]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/520.omnetpp_r   NUM_INSNS_TO_COLLECT="${bm_insts[520]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/521.wrf_r       NUM_INSNS_TO_COLLECT="${bm_insts[521]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT="${bm_insts[523]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/525.x264_r      NUM_INSNS_TO_COLLECT="${bm_insts[525]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/526.blender_r   NUM_INSNS_TO_COLLECT="${bm_insts[526]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/527.cam4_r      NUM_INSNS_TO_COLLECT="${bm_insts[527]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/531.deepsjeng_r NUM_INSNS_TO_COLLECT="${bm_insts[531]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT="${bm_insts[538]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/541.leela_r     NUM_INSNS_TO_COLLECT="${bm_insts[541]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/544.nab_r       NUM_INSNS_TO_COLLECT="${bm_insts[544]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/548.exchange2_r NUM_INSNS_TO_COLLECT="${bm_insts[548]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/549.fotonik3d_r NUM_INSNS_TO_COLLECT="${bm_insts[549]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/554.roms_r      NUM_INSNS_TO_COLLECT="${bm_insts[554]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT="${bm_insts[557]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
+    (make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT="${bm_insts[999]}" JUMP_NUM="${JUMP_NUM}" CONVERT_NUM_Vgi_RECS="${CONVERT_NUM_Vgi_RECS}" NUM_INST="${NUM_INST}" CPI_INTERVAL="${NUM_INST}" SCROLL_BEGIN="${SCROLL_BEGIN}" SCROLL_END="${SCROLL_END}" >>nohup.out 2>&1 &)
   elif [[ $with_entire_all_benchmarks == true ]]; then
-    nohup make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT="${bm_insts[502]}" JUMP_NUM=0 NUM_INST="${bm_insts[502]}" CPI_INTERVAL="${bm_insts[502]}" RESET_STATS=1 &
-    nohup make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT="${bm_insts[999]}" JUMP_NUM=0 NUM_INST="${bm_insts[999]}" CPI_INTERVAL="${bm_insts[999]}" RESET_STATS=1 &
-    nohup make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT="${bm_insts[538]}" JUMP_NUM=0 NUM_INST="${bm_insts[538]}" CPI_INTERVAL="${bm_insts[538]}" RESET_STATS=1 &
-    nohup make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT="${bm_insts[523]}" JUMP_NUM=0 NUM_INST="${bm_insts[523]}" CPI_INTERVAL="${bm_insts[523]}" RESET_STATS=1 &
-    nohup make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT="${bm_insts[557]}" JUMP_NUM=0 NUM_INST="${bm_insts[557]}" CPI_INTERVAL="${bm_insts[557]}" RESET_STATS=1 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[526]}" "${bm_insts[526]}" 2 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[525]}" "${bm_insts[525]}" 4 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[511]}" "${bm_insts[511]}" 4 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[500]}" "${bm_insts[500]}" 5 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[519]}" "${bm_insts[519]}" 10 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[544]}" "${bm_insts[544]}" 10 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[503]}" "${bm_insts[503]}" 20 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[520]}" "${bm_insts[520]}" 21 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[554]}" "${bm_insts[554]}" 25 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[507]}" "${bm_insts[507]}" 27 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[541]}" "${bm_insts[541]}" 41 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[505]}" "${bm_insts[505]}" 45 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[510]}" "${bm_insts[510]}" 46 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[531]}" "${bm_insts[531]}" 64 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[521]}" "${bm_insts[521]}" 65 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[549]}" "${bm_insts[549]}" 68 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[508]}" "${bm_insts[508]}" 102 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[548]}" "${bm_insts[548]}" 143 &
-    ./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[527]}" "${bm_insts[527]}" 184 &
+    nohup make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT="${bm_insts[502]}" JUMP_NUM=0 NUM_INST="${bm_insts[502]}" CPI_INTERVAL="${bm_insts[502]}" RESET_STATS=1 >>nohup.out 2>&1 &
+    nohup make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT="${bm_insts[999]}" JUMP_NUM=0 NUM_INST="${bm_insts[999]}" CPI_INTERVAL="${bm_insts[999]}" RESET_STATS=1 >>nohup.out 2>&1 &
+    nohup make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT="${bm_insts[538]}" JUMP_NUM=0 NUM_INST="${bm_insts[538]}" CPI_INTERVAL="${bm_insts[538]}" RESET_STATS=1 >>nohup.out 2>&1 &
+    nohup make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT="${bm_insts[523]}" JUMP_NUM=0 NUM_INST="${bm_insts[523]}" CPI_INTERVAL="${bm_insts[523]}" RESET_STATS=1 >>nohup.out 2>&1 &
+    nohup make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT="${bm_insts[557]}" JUMP_NUM=0 NUM_INST="${bm_insts[557]}" CPI_INTERVAL="${bm_insts[557]}" RESET_STATS=1 >>nohup.out 2>&1 &
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[526]}" "${bm_insts[526]}" 2 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[525]}" "${bm_insts[525]}" 4 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[511]}" "${bm_insts[511]}" 4 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[500]}" "${bm_insts[500]}" 5 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[519]}" "${bm_insts[519]}" 10 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[544]}" "${bm_insts[544]}" 10 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[503]}" "${bm_insts[503]}" 20 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[520]}" "${bm_insts[520]}" 21 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[554]}" "${bm_insts[554]}" 25 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[507]}" "${bm_insts[507]}" 27 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[541]}" "${bm_insts[541]}" 41 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[505]}" "${bm_insts[505]}" 45 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[510]}" "${bm_insts[510]}" 46 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[531]}" "${bm_insts[531]}" 64 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[521]}" "${bm_insts[521]}" 65 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[549]}" "${bm_insts[549]}" 68 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[508]}" "${bm_insts[508]}" 102 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[548]}" "${bm_insts[548]}" 143 >>nohup.out 2>&1 &)
+    (./partition_run_spec2017_m1.sh "${WORK_DIR}" "${bm[527]}" "${bm_insts[527]}" 184 >>nohup.out 2>&1 &)
   else
     target=""
     args=""
