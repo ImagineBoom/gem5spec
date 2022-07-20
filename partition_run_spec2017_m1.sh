@@ -34,6 +34,7 @@ if [[ ! -e "${workdir}"/"${file_name_append}".vgi ]];then
 fi
 for ((i=0;i<INSTS;i=i+lenseg))
 do
+  read -u6
   {
     i_add_lenseg=$((i+lenseg))
     m1file=${file_prefix}_${i}_${i_add_lenseg}_${file_name_append}
@@ -41,6 +42,7 @@ do
     make m1 -C "${workdir}" NUM_INST=${lenseg} CPI_INTERVAL=${lenseg} qtFILE="${m1file}"
     rm -rf "${workdir}"/"${m1file}".qt
     mv "${workdir}"/"${m1file}"* "${workdir}/${dirname}"
+    echo >&6
   } &
 done
 wait
