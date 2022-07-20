@@ -187,11 +187,11 @@ func_with_all_benchmarks(){
 
 func_with_entire_all_benchmarks(){
   opts=(
-    "nohup make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT=${bm_insts[502]} JUMP_NUM=0 NUM_INST=${bm_insts[502]} CPI_INTERVAL=${bm_insts[502]} RESET_STATS=1"
-    "nohup make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT=${bm_insts[999]} JUMP_NUM=0 NUM_INST=${bm_insts[999]} CPI_INTERVAL=${bm_insts[999]} RESET_STATS=1"
-    "nohup make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT=${bm_insts[538]} JUMP_NUM=0 NUM_INST=${bm_insts[538]} CPI_INTERVAL=${bm_insts[538]} RESET_STATS=1"
-    "nohup make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT=${bm_insts[523]} JUMP_NUM=0 NUM_INST=${bm_insts[523]} CPI_INTERVAL=${bm_insts[523]} RESET_STATS=1"
-    "nohup make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT=${bm_insts[557]} JUMP_NUM=0 NUM_INST=${bm_insts[557]} CPI_INTERVAL=${bm_insts[557]} RESET_STATS=1"
+    "make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT=${bm_insts[502]} JUMP_NUM=0 NUM_INST=${bm_insts[502]} CPI_INTERVAL=${bm_insts[502]} RESET_STATS=1"
+    "make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT=${bm_insts[999]} JUMP_NUM=0 NUM_INST=${bm_insts[999]} CPI_INTERVAL=${bm_insts[999]} RESET_STATS=1"
+    "make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT=${bm_insts[538]} JUMP_NUM=0 NUM_INST=${bm_insts[538]} CPI_INTERVAL=${bm_insts[538]} RESET_STATS=1"
+    "make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT=${bm_insts[523]} JUMP_NUM=0 NUM_INST=${bm_insts[523]} CPI_INTERVAL=${bm_insts[523]} RESET_STATS=1"
+    "make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT=${bm_insts[557]} JUMP_NUM=0 NUM_INST=${bm_insts[557]} CPI_INTERVAL=${bm_insts[557]} RESET_STATS=1"
     "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[526]} ${bm_insts[526]} 2"
     "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[525]} ${bm_insts[525]} 4"
     "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[511]} ${bm_insts[511]} 4"
