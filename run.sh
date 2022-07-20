@@ -57,6 +57,7 @@ bm=(\
 
 #进程控制
 mkdir -p "./running"
+rm -rf ./running/run.fifo
 mkfifo ./running/run.fifo
 exec 6<>./running/run.fifo
 #最大线程数
