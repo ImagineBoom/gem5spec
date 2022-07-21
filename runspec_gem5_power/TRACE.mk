@@ -3,7 +3,7 @@ VALGRIND_EXE   = /home/lizongping/dev/valgrind-install/bin/valgrind
 VGI2QT_EXE     = /home/lizongping/dev/valgrind-install/bin/vgi2qt
 
 FILE           = $$(basename $(BENCH_PATH))
-
+FILE_FOR_FINDINTERVALSIZE = "$(FILE)"
 #Simpoint
 INTERVAL_SIZE  = 100000
 MAXK           = 35

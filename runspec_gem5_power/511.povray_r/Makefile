@@ -67,3 +67,6 @@ gem5_pipeview: $(EXECUTABLE)
 	$(GEM5_REPO_PATH)/util/o3-pipeview.py -c 500 -o pipeview.out --color m5out/trace.out
 	less -r pipeview.out
 	@echo ---------------------gem5pv handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+
+find_interval_size:  $(EXECUTABLE)
+	../Find_IntervalSize.sh $(SIMPOINT_EXE) $(VALGRIND_EXE) $(EXECUTABLE) $(FILE_FOR_FINDINTERVALSIZE) "$(ARGS)"
