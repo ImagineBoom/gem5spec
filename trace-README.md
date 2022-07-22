@@ -227,12 +227,14 @@ make checkpoints
 
 该命令会使用Gem5读取.simpts和.weights文件，Gem5在完整执行完一遍程序后，会生成对应的checkpoints在m5out目录下。
 
-### 3. 使用Gem5恢复Checkpoints
+### 3.使用Gem5恢复Checkpoints
+
+#### 3.1单独恢复某一个Checkpoint
 
 得到checkpoints后，使用Gem5恢复某一个checkpoint可以使用如下命令
 
-```shell
-make restore NUM_CKP=1 CPU_TYPE=O3CPU
+```bash
+make restore NUM_CKP=1 CPU_TYPE=O3CPUa
 ```
 
 参数`NUM_CKP`用于指定restore哪一个checkpoint，注意该参数的值从1开始，而m5out目录下的checkpoint是从0开始，因此在指定该参数时需要加偏移量1。
@@ -240,3 +242,43 @@ make restore NUM_CKP=1 CPU_TYPE=O3CPU
 参数`CPU_TYPE`用于指定resotre checkpoint使用哪种类型的CPU模型，默认类型是O3CPU。注意，这里不能使用AtomicSimpleCPU来恢复Checkpoints。
 
 恢复结束后的输出文件会重定向到当前目录下的`output_ckp'n'`目录下，其中`n`与`NUM_CKP`的值相同。
+
+#### 3.2恢复某个测例全部的Checkpoints
+
+进入`runspec_gem5_power`目录下某个测例的文件后，输入以下命令
+
+```bash
+make restore-all
+```
+
+该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，Terminal中会输出`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。
+
+由于该命令会将每个Checkpoint的Restore压入后台运行，为方便查看所有的Checkpoints完成情况，可以使用命令
+
+```bash
+make restore-status
+```
+
+如果当前测例的所有Checkpoint都已完成restore，则Termianl会输出`All Checkpoints Restore Have Finshed!`
+
+如果还有部分Checkpoint没有完成restore，则Termianl会输出`Some Checkpoints Are Restoring!`
+
+### 4.CPI统计
+
+由于在3.2中生成log中只有每个Checkpoint的CPI，没有与权重相乘，使用以下命令进行计算
+
+```bash
+make cpi
+```
+
+该命令会对`xxx_CKPS_CPI.log`中每一个Checkpoint的权重与CPI进行乘法运算，将结果插入到第四列中，并保存到`xxx_CKPS_Weighted_CPI.log`中。
+
+最后还会对每个带有权重的CPI的进行求和，得到该测例总的CPI结果，并生成一个新的csv文件保存上述结果，文件名为`xxx_final_result_N.csv`(xxx为当前测例的序号；N为权重CPI的总和)。
+
+为方便后期测试，可以在`runspec_gem5_power`目录下使用以下命令
+
+```bash
+make cpi-all
+```
+
+该命令会遍历所有测例的统计结果，并保存到`weightedCPI_results.csv`中。
