@@ -67,3 +67,20 @@ gem5_pipeview: $(EXECUTABLE)
 
 find_interval_size:  $(EXECUTABLE)
 	../Find_IntervalSize.sh $(SIMPOINT_EXE) $(VALGRIND_EXE) $(EXECUTABLE) $(FILE_FOR_FINDINTERVALSIZE) "$(ARGS)"
+
+restore-all: $(EXECUTABLE)
+	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
+	@rm -rf ./output_ckp*;
+	@rm -rf ./$(FILE)_CKPS_CPI.log;
+	@rm -rf ./$(FILE)_RS_NUM.log;
+	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
+	for i in `seq $${m}`; do ( \
+		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out --input $(EXECUTABLE) -o "$(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1 \
+		cat $(FILE)_restore.log >> $(FILE)_trace.log; \
+		grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true ;\
+		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}' `; \
+		cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
+		echo ckp$${i} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
+		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log)& \
+	done;
+	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
