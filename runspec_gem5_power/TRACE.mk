@@ -104,3 +104,7 @@ cpi: $(EXECUTABLE)
 	awk -F, 'NR==1 {print "Checkpoint#","Weights","CPI","WeightedCPI"} {print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log | column -t > $(FILE)_final_result_$${result}.csv;\
 	sed -i '$$G;$$a The total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
+
+restore-status: $(EXECUTABLE)
+	@[ x`awk 'END {print NR}' ./$(FILE).merge` == x`awk 'END {print NR}' ./$(FILE)_RS_NUM.log` ] \
+	&& echo All Checkpoints Restore Have Finshed! || echo Some Checkpoints Are Restoring!
