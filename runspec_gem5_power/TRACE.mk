@@ -88,3 +88,19 @@ m1: $(EXECUTABLE)
 	@echo ---------------------m1 handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
 
+cpi: $(EXECUTABLE)
+	@echo ---------------------cpi handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
+	@rm -rf ./$(FILE)_CKPS_Weighted_CPI.log
+	@sort -k 1 ./$(FILE)_CKPS_CPI.log;
+	@m=(`awk 'END {print NR}' ./$(FILE)_CKPS_CPI.log;`);\
+	for i in `seq $${m}`; do( \
+		weights=`sed -n "$${i}p" $(FILE)_CKPS_CPI.log | awk '{print $$2}' `; \
+		cpi=`sed -n "$${i}p" $(FILE)_CKPS_CPI.log | awk '{print $$3}' `;\
+		#weightedCPI=`echo "$${weights}*$${cpi}" | bc`;\
+		weightedCPI=`echo $${weights} $${cpi} | awk '{printf "%.6f", $$1*$$2}'`;\
+		echo ckp$${i} $${weights} $${cpi} $${weightedCPI} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
+	done;
+	result=`awk '{sum+=$$4}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	awk -F, 'NR==1 {print "Checkpoint#","Weights","CPI","WeightedCPI"} {print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log | column -t > $(FILE)_final_result_$${result}.csv;\
+	sed -i '$$G;$$a The total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;
+	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;

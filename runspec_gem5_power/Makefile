@@ -397,3 +397,9 @@ help:
 	@echo "Check fail_[host|gem5].log to see failed benchmarks."
 	@echo ""
 
+cpi-all:
+	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log 
+	@sed -i 's/.csv//' weightedCPI_results.log;
+	@awk -F, 'NR==1 {print "SpecCase#","WeightedCPI"} {print $$1,$$2}' weightedCPI_results.log | column -t > weightedCPI_results.csv;
+	@rm -rf weightedCPI_results.log;
+	@gedit weightedCPI_results.csv;
