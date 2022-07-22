@@ -234,7 +234,7 @@ make checkpoints
 得到checkpoints后，使用Gem5恢复某一个checkpoint可以使用如下命令
 
 ```bash
-make restore NUM_CKP=1 CPU_TYPE=O3CPUa
+make restore NUM_CKP=1 CPU_TYPE=O3CPU
 ```
 
 参数`NUM_CKP`用于指定restore哪一个checkpoint，注意该参数的值从1开始，而m5out目录下的checkpoint是从0开始，因此在指定该参数时需要加偏移量1。
