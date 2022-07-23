@@ -66,7 +66,7 @@ gem5_pipeview: $(EXECUTABLE)
 find_interval_size:  $(EXECUTABLE)
 	../Find_IntervalSize.sh $(SIMPOINT_EXE) $(VALGRIND_EXE) $(EXECUTABLE) $(FILE_FOR_FINDINTERVALSIZE) "$(ARGS)" $(FILE).merge
 
-restore-all: $(EXECUTABLE) parallel_control
+restore-all: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./output_ckp*;
 	@rm -rf ./$(FILE)_CKPS_CPI.log;
@@ -80,6 +80,7 @@ restore-all: $(EXECUTABLE) parallel_control
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}' `; \
 		cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
 		echo ckp$${i} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
-		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log)& \
+		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
+		echo >&6 )& \
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
