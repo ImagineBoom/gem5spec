@@ -40,6 +40,8 @@ CACHE_OPT += --ruby --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i
 
 TIME = /usr/bin/time --format="Consumed Time: %E  --  $$(basename $${PWD})"
 
+FLOODGATE=/opt/run-p8-m1/running/run.fifo
+
 inst_count:$(EXECUTABLE)
 	$(TIME) $(VALGRIND_EXE) --tool=exp-bbv --instr-count-only=yes --bb-out-file=/dev/null ./$(EXECUTABLE) $(ARGS) >$(FILE)_inst.log 2>&1
 	insts=`grep -oP 'Total instructions: \d+' $(FILE)_inst.log|grep -oP '\d+'`;\
