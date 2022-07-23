@@ -14,7 +14,9 @@ trace: trace_500 trace_502 trace_503 trace_505 trace_507 trace_508 trace_510 tra
 
 checkpoints: checkpoints_500 checkpoints_502 checkpoints_503 checkpoints_505 checkpoints_507 checkpoints_508 checkpoints_510 checkpoints_511 checkpoints_519 checkpoints_520 checkpoints_521 checkpoints_523 checkpoints_525 checkpoints_526 checkpoints_527 checkpoints_531 checkpoints_538 checkpoints_541 checkpoints_544 checkpoints_548 checkpoints_549 checkpoints_554 checkpoints_557 checkpoints_999
 
-restore: restore_500 restore_502 restore_503 restore_505 restore_507 restore_508 restore_510 restore_511 restore_519 restore_520 restore_521 restore_523 restore_525 restore_526 restore_527 restore_531 restore_538 restore_541 restore_544 restore_548 restore_549 restore_554 restore_557 restore_999
+restore-all-case: restore-all_500 restore-all_502 restore-all_503 restore-all_505 restore-all_507 restore-all_508 restore-all_510 restore-all_511 restore-all_519 restore-all_520 restore-all_521 restore-all_523 restore-all_525 restore-all_526 restore-all_527 restore-all_531 restore-all_538 restore-all_541 restore-all_544 restore-all_548 restore-all_549 restore-all_554 restore-all_557 restore-all_999
+
+cpi-case: cpi_500 cpi_502 cpi_503 cpi_505 cpi_507 cpi_508 cpi_510 cpi_511 cpi_519 cpi_520 cpi_521 cpi_523 cpi_525 cpi_526 cpi_527 cpi_531 cpi_538 cpi_541 cpi_544 cpi_548 cpi_549 cpi_554 cpi_557 cpi_999
 
 log-pre:
 	@LOG_DIR=$(DATE); \
@@ -313,54 +315,54 @@ checkpoints_557:simpoint_557
 checkpoints_999:simpoint_999
 	@-make checkpoints -C 999.specrand_ir
 
-restore_500:
-	@-make restore -C 500.perlbench_r
-restore_502:
-	@-make restore -C 502.gcc_r
-restore_503:
-	@-make restore -C 503.bwaves_r
-restore_505:
-	@-make restore -C 505.mcf_r
-restore_507:
-	@-make restore -C 507.cactuBSSN_r
-restore_508:
-	@-make restore -C 508.namd_r
-restore_510:
-	@-make restore -C 510.parest_r
-restore_511:
-	@-make restore -C 511.povray_r
-restore_519:
-	@-make restore -C 519.lbm_r
-restore_520:
-	@-make restore -C 520.omnetpp_r
-restore_521:
-	@-make restore -C 521.wrf_r
-restore_523:
-	@-make restore -C 523.xalancbmk_r
-restore_525:
-	@-make restore -C 525.x264_r
-restore_526:
-	@-make restore -C 526.blender_r
-restore_527:
-	@-make restore -C 527.cam4_r
-restore_531:
-	@-make restore -C 531.deepsjeng_r
-restore_538:
-	@-make restore -C 538.imagick_r
-restore_541:
-	@-make restore -C 541.leela_r
-restore_544:
-	@-make restore -C 544.nab_r
-restore_548:
-	@-make restore -C 548.exchange2_r
-restore_549:
-	@-make restore -C 549.fotonik3d_r
-restore_554:
-	@-make restore -C 554.roms_r
-restore_557:
-	@-make restore -C 557.xz_r
-restore_999:
-	@-make restore -C 999.specrand_ir
+restore-all_500:
+	@-make restore-all -C 500.perlbench_r
+restore-all_502:
+	@-make restore-all -C 502.gcc_r
+restore-all_503:
+	@-make restore-all -C 503.bwaves_r
+restore-all_505:
+	@-make restore-all -C 505.mcf_r
+restore-all_507:
+	@-make restore-all -C 507.cactuBSSN_r
+restore-all_508:
+	@-make restore-all -C 508.namd_r
+restore-all_510:
+	@-make restore-all -C 510.parest_r
+restore-all_511:
+	@-make restore-all -C 511.povray_r
+restore-all_519:
+	@-make restore-all -C 519.lbm_r
+restore-all_520:
+	@-make restore-all -C 520.omnetpp_r
+restore-all_521:
+	@-make restore-all -C 521.wrf_r
+restore-all_523:
+	@-make restore-all -C 523.xalancbmk_r
+restore-all_525:
+	@-make restore-all -C 525.x264_r
+restore-all_526:
+	@-make restore-all -C 526.blender_r
+restore-all_527:
+	@-make restore-all -C 527.cam4_r
+restore-all_531:
+	@-make restore-all -C 531.deepsjeng_r
+restore-all_538:
+	@-make restore-all -C 538.imagick_r
+restore-all_541:
+	@-make restore-all -C 541.leela_r
+restore-all_544:
+	@-make restore-all -C 544.nab_r
+restore-all_548:
+	@-make restore-all -C 548.exchange2_r
+restore-all_549:
+	@-make restore-all -C 549.fotonik3d_r
+restore-all_554:
+	@-make restore-all -C 554.roms_r
+restore-all_557:
+	@-make restore-all -C 557.xz_r
+restore-all_999:
+	@-make restore-all -C 999.specrand_ir
 
 diff:
 	find -maxdepth 1 -type d -regex ".*r" -exec make diff -C {} \;
@@ -396,6 +398,56 @@ help:
 	@echo ""
 	@echo "Check fail_[host|gem5].log to see failed benchmarks."
 	@echo ""
+
+
+cpi_500:
+	@-make cpi -C 500.perlbench_r
+cpi_502:
+	@-make cpi -C 502.gcc_r
+cpi_503:
+	@-make cpi -C 503.bwaves_r
+cpi_505:
+	@-make cpi -C 505.mcf_r
+cpi_507:
+	@-make cpi -C 507.cactuBSSN_r
+cpi_508:
+	@-make cpi -C 508.namd_r
+cpi_510:
+	@-make cpi -C 510.parest_r
+cpi_511:
+	@-make cpi -C 511.povray_r
+cpi_519:
+	@-make cpi -C 519.lbm_r
+cpi_520:
+	@-make cpi -C 520.omnetpp_r
+cpi_521:
+	@-make cpi -C 521.wrf_r
+cpi_523:
+	@-make cpi -C 523.xalancbmk_r
+cpi_525:
+	@-make cpi -C 525.x264_r
+cpi_526:
+	@-make cpi -C 526.blender_r
+cpi_527:
+	@-make cpi -C 527.cam4_r
+cpi_531:
+	@-make cpi -C 531.deepsjeng_r
+cpi_538:
+	@-make cpi -C 538.imagick_r
+cpi_541:
+	@-make cpi -C 541.leela_r
+cpi_544:
+	@-make cpi -C 544.nab_r
+cpi_548:
+	@-make cpi -C 548.exchange2_r
+cpi_549:
+	@-make cpi -C 549.fotonik3d_r
+cpi_554:
+	@-make cpi -C 554.roms_r
+cpi_557:
+	@-make cpi -C 557.xz_r
+cpi_999:
+	@-make cpi -C 999.specrand_ir
 
 cpi-all:
 	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log 
