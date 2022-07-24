@@ -21,6 +21,8 @@ with_r_reset_stats=false
 with_r_pipe_type=false
 with_r_pipe_begin=false
 with_r_pipe_end=false
+with_max_insts=false
+with_slice_len=false
 
 cmd_control(){
   for option in "${COMP_WORDS[@]}";do
@@ -54,6 +56,12 @@ cmd_control(){
         ;;
       --pipe_view)
         with_pipe_view=true
+        ;;
+      --max_insts)
+        with_max_insts=true
+        ;;
+      --slice_len)
+        with_slice_len=true
         ;;
       *)
         ;;
@@ -144,7 +152,7 @@ cmd_m1_spec2017(){
   elif [[ $pre == "--all_benchmarks" ]];then
     options="--q_jump --q_convert --r_pipe_begin --r_pipe_end"
   elif [[ $pre == "--entire_all_benchmarks" ]]; then
-    options=""
+    options="--max_insts --slice_len"
   elif [[ $pre == [0-9][0-9][0-9] ]]; then
     if [[ ${COMP_WORDS[COMP_CWORD-2]} == "--spec2017" ]];then
       options="--all_steps --itrace --qtrace --run_timer --pipe_view -b -e"
@@ -195,6 +203,9 @@ cmd_hub(){
   with_r_pipe_type=false
   with_r_pipe_begin=false
   with_r_pipe_end=false
+  with_max_insts=false
+  with_slice_len=false
+
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};
 
