@@ -6,9 +6,12 @@ version="1.0.0"
 
 getopt_cmd=$(getopt \
 -o aiqrphvVj:c:b:e: \
--l m1,spec2017:,myexe:,\
+-l m1,gem5,spec2017:,myexe:,\
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
+all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
+restore_all,\
+control,add_thread,reduce_thread,del_thread_pool,add_thread_10,reduce_thread_10,get_thread_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
 )
@@ -22,6 +25,7 @@ is_gem5=false
 is_host=false
 is_myexe=false
 is_spec2017=false
+is_control=false
 with_all_benchmarks=false
 with_entire_all_benchmarks=false
 spec2017_bm=999
@@ -41,7 +45,17 @@ with_r_reset_stats=false
 with_r_pipe_type=false
 with_r_pipe_begin=false
 with_r_pipe_end=false 
+with_max_insts=false
+with_slice_len=false
 
+with_restore_all=false
+
+with_add_thread=false
+with_add_thread_10=false
+with_reduce_thread=false
+with_reduce_thread_10=false
+with_del_thread_pool=false
+with_get_thread_pool_size=false
 
 #spec2017 benchmark
 bm_insts=(\
@@ -55,17 +69,11 @@ bm=(\
 [505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
 #${bm[502]}
 
-#进程控制
-mkdir -p "./running"
-rm -rf ./running/run.fifo
-mkfifo ./running/run.fifo
-exec 6<>./running/run.fifo
-#最大线程数
-max_threads=20
-for(( i=0;i<max_threads;i++ )); do
-  echo >&6
-done
+source ./scripts/thread_control.sh
 
+set_thread_pool
+
+rm -rf nohup.out 2>/dev/null
 
 #echo ${@}
 
@@ -82,6 +90,8 @@ RESET_STATS=1
 SCROLL_PIPE=1
 SCROLL_BEGIN=-1
 SCROLL_END=-1
+#entire_all_benchmarks
+slice_len=-1
 
 func_help(){
   cat <<- EOF
@@ -91,37 +101,42 @@ func_help(){
 
     MAIN_OPTS:
     |  --m1,                                                                     使用power8模拟器
+    |  --is_gem5
+    |  --control --add_thread|--reduce_thread|--del_thread_pool                  线程控制;增加一个线程;减少一个线程删除线程池
+                 --add_thread_10|--reduce_thread_10
     FIR_OPTS:
     |  --myexe <exepath> [--entire]                                              使用自定义的程序(编译后的)
-                          --entire                                               按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
+                          --entire                                               按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
     |  --spec2017 <benchmark num>|--all_benchmarks|--entire_all_benchmarks       使用spec2017某一个或者全部
                   --all_benchmarks -j=<num> -c=<num> -b=<num> -e=<num>           所有的benchmark执行指令数均为-c指定,itrace按最大指令数转换,流水线图指令区间为[j+b,j+e-b+1]
-                  --entire_all_benchmarks                                        所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
+                  --entire_all_benchmarks [--max_insts|--slice_len=<num>]        所有的benchmark默认--max_insts按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行;
+                                                                                 可通过--slice_len=<num>指定分段的指令数目,不超过5000条,使用--slice_len时会自动生成每个slice对应的流水线文本图
                   <benchmark num>                                                [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
+    |  --restore_all                                                             gem5 restore all benchmark
 
     SEC_OPTS:
     |  -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
     |  -i --i_insts=<num>                                                        生成i_insts条指令的itrace
     |  -q -j=<num> -c=<num>                                                      生成[j,j+c]指令区间的qtrace
     |  -r --r_insts=<num> -b=<num> -e=<num>                                      在qtrace区间中执行r_insts条指令,流水线图指令区间为[j+b,j+e-b+1]
-    |  -p                                                                        查看流水线图
+    |  -p [--gen_txt]                                                            查看流水线图;启用--gen_txt会生成文本而不是启动UI工具
 
     OPTS解释:
     --m1
-    |  -a | --all             | --all_steps                                      执行使用m1的所有步骤
-    |  -i | --itrace                                                             只生成itrace
-    |  -q | --qtrace                                                             只转换qtrace
-    |  -r | --run_timer                                                          只执行run_timer
-    |  -p | --pipe_view                                                          只查看流水线
-    |       --i_insts         | --NUM_INSNS_TO_COLLECT                           生成itrace指定的指令数
-    |  -j | --q_jump          | --JUMP_NUM                                       生成qtrace跳过的指令数
-    |  -c | --q_convert       | --CONVERT_NUM_Vgi_RECS                           生成qtrace转换的指令数
-    |       --r_insts         | --NUM_INST                                       run_timer执行的指令数
-    |       --r_cpi_interval  | --CPI_INTERVAL                                   可打印CPI的INTERVAL大小
-    |       --r_reset_stats   | --RESET_STATS
-    |       --r_pipe_type     | --SCROLL_PIPE                                    流水线类型 1为architected inst, 2为internal instruction, 3为cycle count
-    |  -b | --r_pipe_begin    | --SCROLL_BEGIN                                   流水线图指令区间起始位置
-    |  -e | --r_pipe_end      | --SCROLL_END                                     流水线图指令区间结束位置
+    |  --all             | --all_steps             | -a                          执行使用m1的所有步骤
+    |  --itrace                                    | -i                          只生成itrace
+    |  --qtrace                                    | -q                          只转换qtrace
+    |  --run_timer                                 | -r                          只执行run_timer
+    |  --pipe_view                                 | -p                          只查看流水线
+    |  --i_insts         | --NUM_INSNS_TO_COLLECT                                生成itrace指定的指令数
+    |  --q_jump          | --JUMP_NUM              | -j                          生成qtrace跳过的指令数
+    |  --q_convert       | --CONVERT_NUM_Vgi_RECS  | -c                          生成qtrace转换的指令数
+    |  --r_insts         | --NUM_INST                                            run_timer执行的指令数
+    |  --r_cpi_interval  | --CPI_INTERVAL                                        可打印CPI的INTERVAL大小
+    |  --r_reset_stats   | --RESET_STATS                   
+    |  --r_pipe_type     | --SCROLL_PIPE                                         流水线类型 1为architected inst, 2为internal instruction, 3为cycle count
+    |  --r_pipe_begin    | --SCROLL_BEGIN          | -b                          流水线图指令区间起始位置
+    |  --r_pipe_end      | --SCROLL_END            | -e                          流水线图指令区间结束位置
 
     运行:
     PATTERN-1: 完整参数模式
@@ -135,8 +150,12 @@ func_help(){
 
     |  所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
        ./run.sh --m1 --spec2017 --entire_all_benchmarks
+       ./run.sh --m1 --spec2017 --entire_all_benchmarks --max_insts
 
-    |  test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
+    |  所有的benchmark按1000条指令分段执行
+       ./run.sh --m1 --spec2017 --entire_all_benchmarks --slice_len=1000
+
+    |  test-p8按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
        ./run.sh --m1 --myexe ./test-p8 --entire
 
     PATTERN-2: 缺省参数模式【推荐】
@@ -187,31 +206,96 @@ func_with_all_benchmarks(){
 }
 
 func_with_entire_all_benchmarks(){
+  if [[ $with_slice_len == false ]];then
+    opts=(
+      "make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT=${bm_insts[502]} JUMP_NUM=0 NUM_INST=${bm_insts[502]} CPI_INTERVAL=${bm_insts[502]} RESET_STATS=1"
+      "make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT=${bm_insts[999]} JUMP_NUM=0 NUM_INST=${bm_insts[999]} CPI_INTERVAL=${bm_insts[999]} RESET_STATS=1"
+      "make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT=${bm_insts[538]} JUMP_NUM=0 NUM_INST=${bm_insts[538]} CPI_INTERVAL=${bm_insts[538]} RESET_STATS=1"
+      "make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT=${bm_insts[523]} JUMP_NUM=0 NUM_INST=${bm_insts[523]} CPI_INTERVAL=${bm_insts[523]} RESET_STATS=1"
+      "make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT=${bm_insts[557]} JUMP_NUM=0 NUM_INST=${bm_insts[557]} CPI_INTERVAL=${bm_insts[557]} RESET_STATS=1"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[526]} ${bm_insts[526]} 2"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[525]} ${bm_insts[525]} 4"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[511]} ${bm_insts[511]} 4"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[500]} ${bm_insts[500]} 5"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[519]} ${bm_insts[519]} 10"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[544]} ${bm_insts[544]} 10"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[503]} ${bm_insts[503]} 20"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[520]} ${bm_insts[520]} 21"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[554]} ${bm_insts[554]} 25"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[507]} ${bm_insts[507]} 27"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[541]} ${bm_insts[541]} 41"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[505]} ${bm_insts[505]} 45"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[510]} ${bm_insts[510]} 46"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[531]} ${bm_insts[531]} 64"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[521]} ${bm_insts[521]} 65"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[549]} ${bm_insts[549]} 68"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[508]} ${bm_insts[508]} 102"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[548]} ${bm_insts[548]} 143"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[527]} ${bm_insts[527]} 184"
+    )
+  else
+    opts=(
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[502]} ${bm_insts[502]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[999]} ${bm_insts[999]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[538]} ${bm_insts[538]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[523]} ${bm_insts[523]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[557]} ${bm_insts[557]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[526]} ${bm_insts[526]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[525]} ${bm_insts[525]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[511]} ${bm_insts[511]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[500]} ${bm_insts[500]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[519]} ${bm_insts[519]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[544]} ${bm_insts[544]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[503]} ${bm_insts[503]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[520]} ${bm_insts[520]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[554]} ${bm_insts[554]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[507]} ${bm_insts[507]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[541]} ${bm_insts[541]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[505]} ${bm_insts[505]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[510]} ${bm_insts[510]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[531]} ${bm_insts[531]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[521]} ${bm_insts[521]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[549]} ${bm_insts[549]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[508]} ${bm_insts[508]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[548]} ${bm_insts[548]} - ${slice_len}"
+      "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[527]} ${bm_insts[527]} - ${slice_len}"
+    )
+  fi
+  for opt in "${opts[@]}" ;do
+    read -u6
+    {
+      ${opt} >>nohup.out 2>&1
+      echo >&6
+    }&
+  done
+}
+
+func_with_restore_all_benchmarks(){
   opts=(
-    "make trace -C runspec_gem5_power/502.gcc_r       NUM_INSNS_TO_COLLECT=${bm_insts[502]} JUMP_NUM=0 NUM_INST=${bm_insts[502]} CPI_INTERVAL=${bm_insts[502]} RESET_STATS=1"
-    "make trace -C runspec_gem5_power/999.specrand_ir NUM_INSNS_TO_COLLECT=${bm_insts[999]} JUMP_NUM=0 NUM_INST=${bm_insts[999]} CPI_INTERVAL=${bm_insts[999]} RESET_STATS=1"
-    "make trace -C runspec_gem5_power/538.imagick_r   NUM_INSNS_TO_COLLECT=${bm_insts[538]} JUMP_NUM=0 NUM_INST=${bm_insts[538]} CPI_INTERVAL=${bm_insts[538]} RESET_STATS=1"
-    "make trace -C runspec_gem5_power/523.xalancbmk_r NUM_INSNS_TO_COLLECT=${bm_insts[523]} JUMP_NUM=0 NUM_INST=${bm_insts[523]} CPI_INTERVAL=${bm_insts[523]} RESET_STATS=1"
-    "make trace -C runspec_gem5_power/557.xz_r        NUM_INSNS_TO_COLLECT=${bm_insts[557]} JUMP_NUM=0 NUM_INST=${bm_insts[557]} CPI_INTERVAL=${bm_insts[557]} RESET_STATS=1"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[526]} ${bm_insts[526]} 2"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[525]} ${bm_insts[525]} 4"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[511]} ${bm_insts[511]} 4"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[500]} ${bm_insts[500]} 5"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[519]} ${bm_insts[519]} 10"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[544]} ${bm_insts[544]} 10"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[503]} ${bm_insts[503]} 20"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[520]} ${bm_insts[520]} 21"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[554]} ${bm_insts[554]} 25"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[507]} ${bm_insts[507]} 27"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[541]} ${bm_insts[541]} 41"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[505]} ${bm_insts[505]} 45"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[510]} ${bm_insts[510]} 46"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[531]} ${bm_insts[531]} 64"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[521]} ${bm_insts[521]} 65"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[549]} ${bm_insts[549]} 68"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[508]} ${bm_insts[508]} 102"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[548]} ${bm_insts[548]} 143"
-    "./partition_run_spec2017_m1.sh ${WORK_DIR} ${bm[527]} ${bm_insts[527]} 184"
+    "make restore-all -C runspec_gem5_power/${bm[502]} "
+    "make restore-all -C runspec_gem5_power/${bm[999]} "
+    "make restore-all -C runspec_gem5_power/${bm[538]} "
+    "make restore-all -C runspec_gem5_power/${bm[523]} "
+    "make restore-all -C runspec_gem5_power/${bm[557]} "
+    "make restore-all -C runspec_gem5_power/${bm[526]} "
+    "make restore-all -C runspec_gem5_power/${bm[525]} "
+    "make restore-all -C runspec_gem5_power/${bm[511]} "
+    "make restore-all -C runspec_gem5_power/${bm[500]} "
+    "make restore-all -C runspec_gem5_power/${bm[519]} "
+    "make restore-all -C runspec_gem5_power/${bm[544]} "
+    "make restore-all -C runspec_gem5_power/${bm[503]} "
+    "make restore-all -C runspec_gem5_power/${bm[520]} "
+    "make restore-all -C runspec_gem5_power/${bm[554]} "
+    "make restore-all -C runspec_gem5_power/${bm[507]} "
+    "make restore-all -C runspec_gem5_power/${bm[541]} "
+    "make restore-all -C runspec_gem5_power/${bm[505]} "
+    "make restore-all -C runspec_gem5_power/${bm[510]} "
+    "make restore-all -C runspec_gem5_power/${bm[531]} "
+    "make restore-all -C runspec_gem5_power/${bm[521]} "
+    "make restore-all -C runspec_gem5_power/${bm[549]} "
+    "make restore-all -C runspec_gem5_power/${bm[508]} "
+    "make restore-all -C runspec_gem5_power/${bm[548]} "
+    "make restore-all -C runspec_gem5_power/${bm[527]} "
   )
   for opt in "${opts[@]}" ;do
     read -u6
@@ -233,14 +317,23 @@ case "${1#*=}" in
     ;;
 esac
 
+# MAIN_OPTS 解析
 case "${1#*=}" in
   --m1)
     is_m1=true
     shift
     ;;
+  --gem5)
+    is_gem5=true
+    shift
+    ;;
+  --control)
+    is_control=true
+    shift
+    ;;
 esac
 
-
+# FIR_OPTS 解析
 case "${1#*=}" in
   --myexe)
     is_myexe=true
@@ -265,20 +358,20 @@ case "${1#*=}" in
             case "${1#*=}" in
               -j|--q_jump|--JUMP_NUM)
                 JUMP_NUM="${2#*=}"
-                shift
+                shift 2
                 ;;
               -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
                 CONVERT_NUM_Vgi_RECS="${2#*=}"
                 NUM_INST="${2#*=}"
-                shift
+                shift 2
                 ;;
               -b|--r_pipe_begin|--SCROLL_BEGIN)
                 SCROLL_BEGIN="${2#*=}"
-                shift
+                shift 2
                 ;;
               -e|--r_pipe_end|--SCROLL_END)
                 SCROLL_END="${2#*=}"
-                shift
+                shift 2
                 ;;
               --)
                 shift
@@ -287,12 +380,30 @@ case "${1#*=}" in
                 break
                 ;;
             esac
-            shift
         done
         ;;
       --entire_all_benchmarks)#用于查看整体CPI等数据
         with_entire_all_benchmarks=true
         shift 2
+        while [ -n "${1#*=}" ]; do
+          case "${1#*=}" in
+            --max_insts)
+              with_max_insts=true
+              shift
+              ;;
+            --slice_len)
+              slice_len="${2#*=}"
+              with_slice_len=true
+              shift 2
+              ;;
+            --)
+              shift
+              ;;
+            *)
+              break
+              ;;
+          esac
+        done
         ;;
       --)
         shift 2
@@ -301,6 +412,34 @@ case "${1#*=}" in
         exit 1
         ;;
     esac
+    ;;
+  --restore_all)
+    with_restore_all=true
+    shift
+    ;;
+  --add_thread)
+    with_add_thread=true
+    shift
+    ;;
+  --add_thread_10)
+    with_add_thread_10=true
+    shift
+    ;;
+  --reduce_thread)
+    with_reduce_thread=true
+    shift
+    ;;
+  --reduce_thread_10)
+    with_reduce_thread_10=true
+    shift
+    ;;
+  --del_thread_pool)
+    with_del_thread_pool=true
+    shift
+    ;;
+  --get_thread_pool_size)
+    with_get_thread_pool_size=true
+    shift
     ;;
   --)
     shift
@@ -310,118 +449,8 @@ case "${1#*=}" in
     ;;
 esac
 
-
-if [[ $is_myexe == true ]]; then
-  target=""
-  args=""
-  while [[ -n "${1#*=}" ]]
-  do
-    case "${1#*=}" in
-      -a|--all|--all_steps)
-        with_all_steps=true
-        target=all
-        ;;
-      -i|--itrace)
-        with_itrace=true
-        target=itrace
-        ;;
-      -q|--qtrace)
-        with_qtrace=true
-        target=qtrace
-        ;;
-      -r|--run_timer)
-        with_run_timer=true
-        target=run_timer
-        ;;
-      -p|--pipe_view)
-        with_pipe_view=true
-        target=m1_pipeview
-        ;;
-      --entire)
-        with_entire=true
-        target=entire
-        ;;
-      --i_insts|--NUM_INSNS_TO_COLLECT)
-        with_i_insts=true
-        NUM_INSNS_TO_COLLECT="${2#*=}"
-        shift
-        ;;
-      -j|--q_jump|--JUMP_NUM)
-        with_q_jump=true
-        JUMP_NUM="${2#*=}"
-        shift
-        ;;
-      -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
-        with_q_convert=true
-        CONVERT_NUM_Vgi_RECS="${2#*=}"
-        shift
-        ;;
-      --r_insts|--NUM_INST)
-        with_r_insts=true
-        NUM_INST="${2#*=}"
-        shift
-        ;;
-      --r_cpi_interval|--CPI_INTERVAL)
-        with_r_cpi_interval=true
-        CPI_INTERVAL="${2#*=}"
-        shift
-        ;;
-      --r_reset_stats|--RESET_STATS)
-        with_r_reset_stats=true
-        RESET_STATS="${2#*=}"
-        shift
-        ;;
-      --r_pipe_type|--SCROLL_PIPE)
-        with_r_pipe_type=true
-        SCROLL_PIPE="${2#*=}"
-        shift
-        ;;
-      -b|--r_pipe_begin|--SCROLL_BEGIN)
-        with_r_pipe_begin=true
-        SCROLL_BEGIN="${2#*=}"
-        shift
-        ;;
-      -e|--r_pipe_end|--SCROLL_END)
-        with_r_pipe_end=true
-        SCROLL_END="${2#*=}"
-        shift
-        ;;
-      --)
-        shift
-        ;;
-      *)
-        exit 1
-        ;;
-    esac
-    shift
-  done
-  #完整参数模式
-  if [[ $with_all_steps == true || $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true || $with_entire == true ]] ; then
-    if [[ "${CPI_INTERVAL}" == "-1" ]];then
-      CPI_INTERVAL="${NUM_INST}"
-    fi
-#    ./p8-m1.sh "${EXE}" ${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
-    ./p8-m1.sh "${EXE}" --${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
-  #缺省参数模式1
-  elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
-    (( SCROLL_BEGIN = SCROLL_BEGIN - 1 ))
-    (( insts = SCROLL_END - SCROLL_BEGIN ))
-    JUMP_NUM=${SCROLL_BEGIN}
-    CONVERT_NUM_Vgi_RECS=${insts}
-    NUM_INST=${insts}
-    CPI_INTERVAL="${NUM_INST}"
-    SCROLL_BEGIN=1
-    SCROLL_END=${insts}
-    ./p8-m1.sh "${EXE}" -- "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
-#      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_BEGIN=1 SCROLL_END=${insts}"
-#      make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
-  fi
-elif [[ $is_spec2017 == true ]]; then
-  if [[ $with_all_benchmarks == true ]]; then
-    (func_with_all_benchmarks >>nohup.out 2>&1 &)
-  elif [[ $with_entire_all_benchmarks == true ]]; then
-    (func_with_entire_all_benchmarks >>nohup.out 2>&1 &)
-  else
+if [[ $is_m1 == true ]]; then
+  if [[ $is_myexe == true ]]; then
     target=""
     args=""
     while [[ -n "${1#*=}" ]]
@@ -429,7 +458,7 @@ elif [[ $is_spec2017 == true ]]; then
       case "${1#*=}" in
         -a|--all|--all_steps)
           with_all_steps=true
-          target=trace
+          target=all
           ;;
         -i|--itrace)
           with_itrace=true
@@ -441,64 +470,59 @@ elif [[ $is_spec2017 == true ]]; then
           ;;
         -r|--run_timer)
           with_run_timer=true
-          target=m1
+          target=run_timer
           ;;
         -p|--pipe_view)
           with_pipe_view=true
           target=m1_pipeview
           ;;
+        --entire)
+          with_entire=true
+          target=entire
+          ;;
         --i_insts|--NUM_INSNS_TO_COLLECT)
           with_i_insts=true
           NUM_INSNS_TO_COLLECT="${2#*=}"
-          args+="NUM_INSNS_TO_COLLECT="${2#*=}" "
           shift
           ;;
         -j|--q_jump|--JUMP_NUM)
           with_q_jump=true
           JUMP_NUM="${2#*=}"
-          args+="JUMP_NUM="${2#*=}" "
           shift
           ;;
         -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
           with_q_convert=true
           CONVERT_NUM_Vgi_RECS="${2#*=}"
-          args+="CONVERT_NUM_Vgi_RECS="${2#*=}" "
           shift
           ;;
         --r_insts|--NUM_INST)
           with_r_insts=true
           NUM_INST="${2#*=}"
-          args+="NUM_INST="${2#*=}" "
           shift
           ;;
         --r_cpi_interval|--CPI_INTERVAL)
           with_r_cpi_interval=true
           CPI_INTERVAL="${2#*=}"
-          args+="CPI_INTERVAL="${2#*=}" "
           shift
           ;;
         --r_reset_stats|--RESET_STATS)
           with_r_reset_stats=true
           RESET_STATS="${2#*=}"
-          args+="RESET_STATS="${2#*=}" "
           shift
           ;;
         --r_pipe_type|--SCROLL_PIPE)
           with_r_pipe_type=true
           SCROLL_PIPE="${2#*=}"
-          args+="SCROLL_PIPE="${2#*=}" "
           shift
           ;;
         -b|--r_pipe_begin|--SCROLL_BEGIN)
           with_r_pipe_begin=true
           SCROLL_BEGIN="${2#*=}"
-          args+="SCROLL_BEGIN="${2#*=}" "
           shift
           ;;
         -e|--r_pipe_end|--SCROLL_END)
           with_r_pipe_end=true
           SCROLL_END="${2#*=}"
-          args+="SCROLL_END="${2#*=}" "
           shift
           ;;
         --)
@@ -511,29 +535,168 @@ elif [[ $is_spec2017 == true ]]; then
       shift
     done
     #完整参数模式
-    if [[ $with_all_steps == true ]] ; then
-      if [[ ${CPI_INTERVAL} == -1 ]];then
-        CPI_INTERVAL=${NUM_INST}
+    if [[ $with_all_steps == true || $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true || $with_entire == true ]] ; then
+      if [[ "${CPI_INTERVAL}" == "-1" ]];then
+        CPI_INTERVAL="${NUM_INST}"
       fi
-      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${NUM_INSNS_TO_COLLECT} JUMP_NUM=${JUMP_NUM} CONVERT_NUM_Vgi_RECS=${CONVERT_NUM_Vgi_RECS} NUM_INST=${NUM_INST} CPI_INTERVAL=${CPI_INTERVAL} RESET_STATS=${RESET_STATS} SCROLL_PIPE=${SCROLL_PIPE} SCROLL_BEGIN=${SCROLL_BEGIN} SCROLL_END=${SCROLL_END}
-      make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
-    elif [[ $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true  ]]; then
-      make ${target} -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
+      #    ./p8-m1.sh "${EXE}" ${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
+      ./p8-m1.sh "${EXE}" --${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
     #缺省参数模式1
     elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
-      #args=("${args}")
-      #pipe_b="${args[0]##*=}"
-      #pipe_e="${args[1]##*=}"
-      pipe_b=$(echo "${args[@]}" | grep -oP "SCROLL_BEGIN=\d+" | grep -oP "\d+")
-      (( pipe_b=pipe_b-1 ))
-      pipe_e=$(echo "${args[@]}" | grep -oP "SCROLL_END=\d+" | grep -oP "\d+")
-      (( insts = pipe_e - pipe_b ))
-      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
-      make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
+      (( SCROLL_BEGIN = SCROLL_BEGIN - 1 ))
+      (( insts = SCROLL_END - SCROLL_BEGIN ))
+      JUMP_NUM=${SCROLL_BEGIN}
+      CONVERT_NUM_Vgi_RECS=${insts}
+      NUM_INST=${insts}
+      CPI_INTERVAL="${NUM_INST}"
+      SCROLL_BEGIN=1
+      SCROLL_END=${insts}
+      ./p8-m1.sh "${EXE}" -- "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
+      #      make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" "NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_BEGIN=1 SCROLL_END=${insts}"
+      #      make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
     fi
+  elif [[ $is_spec2017 == true ]]; then
+    if [[ $with_all_benchmarks == true ]]; then
+      (func_with_all_benchmarks >>nohup.out 2>&1 &)
+    elif [[ $with_entire_all_benchmarks == true ]]; then
+      (func_with_entire_all_benchmarks >>nohup.out 2>&1 &)
+    else
+      target=""
+      args=""
+      while [[ -n "${1#*=}" ]]
+      do
+        case "${1#*=}" in
+          -a|--all|--all_steps)
+            with_all_steps=true
+            target=trace
+            ;;
+          -i|--itrace)
+            with_itrace=true
+            target=itrace
+            ;;
+          -q|--qtrace)
+            with_qtrace=true
+            target=qtrace
+            ;;
+          -r|--run_timer)
+            with_run_timer=true
+            target=m1
+            ;;
+          -p|--pipe_view)
+            with_pipe_view=true
+            target=m1_pipeview
+            ;;
+          --i_insts|--NUM_INSNS_TO_COLLECT)
+            with_i_insts=true
+            NUM_INSNS_TO_COLLECT="${2#*=}"
+            args+="NUM_INSNS_TO_COLLECT="${2#*=}" "
+            shift
+            ;;
+          -j|--q_jump|--JUMP_NUM)
+            with_q_jump=true
+            JUMP_NUM="${2#*=}"
+            args+="JUMP_NUM="${2#*=}" "
+            shift
+            ;;
+          -c|--q_convert|--CONVERT_NUM_Vgi_RECS)
+            with_q_convert=true
+            CONVERT_NUM_Vgi_RECS="${2#*=}"
+            args+="CONVERT_NUM_Vgi_RECS="${2#*=}" "
+            shift
+            ;;
+          --r_insts|--NUM_INST)
+            with_r_insts=true
+            NUM_INST="${2#*=}"
+            args+="NUM_INST="${2#*=}" "
+            shift
+            ;;
+          --r_cpi_interval|--CPI_INTERVAL)
+            with_r_cpi_interval=true
+            CPI_INTERVAL="${2#*=}"
+            args+="CPI_INTERVAL="${2#*=}" "
+            shift
+            ;;
+          --r_reset_stats|--RESET_STATS)
+            with_r_reset_stats=true
+            RESET_STATS="${2#*=}"
+            args+="RESET_STATS="${2#*=}" "
+            shift
+            ;;
+          --r_pipe_type|--SCROLL_PIPE)
+            with_r_pipe_type=true
+            SCROLL_PIPE="${2#*=}"
+            args+="SCROLL_PIPE="${2#*=}" "
+            shift
+            ;;
+          -b|--r_pipe_begin|--SCROLL_BEGIN)
+            with_r_pipe_begin=true
+            SCROLL_BEGIN="${2#*=}"
+            args+="SCROLL_BEGIN="${2#*=}" "
+            shift
+            ;;
+          -e|--r_pipe_end|--SCROLL_END)
+            with_r_pipe_end=true
+            SCROLL_END="${2#*=}"
+            args+="SCROLL_END="${2#*=}" "
+            shift
+            ;;
+          --)
+            shift
+            ;;
+          *)
+            exit 1
+            ;;
+        esac
+        shift
+      done
+      #完整参数模式
+      if [[ $with_all_steps == true ]] ; then
+        if [[ ${CPI_INTERVAL} == -1 ]];then
+          CPI_INTERVAL=${NUM_INST}
+        fi
+        make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${NUM_INSNS_TO_COLLECT} JUMP_NUM=${JUMP_NUM} CONVERT_NUM_Vgi_RECS=${CONVERT_NUM_Vgi_RECS} NUM_INST=${NUM_INST} CPI_INTERVAL=${CPI_INTERVAL} RESET_STATS=${RESET_STATS} SCROLL_PIPE=${SCROLL_PIPE} SCROLL_BEGIN=${SCROLL_BEGIN} SCROLL_END=${SCROLL_END}
+        make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
+      elif [[ $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true  ]]; then
+        make ${target} -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
+      #缺省参数模式1
+      elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
+        #args=("${args}")
+        #pipe_b="${args[0]##*=}"
+        #pipe_e="${args[1]##*=}"
+        pipe_b=$(echo "${args[@]}" | grep -oP "SCROLL_BEGIN=\d+" | grep -oP "\d+")
+        (( pipe_b=pipe_b-1 ))
+        pipe_e=$(echo "${args[@]}" | grep -oP "SCROLL_END=\d+" | grep -oP "\d+")
+        (( insts = pipe_e - pipe_b ))
+        make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
+        make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
+      fi
+    fi
+  else
+    exit 1
+  fi
+elif [[ $is_gem5 == true ]]; then
+  if [[ $with_restore_all == true ]]; then
+    (func_with_restore_all_benchmarks >>nohup.out 2>&1 &)
+  else
+    exit 1
+  fi
+elif [[ $is_control == true ]]; then
+  if [[ $with_add_thread == true ]]; then
+    add_thread
+  elif [[ $with_add_thread_10 == true ]]; then
+    add_thread_10
+  elif [[ $with_reduce_thread == true ]]; then
+    reduce_thread
+  elif [[ $with_reduce_thread_10 == true ]]; then
+    reduce_thread_10
+  elif [[ $with_del_thread_pool == true ]]; then
+    delete_thread_pool
+  elif [[ $with_get_thread_pool_size == true ]]; then
+    get_thread_pool_size
+  else
+    exit 1
   fi
 else
   exit 1
 fi
-
 exit 0

@@ -73,7 +73,7 @@ restore-all: $(EXECUTABLE)
 	@rm -rf ./$(FILE)_RS_NUM.log;
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
-	for i in `seq $${m}`; do read-u6; ( \
+	for i in `seq $${m}`; do read -u6; ( \
 		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1 \
 		cat $(FILE)_restore.log >> $(FILE)_trace.log; \
 		grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true ;\
