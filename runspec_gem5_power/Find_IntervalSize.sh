@@ -68,7 +68,6 @@ for ((i=0;i<${#interval_size[@]};i++)) do
       echo ${Interval_size}_${FILE}:"$Sum_WeightedCPI" >> ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log
       break
     fi
-
   }
 done
 
