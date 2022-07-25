@@ -4,6 +4,7 @@ is_gem5=false
 is_host=false
 is_myexe=false
 is_spec2017=false
+is_control=false
 with_all_benchmarks=false
 with_entire_all_benchmarks=false
 #判断参数个数选择不同模式
@@ -23,6 +24,15 @@ with_r_pipe_begin=false
 with_r_pipe_end=false
 with_max_insts=false
 with_slice_len=false
+
+with_restore_all=false
+
+with_add_thread=false
+with_add_thread_10=false
+with_reduce_thread=false
+with_reduce_thread_10=false
+with_del_thread_pool=false
+with_get_thread_pool_size=false
 
 cmd_control(){
   for option in "${COMP_WORDS[@]}";do
@@ -62,6 +72,12 @@ cmd_control(){
         ;;
       --slice_len)
         with_slice_len=true
+        ;;
+      --control)
+        is_control=true
+        ;;
+      --gem5)
+        is_gem5=true
         ;;
       *)
         ;;
@@ -177,12 +193,17 @@ cmd_m1_spec2017(){
   COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
 }
 
+cmd_gem5(){
+  :
+}
 
 cmd_hub(){
   COMPREPLY=()
   #判断选项
   is_m1=false
   is_gem5=false
+  is_control=false
+
   is_host=false
   is_myexe=false
   is_spec2017=false
@@ -205,6 +226,14 @@ cmd_hub(){
   with_r_pipe_end=false
   with_max_insts=false
   with_slice_len=false
+  with_restore_all=false
+
+  with_add_thread=false
+  with_add_thread_10=false
+  with_reduce_thread=false
+  with_reduce_thread_10=false
+  with_del_thread_pool=false
+  with_get_thread_pool_size=false
 
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};
@@ -214,17 +243,31 @@ cmd_hub(){
 #      echo "${COMP_WORDS[@]}" >> len.txt
       ;;
     1)
-      COMPREPLY=( $(compgen -W "--m1" -- ${cur}) )
+      COMPREPLY=( $(compgen -W "--m1 --gem5 --control" -- ${cur}) )
       ;;
     2)
-      COMPREPLY=( $(compgen -W "--myexe --spec2017" -- ${cur}) )
+      if [[ ${pre} == "--gem5" ]]; then
+        COMPREPLY=( $(compgen -W "--restore_all" -- ${cur}) )
+      elif [[ ${pre} == "--m1" ]]; then
+        COMPREPLY=( $(compgen -W "--myexe --spec2017" -- ${cur}) )
+      elif [[ ${pre} == "--control" ]]; then
+        COMPREPLY=( $(compgen -W "--add_thread --reduce_thread --add_thread_10 --reduce_thread_10 --get_thread_pool_size --del_thread_pool" -- ${cur}) )
+      else
+        exit 1
+      fi
       ;;
     3|*)
-      cmd_f="${COMP_WORDS[1]##*-}_${COMP_WORDS[2]##*-}"
-      cmd_f="${cmd_f%%=*}"
-      #echo "${cmd_f}"
-      #1代表被调用脚本从COMP_WORDS的第几个下标开始
-      eval cmd_"${cmd_f}"
+      if [[ ${COMP_WORDS[1]} == "--gem5" ]]; then
+        COMPREPLY=( $(compgen -W "" -- ${cur}) )
+      elif [[ ${COMP_WORDS[1]} == "--m1" ]]; then
+        cmd_f="${COMP_WORDS[1]##*-}_${COMP_WORDS[2]##*-}"
+        cmd_f="${cmd_f%%=*}"
+        #echo "${cmd_f}"
+        #1代表被调用脚本从COMP_WORDS的第几个下标开始
+        eval cmd_"${cmd_f}"
+      elif [[ ${COMP_WORDS[1]} == "--control" ]]; then
+        :
+      fi
       ;;
   esac
 }
