@@ -10,7 +10,7 @@ getopt_cmd=$(getopt \
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
-restore_all,\
+restore_all,cpi_all\
 control,add_thread,reduce_thread,del_thread_pool,add_thread_10,reduce_thread_10,get_thread_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
@@ -49,6 +49,7 @@ with_max_insts=false
 with_slice_len=false
 
 with_restore_all=false
+with_cpi_all=false
 
 with_add_thread=false
 with_add_thread_10=false
@@ -101,10 +102,11 @@ func_help(){
 
     MAIN_OPTS:
     |  --m1,                                                                     使用power8模拟器
-    |  --is_gem5
-    |  --control --add_thread|--reduce_thread|--del_thread_pool                  线程控制;增加一个线程;减少一个线程删除线程池
-                 --add_thread_10|--reduce_thread_10
+    |  --gem5                                                                    使用gem5模拟器
+    |  --control                                                                 线程控制
+                                                     
     FIR_OPTS:
+    (--m1)
     |  --myexe <exepath> [--entire]                                              使用自定义的程序(编译后的)
                           --entire                                               按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
     |  --spec2017 <benchmark num>|--all_benchmarks|--entire_all_benchmarks       使用spec2017某一个或者全部
@@ -112,7 +114,20 @@ func_help(){
                   --entire_all_benchmarks [--max_insts|--slice_len=<num>]        所有的benchmark默认--max_insts按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行;
                                                                                  可通过--slice_len=<num>指定分段的指令数目,不超过5000条,使用--slice_len时会自动生成每个slice对应的流水线文本图
                   <benchmark num>                                                [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
-    |  --restore_all                                                             gem5 restore all benchmark
+    |  --restore_all                                                             m1 run all benchmark checkpoints segments
+    |  --cpi_all                                                                 收集所有的benchmark cpi
+
+    (--gem5)
+    |  --restore_all                                                             gem5 restore all benchmark checkpoints
+    |  --cpi_all                                                                 收集所有的benchmark cpi
+    |
+
+
+    (--control)
+    |  --add_thread|--add_thread_10
+       --reduce_thread|--reduce_thread_10                                        对于待运行的增加|减少运行中的线程数
+       --del_thread_pool
+       --kill_all                                                        
 
     SEC_OPTS:
     |  -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
@@ -271,32 +286,61 @@ func_with_entire_all_benchmarks(){
 }
 
 func_with_restore_all_benchmarks(){
-  opts=(
-    "make restore-all -C runspec_gem5_power/${bm[502]} "
-    "make restore-all -C runspec_gem5_power/${bm[999]} "
-    "make restore-all -C runspec_gem5_power/${bm[538]} "
-    "make restore-all -C runspec_gem5_power/${bm[523]} "
-    "make restore-all -C runspec_gem5_power/${bm[557]} "
-    "make restore-all -C runspec_gem5_power/${bm[526]} "
-    "make restore-all -C runspec_gem5_power/${bm[525]} "
-    "make restore-all -C runspec_gem5_power/${bm[511]} "
-    "make restore-all -C runspec_gem5_power/${bm[500]} "
-    "make restore-all -C runspec_gem5_power/${bm[519]} "
-    "make restore-all -C runspec_gem5_power/${bm[544]} "
-    "make restore-all -C runspec_gem5_power/${bm[503]} "
-    "make restore-all -C runspec_gem5_power/${bm[520]} "
-    "make restore-all -C runspec_gem5_power/${bm[554]} "
-    "make restore-all -C runspec_gem5_power/${bm[507]} "
-    "make restore-all -C runspec_gem5_power/${bm[541]} "
-    "make restore-all -C runspec_gem5_power/${bm[505]} "
-    "make restore-all -C runspec_gem5_power/${bm[510]} "
-    "make restore-all -C runspec_gem5_power/${bm[531]} "
-    "make restore-all -C runspec_gem5_power/${bm[521]} "
-    "make restore-all -C runspec_gem5_power/${bm[549]} "
-    "make restore-all -C runspec_gem5_power/${bm[508]} "
-    "make restore-all -C runspec_gem5_power/${bm[548]} "
-    "make restore-all -C runspec_gem5_power/${bm[527]} "
-  )
+  if [[ $is_gem5 == true ]]; then
+    opts=(
+      "make restore-all -C runspec_gem5_power/${bm[502]} "
+      "make restore-all -C runspec_gem5_power/${bm[999]} "
+      "make restore-all -C runspec_gem5_power/${bm[538]} "
+      "make restore-all -C runspec_gem5_power/${bm[523]} "
+      "make restore-all -C runspec_gem5_power/${bm[557]} "
+      "make restore-all -C runspec_gem5_power/${bm[526]} "
+      "make restore-all -C runspec_gem5_power/${bm[525]} "
+      "make restore-all -C runspec_gem5_power/${bm[511]} "
+      "make restore-all -C runspec_gem5_power/${bm[500]} "
+      "make restore-all -C runspec_gem5_power/${bm[519]} "
+      "make restore-all -C runspec_gem5_power/${bm[544]} "
+      "make restore-all -C runspec_gem5_power/${bm[503]} "
+      "make restore-all -C runspec_gem5_power/${bm[520]} "
+      "make restore-all -C runspec_gem5_power/${bm[554]} "
+      "make restore-all -C runspec_gem5_power/${bm[507]} "
+      "make restore-all -C runspec_gem5_power/${bm[541]} "
+      "make restore-all -C runspec_gem5_power/${bm[505]} "
+      "make restore-all -C runspec_gem5_power/${bm[510]} "
+      "make restore-all -C runspec_gem5_power/${bm[531]} "
+      "make restore-all -C runspec_gem5_power/${bm[521]} "
+      "make restore-all -C runspec_gem5_power/${bm[549]} "
+      "make restore-all -C runspec_gem5_power/${bm[508]} "
+      "make restore-all -C runspec_gem5_power/${bm[548]} "
+      "make restore-all -C runspec_gem5_power/${bm[527]} "
+    )
+  elif [[ $is_m1 ]]; then
+    opts=(
+      "make find_interval_size -C runspec_gem5_power/${bm[502]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[999]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[538]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[523]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[557]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[526]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[525]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[511]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[500]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[519]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[544]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[503]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[520]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[554]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[507]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[541]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[505]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[510]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[531]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[521]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[549]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[508]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[548]} "
+      "make find_interval_size -C runspec_gem5_power/${bm[527]} "
+    )
+  fi
   for opt in "${opts[@]}" ;do
     read -u6
     {
@@ -304,6 +348,10 @@ func_with_restore_all_benchmarks(){
       echo >&6
     }&
   done
+}
+
+func_with_cpi_all_benchmarks(){
+  :
 }
 
 case "${1#*=}" in
@@ -417,6 +465,10 @@ case "${1#*=}" in
     with_restore_all=true
     shift
     ;;
+  --cpi_all)
+    with_cpi_all=true
+    shift
+    ;;
   --add_thread)
     with_add_thread=true
     shift
@@ -450,7 +502,11 @@ case "${1#*=}" in
 esac
 
 if [[ $is_m1 == true ]]; then
-  if [[ $is_myexe == true ]]; then
+  if [[ $with_restore_all == true ]]; then
+    (func_with_restore_all_benchmarks >>nohup.out 2>&1 &)
+  elif [[ $with_cpi_all == true ]]; then
+    (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
+  elif [[ $is_myexe == true ]]; then
     target=""
     args=""
     while [[ -n "${1#*=}" ]]
@@ -677,6 +733,8 @@ if [[ $is_m1 == true ]]; then
 elif [[ $is_gem5 == true ]]; then
   if [[ $with_restore_all == true ]]; then
     (func_with_restore_all_benchmarks >>nohup.out 2>&1 &)
+  elif [[ $with_cpi_all == true ]]; then
+    (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
   else
     exit 1
   fi

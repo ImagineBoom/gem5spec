@@ -12,12 +12,6 @@ NUM_INSNS_BEFORE_START=0
 NUM_INSNS_TO_COLLECT=1500m
 Sum_WeightedCPI=0
 
-if [[ ! -e ../running/run.fifo ]];then
-  mkdir -p "../running"
-  mkfifo ../running/run.fifo
-fi
-
-exec 6<>../running/run.fifo
 source ../Set_IntervalSize.sh
 
 #echo >&6
