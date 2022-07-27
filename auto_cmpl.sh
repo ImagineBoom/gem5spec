@@ -173,7 +173,7 @@ cmd_m1_spec2017(){
   local pre=${COMP_WORDS[COMP_CWORD-1]};
   cmd_control
   if [[ $pre == "--spec2017" ]];then
-    options="502 999 538 523 557 526 525 511 500 519 544 503 520 554 507 541 505 510 531 521 549 508 548 527 --all_benchmarks --entire_all_benchmarks"
+    options="502 999 538 523 557 526 525 511 500 519 544 503 520 554 507 541 505 510 531 521 549 508 548 527 --all_benchmarks --entire_all_benchmarks --restore_all --cpi_all"
   elif [[ $pre == "--all_benchmarks" ]];then
     options="--q_jump --q_convert --r_pipe_begin --r_pipe_end"
   elif [[ $pre == "--entire_all_benchmarks" ]]; then
