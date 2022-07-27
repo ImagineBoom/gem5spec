@@ -7,6 +7,8 @@ is_spec2017=false
 is_control=false
 with_all_benchmarks=false
 with_entire_all_benchmarks=false
+with_entire=false
+
 #判断参数个数选择不同模式
 with_all_steps=false
 with_itrace=false
@@ -26,6 +28,8 @@ with_max_insts=false
 with_slice_len=false
 
 with_restore_all=false
+with_cpi_all=false
+
 
 with_add_thread=false
 with_add_thread_10=false
@@ -51,6 +55,9 @@ cmd_control(){
         ;;
       --entire_all_benchmarks)
         with_entire_all_benchmarks=true
+        ;;
+      --entire)
+        with_entire=true
         ;;
       --all_steps)
         with_all_steps=true
@@ -119,6 +126,8 @@ cmd_m1_steps(){
         options=${options/${option}/}
       done
     elif [[ $with_pipe_view == true ]]; then
+        options=""
+    elif [[ $with_entire == true ]]; then
         options=""
     else
       options="-b -e"
@@ -193,8 +202,16 @@ cmd_m1_spec2017(){
   COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
 }
 
-cmd_gem5(){
-  :
+cmd_gem5_spec2017(){
+  local cur=${COMP_WORDS[COMP_CWORD]};
+  local pre=${COMP_WORDS[COMP_CWORD-1]};
+  cmd_control
+  if [[ $pre == "--spec2017" ]];then
+    options="--restore_all --cpi_all"
+  else
+    options=""
+  fi
+  COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
 }
 
 cmd_hub(){
@@ -209,6 +226,8 @@ cmd_hub(){
   is_spec2017=false
   with_all_benchmarks=false
   with_entire_all_benchmarks=false
+  with_entire=false
+
   #判断参数个数选择不同模式
   with_all_steps=false
   with_itrace=false
@@ -227,6 +246,7 @@ cmd_hub(){
   with_max_insts=false
   with_slice_len=false
   with_restore_all=false
+  with_cpi_all=false
 
   with_add_thread=false
   with_add_thread_10=false
@@ -247,7 +267,7 @@ cmd_hub(){
       ;;
     2)
       if [[ ${pre} == "--gem5" ]]; then
-        COMPREPLY=( $(compgen -W "--restore_all" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "--spec2017" -- ${cur}) )
       elif [[ ${pre} == "--m1" ]]; then
         COMPREPLY=( $(compgen -W "--myexe --spec2017" -- ${cur}) )
       elif [[ ${pre} == "--control" ]]; then
@@ -257,9 +277,7 @@ cmd_hub(){
       fi
       ;;
     3|*)
-      if [[ ${COMP_WORDS[1]} == "--gem5" ]]; then
-        COMPREPLY=( $(compgen -W "" -- ${cur}) )
-      elif [[ ${COMP_WORDS[1]} == "--m1" ]]; then
+      if [[ ${COMP_WORDS[1]} == "--m1" || ${COMP_WORDS[1]} == "--gem5" ]]; then
         cmd_f="${COMP_WORDS[1]##*-}_${COMP_WORDS[2]##*-}"
         cmd_f="${cmd_f%%=*}"
         #echo "${cmd_f}"
