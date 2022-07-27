@@ -306,14 +306,53 @@ func_with_restore_all_benchmarks(){
   for opt in "${opts[@]}" ;do
     read -u6
     {
-      ${opt} >>nohup.out 2>&1
+     ${opt} >>nohup.out 2>&1
       echo >&6
     }&
   done
 }
 
 func_with_cpi_all_benchmarks(){
-  :
+  if [[ $is_gem5 == true ]]; then
+    opts=(
+      "make cpi -C runspec_gem5_power/${bm[502]} "
+      "make cpi -C runspec_gem5_power/${bm[999]} "
+      "make cpi -C runspec_gem5_power/${bm[538]} "
+      "make cpi -C runspec_gem5_power/${bm[523]} "
+      "make cpi -C runspec_gem5_power/${bm[557]} "
+      "make cpi -C runspec_gem5_power/${bm[526]} "
+      "make cpi -C runspec_gem5_power/${bm[525]} "
+      "make cpi -C runspec_gem5_power/${bm[511]} "
+      "make cpi -C runspec_gem5_power/${bm[500]} "
+      "make cpi -C runspec_gem5_power/${bm[519]} "
+      "make cpi -C runspec_gem5_power/${bm[544]} "
+      "make cpi -C runspec_gem5_power/${bm[503]} "
+      "make cpi -C runspec_gem5_power/${bm[520]} "
+      "make cpi -C runspec_gem5_power/${bm[554]} "
+      "make cpi -C runspec_gem5_power/${bm[507]} "
+      "make cpi -C runspec_gem5_power/${bm[541]} "
+      "make cpi -C runspec_gem5_power/${bm[505]} "
+      "make cpi -C runspec_gem5_power/${bm[510]} "
+      "make cpi -C runspec_gem5_power/${bm[531]} "
+      "make cpi -C runspec_gem5_power/${bm[521]} "
+      "make cpi -C runspec_gem5_power/${bm[549]} "
+      "make cpi -C runspec_gem5_power/${bm[508]} "
+      "make cpi -C runspec_gem5_power/${bm[548]} "
+      "make cpi -C runspec_gem5_power/${bm[527]} "
+    )
+    for opt in "${opts[@]}" ;do
+      read -u6
+      {
+        ${opt} >>nohup.out 2>&1
+        echo >&6
+      }&
+    done
+    wait
+    make cpi_all -C runspec_gem5_power
+  elif [[ $is_m1 == true ]]; then
+    find ./runspec_gem5_power/*r/CPI_result/*CPI_result*.log -exec basename {} \;|grep -oP "(\d+).*CPI_result_(\d+\.*\d+)"|awk -F "_CPI_result_" 'BEGIN{print "Benchmark","WeightedCPI"} {print $1" "$2}'|column -t >m1_restore.csv
+  fi
+
 }
 
 func_m1_args_parser(){
@@ -391,4 +430,31 @@ func_m1_args_parser(){
     shift
   done
   # echo $args
+}
+
+func_itrace_all_benchmarks(){
+  make itrace -C runspec_gem5_power/${bm[502]} NUM_INSNS_TO_COLLECT=${bm_insts[502]} &
+  make itrace -C runspec_gem5_power/${bm[999]} NUM_INSNS_TO_COLLECT=${bm_insts[999]} &
+  make itrace -C runspec_gem5_power/${bm[538]} NUM_INSNS_TO_COLLECT=${bm_insts[538]} &
+  make itrace -C runspec_gem5_power/${bm[523]} NUM_INSNS_TO_COLLECT=${bm_insts[523]} &
+  make itrace -C runspec_gem5_power/${bm[557]} NUM_INSNS_TO_COLLECT=${bm_insts[557]} &
+  make itrace -C runspec_gem5_power/${bm[526]} NUM_INSNS_TO_COLLECT=${bm_insts[526]} &
+  make itrace -C runspec_gem5_power/${bm[525]} NUM_INSNS_TO_COLLECT=${bm_insts[525]} &
+  make itrace -C runspec_gem5_power/${bm[511]} NUM_INSNS_TO_COLLECT=${bm_insts[511]} &
+  make itrace -C runspec_gem5_power/${bm[500]} NUM_INSNS_TO_COLLECT=${bm_insts[500]} &
+  make itrace -C runspec_gem5_power/${bm[519]} NUM_INSNS_TO_COLLECT=${bm_insts[519]} &
+  make itrace -C runspec_gem5_power/${bm[544]} NUM_INSNS_TO_COLLECT=${bm_insts[544]} &
+  make itrace -C runspec_gem5_power/${bm[503]} NUM_INSNS_TO_COLLECT=${bm_insts[503]} &
+  make itrace -C runspec_gem5_power/${bm[520]} NUM_INSNS_TO_COLLECT=${bm_insts[520]} &
+  make itrace -C runspec_gem5_power/${bm[554]} NUM_INSNS_TO_COLLECT=${bm_insts[554]} &
+  make itrace -C runspec_gem5_power/${bm[507]} NUM_INSNS_TO_COLLECT=${bm_insts[507]} &
+  make itrace -C runspec_gem5_power/${bm[541]} NUM_INSNS_TO_COLLECT=${bm_insts[541]} &
+  make itrace -C runspec_gem5_power/${bm[505]} NUM_INSNS_TO_COLLECT=${bm_insts[505]} &
+  make itrace -C runspec_gem5_power/${bm[510]} NUM_INSNS_TO_COLLECT=${bm_insts[510]} &
+  make itrace -C runspec_gem5_power/${bm[531]} NUM_INSNS_TO_COLLECT=${bm_insts[531]} &
+  make itrace -C runspec_gem5_power/${bm[521]} NUM_INSNS_TO_COLLECT=${bm_insts[521]} &
+  make itrace -C runspec_gem5_power/${bm[549]} NUM_INSNS_TO_COLLECT=${bm_insts[549]} &
+  make itrace -C runspec_gem5_power/${bm[508]} NUM_INSNS_TO_COLLECT=${bm_insts[508]} &
+  make itrace -C runspec_gem5_power/${bm[548]} NUM_INSNS_TO_COLLECT=${bm_insts[548]} &
+  make itrace -C runspec_gem5_power/${bm[527]} NUM_INSNS_TO_COLLECT=${bm_insts[527]} &
 }
