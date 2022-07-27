@@ -28,6 +28,7 @@ if [[ -d "$CPI_log_PATH"||"$M1_log_PATH"||"$Valgrind_Simpts_log_PATH" ]];then
   rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
 fi
 
+rm -rf M1_result Valgrind_Simpoint_result CPI_result
 mkdir -p M1_result
 mkdir -p Valgrind_Simpoint_result
 mkdir -p CPI_result
