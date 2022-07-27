@@ -123,12 +123,12 @@ case "${1#*=}" in
 esac
 
 #SEC_OPTS解析
-target=""
-args=""
+
 
 case "${1#*=}" in
   502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527)
     spec2017_bm="${1#*=}"
+    # echo $spec2017_bm
     shift 1
     ;;
   *)
@@ -152,19 +152,19 @@ case "${1#*=}" in
       exit 1
     fi
     shift 1
-    func_m1_args_parser
+    func_m1_args_parser $@
     ;;
   -i|--itrace)
     with_itrace=true
     target=itrace
     shift 1
-    func_m1_args_parser
+    func_m1_args_parser $@
     ;;
   -q|--qtrace)
     with_qtrace=true
     target=qtrace
     shift 1
-    func_m1_args_parser
+    func_m1_args_parser $@
     ;;
   -r|--run_timer)
     with_run_timer=true
@@ -176,18 +176,18 @@ case "${1#*=}" in
       exit 1
     fi
     shift 1
-    func_m1_args_parser
+    func_m1_args_parser $@
     ;;
   -p|--pipe_view)
     with_pipe_view=true
     target=m1_pipeview
     shift 1
-    func_m1_args_parser
+    func_m1_args_parser $@
     ;;
   --all_benchmarks)
     with_all_benchmarks=true
     shift 1
-    func_m1_args_parser
+    func_m1_args_parser $@
     ;;
   --entire_all_benchmarks) #用于查看整体CPI等数据
     with_entire_all_benchmarks=true
@@ -221,7 +221,9 @@ case "${1#*=}" in
     shift
     ;;
   -b|--r_pipe_begin|--SCROLL_BEGIN|-e|--r_pipe_end|--SCROLL_END) #缺省参数模式
-    func_m1_args_parser
+    # echo "225"
+    func_m1_args_parser $@
+    # echo $args
     ;;
   --)
     shift 1

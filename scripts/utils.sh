@@ -8,6 +8,7 @@ is_spec2017=false
 is_control=false
 with_all_benchmarks=false
 with_entire_all_benchmarks=false
+with_entire=false
 spec2017_bm=999
 
 #判断参数个数选择不同模式
@@ -46,6 +47,9 @@ SCROLL_BEGIN=-1
 SCROLL_END=-1
 #entire_all_benchmarks
 slice_len=-1
+
+target=""
+args=""
 
 func_help(){
   cat <<- EOF
@@ -313,6 +317,8 @@ func_with_cpi_all_benchmarks(){
 }
 
 func_m1_args_parser(){
+  # echo "320"
+  # echo $1
   while [[ -n "${1#*=}" ]]
   do
     case "${1#*=}" in
@@ -362,12 +368,14 @@ func_m1_args_parser(){
         with_r_pipe_begin=true
         SCROLL_BEGIN="${2#*=}"
         args+="SCROLL_BEGIN="${2#*=}" "
+        # echo $SCROLL_BEGIN
         shift
         ;;
       -e|--r_pipe_end|--SCROLL_END)
         with_r_pipe_end=true
         SCROLL_END="${2#*=}"
         args+="SCROLL_END="${2#*=}" "
+        # echo $SCROLL_END
         shift
         ;;
       --gen_txt)
@@ -382,4 +390,5 @@ func_m1_args_parser(){
     esac
     shift
   done
+  # echo $args
 }
