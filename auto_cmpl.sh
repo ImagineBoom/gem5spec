@@ -86,6 +86,12 @@ cmd_control(){
       --gem5)
         is_gem5=true
         ;;
+      --restore_all)
+        with_restore_all=true
+        ;;
+      --cpi_all)
+        with_cpi_all=true
+        ;;
       *)
         ;;
     esac
@@ -127,7 +133,7 @@ cmd_m1_steps(){
       done
     elif [[ $with_pipe_view == true ]]; then
         options=""
-    elif [[ $with_entire == true ]]; then
+    elif [[ $with_entire == true || $with_restore_all == true || $with_cpi_all = true ]]; then
         options=""
     else
       options="-b -e"
