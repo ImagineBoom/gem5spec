@@ -16,13 +16,13 @@ source ../Set_IntervalSize.sh
 
 #echo >&6
 
-if [[ ! -f ${FILE}.vgi ]];then
-  echo ---------------------m1 handle ${FILE} beginning ---------------------->>${FILE}_trace.log
-  ${VALGRIND_EXE} --tool=itrace --trace-extent=all --trace-children=no --binary-outfile=${FILE}.vgi --g-num-insns-before-start=${NUM_INSNS_BEFORE_START} --num-insns-to-collect=${NUM_INSNS_TO_COLLECT} ./${EXECUTABLE} ${ARGS} >>${FILE}_trace.log 2>&1
-  echo itrace-ok
-else
-  echo ${FILE}.vgi already exist
-fi
+#if [[ ! -f ${FILE}.vgi ]];then
+#  echo ---------------------m1 handle ${FILE} beginning ---------------------->>${FILE}_trace.log
+#  ${VALGRIND_EXE} --tool=itrace --trace-extent=all --trace-children=no --binary-outfile=${FILE}.vgi --g-num-insns-before-start=${NUM_INSNS_BEFORE_START} --num-insns-to-collect=${NUM_INSNS_TO_COLLECT} ./${EXECUTABLE} ${ARGS} >>${FILE}_trace.log 2>&1
+#  echo itrace-ok
+#else
+#  echo ${FILE}.vgi already exist
+#fi
 
 if [[ -d "$CPI_log_PATH"||"$M1_log_PATH"||"$Valgrind_Simpts_log_PATH" ]];then 
   rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
