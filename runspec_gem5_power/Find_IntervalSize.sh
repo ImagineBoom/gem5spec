@@ -24,9 +24,9 @@ source ../Set_IntervalSize.sh
 #  echo ${FILE}.vgi already exist
 #fi
 
-if [[ -d "$CPI_log_PATH"||"$M1_log_PATH"||"$Valgrind_Simpts_log_PATH" ]];then 
-  rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
-fi
+#if [[ -d "$CPI_log_PATH"||"$M1_log_PATH"||"$Valgrind_Simpts_log_PATH" ]]; then
+#  rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
+#fi
 
 rm -rf M1_result Valgrind_Simpoint_result CPI_result
 mkdir -p M1_result
