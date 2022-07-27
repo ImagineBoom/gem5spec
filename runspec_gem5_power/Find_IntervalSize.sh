@@ -64,9 +64,9 @@ for ((i=0;i<${#interval_size[@]};i++)) do
     fi
   }
 done
-rm -r *.pipe *.qt *.config 2>/dev/null
 Interval_Number=${#interval_size[@]}
 wait
+rm -r *.pipe *.qt *.config 2>/dev/null
 LineNumof_CPI_result_log=`awk 'END{print NR}' ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log`
 if [[ $Interval_Number == $LineNumof_CPI_result_log ]];then
   sort -n -r -k 2 -t : ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log | awk 'END{printf "The best CPI is " $0}' >> ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log
