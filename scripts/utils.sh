@@ -306,7 +306,7 @@ func_with_restore_all_benchmarks(){
   for opt in "${opts[@]}" ;do
     read -u6
     {
-     ${opt} >>nohup.out 2>&1
+      ${opt} >>nohup.out 2>&1
       echo >&6
     }&
   done
