@@ -4,79 +4,79 @@ FILE=$4
 
 	case $FILE in
 	502.gcc_r)
-		interval_size=(300000 500000)
+		interval_size=(5000000)
 		;;
 	500.perlbench_r)
-		interval_size=(500)
+		interval_size=(5000000)
 		;;
 	503.bwaves_r)
-		interval_size=(503)
+		interval_size=(5000000)
 		;;
 	505.mcf_r)
-		interval_size=(505)
+		interval_size=(5000000)
 		;;
 	507.cactuBSSN_r)
-		interval_size=(507)
+		interval_size=(5000000)
 		;;
 	508.namd_r)
-		interval_size=(508)
+		interval_size=(5000000)
 		;;
 	510.parest_r)
-		interval_size=(510)
+		interval_size=(5000000)
 		;;
 	511.povray_r)
-		interval_size=(511)
+		interval_size=(5000000)
 		;;
 	519.lbm_r)
-		interval_size=(519)
+		interval_size=(5000000)
 		;;
 	520.omnetpp_r)
-		interval_size=(520)
+		interval_size=(5000000)
 		;;
 	521.wrf_r)
-		interval_size=(521)
+		interval_size=(5000000)
 		;;
 	523.xalancbmk_r)
-		interval_size=(523)
+		interval_size=(5000000)
 		;;
 	525.x264_r)
-		interval_size=(525)
+		interval_size=(5000000)
 		;;
 	526.blender_r)
-		interval_size=(526)
+		interval_size=(5000000)
 		;;
 	527.cam4_r)
-		interval_size=(527)
+		interval_size=(5000000)
 		;;
 	531.deepsjeng_r)
-		interval_size=(531)
+		interval_size=(5000000)
 		;;
 	538.imagick_r)
-		interval_size=(538)
+		interval_size=(5000000)
 		;;
 	541.leela_r)
-		interval_size=(541)
+		interval_size=(5000000)
 		;;
 	544.nab_r)
-		interval_size=(544)
+		interval_size=(5000000)
 		;;
 	548.exchange2_r)
-		interval_size=(548)
+		interval_size=(5000000)
 		;;
 	549.fotonik3d_r)
-		interval_size=(549)
+		interval_size=(5000000)
 		;;
 	554.roms_r)
-		interval_size=(554)
+		interval_size=(5000000)
 		;;
 	557.xz_r)
-		interval_size=(557)
+		interval_size=(5000000)
 		;;
 	999.specrand_ir)
-		interval_size=(999)
+		interval_size=(5000000)
 		;;
 	*)
-		interval_size=()
+		interval_size=(5000000)
 
 	esac
 

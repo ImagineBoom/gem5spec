@@ -16,18 +16,19 @@ source ../Set_IntervalSize.sh
 
 #echo >&6
 
-if [[ ! -f ${FILE}.vgi ]];then
-  echo ---------------------m1 handle ${FILE} beginning ---------------------->>${FILE}_trace.log
-  ${VALGRIND_EXE} --tool=itrace --trace-extent=all --trace-children=no --binary-outfile=${FILE}.vgi --g-num-insns-before-start=${NUM_INSNS_BEFORE_START} --num-insns-to-collect=${NUM_INSNS_TO_COLLECT} ./${EXECUTABLE} ${ARGS} >>${FILE}_trace.log 2>&1
-  echo itrace-ok
-else
-  echo ${FILE}.vgi already exist
-fi
+#if [[ ! -f ${FILE}.vgi ]];then
+#  echo ---------------------m1 handle ${FILE} beginning ---------------------->>${FILE}_trace.log
+#  ${VALGRIND_EXE} --tool=itrace --trace-extent=all --trace-children=no --binary-outfile=${FILE}.vgi --g-num-insns-before-start=${NUM_INSNS_BEFORE_START} --num-insns-to-collect=${NUM_INSNS_TO_COLLECT} ./${EXECUTABLE} ${ARGS} >>${FILE}_trace.log 2>&1
+#  echo itrace-ok
+#else
+#  echo ${FILE}.vgi already exist
+#fi
 
-if [[ -d "$CPI_log_PATH"||"$M1_log_PATH"||"$Valgrind_Simpts_log_PATH" ]];then 
-  rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
-fi
+#if [[ -d "$CPI_log_PATH"||"$M1_log_PATH"||"$Valgrind_Simpts_log_PATH" ]]; then
+#  rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
+#fi
 
+rm -rf M1_result Valgrind_Simpoint_result CPI_result
 mkdir -p M1_result
 mkdir -p Valgrind_Simpoint_result
 mkdir -p CPI_result
@@ -43,10 +44,12 @@ for ((i=0;i<${#interval_size[@]};i++)) do
         Simpts=${Simpts_Array[j]}
         Weight=${Weight_Array[j]}
         make qtrace JUMP_NUM=$[Simpts*Interval_size] CONVERT_NUM_Vgi_RECS=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE}
-        make m1 NUM_INST=${Interval_size} CPI_INTERVAL=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE}
+        # SCROLL_END=${Interval_size}
+        # 每个片段取前5000条，因为生成5,000,000的文本>12小时
+        make m1 NUM_INST=${Interval_size} CPI_INTERVAL=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE} SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=5000
+        make m1_pipeview pipeFILE=${Simpts}_${Interval_size}_${FILE} pipeARGS="-out_file ${Simpts}_${Interval_size}_${FILE}.txt  -overwrite "
         CPI=`grep 'CMPL: CPI--------------------------------------- .* inst.*' ./${Simpts}_${Interval_size}_${FILE}.results |awk '{print $3}'`
         echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" "$2*$3)}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
-        rm -r *.pipe *.qt *.config 2>/dev/null
         mv ${Simpts}_${Interval_size}_${FILE}.* M1_result 2>/dev/null
         mv ${Simpts}_${Interval_size}_${FILE}_trace.* M1_result 2>/dev/null
         echo >&6
@@ -55,7 +58,7 @@ for ((i=0;i<${#interval_size[@]};i++)) do
     wait
     LineNumof_merge=`awk 'END{print NR}' ${MERGE_FILE_PATH}`
     LineNumof_Calculate_WeightedCPI_log=`awk 'END{print NR}' ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log`
-    if [[ $LineNumof_Calculate_WeightedCPI_log == $LineNumof_merge ]];then
+    if [[ $LineNumof_Calculate_WeightedCPI_log == $LineNumof_merge ]]; then
       Sum_WeightedCPI=`awk '{s += $4} END {print s}' ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log`
       sort -n -k 1 ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log | awk 'BEGIN {print "simpts","Weights","CPI","WeightedCPI"} {print $1,$2,$3,$4}' |  column -t > ./CPI_result/${Interval_size}_CPI_result.merge
       echo ${Interval_size}_${FILE}_SumWeightCPI:"$Sum_WeightedCPI" >> ./CPI_result/${Interval_size}_CPI_result.merge
@@ -64,9 +67,9 @@ for ((i=0;i<${#interval_size[@]};i++)) do
     fi
   }
 done
-
 Interval_Number=${#interval_size[@]}
 wait
+#rm -r *.pipe *.qt *.config 2>/dev/null
 LineNumof_CPI_result_log=`awk 'END{print NR}' ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log`
 if [[ $Interval_Number == $LineNumof_CPI_result_log ]];then
   sort -n -r -k 2 -t : ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log | awk 'END{printf "The best CPI is " $0}' >> ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log
