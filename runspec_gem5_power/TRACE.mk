@@ -34,6 +34,7 @@ SCROLL_END      = 200
 
 #scrollpv
 pipeFILE        =$(resultsFILE)
+pipeARGS        =
 
 CPU_TYPE = O3CPU
 CACHE_OPT += --ruby --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128
@@ -71,7 +72,7 @@ trace: $(EXECUTABLE)
 
 m1_pipeview: $(EXECUTABLE)
 	@echo ---------------------spv handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIME) /opt/ibm/sim_ppc/bin/scrollpv -pipe $(pipeFILE).pipe -config $(pipeFILE).config  >>$(FILE)_trace.log 2>&1
+	$(TIME) /opt/ibm/sim_ppc/bin/scrollpv -pipe $(pipeFILE).pipe -config $(pipeFILE).config $(pipeARGS) >>$(pipeFILE)_trace.log 2>&1
 	@echo ---------------------spv handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
 
@@ -104,9 +105,7 @@ cpi: $(EXECUTABLE)
 	done;
 	result=`awk '{sum+=$$4}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
 	awk -F, 'NR==1 {print "Checkpoint#","Weights","CPI","WeightedCPI"} {print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log | column -t > $(FILE)_final_result_$${result}.csv;\
-	case_name=$(FILE);\
-	sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;\
-	sed -i '$$G' ./$(FILE)_final_result_$${result}.csv;
+	sed -i '$$G;$$a The total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 restore-status: $(EXECUTABLE)
