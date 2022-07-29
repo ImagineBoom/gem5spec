@@ -105,7 +105,9 @@ cpi: $(EXECUTABLE)
 	done;
 	result=`awk '{sum+=$$4}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
 	awk -F, 'NR==1 {print "Checkpoint#","Weights","CPI","WeightedCPI"} {print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log | column -t > $(FILE)_final_result_$${result}.csv;\
-	sed -i '$$G;$$a The total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;
+	case_name=$(FILE);\
+	sed-i'$$a The '$$case_name' total weighted cpi is '$$result''./$(FILE)_final_result_$${result}.csv;\
+	sed-i'$$G'./$(FILE)_final_result_$${result}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 restore-status: $(EXECUTABLE)
