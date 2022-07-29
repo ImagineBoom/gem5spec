@@ -49,7 +49,7 @@ reduce_thread(){
 
 reduce_thread_10(){
   for i in `seq 10`; do
-    reduce_thread
+    reduce_thread &
   done
 }
 
