@@ -457,3 +457,6 @@ cpi-all:
 	@awk -F, 'NR==1 {print "SpecCase#","WeightedCPI"} {print $$1,$$2}' weightedCPI_results.log | column -t > weightedCPI_results.csv;
 	@rm -rf weightedCPI_results.log;
 	@gedit weightedCPI_results.csv;
+
+collect-csv:
+	@cat ./*/*.csv > Each_case_ckp_data.csv
