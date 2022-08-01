@@ -1,6 +1,9 @@
+import csv
 import datetime
 import subprocess
 import re
+import threading
+from collections import namedtuple
 
 
 def runcmd(command):
@@ -23,8 +26,10 @@ class Instruction:
         self.Pipe = Pipe
 
 
-class Trace:
-    def __init__(self):
+class Trace(threading.Thread):
+    def __init__(self, fname):
+        super(Trace, self).__init__(name=fname)
+        self.fname: str = fname
         self.instruction: dict[str, list[Instruction]] = {}
         self.lines: list[str] = []  # 流水线图的行
         self.cur_line = ""  # 当前处理的流水线图的行
@@ -46,7 +51,7 @@ class Trace:
         for line in self.lines:
             if "| Scrollpipe Data |" in line:
                 start = True
-                print("started")
+                print(self.name + "-started")
                 # print(line)
             if not start:
                 # print("not start")
@@ -63,8 +68,8 @@ class Trace:
                 InstAddrLow32 = pipeline.group('inst_addr_low32')
                 DataAddrLow32 = pipeline.group('data_addr_low32')
                 Pipe = pipeline.group('pipe')
-                instruction = Instruction(IopId=IopId, MnemonicValue=MnemonicValue, InstAddrLow32=InstAddrLow32,
-                                          DataAddrLow32=DataAddrLow32, Pipe=Pipe)
+                new_inst = Instruction(IopId=IopId, MnemonicValue=MnemonicValue, InstAddrLow32=InstAddrLow32,
+                                       DataAddrLow32=DataAddrLow32, Pipe=Pipe)
                 haveSameInst = False
                 # print(MnemonicKey)
                 # print(IopId,MnemonicValue,InstAddrLow32,DataAddrLow32,Pipe)
@@ -82,7 +87,7 @@ class Trace:
 
                 if not haveSameInst:
                     # print(line)
-                    self.instruction.setdefault(MnemonicKey, []).append(instruction)
+                    self.instruction.setdefault(MnemonicKey, []).append(new_inst)
                     haveSameInst = False
                 # print(line)
             else:
@@ -91,35 +96,121 @@ class Trace:
 
     def calculate_execycles(self):
         exe_pattern = re.compile(r'(I*\.*E+\.*)\.*f\.*C')
-        for key, insts in self.instruction.items():
-            for index, val in enumerate(insts):
+        for this_key, this_insts in self.instruction.items():
+            for index, val in enumerate(this_insts):
                 exe = exe_pattern.search(val.Pipe)
                 if exe:
                     # print(exe.group(0))
-                    self.instruction[key][index].EXE_Cycles = exe.group(0).count('E')
-                    # print(self.instruction[key][index].EXE_Cycles)
+                    self.instruction[this_key][index].EXE_Cycles = exe.group(0).count('E')
+                    # print(self.instruction[this_key][index].EXE_Cycles)
 
-    def calculate_place(self, iop_id) -> int:
+    # 精简的流水线图
+    def tidy(self):
+        new_insts: list[Instruction] = []
+        new_inst = None
+        for key, insts in self.instruction.items():
+            new_insts.clear()
+            for index, inst in enumerate(insts):
+                for new_inst in new_insts:
+                    if inst.EXE_Cycles == new_inst.EXE_Cycles or inst.EXE_Cycles == -1:
+                        break
+                else:
+                    if inst.EXE_Cycles != -1:
+                        new_insts.append(inst)
+            self.instruction[key].clear()
+            self.instruction[key].extend(new_insts)
+
+    # 还原流水线图
+    def calculate_place(self, iop_id):
         None
 
-    def test_grep(self):
-        with open("pipe.txt", 'w', encoding='utf-8') as f:
-            for key, insts in self.instruction.items():
-                f.write(key + '\n')
-                for i in insts:
-                    f.write("            " +
+    # 写入csv
+    def wirte(self):
+        with open(self.fname.removesuffix(".txt") + ".csv", 'w', encoding='utf-8') as f:
+            f.write(format("MNEMONIC-L", "<20") +
+                    format("IOP-ID", "<20") + format("MNEMONIC-R", "<20") +
+                    format("EXE-CYCLES", "<20") + format("INST-ADDR-LOW-32", "<20") +
+                    format("DATA-ADDR-LOW-32", "<20") + "PIPE-JOBS" +
+                    '\n')
+            for this_key, this_insts in self.instruction.items():
+                # f.write(this_key + '\n')
+                for i in this_insts:
+                    f.write(format(this_key, "<20") +
                             format(str(i.IopId), "<20") + format(i.MnemonicValue, "<20") +
                             format(str(i.EXE_Cycles), "<20") + format(i.InstAddrLow32, "<20") +
                             format(i.DataAddrLow32, "<20") + i.Pipe +
                             '\n')
 
+    # 多线程
+    def run(self) -> None:
+        # threadLock.acquire()
+        # None
+        # threadLock.release()
+        self.m1pipe_grep(self.fname)
+        self.calculate_execycles()
+        self.tidy()
+        self.wirte()
 
+    def sort_after_merge(self, source_csv_file):
+        with open(source_csv_file, "r", encoding='utf-8') as fr:
+            csv_reader = csv.reader(fr)
+            # headers=next(csv_reader)
+            headers = ["MNEMONIC_L0", "MNEMONIC_L1", "MNEMONIC_L2", "STATUS", "VERSION", "CATEGORY", "PDF_SHOW",
+                       "PDF_REAL", "DESC"]
+            Summary_Inst = namedtuple('Summary_inst', headers)
+            with open("./data/p8_insts.csv", 'w+', encoding="utf-8") as fw:
+                p8_insts = csv.writer(fw)
+                p8_insts.writerow(["MNEMONIC", "EXE_CYCLES", "STATUS", "CATEGORY", "VERSION", "PDF_REAL", "DESC"])
+                for r in csv_reader:
+                    row_info = Summary_Inst(*r)
+                    # print(row_info)
+                    exe_cycles = ""
+                    this_insts = self.instruction.setdefault(row_info.MNEMONIC_L2, [])
+                    if len(this_insts) == 1:
+                        exe_cycles += str(this_insts[0].EXE_Cycles)
+                    elif len(this_insts) > 1:
+                        for inst in self.instruction[row_info.MNEMONIC_L2]:
+                            exe_cycles += str(inst.EXE_Cycles) + ";"
+                    else:
+                        continue
+                    p8_insts.writerow(
+                        [row_info.MNEMONIC_L2, exe_cycles, row_info.STATUS, row_info.CATEGORY, row_info.VERSION,
+                         row_info.PDF_REAL,
+                         row_info.DESC])
+
+
+# def t():
+#     a = [1, 2, 3, 4, 5, 6]
+#     i = 0
+#     for i in a:
+#         if i == 6: break
+#     else:
+#         print("end:" + str(i))
+
+
+# t()
 start_time = datetime.datetime.now()
-t = Trace()
-t.m1pipe_grep(fname="./999.txt")
-t.calculate_execycles()
-t.test_grep()
 
-print("end")
+# 1. 并行
+runcmd(["find ./runspec_gem5_power/*r/M1_result/*.txt"])
+pipe_list = ["./5_5000000_999.specrand_ir.txt", "./6_5000000_999.specrand_ir.txt"]
+threads: list[Trace] = []
+
+for p in pipe_list:
+    t = Trace(fname=p)
+    threads.append(t)
+[t.start() for t in threads]
+[t.join() for t in threads]
+
+# 2. 合并(按指令)
+merge = Trace(fname="merge")
+for t in threads:
+    for key, insts in t.instruction.items():
+        merge.instruction.setdefault(key, []).extend(insts)
+merge.tidy()
+merge.wirte()
+merge.sort_after_merge(source_csv_file="./data/scripts_csv_power-isa-implementation.csv")
+print("MERGE-ENDED")
 end_time = datetime.datetime.now()
-print("CONSUMED TIME",end_time - start_time)
+print("SORT-ENDED")
+print("CONSUMED TIME", end_time - start_time)
