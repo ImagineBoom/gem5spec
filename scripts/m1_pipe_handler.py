@@ -193,7 +193,7 @@ class Trace(threading.Thread):
 start_time = datetime.datetime.now()
 
 # 1. 并行
-l = runcmd(["find ./runspec_gem5_power/*r/M1_result/*.txt"])
+l = runcmd(["find ../runspec_gem5_power/*r/M1_result/*.txt"])
 pipe_list = list(set(l))
 threads: list[Trace] = []
 
