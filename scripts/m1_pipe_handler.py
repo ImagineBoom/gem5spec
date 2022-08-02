@@ -1,5 +1,6 @@
 import csv
 import datetime
+import os
 import subprocess
 import re
 import threading
@@ -134,9 +135,10 @@ class Trace(threading.Thread):
 
     # 写入csv
     def wirte(self, file_type="txt"):
+        tup_path = os.path.splitext(self.fname)
         this_fname = self.fname
-        if self.fname[-4:] == ".txt":
-            this_fname = self.fname[:-4] + "." + file_type
+        if tup_path[1] == ".txt":
+            this_fname = tup_path[0] + "." + file_type
         if "." not in this_fname:
             this_fname += "." + file_type
         # this_fname = self.fname.removesuffix(".txt") + "."+file_type
@@ -157,16 +159,22 @@ class Trace(threading.Thread):
                             '\n')
 
     # 多线程
-    def run(self) -> str:
+    def run(self):
         # threadLock.acquire()
         # None
         # threadLock.release()
+        tup_path = os.path.splitext(basename(self.fname))
+        for f in existed_files:
+            if tup_path[0] in f:
+                # print("EXISTED: " + self.fname)
+                return {"name": self.fname, "state": "EXISTED"}
+        # print("171")
         self.m1pipe_grep(self.fname)
         self.calculate_execycles()
         self.tidy()
         self.wirte()
         # print(self.fname+" done")
-        return self.fname
+        return {"name": self.fname, "state": "RE-CONSTRUCTED"}
 
     def sort_after_merge(self, source_csv_file):
         with open(source_csv_file, "r", encoding='utf-8') as fr:
@@ -189,7 +197,8 @@ class Trace(threading.Thread):
                         for inst in self.instruction[row_info.MNEMONIC_L2]:
                             exe_cycles += str(inst.EXE_Cycles) + ";"
                     else:
-                        continue
+                        # continue
+                        exe_cycles = ""
                     p8_insts.writerow(
                         [row_info.MNEMONIC_L2, exe_cycles, row_info.STATUS, row_info.CATEGORY, row_info.VERSION,
                          row_info.PDF_REAL,
@@ -206,15 +215,26 @@ class Trace(threading.Thread):
 
 def job_done(this_future: Future):
     sleep(1)
-    job_name = this_future.result()
-    print("RE-CONSTRUCTED : " + job_name)
+    job = this_future.result()
+    print(job["state"] + " : " + job["name"])
+
+
+existed_files = []
+
+
+def get_existed():
+    for root, dirs, files in os.walk("../data", topdown=False):
+        for name in files:
+            existed_files.append(os.path.join(root, name))
 
 
 start_time = datetime.datetime.now()
+# 0. 检查
+get_existed()
 
 # 1. 并行
-# pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/M1_result/*.txt"])
-pipe_list_temp = runcmd(["find ../*.txt"])
+pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/M1_result/*.txt"])
+# pipe_list_temp = runcmd(["find ../*.txt"])
 # pipe_list_temp = ["../5_5000000_999.specrand_ir.txt","../6_5000000_999.specrand_ir.txt"]
 pipe_list = list(sorted(set(pipe_list_temp)))
 # [print(f) for f in pipe_list]
