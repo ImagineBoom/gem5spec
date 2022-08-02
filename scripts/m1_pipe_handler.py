@@ -4,16 +4,23 @@ import subprocess
 import re
 import threading
 from collections import namedtuple
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future
+from os import getpid as pid
+from os.path import basename
+from time import sleep
 
 
 def runcmd(command):
     ret = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="utf-8",
-                         timeout=500)
+                         timeout=None)
     if ret.returncode == 0:
+        # print("success:", ret)
         return ret.stdout.split('\n')
     else:
-        print(ret)
-        return None
+        # print("error:", ret)
+        return ret.stderr.split('\n')
 
 
 class Instruction:
@@ -37,7 +44,7 @@ class Trace(threading.Thread):
         self.pattern = re.compile(
             r'^\|(?P<pipe>[\.\w]+)[\+\-\|\s]+(?P<iop_id>\d+)\s*\|\s*(?P<mnemonic_key>[\w\?\-]+)\s*(?P<mnemonic_value>[\w\,\.\(\)\?\+\-]*)\s*\|\s*(?P<inst_addr_low32>\w+)\s*\|\s*(?P<data_addr_low32>\w*)\s*\|$')
 
-    def m1pipe_read(self, fname: str) -> list[str]:
+    def m1pipe_read(self, fname: str):
         with open(fname, 'r', encoding='utf-8') as f:
             lines = f.readlines()
         return lines
@@ -52,7 +59,7 @@ class Trace(threading.Thread):
         for line in self.lines:
             if "| Scrollpipe Data |" in line:
                 start = True
-                print(self.name + "-started")
+                # print(self.name + "-started")
                 # print(line)
             if not start:
                 # print("not start")
@@ -84,7 +91,7 @@ class Trace(threading.Thread):
                         else:
                             haveSameInst = False
                 else:
-                    None
+                    pass
 
                 if not haveSameInst:
                     # print(line)
@@ -93,7 +100,7 @@ class Trace(threading.Thread):
                 # print(line)
             else:
                 # print("pipeline is empty")
-                None
+                pass
 
     def calculate_execycles(self):
         exe_pattern = re.compile(r'(I*\.*E+\.*)\.*f\.*C')
@@ -123,11 +130,18 @@ class Trace(threading.Thread):
 
     # 还原流水线图
     def calculate_place(self, iop_id):
-        None
+        pass
 
     # 写入csv
-    def wirte(self):
-        with open(self.fname.removesuffix(".txt") + ".csv", 'w', encoding='utf-8') as f:
+    def wirte(self, file_type="txt"):
+        this_fname = self.fname
+        if self.fname[-4:] == ".txt":
+            this_fname = self.fname[:-4] + "." + file_type
+        if "." not in this_fname:
+            this_fname += "." + file_type
+        # this_fname = self.fname.removesuffix(".txt") + "."+file_type
+        # print("basename: "+basename(this_fname))
+        with open("../data/" + basename(this_fname), 'w', encoding='utf-8') as f:
             f.write(format("MNEMONIC-L", "<20") +
                     format("IOP-ID", "<20") + format("MNEMONIC-R", "<20") +
                     format("EXE-CYCLES", "<20") + format("INST-ADDR-LOW-32", "<20") +
@@ -143,7 +157,7 @@ class Trace(threading.Thread):
                             '\n')
 
     # 多线程
-    def run(self) -> None:
+    def run(self) -> str:
         # threadLock.acquire()
         # None
         # threadLock.release()
@@ -151,6 +165,8 @@ class Trace(threading.Thread):
         self.calculate_execycles()
         self.tidy()
         self.wirte()
+        # print(self.fname+" done")
+        return self.fname
 
     def sort_after_merge(self, source_csv_file):
         with open(source_csv_file, "r", encoding='utf-8') as fr:
@@ -188,20 +204,38 @@ class Trace(threading.Thread):
 #     else:
 #         print("end:" + str(i))
 
+def job_done(this_future: Future):
+    sleep(1)
+    job_name = this_future.result()
+    print("RE-CONSTRUCTED : " + job_name)
 
-# t()
+
 start_time = datetime.datetime.now()
 
 # 1. 并行
-l = runcmd(["find ../runspec_gem5_power/*r/M1_result/*.txt"])
-pipe_list = list(set(l))
-threads: list[Trace] = []
+# pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/M1_result/*.txt"])
+pipe_list_temp = runcmd(["find ../*.txt"])
+# pipe_list_temp = ["../5_5000000_999.specrand_ir.txt","../6_5000000_999.specrand_ir.txt"]
+pipe_list = list(sorted(set(pipe_list_temp)))
+# [print(f) for f in pipe_list]
+if "" in pipe_list:
+    pipe_list.remove("")
+# [print(f) for f in pipe_list]
+threads = []
 
 for p in pipe_list:
     t = Trace(fname=p)
     threads.append(t)
-[t.start() for t in threads]
-[t.join() for t in threads]
+# [t.start() for t in threads]
+# [t.join() for t in threads]
+
+# 线程异步回调
+threads_num = 10
+threadpool = ThreadPoolExecutor(max_workers=threads_num)
+for t in threads:
+    future = threadpool.submit(t.run)
+    future.add_done_callback(job_done)
+threadpool.shutdown(wait=True)
 
 # 2. 合并(按指令)
 merge = Trace(fname="merge")
@@ -210,8 +244,9 @@ for t in threads:
         merge.instruction.setdefault(key, []).extend(insts)
 merge.tidy()
 merge.wirte()
-merge.sort_after_merge(source_csv_file="../data/scripts_csv_power-isa-implementation.csv")
 print("MERGE-ENDED")
-end_time = datetime.datetime.now()
+merge.sort_after_merge(source_csv_file="../data/scripts_csv_power-isa-implementation.csv")
 print("SORT-ENDED")
+end_time = datetime.datetime.now()
+
 print("CONSUMED TIME", end_time - start_time)
