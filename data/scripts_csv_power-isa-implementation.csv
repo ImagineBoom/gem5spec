@@ -1,0 +1,755 @@
+b[l][a],b,b,Implemented,P1,BASIC,41,65,Branch I-form
+b[l][a],ba,b,Implemented,P1,BASIC,41,65,Branch I-form
+b[l][a],bl,b,Implemented,P1,BASIC,41,65,Branch I-form
+b[l][a],bla,b,Implemented,P1,BASIC,41,65,Branch I-form
+bc[l][a],bc,bc,Implemented,P1,BASIC,41,65,Branch Conditional B-form
+bc[l][a],bca,bc,Implemented,P1,BASIC,41,65,Branch Conditional B-form
+bc[l][a],bcl,bc,Implemented,P1,BASIC,41,65,Branch Conditional B-form
+bc[l][a],bcla,bc,Implemented,P1,BASIC,41,65,Branch Conditional B-form
+bcctr[l],bcctr,bcctr,Implemented,P1,BASIC,42,66,Branch Conditional to Count Register XL-form
+bcctr[l],bcctrl,bcctr,Implemented,P1,BASIC,42,66,Branch Conditional to Count Register XL-form
+bclr[l],bclr,bclr,Implemented,P1,BASIC,42,66,Branch Conditional to Link Register XL-form
+bclr[l],bclrl,bclr,Implemented,P1,BASIC,42,66,Branch Conditional to Link Register XL-form
+bctar[l],bctar,bctar,Implemented,v2.07,BASIC,43,67,Branch Conditional to Branch Target Address Register XL-form
+bctar[l],bctarl,bctar,Implemented,v2.07,BASIC,43,67,Branch Conditional to Branch Target Address Register XL-form
+crand,crand,crand,Implemented,P1,BASIC,44,68,Condition Register AND XL-form
+crnand,crnand,crnand,Implemented,P1,BASIC,44,68,Condition Register NAND XL-form
+cror,cror,cror,Implemented,P1,BASIC,44,68,Condition Register OR XL-form
+crxor,crxor,crxor,Implemented,P1,BASIC,44,68,Condition Register XOR XL-form
+crandc,crandc,crandc,Implemented,P1,BASIC,45,69,Condition Register AND with Complement XL-form
+creqv,creqv,creqv,Implemented,P1,BASIC,45,69,Condition Register Equivalent XL-form
+crnor,crnor,crnor,Implemented,P1,BASIC,45,69,Condition Register NOR XL-form
+crorc,crorc,crorc,Implemented,P1,BASIC,45,69,Condition Register OR with Complement XL-form
+mcrf,mcrf,mcrf,Implemented,P1,BASIC,46,70,Move Condition Register Field XL-form
+sc,sc,sc,Implemented,PPC,BASIC,47,71,System Call SC-form
+lbz,lbz,lbz,Implemented,P1,BASIC,52,76,Load Byte and Zero D-form
+lbzu,lbzu,lbzu,Implemented,P1,BASIC,52,76,Load Byte and Zero with Update D-form
+lbzux,lbzux,lbzux,Implemented,P1,BASIC,52,76,Load Byte and Zero with Update Indexed X-form
+lbzx,lbzx,lbzx,Implemented,P1,BASIC,52,76,Load Byte and Zero Indexed X-form
+lhz,lhz,lhz,Implemented,P1,BASIC,53,77,Load Halfword and Zero D-form
+lhzu,lhzu,lhzu,Implemented,P1,BASIC,53,77,Load Halfword and Zero with Update D-form
+lhzux,lhzux,lhzux,Implemented,P1,BASIC,53,77,Load Halfword and Zero with Update Indexed X-form
+lhzx,lhzx,lhzx,Implemented,P1,BASIC,53,77,Load Halfword and Zero Indexed X-form
+lha,lha,lha,Implemented,P1,BASIC,54,78,Load Halfword Algebraic D-form
+lhau,lhau,lhau,Implemented,P1,BASIC,54,78,Load Halfword Algebraic with Update D-form
+lhaux,lhaux,lhaux,Implemented,P1,BASIC,54,78,Load Halfword Algebraic with Update Indexed X-form
+lhax,lhax,lhax,Implemented,P1,BASIC,54,78,Load Halfword Algebraic Indexed X-form
+lwz,lwz,lwz,Implemented,P1,BASIC,55,79,Load Word and Zero D-form
+lwzu,lwzu,lwzu,Implemented,P1,BASIC,55,79,Load Word and Zero with Update D-form
+lwzux,lwzux,lwzux,Implemented,P1,BASIC,55,79,Load Word and Zero with Update Indexed X-form
+lwzx,lwzx,lwzx,Implemented,P1,BASIC,55,79,Load Word and Zero Indexed X-form
+lwa,lwa,lwa,Implemented,PPC,BASIC,56,80,Load Word Algebraic DS-form
+lwaux,lwaux,lwaux,Implemented,PPC,BASIC,56,80,Load Word Algebraic with Update Indexed X-form
+lwax,lwax,lwax,Implemented,PPC,BASIC,56,80,Load Word Algebraic Indexed X-form
+ld,ld,ld,Implemented,PPC,BASIC,57,81,Load Doubleword DS-form
+ldu,ldu,ldu,Implemented,PPC,BASIC,57,81,Load Doubleword with Update DS-form
+ldux,ldux,ldux,Implemented,PPC,BASIC,57,81,Load Doubleword with Update Indexed X-form
+ldx,ldx,ldx,Implemented,PPC,BASIC,57,81,Load Doubleword Indexed X-form
+stb,stb,stb,Implemented,P1,BASIC,59,83,Store Byte D-form
+stbu,stbu,stbu,Implemented,P1,BASIC,59,83,Store Byte with Update D-form
+stbux,stbux,stbux,Implemented,P1,BASIC,59,83,Store Byte with Update Indexed X-form
+stbx,stbx,stbx,Implemented,P1,BASIC,59,83,Store Byte Indexed X-form
+sth,sth,sth,Implemented,P1,BASIC,60,84,Store Halfword D-form
+sthu,sthu,sthu,Implemented,P1,BASIC,60,84,Store Halfword with Update D-form
+sthux,sthux,sthux,Implemented,P1,BASIC,60,84,Store Halfword with Update Indexed X-form
+sthx,sthx,sthx,Implemented,P1,BASIC,60,84,Store Halfword Indexed X-form
+stw,stw,stw,Implemented,P1,BASIC,61,85,Store Word D-form
+stwu,stwu,stwu,Implemented,P1,BASIC,61,85,Store Word with Update D-form
+stwux,stwux,stwux,Implemented,P1,BASIC,61,85,Store Word with Update Indexed X-form
+stwx,stwx,stwx,Implemented,P1,BASIC,61,85,Store Word Indexed X-form
+std,std,std,Implemented,PPC,BASIC,62,86,Store Doubleword DS-form
+stdu,stdu,stdu,Implemented,PPC,BASIC,62,86,Store Doubleword with Update DS-form
+stdx,stdx,stdx,Implemented,PPC,BASIC,62,86,Store Doubleword Indexed X-form
+stdux,stdux,stdux,Implemented,PPC,BASIC,63,87,Store Doubleword with Update Indexed X-form
+lq,lq,lq,Unimplemented,v2.03,BASIC,65,89,Load Quadword DQ-form
+stq,stq,stq,Unimplemented,v2.03,BASIC,66,90,Store Quadword DS-form
+lhbrx,lhbrx,lhbrx,Implemented,P1,BASIC,67,91,Load Halfword Byte-Reverse Indexed X-form
+sthbrx,sthbrx,sthbrx,Implemented,P1,BASIC,67,91,Store Halfword Byte-Reverse Indexed X-form
+lwbrx,lwbrx,lwbrx,Implemented,P1,BASIC,68,92,Load Word Byte-Reverse Indexed X-form
+stwbrx,stwbrx,stwbrx,Implemented,P1,BASIC,68,92,Store Word Byte-Reverse Indexed X-form
+ldbrx,ldbrx,ldbrx,Implemented,v2.06,BASIC,69,93,Load Doubleword Byte-Reverse Indexed X-form
+stdbrx,stdbrx,stdbrx,Implemented,v2.06,BASIC,69,93,Store Doubleword Byte-Reverse Indexed X-form
+lmw,lmw,lmw,Unimplemented,P1,BASIC,70,94,Load Multiple Word D-form
+stmw,stmw,stmw,Unimplemented,P1,BASIC,70,94,Store Multiple Word D-form
+lswi,lswi,lswi,Unimplemented,P1,BASIC,72,96,Load String Word Immediate X-form
+lswx,lswx,lswx,Unimplemented,P1,BASIC,72,96,Load String Word Indexed X-form
+stswi,stswi,stswi,Unimplemented,P1,BASIC,73,97,Store String Word Immediate X-form
+stswx,stswx,stswx,Unimplemented,P1,BASIC,73,97,Store String Word Indexed X-form
+addi,addi,addi,Implemented,P1,BASIC,76,100,Add Immediate D-form
+addis,addis,addis,Implemented,P1,BASIC,76,100,Add Immediate Shifted D-form
+add[.],add,add,Implemented,P1,BASIC,77,101,Add XO-form
+addic[.],addic,addic,Implemented,P1,BASIC,77,101,Add Immediate Carrying [and Record] D-form
+addo[.],addo,addo,Unimplemented,P1,BASIC,77,101,Add & record OV XO-form
+subfic,subfic,subfic,Implemented,P1,BASIC,77,101,Subtract From Immediate Carrying D-form
+subf[.],subf,subf,Implemented,PPC,BASIC,77,101,Subtract From XO-form
+subfo[.],subfo,subfo,Unimplemented,PPC,BASIC,77,101,Subtract From & record OV XO-form
+addc[.],addc,addc,Implemented,P1,BASIC,78,102,Add Carrying XO-form
+addco[.],addco,addco,Unimplemented,P1,BASIC,78,102,Add Carrying & record OV XO-form
+adde[.],adde,adde,Implemented,P1,BASIC,78,102,Add Extended XO-form
+addeo[.],addeo,addeo,Unimplemented,P1,BASIC,78,102,Add Extended & record OV XO-form
+subfc[.],subfc,subfc,Implemented,P1,BASIC,78,102,Subtract From Carrying XO-form
+subfco[.],subfco,subfco,Unimplemented,P1,BASIC,78,102,Subtract From Carrying & record OV XO-form
+subfe[.],subfe,subfe,Implemented,P1,BASIC,78,102,Subtract From Extended XO-form
+subfeo[.],subfeo,subfeo,Unimplemented,P1,BASIC,78,102,Subtract From Extended & record OV XO-form
+subfze[.],subfze,subfze,Implemented,P1,BASIC,78,102,Subtract From Zero Extended XO-form
+subfzeo[.],subfzeo,subfzeo,Unimplemented,P1,BASIC,78,102,Subtract From Zero Extended & record OV XO-form
+addme[.],addme,addme,Implemented,P1,BASIC,79,103,Add to Minus One Extended XO-form
+addmeo[.],addmeo,addmeo,Unimplemented,P1,BASIC,79,103,Add to Minus One Extended & record OV XO-form
+addze[.],addze,addze,Implemented,P1,BASIC,79,103,Add to Zero Extended XO-form
+addzeo[.],addzeo,addzeo,Unimplemented,P1,BASIC,79,103,Add to Zero Extended & record OV XO-form
+subfme[.],subfme,subfme,Implemented,P1,BASIC,79,103,Subtract From Minus One Extended XO-form
+subfmeo[.],subfmeo,subfmeo,Unimplemented,P1,BASIC,79,103,Subtract From Minus One Extended & record OV XO-form
+neg[.],neg,neg,Implemented,P1,BASIC,80,104,Negate XO-form
+nego[.],nego,nego,Unimplemented,P1,BASIC,80,104,Negate & record OV XO-form
+mulli,mulli,mulli,Implemented,P1,BASIC,81,105,Multiply Low Immediate D-form
+mullw[.],mullw,mullw,Implemented,P1,BASIC,81,105,Multiply Low Word XO-form
+mullwo[.],mullwo,mullwo,Unimplemented,P1,BASIC,81,105,Multiply Low Word & record OV XO-form
+mulhw[.],mulhw,mulhw,Implemented,PPC,BASIC,81,105,Multiply High Word XO-form
+mulhwu[.],mulhwu,mulhwu,Implemented,PPC,BASIC,81,105,Multiply High Word Unsigned XO-form
+divw[.],divw,divw,Implemented,PPC,BASIC,82,106,Divide Word XO-form
+divwo[.],divwo,divwo,Unimplemented,PPC,BASIC,82,106,Divide Word & record OV XO-form
+divwu[.],divwu,divwu,Implemented,PPC,BASIC,82,106,Divide Word Unsigned XO-form
+divwuo[.],divwuo,divwuo,Unimplemented,PPC,BASIC,82,106,Divide Word Unsigned & record OV XO-form
+divwe[.],divwe,divwe,Implemented,v2.06,BASIC,83,107,Divide Word Extended XO-form
+divweo[.],divweo,divweo,Unimplemented,v2.06,BASIC,83,107,Divide Word Extended & record OV XO-form
+divweu[.],divweu,divweu,Implemented,v2.06,BASIC,83,107,Divide Word Extended Unsigned XO-form
+divweuo[.],divweuo,divweuo,Unimplemented,v2.06,BASIC,83,107,Divide Word Extended Unsigned & record OV XO-form
+mulhd[.],mulhd,mulhd,Implemented,PPC,BASIC,87,111,Multiply High Doubleword XO-form
+mulhdu[.],mulhdu,mulhdu,Implemented,PPC,BASIC,87,111,Multiply High Doubleword Unsigned XO-form
+mulld[.],mulld,mulld,Implemented,PPC,BASIC,87,111,Multiply Low Doubleword XO-form
+mulldo[.],mulldo,mulldo,Unimplemented,PPC,BASIC,87,111,Multiply Low Doubleword & record OV XO-form
+divd[.],divd,divd,Implemented,PPC,BASIC,89,113,Divide Doubleword XO-form
+divdo[.],divdo,divdo,Unimplemented,PPC,BASIC,89,113,Divide Doubleword & record OV XO-form
+divdu[.],divdu,divdu,Implemented,PPC,BASIC,89,113,Divide Doubleword Unsigned XO-form
+divduo[.],divduo,divduo,Unimplemented,PPC,BASIC,89,113,Divide Doubleword Unsigned & record OV XO-form
+divde[.],divde,divde,Implemented,v2.06,BASIC,90,114,Divide Doubleword Extended XO-form
+divdeo[.],divdeo,divdeo,Unimplemented,v2.06,BASIC,90,114,Divide Doubleword Extended & record OV XO-form
+divdeu[.],divdeu,divdeu,Implemented,v2.06,BASIC,90,114,Divide Doubleword Extended Unsigned XO-form
+divdeuo[.],divdeuo,divdeuo,Unimplemented,v2.06,BASIC,90,114,Divide Doubleword Extended Unsigned & record OV XO-form
+cmp,cmp,cmp,Implemented,P1,BASIC,93,117,Compare X-form
+cmpi,cmpi,cmpi,Implemented,P1,BASIC,93,117,Compare Immediate D-form
+cmpl,cmpl,cmpl,Implemented,P1,BASIC,93,117,Compare Logical X-form
+cmpli,cmpli,cmpli,Implemented,P1,BASIC,93,117,Compare Logical Immediate D-form
+tw,tw,tw,Implemented,P1,BASIC,97,121,Trap Word X-form
+twi,twi,twi,Implemented,P1,BASIC,97,121,Trap Word Immediate D-form
+td,td,td,Implemented,PPC,BASIC,98,122,Trap Doubleword X-form
+tdi,tdi,tdi,Implemented,PPC,BASIC,98,122,Trap Doubleword Immediate D-form
+isel,isel,isel,Unimplemented,v2.03,BASIC,98,122,Integer Select A-form
+andi.,andi,andi,Unimplemented,P1,BASIC,99,123,AND Immediate D-form
+andis.,andis,andis,Unimplemented,P1,BASIC,99,123,AND Immediate Shifted D-form
+ori,ori,ori,Implemented,P1,BASIC,99,123,OR Immediate D-form
+and[.],and,and,Implemented,P1,BASIC,100,124,AND X-form
+nand[.],nand,nand,Implemented,P1,BASIC,100,124,NAND X-form
+oris,oris,oris,Implemented,P1,BASIC,100,124,OR Immediate Shifted D-form
+xor[.],xor,xor,Implemented,P1,BASIC,100,124,XOR X-form
+xori,xori,xori,Implemented,P1,BASIC,100,124,XOR Immediate D-form
+xoris,xoris,xoris,Implemented,P1,BASIC,100,124,XOR Immediate Shifted D-form
+andc[.],andc,andc,Implemented,P1,BASIC,101,125,AND with Complement X-form
+eqv[.],eqv,eqv,Implemented,P1,BASIC,101,125,Equivalent X-form
+nor[.],nor,nor,Implemented,P1,BASIC,101,125,NOR X-form
+or[.],or,or,Implemented,P1,BASIC,101,125,OR X-form
+orc[.],orc,orc,Implemented,P1,BASIC,101,125,OR with Complement X-form
+cntlzw[.],cntlzw,cntlzw,Implemented,P1,BASIC,102,126,Count Leading Zeros Word X-form
+extsh[.],extsh,extsh,Implemented,P1,BASIC,102,126,Extend Sign Halfword X-form
+extsb[.],extsb,extsb,Implemented,PPC,BASIC,102,126,Extend Sign Byte X-form
+cmpb,cmpb,cmpb,Implemented,v2.05,BASIC,102,126,Compare Bytes X-form
+popcntb,popcntb,popcntb,Implemented,v2.02,BASIC,103,127,Population Count Bytes X-form
+prtyw,prtyw,prtyw,Implemented,v2.05,BASIC,103,127,Parity Word X-form
+popcntw,popcntw,popcntw,Implemented,v2.06,BASIC,103,127,Population Count Words X-form
+cntlzd[.],cntlzd,cntlzd,Implemented,PPC,BASIC,104,128,Count Leading Zeros Doubleword X-form
+extsw[.],extsw,extsw,Implemented,PPC,BASIC,104,128,Extend Sign Word X-form
+prtyd,prtyd,prtyd,Implemented,v2.05,BASIC,104,128,Parity Doubleword X-form
+popcntd,popcntd,popcntd,Implemented,v2.06,BASIC,104,128,Population Count Doubleword X-form
+bpermd,bpermd,bpermd,Implemented,v2.06,BASIC,105,129,Bit Permute Doubleword X-form
+rlwinm[.],rlwinm,rlwinm,Implemented,P1,BASIC,107,131,Rotate Left Word Immediate then AND with Mask M-form
+rlwimi[.],rlwimi,rlwimi,Implemented,P1,BASIC,108,132,Rotate Left Word Immediate then Mask Insert M-form
+rlwnm[.],rlwnm,rlwnm,Implemented,P1,BASIC,108,132,Rotate Left Word then AND with Mask M-form
+rldicl[.],rldicl,rldicl,Implemented,PPC,BASIC,110,134,Rotate Left Doubleword Immediate then Clear Left MD-form
+rldicr[.],rldicr,rldicr,Implemented,PPC,BASIC,110,134,Rotate Left Doubleword Immediate then Clear Right MD-form
+rldcl[.],rldcl,rldcl,Implemented,PPC,BASIC,111,135,Rotate Left Doubleword then Clear Left MDS-form
+rldic[.],rldic,rldic,Implemented,PPC,BASIC,111,135,Rotate Left Doubleword Immediate then Clear MD-form
+rldcr[.],rldcr,rldcr,Implemented,PPC,BASIC,112,136,Rotate Left Doubleword then Clear Right MDS-form
+rldimi[.],rldimi,rldimi,Implemented,PPC,BASIC,112,136,Rotate Left Doubleword Immediate then Mask Insert MD-form
+slw[.],slw,slw,Implemented,P1,BASIC,113,137,Shift Left Word X-form
+srw[.],srw,srw,Implemented,P1,BASIC,113,137,Shift Right Word X-form
+sraw[.],sraw,sraw,Implemented,P1,BASIC,114,138,Shift Right Algebraic Word X-form
+srawi[.],srawi,srawi,Implemented,P1,BASIC,114,138,Shift Right Algebraic Word Immediate X-form
+sld[.],sld,sld,Implemented,PPC,BASIC,115,139,Shift Left Doubleword X-form
+srad[.],srad,srad,Implemented,PPC,BASIC,115,139,Shift Right Algebraic Doubleword X-form
+sradi[.],sradi,sradi,Implemented,PPC,BASIC,115,139,Shift Right Algebraic Doubleword Immediate XS-form
+srd[.],srd,srd,Implemented,PPC,BASIC,115,139,Shift Right Doubleword X-form
+cbcdtd,cbcdtd,cbcdtd,Unimplemented,v2.06,BASIC,117,141,Convert Binary Coded Decimal To Declets X-form
+cdtbcd,cdtbcd,cdtbcd,Unimplemented,v2.06,BASIC,117,141,Convert Declets To Binary Coded Decimal X-form
+addg6s,addg6s,addg6s,Unimplemented,v2.06,BASIC,118,142,Add and Generate Sixes XO-form
+mfvsrd,mfvsrd,mfvsrd,Implemented,v2.07,BASIC,120,144,Move From VSR Doubleword X-form
+mfvsrwz,mfvsrwz,mfvsrwz,Implemented,v2.07,BASIC,121,145,Move From VSR Word and Zero X-form
+mtvsrd,mtvsrd,mtvsrd,Implemented,v2.07,BASIC,121,145,Move To VSR Doubleword X-form
+mtvsrwa,mtvsrwa,mtvsrwa,Implemented,v2.07,BASIC,122,146,Move To VSR Word Algebraic X-form
+mtvsrwz,mtvsrwz,mtvsrwz,Implemented,v2.07,BASIC,122,146,Move To VSR Word and Zero X-form
+mtcrf,mtcrf,mtcrf,Implemented,P1,BASIC,127,151,Move To Condition Register Fields XFX-form
+mtocrf,mtocrf,mtocrf,Implemented,v2.01,BASIC,127,151,Move To One Condition Register Field XFX-form
+mfcr,mfcr,mfcr,Implemented,P1,BASIC,128,152,Move From Condition Register XFX-form
+mfocrf,mfocrf,mfocrf,Implemented,v2.01,BASIC,128,152,Move From One Condition Register Field XFX-form
+lfs,lfs,lfs,Implemented,P1,BASIC,150,174,Load Floating-Point Single D-form
+lfsu,lfsu,lfsu,Implemented,P1,BASIC,150,174,Load Floating-Point Single with Update D-form
+lfsx,lfsx,lfsx,Implemented,P1,BASIC,150,174,Load Floating-Point Single Indexed X-form
+lfsux,lfsux,lfsux,Implemented,P1,BASIC,151,175,Load Floating-Point Single with Update Indexed X-form
+lfd,lfd,lfd,Implemented,P1,BASIC,152,176,Load Floating-Point Double D-form
+lfdu,lfdu,lfdu,Implemented,P1,BASIC,152,176,Load Floating-Point Double with Update D-form
+lfdux,lfdux,lfdux,Implemented,P1,BASIC,152,176,Load Floating-Point Double with Update Indexed X-form
+lfdx,lfdx,lfdx,Implemented,P1,BASIC,152,176,Load Floating-Point Double Indexed X-form
+lfiwax,lfiwax,lfiwax,Implemented,v2.05,BASIC,153,177,Load Floating-Point as Integer Word Algebraic Indexed X-form
+lfiwzx,lfiwzx,lfiwzx,Implemented,v2.06,BASIC,153,177,Load Floating-Point as Integer Word & Zero Indexed X-form
+stfs,stfs,stfs,Implemented,P1,BASIC,155,179,Store Floating-Point Single D-form
+stfsu,stfsu,stfsu,Implemented,P1,BASIC,155,179,Store Floating-Point Single with Update D-form
+stfsx,stfsx,stfsx,Implemented,P1,BASIC,155,179,Store Floating-Point Single Indexed X-form
+stfsux,stfsux,stfsux,Implemented,P1,BASIC,156,180,Store Floating-Point Single with Update Indexed X-form
+stfd,stfd,stfd,Implemented,P1,BASIC,157,181,Store Floating-Point Double D-form
+stfdu,stfdu,stfdu,Implemented,P1,BASIC,157,181,Store Floating-Point Double with Update D-form
+stfdx,stfdx,stfdx,Implemented,P1,BASIC,157,181,Store Floating-Point Double Indexed X-form
+stfdux,stfdux,stfdux,Implemented,P1,BASIC,158,182,Store Floating-Point Double with Update Indexed X-form
+stfiwx,stfiwx,stfiwx,Implemented,PPC,BASIC,158,182,Store Floating-Point as Integer Word Indexed X-form
+lfdp,lfdp,lfdp,Unimplemented,v2.05,BASIC,159,183,Load Floating-Point Double Pair DS-form
+lfdpx,lfdpx,lfdpx,Unimplemented,v2.05,BASIC,159,183,Load Floating-Point Double Pair Indexed X-form
+stfdp,stfdp,stfdp,Unimplemented,v2.05,BASIC,160,184,Store Floating-Point Double Pair DS-form
+stfdpx,stfdpx,stfdpx,Unimplemented,v2.05,BASIC,160,184,Store Floating-Point Double Pair Indexed X-form
+fabs[.],fabs,fabs,Implemented,P1,BASIC,161,185,Floating Absolute Value X-form
+fmr[.],fmr,fmr,Implemented,P1,BASIC,161,185,Floating Move Register X-form
+fnabs[.],fnabs,fnabs,Implemented,P1,BASIC,161,185,Floating Negative Absolute Value X-form
+fneg[.],fneg,fneg,Implemented,P1,BASIC,161,185,Floating Negate X-form
+fcpsgn[.],fcpsgn,fcpsgn,Implemented,v2.05,BASIC,161,185,Floating Copy Sign X-form
+fmrgew,fmrgew,fmrgew,Unimplemented,v2.07,BASIC,162,186,Floating Merge Even Word X-form
+fmrgow,fmrgow,fmrgow,Unimplemented,v2.07,BASIC,162,186,Floating Merge Odd Word X-form
+fadd[.],fadd,fadd,Implemented,P1,BASIC,163,187,Floating Add A-form
+fsub[.],fsub,fsub,Implemented,P1,BASIC,163,187,Floating Subtract A-form
+fadds[.],fadds,fadds,Implemented,PPC,BASIC,163,187,Floating Add Single A-form
+fsubs[.],fsubs,fsubs,Implemented,PPC,BASIC,163,187,Floating Subtract Single A-form
+fdiv[.],fdiv,fdiv,Implemented,P1,BASIC,164,188,Floating Divide A-form
+fmul[.],fmul,fmul,Implemented,P1,BASIC,164,188,Floating Multiply A-form
+fdivs[.],fdivs,fdivs,Implemented,PPC,BASIC,164,188,Floating Divide Single A-form
+fmuls[.],fmuls,fmuls,Implemented,PPC,BASIC,164,188,Floating Multiply Single A-form
+fsqrt[.],fsqrt,fsqrt,Implemented,P2,BASIC,165,189,Floating Square Root A-form
+fres[.],fres,fres,Implemented,PPC,BASIC,165,189,Floating Reciprocal Estimate Single A-form
+fsqrts[.],fsqrts,fsqrts,Implemented,PPC,BASIC,165,189,Floating Square Root Single A-form
+fre[.],fre,fre,Implemented,v2.02,BASIC,165,189,Floating Reciprocal Estimate A-form
+frsqrte[.],frsqrte,frsqrte,Implemented,PPC,BASIC,166,190,Floating Reciprocal Square Root Estimate A-form
+frsqrtes[.],frsqrtes,frsqrtes,Implemented,v2.02,BASIC,166,190,Floating Reciprocal Square Root Estimate Single A-form
+ftdiv,ftdiv,ftdiv,Unimplemented,v2.06,BASIC,166,190,Floating Test for software Divide X-form
+ftsqrt,ftsqrt,ftsqrt,Unimplemented,v2.06,BASIC,167,191,Floating Test for software Square Root X-form
+fmadd[.],fmadd,fmadd,Implemented,P1,BASIC,168,192,Floating Multiply-Add A-form
+fmsub[.],fmsub,fmsub,Implemented,P1,BASIC,168,192,Floating Multiply-Subtract A-form
+fmadds[.],fmadds,fmadds,Implemented,PPC,BASIC,168,192,Floating Multiply-Add Single A-form
+fmsubs[.],fmsubs,fmsubs,Implemented,PPC,BASIC,168,192,Floating Multiply-Subtract Single A-form
+fnmadd[.],fnmadd,fnmadd,Implemented,P1,BASIC,169,193,Floating Negative Multiply-Add A-form
+fnmsub[.],fnmsub,fnmsub,Implemented,P1,BASIC,169,193,Floating Negative Multiply-Subtract A-form
+fnmadds[.],fnmadds,fnmadds,Implemented,PPC,BASIC,169,193,Floating Negative Multiply-Add Single A-form
+fnmsubs[.],fnmsubs,fnmsubs,Implemented,PPC,BASIC,169,193,Floating Negative Multiply-Subtract Single A-form
+frsp[.],frsp,frsp,Implemented,P1,BASIC,170,194,Floating Round to Single-Precision X-form
+fctid[.],fctid,fctid,Implemented,PPC,BASIC,170,194,Floating Convert with round Double-Precision To Signed Doubleword format X-form
+fctidz[.],fctidz,fctidz,Implemented,PPC,BASIC,171,195,Floating Convert with truncate Double-Precision To Signed Doubleword format X-form
+fctidu[.],fctidu,fctidu,Implemented,v2.06,BASIC,171,195,Floating Convert with round Double-Precision To Unsigned Doubleword format X-form
+fctiw[.],fctiw,fctiw,Implemented,P2,BASIC,172,196,Floating Convert with round Double-Precision To Signed Word format X-form
+fctiduz[.],fctiduz,fctiduz,Implemented,v2.06,BASIC,172,196,Floating Convert with truncate Double-Precision To Unsigned Doubleword format X-form
+fctiwuz[.],fctiwuz,fctiwuz,Implemented,v2.06,BASIC,172,196,Floating Convert with truncate Double-Precision To Unsigned Word format X-form
+fctiwz[.],fctiwz,fctiwz,Implemented,P2,BASIC,173,197,Floating Convert with truncate Double-Precision To Signed Word fomat X-form
+fctiwu[.],fctiwu,fctiwu,Implemented,v2.06,BASIC,173,197,Floating Convert with round Double-Precision To Unsigned Word format X-form
+fcfid[.],fcfid,fcfid,Implemented,PPC,BASIC,174,198,Floating Convert with round Signed Doubleword to Double-Precision format X-form
+fcfids[.],fcfids,fcfids,Implemented,v2.06,BASIC,175,199,Floating Convert with round Signed Doubleword to Single-Precision format X-form
+fcfidu[.],fcfidu,fcfidu,Implemented,v2.06,BASIC,175,199,Floating Convert with round Unsigned Doubleword to Double-Precision format X-form
+fcfidus[.],fcfidus,fcfidus,Implemented,v2.06,BASIC,176,200,Floating Convert with round Unsigned Doubleword to Single-Precision format X-form
+frim[.],frim,frim,Implemented,v2.02,BASIC,178,202,Floating Round to Integer Minus X-form
+frin[.],frin,frin,Implemented,v2.02,BASIC,178,202,Floating Round to Integer Nearest X-form
+frip[.],frip,frip,Implemented,v2.02,BASIC,178,202,Floating Round to Integer Plus X-form
+friz[.],friz,friz,Implemented,v2.02,BASIC,178,202,Floating Round to Integer Toward Zero X-form
+fcmpo,fcmpo,fcmpo,Implemented,P1,BASIC,179,203,Floating Compare Ordered X-form
+fcmpu,fcmpu,fcmpu,Implemented,P1,BASIC,179,203,Floating Compare Unordered X-form
+fsel[.],fsel,fsel,Implemented,PPC,BASIC,180,204,Floating Select A-form
+mffs[.],mffs,mffs,Implemented,P1,BASIC,182,206,Move From FPSCR X-form
+mcrfs,mcrfs,mcrfs,Implemented,P1,BASIC,184,208,Move to Condition Register from FPSCR X-form
+mtfsf[.],mtfsf,mtfsf,Implemented,P1,BASIC,184,208,Move To FPSCR Fields XFL-form
+mtfsfi[.],mtfsfi,mtfsfi,Implemented,P1,BASIC,184,208,Move To FPSCR Field Immediate X-form
+mtfsb0[.],mtfsb0,mtfsb0,Implemented,P1,BASIC,185,209,Move To FPSCR Bit 0 X-form
+mtfsb1[.],mtfsb1,mtfsb1,Implemented,P1,BASIC,185,209,Move To FPSCR Bit 1 X-form
+dadd[.],dadd,dadd,Unimplemented,v2.05,BASIC,206,230,DFP Add X-form
+daddq[.],daddq,daddq,Unimplemented,v2.05,BASIC,206,230,DFP Add Quad X-form
+dsub[.],dsub,dsub,Unimplemented,v2.05,BASIC,206,230,DFP Subtract X-form
+dsubq[.],dsubq,dsubq,Unimplemented,v2.05,BASIC,206,230,DFP Subtract Quad X-form
+dmul[.],dmul,dmul,Unimplemented,v2.05,BASIC,208,232,DFP Multiply X-form
+dmulq[.],dmulq,dmulq,Unimplemented,v2.05,BASIC,208,232,DFP Multiply Quad X-form
+ddiv[.],ddiv,ddiv,Unimplemented,v2.05,BASIC,209,233,DFP Divide X-form
+ddivq[.],ddivq,ddivq,Unimplemented,v2.05,BASIC,209,233,DFP Divide Quad X-form
+dcmpu,dcmpu,dcmpu,Unimplemented,v2.05,BASIC,211,235,DFP Compare Unordered X-form
+dcmpuq,dcmpuq,dcmpuq,Unimplemented,v2.05,BASIC,211,235,DFP Compare Unordered Quad X-form
+dcmpo,dcmpo,dcmpo,Unimplemented,v2.05,BASIC,212,236,DFP Compare Ordered X-form
+dcmpoq,dcmpoq,dcmpoq,Unimplemented,v2.05,BASIC,212,236,DFP Compare Ordered Quad X-form
+dtstdc,dtstdc,dtstdc,Unimplemented,v2.05,BASIC,213,237,DFP Test Data Class Z22-form
+dtstdcq,dtstdcq,dtstdcq,Unimplemented,v2.05,BASIC,213,237,DFP Test Data Class Quad Z22-form
+dtstdg,dtstdg,dtstdg,Unimplemented,v2.05,BASIC,213,237,DFP Test Data Group Z22-form
+dtstdgq,dtstdgq,dtstdgq,Unimplemented,v2.05,BASIC,213,237,DFP Test Data Group Quad Z22-form
+dtstex,dtstex,dtstex,Unimplemented,v2.05,BASIC,214,238,DFP Test Exponent X-form
+dtstexq,dtstexq,dtstexq,Unimplemented,v2.05,BASIC,214,238,DFP Test Exponent Quad X-form
+dtstsf,dtstsf,dtstsf,Unimplemented,v2.05,BASIC,215,239,DFP Test Significance X-form
+dtstsfq,dtstsfq,dtstsfq,Unimplemented,v2.05,BASIC,215,239,DFP Test Significance Quad X-form
+dquai[.],dquai,dquai,Unimplemented,v2.05,BASIC,217,241,DFP Quantize Immediate Z23-form
+dquaiq[.],dquaiq,dquaiq,Unimplemented,v2.05,BASIC,217,241,DFP Quantize Immediate Quad Z23-form
+dqua[.],dqua,dqua,Unimplemented,v2.05,BASIC,219,243,DFP Quantize Z23-form
+dquaq[.],dquaq,dquaq,Unimplemented,v2.05,BASIC,219,243,DFP Quantize Quad Z23-form
+drrnd[.],drrnd,drrnd,Unimplemented,v2.05,BASIC,221,245,DFP Reround Z23-form
+drrndq[.],drrndq,drrndq,Unimplemented,v2.05,BASIC,221,245,DFP Reround Quad Z23-form
+drintx[.],drintx,drintx,Unimplemented,v2.05,BASIC,224,248,DFP Round To FP Integer With Inexact Z23-form
+drintxq[.],drintxq,drintxq,Unimplemented,v2.05,BASIC,224,248,DFP Round To FP Integer With Inexact Quad Z23-form
+drintn[.],drintn,drintn,Unimplemented,v2.05,BASIC,226,250,DFP Round To FP Integer Without Inexact Z23-form
+drintnq[.],drintnq,drintnq,Unimplemented,v2.05,BASIC,226,250,DFP Round To FP Integer Without Inexact Quad Z23-form
+dctdp[.],dctdp,dctdp,Unimplemented,v2.05,BASIC,229,253,DFP Convert To DFP Long X-form
+dctqpq[.],dctqpq,dctqpq,Unimplemented,v2.05,BASIC,229,253,DFP Convert To DFP Extended X-form
+drdpq[.],drdpq,drdpq,Unimplemented,v2.05,BASIC,230,254,DFP Round To DFP Long X-form
+drsp[.],drsp,drsp,Unimplemented,v2.05,BASIC,230,254,DFP Round To DFP Short X-form
+dcffixq[.],dcffixq,dcffixq,Unimplemented,v2.05,BASIC,231,255,DFP Convert From Fixed Quad X-form
+dcffix[.],dcffix,dcffix,Unimplemented,v2.06,BASIC,231,255,DFP Convert From Fixed X-form
+dctfix[.],dctfix,dctfix,Unimplemented,v2.05,BASIC,233,257,DFP Convert To Fixed X-form
+dctfixq[.],dctfixq,dctfixq,Unimplemented,v2.05,BASIC,233,257,DFP Convert To Fixed Quad X-form
+ddedpd[.],ddedpd,ddedpd,Unimplemented,v2.05,BASIC,235,259,DFP Decode DPD To BCD X-form
+ddedpdq[.],ddedpdq,ddedpdq,Unimplemented,v2.05,BASIC,235,259,DFP Decode DPD To BCD Quad X-form
+denbcd[.],denbcd,denbcd,Unimplemented,v2.05,BASIC,235,259,DFP Encode BCD To DPD X-form
+denbcdq[.],denbcdq,denbcdq,Unimplemented,v2.05,BASIC,235,259,DFP Encode BCD To DPD Quad X-form
+diex[.],diex,diex,Unimplemented,v2.05,BASIC,236,260,DFP Insert Biased Exponent X-form
+diexq[.],diexq,diexq,Unimplemented,v2.05,BASIC,236,260,DFP Insert Biased Exponent Quad X-form
+dxex[.],dxex,dxex,Unimplemented,v2.05,BASIC,236,260,DFP Extract Biased Exponent X-form
+dxexq[.],dxexq,dxexq,Unimplemented,v2.05,BASIC,236,260,DFP Extract Biased Exponent Quad X-form
+dscli[.],dscli,dscli,Unimplemented,v2.05,BASIC,238,262,DFP Shift Significand Left Immediate Z22-form
+dscliq[.],dscliq,dscliq,Unimplemented,v2.05,BASIC,238,262,DFP Shift Significand Left Immediate Quad Z22-form
+dscri[.],dscri,dscri,Unimplemented,v2.05,BASIC,238,262,DFP Shift Significand Right Immediate Z22-form
+dscriq[.],dscriq,dscriq,Unimplemented,v2.05,BASIC,238,262,DFP Shift Significand Right Immediate Quad Z22-form
+lvebx,lvebx,lvebx,Implemented,v2.03,VEC,268,292,Load Vector Element Byte Indexed X-form
+lvehx,lvehx,lvehx,Implemented,v2.03,VEC,269,293,Load Vector Element Halfword Indexed X-form
+lvewx,lvewx,lvewx,Implemented,v2.03,VEC,270,294,Load Vector Element Word Indexed X-form
+lvx,lvx,lvx,Implemented,v2.03,VEC,271,295,Load Vector Indexed X-form
+lvxl,lvxl,lvxl,Implemented,v2.03,VEC,271,295,Load Vector Indexed Last X-form
+stvebx,stvebx,stvebx,Implemented,v2.03,VEC,272,296,Store Vector Element Byte Indexed X-form
+stvehx,stvehx,stvehx,Implemented,v2.03,VEC,273,297,Store Vector Element Halfword Indexed X-form
+stvewx,stvewx,stvewx,Implemented,v2.03,VEC,274,298,Store Vector Element Word Indexed X-form
+stvx,stvx,stvx,Implemented,v2.03,VEC,275,299,Store Vector Indexed X-form
+stvxl,stvxl,stvxl,Implemented,v2.03,VEC,275,299,Store Vector Indexed Last X-form
+lvsl,lvsl,lvsl,Implemented,v2.03,VEC,277,301,Load Vector for Shift Left Indexed X-form
+lvsr,lvsr,lvsr,Implemented,v2.03,VEC,277,301,Load Vector for Shift Right Indexed X-form
+vpkpx,vpkpx,vpkpx,Implemented,v2.03,VEC,278,302,Vector Pack Pixel VX-form
+vpkshss,vpkshss,vpkshss,Implemented,v2.03,VEC,279,303,Vector Pack Signed Halfword Signed Saturate VX-form
+vpkshus,vpkshus,vpkshus,Implemented,v2.03,VEC,279,303,Vector Pack Signed Halfword Unsigned Saturate VX-form
+vpkswss,vpkswss,vpkswss,Implemented,v2.03,VEC,280,304,Vector Pack Signed Word Signed Saturate VX-form
+vpkswus,vpkswus,vpkswus,Implemented,v2.03,VEC,280,304,Vector Pack Signed Word Unsigned Saturate VX-form
+vpksdss,vpksdss,vpksdss,Implemented,v2.07,VEC,281,305,Vector Pack Signed Doubleword Signed Saturate VX-form
+vpksdus,vpksdus,vpksdus,Implemented,v2.07,VEC,281,305,Vector Pack Signed Doubleword Unsigned Saturate VX-form
+vpkuhum,vpkuhum,vpkuhum,Implemented,v2.03,VEC,282,306,Vector Pack Unsigned Halfword Unsigned Modulo VX-form
+vpkuhus,vpkuhus,vpkuhus,Implemented,v2.03,VEC,282,306,Vector Pack Unsigned Halfword Unsigned Saturate VX-form
+vpkuwum,vpkuwum,vpkuwum,Implemented,v2.03,VEC,283,307,Vector Pack Unsigned Word Unsigned Modulo VX-form
+vpkuwus,vpkuwus,vpkuwus,Implemented,v2.03,VEC,283,307,Vector Pack Unsigned Word Unsigned Saturate VX-form
+vpkudum,vpkudum,vpkudum,Implemented,v2.07,VEC,284,308,Vector Pack Unsigned Doubleword Unsigned Modulo VX-form
+vpkudus,vpkudus,vpkudus,Implemented,v2.07,VEC,284,308,Vector Pack Unsigned Doubleword Unsigned Saturate VX-form
+vupkhsb,vupkhsb,vupkhsb,Implemented,v2.03,VEC,285,309,Vector Unpack High Signed Byte VX-form
+vupklsb,vupklsb,vupklsb,Implemented,v2.03,VEC,285,309,Vector Unpack Low Signed Byte VX-form
+vupkhsh,vupkhsh,vupkhsh,Implemented,v2.03,VEC,286,310,Vector Unpack High Signed Halfword VX-form
+vupklsh,vupklsh,vupklsh,Implemented,v2.03,VEC,286,310,Vector Unpack Low Signed Halfword VX-form
+vupkhsw,vupkhsw,vupkhsw,Implemented,v2.07,VEC,287,311,Vector Unpack High Signed Word VX-form
+vupklsw,vupklsw,vupklsw,Implemented,v2.07,VEC,287,311,Vector Unpack Low Signed Word VX-form
+vupkhpx,vupkhpx,vupkhpx,Implemented,v2.03,VEC,288,312,Vector Unpack High Pixel VX-form
+vupklpx,vupklpx,vupklpx,Implemented,v2.03,VEC,288,312,Vector Unpack Low Pixel VX-form
+vmrghb,vmrghb,vmrghb,Implemented,v2.03,VEC,289,313,Vector Merge High Byte VX-form
+vmrglb,vmrglb,vmrglb,Implemented,v2.03,VEC,289,313,Vector Merge Low Byte VX-form
+vmrghh,vmrghh,vmrghh,Implemented,v2.03,VEC,290,314,Vector Merge High Halfword VX-form
+vmrglh,vmrglh,vmrglh,Implemented,v2.03,VEC,290,314,Vector Merge Low Halfword VX-form
+vmrghw,vmrghw,vmrghw,Implemented,v2.03,VEC,291,315,Vector Merge High Word VX-form
+vmrglw,vmrglw,vmrglw,Implemented,v2.03,VEC,291,315,Vector Merge Low Word VX-form
+vmrgew,vmrgew,vmrgew,Implemented,v2.07,VEC,292,316,Vector Merge Even Word VX-form
+vmrgow,vmrgow,vmrgow,Implemented,v2.07,VEC,292,316,Vector Merge Odd Word VX-form
+vspltb,vspltb,vspltb,Implemented,v2.03,VEC,293,317,Vector Splat Byte VX-form
+vsplth,vsplth,vsplth,Implemented,v2.03,VEC,293,317,Vector Splat Halfword VX-form
+vspltw,vspltw,vspltw,Implemented,v2.03,VEC,294,318,Vector Splat Word VX-form
+vspltisb,vspltisb,vspltisb,Implemented,v2.03,VEC,295,319,Vector Splat Immediate Signed Byte VX-form
+vspltish,vspltish,vspltish,Implemented,v2.03,VEC,295,319,Vector Splat Immediate Signed Halfword VX-form
+vspltisw,vspltisw,vspltisw,Implemented,v2.03,VEC,295,319,Vector Splat Immediate Signed Word VX-form
+vperm,vperm,vperm,Implemented,v2.03,VEC,296,320,Vector Permute VA-form
+vsel,vsel,vsel,Implemented,v2.03,VEC,297,321,Vector Select VA-form
+vsldoi,vsldoi,vsldoi,Implemented,v2.03,VEC,298,322,Vector Shift Left Double by Octet Immediate VA-form
+vsl,vsl,vsl,Implemented,v2.03,VEC,300,324,Vector Shift Left VX-form
+vsr,vsr,vsr,Implemented,v2.03,VEC,300,324,Vector Shift Right VX-form
+vslo,vslo,vslo,Implemented,v2.03,VEC,301,325,Vector Shift Left by Octet VX-form
+vsro,vsro,vsro,Implemented,v2.03,VEC,301,325,Vector Shift Right by Octet VX-form
+vaddcuw,vaddcuw,vaddcuw,Implemented,v2.03,VEC,323,347,Vector Add & write Carry Unsigned Word VX-form
+vaddsbs,vaddsbs,vaddsbs,Implemented,v2.03,VEC,323,347,Vector Add Signed Byte Saturate VX-form
+vaddshs,vaddshs,vaddshs,Implemented,v2.03,VEC,324,348,Vector Add Signed Halfword Saturate VX-form
+vaddsws,vaddsws,vaddsws,Implemented,v2.03,VEC,324,348,Vector Add Signed Word Saturate VX-form
+vaddubm,vaddubm,vaddubm,Implemented,v2.03,VEC,325,349,Vector Add Unsigned Byte Modulo VX-form
+vadduhm,vadduhm,vadduhm,Implemented,v2.03,VEC,325,349,Vector Add Unsigned Halfword Modulo VX-form
+vadduwm,vadduwm,vadduwm,Implemented,v2.03,VEC,326,350,Vector Add Unsigned Word Modulo VX-form
+vaddudm,vaddudm,vaddudm,Implemented,v2.07,VEC,326,350,Vector Add Unsigned Doubleword Modulo VX-form
+vaddubs,vaddubs,vaddubs,Implemented,v2.03,VEC,327,351,Vector Add Unsigned Byte Saturate VX-form
+vadduhs,vadduhs,vadduhs,Implemented,v2.03,VEC,327,351,Vector Add Unsigned Halfword Saturate VX-form
+vadduws,vadduws,vadduws,Implemented,v2.03,VEC,328,352,Vector Add Unsigned Word Saturate VX-form
+vaddeuqm,vaddeuqm,vaddeuqm,Implemented,v2.07,VEC,329,353,Vector Add Extended Unsigned Quadword Modulo VA-form
+vadduqm,vadduqm,vadduqm,Implemented,v2.07,VEC,329,353,Vector Add Unsigned Quadword Modulo VX-form
+vaddcuq,vaddcuq,vaddcuq,Implemented,v2.07,VEC,330,354,Vector Add & write Carry Unsigned Quadword VX-form
+vaddecuq,vaddecuq,vaddecuq,Implemented,v2.07,VEC,330,354,Vector Add Extended & write Carry Unsigned Quadword VA-form
+vsubcuw,vsubcuw,vsubcuw,Implemented,v2.03,VEC,331,355,Vector Subtract & Write Carry-out Unsigned Word VX-form
+vsubsbs,vsubsbs,vsubsbs,Unimplemented,v2.03,VEC,331,355,Vector Subtract Signed Byte Saturate VX-form
+vsubshs,vsubshs,vsubshs,Implemented,v2.03,VEC,332,356,Vector Subtract Signed Halfword Saturate VX-form
+vsubsws,vsubsws,vsubsws,Implemented,v2.03,VEC,332,356,Vector Subtract Signed Word Saturate VX-form
+vsububm,vsububm,vsububm,Implemented,v2.03,VEC,333,357,Vector Subtract Unsigned Byte Modulo VX-form
+vsubuhm,vsubuhm,vsubuhm,Implemented,v2.03,VEC,333,357,Vector Subtract Unsigned Halfword Modulo VX-form
+vsubuwm,vsubuwm,vsubuwm,Implemented,v2.03,VEC,334,358,Vector Subtract Unsigned Word Modulo VX-form
+vsubudm,vsubudm,vsubudm,Implemented,v2.07,VEC,334,358,Vector Subtract Unsigned Doubleword Modulo VX-form
+vsububs,vsububs,vsububs,Implemented,v2.03,VEC,335,359,Vector Subtract Unsigned Byte Saturate VX-form
+vsubuhs,vsubuhs,vsubuhs,Implemented,v2.03,VEC,335,359,Vector Subtract Unsigned Halfword Saturate VX-form
+vsubuws,vsubuws,vsubuws,Implemented,v2.03,VEC,336,360,Vector Subtract Unsigned Word Saturate VX-form
+vsubeuqm,vsubeuqm,vsubeuqm,Implemented,v2.07,VEC,337,361,Vector Subtract Extended Unsigned Quadword Modulo VA-form
+vsubuqm,vsubuqm,vsubuqm,Implemented,v2.07,VEC,337,361,Vector Subtract Unsigned Quadword Modulo VX-form
+vsubcuq,vsubcuq,vsubcuq,Unimplemented,v2.07,VEC,338,362,Vector Subtract & write Carry-out Unsigned Quadword VX-form
+vsubecuq,vsubecuq,vsubecuq,Implemented,v2.07,VEC,338,362,Vector Subtract Extended & write Carry-out Unsigned Quadword VA-form
+vmulesb,vmulesb,vmulesb,Implemented,v2.03,VEC,339,363,Vector Multiply Even Signed Byte VX-form
+vmulosb,vmulosb,vmulosb,Implemented,v2.03,VEC,339,363,Vector Multiply Odd Signed Byte VX-form
+vmuleub,vmuleub,vmuleub,Implemented,v2.03,VEC,340,364,Vector Multiply Even Unsigned Byte VX-form
+vmuloub,vmuloub,vmuloub,Implemented,v2.03,VEC,340,364,Vector Multiply Odd Unsigned Byte VX-form
+vmulesh,vmulesh,vmulesh,Implemented,v2.03,VEC,341,365,Vector Multiply Even Signed Halfword VX-form
+vmulosh,vmulosh,vmulosh,Implemented,v2.03,VEC,341,365,Vector Multiply Odd Signed Halfword VX-form
+vmuleuh,vmuleuh,vmuleuh,Implemented,v2.03,VEC,342,366,Vector Multiply Even Unsigned Halfword VX-form
+vmulouh,vmulouh,vmulouh,Implemented,v2.03,VEC,342,366,Vector Multiply Odd Unsigned Halfword VX-form
+vmulesw,vmulesw,vmulesw,Implemented,v2.07,VEC,343,367,Vector Multiply Even Signed Word VX-form
+vmulosw,vmulosw,vmulosw,Implemented,v2.07,VEC,343,367,Vector Multiply Odd Signed Word VX-form
+vmuleuw,vmuleuw,vmuleuw,Implemented,v2.07,VEC,344,368,Vector Multiply Even Unsigned Word VX-form
+vmulouw,vmulouw,vmulouw,Implemented,v2.07,VEC,344,368,Vector Multiply Odd Unsigned Word VX-form
+vmuluwm,vmuluwm,vmuluwm,Implemented,v2.07,VEC,347,371,Vector Multiply Unsigned Word Modulo VX-form
+vmhaddshs,vmhaddshs,vmhaddshs,Implemented,v2.03,VEC,351,375,Vector Multiply-High-Add Signed Halfword Saturate VA-form
+vmhraddshs,vmhraddshs,vmhraddshs,Implemented,v2.03,VEC,351,375,Vector Multiply-High-Round-Add Signed Halfword Saturate VA-form
+vmladduhm,vmladduhm,vmladduhm,Implemented,v2.03,VEC,352,376,Vector Multiply-Low-Add Unsigned Halfword Modulo VA-form
+vmsumubm,vmsumubm,vmsumubm,Implemented,v2.03,VEC,352,376,Vector Multiply-Sum Unsigned Byte Modulo VA-form
+vmsummbm,vmsummbm,vmsummbm,Implemented,v2.03,VEC,353,377,Vector Multiply-Sum Mixed Byte Modulo VA-form
+vmsumshm,vmsumshm,vmsumshm,Implemented,v2.03,VEC,353,377,Vector Multiply-Sum Signed Halfword Modulo VA-form
+vmsumshs,vmsumshs,vmsumshs,Implemented,v2.03,VEC,354,378,Vector Multiply-Sum Signed Halfword Saturate VA-form
+vmsumuhm,vmsumuhm,vmsumuhm,Implemented,v2.03,VEC,354,378,Vector Multiply-Sum Unsigned Halfword Modulo VA-form
+vmsumuhs,vmsumuhs,vmsumuhs,Implemented,v2.03,VEC,355,379,Vector Multiply-Sum Unsigned Halfword Saturate VA-form
+vsumsws,vsumsws,vsumsws,Implemented,v2.03,VEC,367,391,Vector Sum across Signed Word Saturate VX-form
+vsum2sws,vsum2sws,vsum2sws,Implemented,v2.03,VEC,368,392,Vector Sum across Half Signed Word Saturate VX-form
+vsum4sbs,vsum4sbs,vsum4sbs,Implemented,v2.03,VEC,369,393,Vector Sum across Quarter Signed Byte Saturate VX-form
+vsum4shs,vsum4shs,vsum4shs,Implemented,v2.03,VEC,369,393,Vector Sum across Quarter Signed Halfword Saturate VX-form
+vsum4ubs,vsum4ubs,vsum4ubs,Implemented,v2.03,VEC,370,394,Vector Sum across Quarter Unsigned Byte Saturate VX-form
+vavgsb,vavgsb,vavgsb,Implemented,v2.03,VEC,375,399,Vector Average Signed Byte VX-form
+vavgub,vavgub,vavgub,Implemented,v2.03,VEC,375,399,Vector Average Unsigned Byte VX-form
+vavgsh,vavgsh,vavgsh,Implemented,v2.03,VEC,376,400,Vector Average Signed Halfword VX-form
+vavguh,vavguh,vavguh,Implemented,v2.03,VEC,376,400,Vector Average Unsigned Halfword VX-form
+vavgsw,vavgsw,vavgsw,Implemented,v2.03,VEC,377,401,Vector Average Signed Word VX-form
+vavguw,vavguw,vavguw,Implemented,v2.03,VEC,377,401,Vector Average Unsigned Word VX-form
+vmaxsb,vmaxsb,vmaxsb,Implemented,v2.03,VEC,380,404,Vector Maximum Signed Byte VX-form
+vmaxub,vmaxub,vmaxub,Implemented,v2.03,VEC,380,404,Vector Maximum Unsigned Byte VX-form
+vmaxsh,vmaxsh,vmaxsh,Implemented,v2.03,VEC,381,405,Vector Maximum Signed Halfword VX-form
+vmaxuh,vmaxuh,vmaxuh,Implemented,v2.03,VEC,381,405,Vector Maximum Unsigned Halfword VX-form
+vmaxsw,vmaxsw,vmaxsw,Implemented,v2.03,VEC,382,406,Vector Maximum Signed Word VX-form
+vmaxuw,vmaxuw,vmaxuw,Implemented,v2.03,VEC,382,406,Vector Maximum Unsigned Word VX-form
+vmaxsd,vmaxsd,vmaxsd,Implemented,v2.07,VEC,383,407,Vector Maximum Signed Doubleword VX-form
+vmaxud,vmaxud,vmaxud,Implemented,v2.07,VEC,383,407,Vector Maximum Unsigned Doubleword VX-form
+vminsb,vminsb,vminsb,Implemented,v2.03,VEC,384,408,Vector Minimum Signed Byte VX-form
+vminub,vminub,vminub,Implemented,v2.03,VEC,384,408,Vector Minimum Unsigned Byte VX-form
+vminsh,vminsh,vminsh,Implemented,v2.03,VEC,385,409,Vector Minimum Signed Halfword VX-form
+vminuh,vminuh,vminuh,Implemented,v2.03,VEC,385,409,Vector Minimum Unsigned Halfword VX-form
+vminsw,vminsw,vminsw,Implemented,v2.03,VEC,386,410,Vector Minimum Signed Word VX-form
+vminuw,vminuw,vminuw,Implemented,v2.03,VEC,386,410,Vector Minimum Unsigned Word VX-form
+vminsd,vminsd,vminsd,Implemented,v2.07,VEC,387,411,Vector Minimum Signed Doubleword VX-form
+vminud,vminud,vminud,Implemented,v2.07,VEC,387,411,Vector Minimum Unsigned Doubleword VX-form
+vcmpequb[.],vcmpequb,vcmpequb,Implemented,v2.03,VEC,388,412,Vector Compare Equal Unsigned Byte VC-form
+vcmpequw[.],vcmpequw,vcmpequw,Implemented,v2.03,VEC,388,412,Vector Compare Equal Unsigned Word VC-form
+vcmpequh[.],vcmpequh,vcmpequh,Implemented,v2.03,VEC,389,413,Vector Compare Equal Unsigned Halfword VC-form
+vcmpequd[.],vcmpequd,vcmpequd,Implemented,v2.07,VEC,391,415,Vector Compare Equal Unsigned Doubleword VC-form
+vcmpgtsb[.],vcmpgtsb,vcmpgtsb,Implemented,v2.03,VEC,393,417,Vector Compare Greater Than Signed Byte VC-form
+vcmpgtub[.],vcmpgtub,vcmpgtub,Implemented,v2.03,VEC,393,417,Vector Compare Greater Than Unsigned Byte VC-form
+vcmpgtsh[.],vcmpgtsh,vcmpgtsh,Implemented,v2.03,VEC,394,418,Vector Compare Greater Than Signed Halfword VC-form
+vcmpgtuh[.],vcmpgtuh,vcmpgtuh,Implemented,v2.03,VEC,394,418,Vector Compare Greater Than Unsigned Halfword VC-form
+vcmpgtsw[.],vcmpgtsw,vcmpgtsw,Implemented,v2.03,VEC,395,419,Vector Compare Greater Than Signed Word VC-form
+vcmpgtuw[.],vcmpgtuw,vcmpgtuw,Implemented,v2.03,VEC,395,419,Vector Compare Greater Than Unsigned Word VC-form
+vcmpgtsd[.],vcmpgtsd,vcmpgtsd,Implemented,v2.07,VEC,396,420,Vector Compare Greater Than Signed Doubleword VC-form
+vcmpgtud[.],vcmpgtud,vcmpgtud,Implemented,v2.07,VEC,396,420,Vector Compare Greater Than Unsigned Doubleword VC-form
+vand,vand,vand,Implemented,v2.03,VEC,402,426,Vector Logical AND VX-form
+vandc,vandc,vandc,Implemented,v2.03,VEC,402,426,Vector Logical AND with Complement VX-form
+vnor,vnor,vnor,Implemented,v2.03,VEC,403,427,Vector Logical NOR VX-form
+vor,vor,vor,Implemented,v2.03,VEC,403,427,Vector Logical OR VX-form
+vxor,vxor,vxor,Implemented,v2.03,VEC,403,427,Vector Logical XOR VX-form
+veqv,veqv,veqv,Implemented,v2.07,VEC,403,427,Vector Logical Equivalence VX-form
+vnand,vnand,vnand,Implemented,v2.07,VEC,403,427,Vector Logical NAND VX-form
+vorc,vorc,vorc,Implemented,v2.07,VEC,403,427,Vector Logical OR with Complement VX-form
+vrlb,vrlb,vrlb,Implemented,v2.03,VEC,404,428,Vector Rotate Left Byte VX-form
+vrlh,vrlh,vrlh,Implemented,v2.03,VEC,404,428,Vector Rotate Left Halfword VX-form
+vrlw,vrlw,vrlw,Implemented,v2.03,VEC,404,428,Vector Rotate Left Word VX-form
+vrld,vrld,vrld,Implemented,v2.07,VEC,405,429,Vector Rotate Left Doubleword VX-form
+vslb,vslb,vslb,Implemented,v2.03,VEC,413,437,Vector Shift Left Byte VX-form
+vslh,vslh,vslh,Implemented,v2.03,VEC,413,437,Vector Shift Left Halfword VX-form
+vslw,vslw,vslw,Implemented,v2.03,VEC,414,438,Vector Shift Left Word VX-form
+vsld,vsld,vsld,Implemented,v2.07,VEC,414,438,Vector Shift Left Doubleword VX-form
+vsrb,vsrb,vsrb,Implemented,v2.03,VEC,416,440,Vector Shift Right Byte VX-form
+vsrh,vsrh,vsrh,Implemented,v2.03,VEC,416,440,Vector Shift Right Halfword VX-form
+vsrw,vsrw,vsrw,Implemented,v2.03,VEC,417,441,Vector Shift Right Word VX-form
+vsrd,vsrd,vsrd,Implemented,v2.07,VEC,417,441,Vector Shift Right Doubleword VX-form
+vsrab,vsrab,vsrab,Implemented,v2.03,VEC,419,443,Vector Shift Right Algebraic Byte VX-form
+vsrah,vsrah,vsrah,Implemented,v2.03,VEC,419,443,Vector Shift Right Algebraic Halfword VX-form
+vsraw,vsraw,vsraw,Implemented,v2.03,VEC,420,444,Vector Shift Right Algebraic Word VX-form
+vsrad,vsrad,vsrad,Implemented,v2.07,VEC,420,444,Vector Shift Right Algebraic Doubleword VX-form
+vaddfp,vaddfp,vaddfp,Implemented,v2.03,VEC,422,446,Vector Add Floating-Point VX-form
+vsubfp,vsubfp,vsubfp,Implemented,v2.03,VEC,422,446,Vector Subtract Floating-Point VX-form
+vmaddfp,vmaddfp,vmaddfp,Implemented,v2.03,VEC,423,447,Vector Multiply-Add Floating-Point VA-form
+vnmsubfp,vnmsubfp,vnmsubfp,Implemented,v2.03,VEC,423,447,Vector Negative Multiply-Subtract Floating-Point VA-form
+vmaxfp,vmaxfp,vmaxfp,Implemented,v2.03,VEC,424,448,Vector Maximum Floating-Point VX-form
+vminfp,vminfp,vminfp,Implemented,v2.03,VEC,424,448,Vector Minimum Floating-Point VX-form
+vcfsx,vcfsx,vcfsx,Implemented,v2.03,VEC,425,449,Vector Convert with round to nearest From Signed Word to floating-point format VX-form
+vcfux,vcfux,vcfux,Implemented,v2.03,VEC,425,449,Vector Convert with round to nearest From Unsigned Word to floating-point format VX-form
+vctsxs,vctsxs,vctsxs,Implemented,v2.03,VEC,426,450,Vector Convert with round to zero from floating-point To Signed Word format Saturate VX-form
+vctuxs,vctuxs,vctuxs,Implemented,v2.03,VEC,426,450,Vector Convert with round to zero from floating-point To Unsigned Word format Saturate VX-form
+vrfim,vrfim,vrfim,Implemented,v2.03,VEC,427,451,Vector Round to Floating-Point Integer toward -Infinity VX-form
+vrfin,vrfin,vrfin,Implemented,v2.03,VEC,427,451,Vector Round to Floating-Point Integer Nearest VX-form
+vrfip,vrfip,vrfip,Implemented,v2.03,VEC,428,452,Vector Round to Floating-Point Integer toward +Infinity VX-form
+vrfiz,vrfiz,vrfiz,Implemented,v2.03,VEC,428,452,Vector Round to Floating-Point Integer toward Zero VX-form
+vcmpbfp[.],vcmpbfp,vcmpbfp,Unimplemented,v2.03,VEC,429,453,Vector Compare Bounds Floating-Point VC-form
+vcmpeqfp[.],vcmpeqfp,vcmpeqfp,Unimplemented,v2.03,VEC,430,454,Vector Compare Equal Floating-Point VC-form
+vcmpgefp[.],vcmpgefp,vcmpgefp,Unimplemented,v2.03,VEC,430,454,Vector Compare Greater Than or Equal Floating-Point VC-form
+vcmpgtfp[.],vcmpgtfp,vcmpgtfp,Unimplemented,v2.03,VEC,431,455,Vector Compare Greater Than Floating-Point VC-form
+vexptefp,vexptefp,vexptefp,Implemented,v2.03,VEC,432,456,Vector 2 Raised to the Exponent Estimate Floating-Point VX-form
+vlogefp,vlogefp,vlogefp,Implemented,v2.03,VEC,433,457,Vector Log Base 2 Estimate Floating-Point VX-form
+vrefp,vrefp,vrefp,Implemented,v2.03,VEC,434,458,Vector Reciprocal Estimate Floating-Point VX-form
+vrsqrtefp,vrsqrtefp,vrsqrtefp,Implemented,v2.03,VEC,434,458,Vector Reciprocal Square Root Estimate Floating-Point VX-form
+vcipher,vcipher,vcipher,Unimplemented,v2.07,VEC,435,459,Vector AES Cipher VX-form
+vcipherlast,vcipherlast,vcipherlast,Unimplemented,v2.07,VEC,435,459,Vector AES Cipher Last VX-form
+vncipher,vncipher,vncipher,Unimplemented,v2.07,VEC,436,460,Vector AES Inverse Cipher VX-form
+vncipherlast,vncipherlast,vncipherlast,Unimplemented,v2.07,VEC,436,460,Vector AES Inverse Cipher Last VX-form
+vsbox,vsbox,vsbox,Unimplemented,v2.07,VEC,437,461,Vector AES SubBytes VX-form
+vshasigmad,vshasigmad,vshasigmad,Unimplemented,v2.07,VEC,438,462,Vector SHA-512 Sigma Doubleword VX-form
+vshasigmaw,vshasigmaw,vshasigmaw,Unimplemented,v2.07,VEC,439,463,Vector SHA-256 Sigma Word VX-form
+vpmsumb,vpmsumb,vpmsumb,Unimplemented,v2.07,VEC,440,464,Vector Polynomial Multiply-Sum Byte VX-form
+vpmsumh,vpmsumh,vpmsumh,Unimplemented,v2.07,VEC,441,465,Vector Polynomial Multiply-Sum Halfword VX-form
+vpmsumw,vpmsumw,vpmsumw,Unimplemented,v2.07,VEC,442,466,Vector Polynomial Multiply-Sum Word VX-form
+vpmsumd,vpmsumd,vpmsumd,Unimplemented,v2.07,VEC,443,467,Vector Polynomial Multiply-Sum Doubleword VX-form
+vpermxor,vpermxor,vpermxor,Unimplemented,v2.07,VEC,444,468,Vector Permute & Exclusive-OR VA-form
+vgbbd,vgbbd,vgbbd,Implemented,v2.07,VEC,445,469,Vector Gather Bits by Bytes by Doubleword VX-form
+vclzb,vclzb,vclzb,Implemented,v2.07,VEC,447,471,Vector Count Leading Zeros Byte VX-form
+vclzh,vclzh,vclzh,Implemented,v2.07,VEC,447,471,Vector Count Leading Zeros Halfword VX-form
+vclzw,vclzw,vclzw,Implemented,v2.07,VEC,448,472,Vector Count Leading Zeros Word VX-form
+vclzd,vclzd,vclzd,Implemented,v2.07,VEC,449,473,Vector Count Leading Zeros Doubleword VX-form
+vpopcntb,vpopcntb,vpopcntb,Implemented,v2.07,VEC,457,481,Vector Population Count Byte VX-form
+vpopcnth,vpopcnth,vpopcnth,Implemented,v2.07,VEC,457,481,Vector Population Count Halfword VX-form
+vpopcntd,vpopcntd,vpopcntd,Implemented,v2.07,VEC,458,482,Vector Population Count Doubleword VX-form
+vpopcntw,vpopcntw,vpopcntw,Implemented,v2.07,VEC,458,482,Vector Population Count Word VX-form
+vbpermq,vbpermq,vbpermq,Implemented,v2.07,VEC,462,486,Vector Bit Permute Quadword VX-form
+bcdadd.,bcdadd,bcdadd,Implemented,v2.07,VEC,478,502,Decimal Add Modulo VX-form
+bcdsub.,bcdsub,bcdsub,Implemented,v2.07,VEC,478,502,Decimal Subtract Modulo VX-form
+mfvscr,mfvscr,mfvscr,Implemented,v2.03,VEC,496,520,Move From Vector Status and Control Register VX-form
+mtvscr,mtvscr,mtvscr,Implemented,v2.03,VEC,496,520,Move To Vector Status and Control Register VX-form
+lxsdx,lxsdx,lxsdx,Implemented,v2.06,VSX,611,635,Load VSX Scalar Doubleword Indexed X-form
+lxsiwax,lxsiwax,lxsiwax,Implemented,v2.07,VSX,613,637,Load VSX Scalar as Integer Word Algebraic Indexed X-form
+lxsiwzx,lxsiwzx,lxsiwzx,Implemented,v2.07,VSX,614,638,Load VSX Scalar as Integer Word & Zero Indexed X-form
+lxsspx,lxsspx,lxsspx,Implemented,v2.07,VSX,616,640,Load VSX Scalar Single-Precision Indexed X-form
+lxvd2x,lxvd2x,lxvd2x,Implemented,v2.06,VSX,619,643,Load VSX Vector Doubleword*2 Indexed X-form
+lxvdsx,lxvdsx,lxvdsx,Implemented,v2.06,VSX,633,657,Load VSX Vector Doubleword & Splat Indexed X-form
+lxvw4x,lxvw4x,lxvw4x,Implemented,v2.06,VSX,635,659,Load VSX Vector Word*4 Indexed X-form
+stxsdx,stxsdx,stxsdx,Implemented,v2.06,VSX,639,663,Store VSX Scalar Doubleword Indexed X-form
+stxsiwx,stxsiwx,stxsiwx,Implemented,v2.07,VSX,641,665,Store VSX Scalar as Integer Word Indexed X-form
+stxsspx,stxsspx,stxsspx,Implemented,v2.07,VSX,643,667,Store VSX Scalar Single-Precision Indexed X-form
+stxvd2x,stxvd2x,stxvd2x,Implemented,v2.06,VSX,646,670,Store VSX Vector Doubleword*2 Indexed X-form
+stxvw4x,stxvw4x,stxvw4x,Implemented,v2.06,VSX,653,677,Store VSX Vector Word*4 Indexed X-form
+xsabsdp,xsabsdp,xsabsdp,Implemented,v2.06,VSX,658,682,VSX Scalar Absolute Double-Precision XX2-form
+xsadddp,xsadddp,xsadddp,Implemented,v2.06,VSX,659,683,VSX Scalar Add Double-Precision XX3-form
+xsaddsp,xsaddsp,xsaddsp,Implemented,v2.07,VSX,664,688,VSX Scalar Add Single-Precision XX3-form
+xscmpodp,xscmpodp,xscmpodp,Implemented,v2.06,VSX,676,700,VSX Scalar Compare Ordered Double-Precision XX3-form
+xscmpudp,xscmpudp,xscmpudp,Implemented,v2.06,VSX,679,703,VSX Scalar Compare Unordered Double-Precision XX3-form
+xscpsgndp,xscpsgndp,xscpsgndp,Implemented,v2.06,VSX,682,706,VSX Scalar Copy Sign Double-Precision XX3-form
+xscvdpsp,xscvdpsp,xscvdpsp,Implemented,v2.06,VSX,685,709,VSX Scalar Convert with round Double-Precision to Single-Precision format XX2-form
+xscvdpspn,xscvdpspn,xscvdpspn,Implemented,v2.07,VSX,686,710,VSX Scalar Convert Scalar Single-Precision to Vector Single-Precision format Non-signalling XX2-form
+xscvdpsxds,xscvdpsxds,xscvdpsxds,Implemented,v2.06,VSX,687,711,VSX Scalar Convert with round to zero Double-Precision to Signed Doubleword format XX2-form
+xscvdpsxws,xscvdpsxws,xscvdpsxws,Implemented,v2.06,VSX,689,713,VSX Scalar Convert with round to zero Double-Precision to Signed Word format XX2-form
+xscvdpuxds,xscvdpuxds,xscvdpuxds,Implemented,v2.06,VSX,691,715,VSX Scalar Convert with round to zero Double-Precision to Unsigned Doubleword format XX2-form
+xscvdpuxws,xscvdpuxws,xscvdpuxws,Implemented,v2.06,VSX,693,717,VSX Scalar Convert with round to zero Double-Precision to Unsigned Word format XX2-form
+xscvspdp,xscvspdp,xscvspdp,Implemented,v2.06,VSX,709,733,VSX Scalar Convert Single-Precision to Double-Precision format XX2-form
+xscvspdpn,xscvspdpn,xscvspdpn,Implemented,v2.07,VSX,710,734,VSX Scalar Convert Single-Precision to Double-Precision format Non-signalling XX2-form
+xscvsxddp,xscvsxddp,xscvsxddp,Implemented,v2.06,VSX,712,736,VSX Scalar Convert with round Signed Doubleword to Double-Precision format XX2-form
+xscvsxdsp,xscvsxdsp,xscvsxdsp,Implemented,v2.07,VSX,713,737,VSX Scalar Convert with round Signed Doubleword to Single-Precision format XX2-form
+xscvuxddp,xscvuxddp,xscvuxddp,Implemented,v2.06,VSX,715,739,VSX Scalar Convert with round Unsigned Doubleword to Double-Precision format XX2-form
+xscvuxdsp,xscvuxdsp,xscvuxdsp,Implemented,v2.07,VSX,716,740,VSX Scalar Convert with round Unsigned Doubleword to Single-Precision XX2-form
+xsdivdp,xsdivdp,xsdivdp,Implemented,v2.06,VSX,717,741,VSX Scalar Divide Double-Precision XX3-form
+xsdivsp,xsdivsp,xsdivsp,Implemented,v2.07,VSX,721,745,VSX Scalar Divide Single-Precision XX3-form
+xsmaddadp,xsmaddadp,xsmaddadp,Implemented,v2.06,VSX,725,749,VSX Scalar Multiply-Add Type-A Double-Precision XX3-form
+xsmaddmdp,xsmaddmdp,xsmaddmdp,Implemented,v2.06,VSX,725,749,VSX Scalar Multiply-Add Type-M Double-Precision XX3-form
+xsmaddasp,xsmaddasp,xsmaddasp,Implemented,v2.07,VSX,728,752,VSX Scalar Multiply-Add Type-A Single-Precision XX3-form
+xsmaddmsp,xsmaddmsp,xsmaddmsp,Implemented,v2.07,VSX,728,752,VSX Scalar Multiply-Add Type-M Single-Precision XX3-form
+xsmaxdp,xsmaxdp,xsmaxdp,Implemented,v2.06,VSX,734,758,VSX Scalar Maximum Double-Precision XX3-form
+xsmindp,xsmindp,xsmindp,Implemented,v2.06,VSX,741,765,VSX Scalar Minimum Double-Precision XX3-form
+xsmsubadp,xsmsubadp,xsmsubadp,Implemented,v2.06,VSX,748,772,VSX Scalar Multiply-Subtract Type-A Double-Precision XX3-form
+xsmsubmdp,xsmsubmdp,xsmsubmdp,Implemented,v2.06,VSX,748,772,VSX Scalar Multiply-Subtract Type-M Double-Precision XX3-form
+xsmsubasp,xsmsubasp,xsmsubasp,Implemented,v2.07,VSX,751,775,VSX Scalar Multiply-Subtract Type-A Single-Precision XX3-form
+xsmsubmsp,xsmsubmsp,xsmsubmsp,Implemented,v2.07,VSX,751,775,VSX Scalar Multiply-Subtract Type-M Single-Precision XX3-form
+xsmuldp,xsmuldp,xsmuldp,Implemented,v2.06,VSX,757,781,VSX Scalar Multiply Double-Precision XX3-form
+xsmulsp,xsmulsp,xsmulsp,Implemented,v2.07,VSX,761,785,VSX Scalar Multiply Single-Precision XX3-form
+xsnabsdp,xsnabsdp,xsnabsdp,Implemented,v2.06,VSX,763,787,VSX Scalar Negative Absolute Double-Precision XX2-form
+xsnegdp,xsnegdp,xsnegdp,Implemented,v2.06,VSX,764,788,VSX Scalar Negate Double-Precision XX2-form
+xsnmaddadp,xsnmaddadp,xsnmaddadp,Implemented,v2.06,VSX,765,789,VSX Scalar Negative Multiply-Add Type-A Double-Precision XX3-form
+xsnmaddmdp,xsnmaddmdp,xsnmaddmdp,Implemented,v2.06,VSX,765,789,VSX Scalar Negative Multiply-Add Type-M Double-Precision XX3-form
+xsnmaddasp,xsnmaddasp,xsnmaddasp,Implemented,v2.07,VSX,770,794,VSX Scalar Negative Multiply-Add Type-A Single-Precision XX3-form
+xsnmaddmsp,xsnmaddmsp,xsnmaddmsp,Implemented,v2.07,VSX,770,794,VSX Scalar Negative Multiply-Add Type-M Single-Precision XX3-form
+xsnmsubadp,xsnmsubadp,xsnmsubadp,Implemented,v2.06,VSX,776,800,VSX Scalar Negative Multiply-Subtract Type-A Double-Precision XX3-form
+xsnmsubmdp,xsnmsubmdp,xsnmsubmdp,Implemented,v2.06,VSX,776,800,VSX Scalar Negative Multiply-Subtract Type-M Double-Precision XX3-form
+xsnmsubasp,xsnmsubasp,xsnmsubasp,Implemented,v2.07,VSX,779,803,VSX Scalar Negative Multiply-Subtract Type-A Single-Precision XX3-form
+xsnmsubmsp,xsnmsubmsp,xsnmsubmsp,Implemented,v2.07,VSX,779,803,VSX Scalar Negative Multiply-Subtract Type-M Single-Precision XX3-form
+xsrdpi,xsrdpi,xsrdpi,Implemented,v2.06,VSX,785,809,VSX Scalar Round to Double-Precision Integer using round to Nearest Away XX2-form
+xsrdpic,xsrdpic,xsrdpic,Implemented,v2.06,VSX,786,810,VSX Scalar Round to Double-Precision Integer exact using Current rounding mode XX2-form
+xsrdpim,xsrdpim,xsrdpim,Implemented,v2.06,VSX,787,811,VSX Scalar Round to Double-Precision Integer using round toward -Infinity XX2-form
+xsrdpip,xsrdpip,xsrdpip,Implemented,v2.06,VSX,788,812,VSX Scalar Round to Double-Precision Integer using round toward +Infinity XX2-form
+xsrdpiz,xsrdpiz,xsrdpiz,Implemented,v2.06,VSX,789,813,VSX Scalar Round to Double-Precision Integer using round toward Zero XX2-form
+xsredp,xsredp,xsredp,Implemented,v2.06,VSX,790,814,VSX Scalar Reciprocal Estimate Double-Precision XX2-form
+xsresp,xsresp,xsresp,Implemented,v2.07,VSX,791,815,VSX Scalar Reciprocal Estimate Single-Precision XX2-form
+xsrsp,xsrsp,xsrsp,Implemented,v2.07,VSX,797,821,VSX Scalar Round to Single-Precision XX2-form
+xsrsqrtedp,xsrsqrtedp,xsrsqrtedp,Implemented,v2.06,VSX,798,822,VSX Scalar Reciprocal Square Root Estimate Double-Precision XX2-form
+xsrsqrtesp,xsrsqrtesp,xsrsqrtesp,Implemented,v2.07,VSX,799,823,VSX Scalar Reciprocal Square Root Estimate Single-Precision XX2-form
+xssqrtdp,xssqrtdp,xssqrtdp,Implemented,v2.06,VSX,801,825,VSX Scalar Square Root Double-Precision XX2-form
+xssqrtsp,xssqrtsp,xssqrtsp,Implemented,v2.07,VSX,805,829,VSX Scalar Square Root Single-Precision XX2-form
+xssubdp,xssubdp,xssubdp,Implemented,v2.06,VSX,807,831,VSX Scalar Subtract Double-Precision XX3-form
+xssubsp,xssubsp,xssubsp,Implemented,v2.07,VSX,811,835,VSX Scalar Subtract Single-Precision XX3-form
+xstdivdp,xstdivdp,xstdivdp,Implemented,v2.06,VSX,813,837,VSX Scalar Test for software Divide Double-Precision XX3-form
+xstsqrtdp,xstsqrtdp,xstsqrtdp,Unimplemented,v2.06,VSX,814,838,VSX Scalar Test for software Square Root Double-Precision XX2-form
+xvabsdp,xvabsdp,xvabsdp,Implemented,v2.06,VSX,820,844,VSX Vector Absolute Value Double-Precision XX2-form
+xvabssp,xvabssp,xvabssp,Unimplemented,v2.06,VSX,820,844,VSX Vector Absolute Value Single-Precision XX2-form
+xvadddp,xvadddp,xvadddp,Implemented,v2.06,VSX,821,845,VSX Vector Add Double-Precision XX3-form
+xvaddsp,xvaddsp,xvaddsp,Implemented,v2.06,VSX,825,849,VSX Vector Add Single-Precision XX3-form
+xvcmpeqdp[.],xvcmpeqdp,xvcmpeqdp,Implemented,v2.06,VSX,832,856,VSX Vector Compare Equal To Double-Precision XX3-form
+xvcmpeqsp[.],xvcmpeqsp,xvcmpeqsp,Implemented,v2.06,VSX,833,857,VSX Vector Compare Equal To Single-Precision XX3-form
+xvcmpgedp[.],xvcmpgedp,xvcmpgedp,Implemented,v2.06,VSX,834,858,VSX Vector Compare Greater Than or Equal To Double-Precision XX3-form
+xvcmpgesp[.],xvcmpgesp,xvcmpgesp,Implemented,v2.06,VSX,835,859,VSX Vector Compare Greater Than or Equal To Single-Precision XX3-form
+xvcmpgtdp[.],xvcmpgtdp,xvcmpgtdp,Implemented,v2.06,VSX,836,860,VSX Vector Compare Greater Than Double-Precision XX3-form
+xvcmpgtsp[.],xvcmpgtsp,xvcmpgtsp,Implemented,v2.06,VSX,837,861,VSX Vector Compare Greater Than Single-Precision XX3-form
+xvcpsgndp,xvcpsgndp,xvcpsgndp,Implemented,v2.06,VSX,838,862,VSX Vector Copy Sign Double-Precision XX3-form
+xvcpsgnsp,xvcpsgnsp,xvcpsgnsp,Implemented,v2.06,VSX,838,862,VSX Vector Copy Sign Single-Precision XX3-form
+xvcvdpsp,xvcvdpsp,xvcvdpsp,Implemented,v2.06,VSX,840,864,VSX Vector Convert with round Double-Precision to Single-Precision format XX2-form
+xvcvdpsxds,xvcvdpsxds,xvcvdpsxds,Implemented,v2.06,VSX,841,865,VSX Vector Convert with round to zero Double-Precision to Signed Doubleword format XX2-form
+xvcvdpsxws,xvcvdpsxws,xvcvdpsxws,Implemented,v2.06,VSX,843,867,VSX Vector Convert with round to zero Double-Precision to Signed Word format XX2-form
+xvcvdpuxds,xvcvdpuxds,xvcvdpuxds,Implemented,v2.06,VSX,845,869,VSX Vector Convert with round to zero Double-Precision to Unsigned Doubleword format XX2-form
+xvcvdpuxws,xvcvdpuxws,xvcvdpuxws,Implemented,v2.06,VSX,847,871,VSX Vector Convert with round to zero Double-Precision to Unsigned Word format XX2-form
+xvcvspdp,xvcvspdp,xvcvspdp,Implemented,v2.06,VSX,851,875,VSX Vector Convert Single-Precision to Double-Precision format XX2-form
+xvcvspsxds,xvcvspsxds,xvcvspsxds,Implemented,v2.06,VSX,853,877,VSX Vector Convert with round to zero Single-Precision to Signed Doubleword format XX2-form
+xvcvspsxws,xvcvspsxws,xvcvspsxws,Implemented,v2.06,VSX,855,879,VSX Vector Convert with round to zero Single-Precision to Signed Word format XX2-form
+xvcvspuxds,xvcvspuxds,xvcvspuxds,Implemented,v2.06,VSX,857,881,VSX Vector Convert with round to zero Single-Precision to Unsigned Doubleword format XX2-form
+xvcvspuxws,xvcvspuxws,xvcvspuxws,Implemented,v2.06,VSX,859,883,VSX Vector Convert with round to zero Single-Precision to Unsigned Word format XX2-form
+xvcvsxddp,xvcvsxddp,xvcvsxddp,Implemented,v2.06,VSX,861,885,VSX Vector Convert with round Signed Doubleword to Double-Precision format XX2-form
+xvcvsxdsp,xvcvsxdsp,xvcvsxdsp,Implemented,v2.06,VSX,862,886,VSX Vector Convert with round Signed Doubleword to Single-Precision format XX2-form
+xvcvsxwdp,xvcvsxwdp,xvcvsxwdp,Implemented,v2.06,VSX,863,887,VSX Vector Convert Signed Word to Double-Precision format XX2-form
+xvcvsxwsp,xvcvsxwsp,xvcvsxwsp,Implemented,v2.06,VSX,863,887,VSX Vector Convert with round Signed Word to Single-Precision format XX2-form
+xvcvuxddp,xvcvuxddp,xvcvuxddp,Implemented,v2.06,VSX,864,888,VSX Vector Convert with round Unsigned Doubleword to Double-Precision format XX2-form
+xvcvuxdsp,xvcvuxdsp,xvcvuxdsp,Implemented,v2.06,VSX,865,889,VSX Vector Convert with round Unsigned Doubleword to Single-Precision format XX2-form
+xvcvuxwdp,xvcvuxwdp,xvcvuxwdp,Unimplemented,v2.06,VSX,866,890,VSX Vector Convert Unsigned Word to Double-Precision format XX2-form
+xvcvuxwsp,xvcvuxwsp,xvcvuxwsp,Unimplemented,v2.06,VSX,866,890,VSX Vector Convert with round Unsigned Word to Single-Precision format XX2-form
+xvdivdp,xvdivdp,xvdivdp,Implemented,v2.06,VSX,867,891,VSX Vector Divide Double-Precision XX3-form
+xvdivsp,xvdivsp,xvdivsp,Implemented,v2.06,VSX,869,893,VSX Vector Divide Single-Precision XX3-form
+xvmaddadp,xvmaddadp,xvmaddadp,Implemented,v2.06,VSX,897,921,VSX Vector Multiply-Add Type-A Double-Precision XX3-form
+xvmaddmdp,xvmaddmdp,xvmaddmdp,Implemented,v2.06,VSX,897,921,VSX Vector Multiply-Add Type-M Double-Precision XX3-form
+xvmaddasp,xvmaddasp,xvmaddasp,Implemented,v2.06,VSX,900,924,VSX Vector Multiply-Add Type-A Single-Precision XX3-form
+xvmaddmsp,xvmaddmsp,xvmaddmsp,Implemented,v2.06,VSX,900,924,VSX Vector Multiply-Add Type-M Single-Precision XX3-form
+xvmaxdp,xvmaxdp,xvmaxdp,Implemented,v2.06,VSX,903,927,VSX Vector Maximum Double-Precision XX3-form
+xvmaxsp,xvmaxsp,xvmaxsp,Implemented,v2.06,VSX,905,929,VSX Vector Maximum Single-Precision XX3-form
+xvmindp,xvmindp,xvmindp,Implemented,v2.06,VSX,907,931,VSX Vector Minimum Double-Precision XX3-form
+xvminsp,xvminsp,xvminsp,Implemented,v2.06,VSX,909,933,VSX Vector Minimum Single-Precision XX3-form
+xvmsubadp,xvmsubadp,xvmsubadp,Implemented,v2.06,VSX,911,935,VSX Vector Multiply-Subtract Type-A Double-Precision XX3-form
+xvmsubmdp,xvmsubmdp,xvmsubmdp,Implemented,v2.06,VSX,911,935,VSX Vector Multiply-Subtract Type-M Double-Precision XX3-form
+xvmsubasp,xvmsubasp,xvmsubasp,Implemented,v2.06,VSX,914,938,VSX Vector Multiply-Subtract Type-A Single-Precision XX3-form
+xvmsubmsp,xvmsubmsp,xvmsubmsp,Implemented,v2.06,VSX,914,938,VSX Vector Multiply-Subtract Type-M Single-Precision XX3-form
+xvmuldp,xvmuldp,xvmuldp,Implemented,v2.06,VSX,917,941,VSX Vector Multiply Double-Precision XX3-form
+xvmulsp,xvmulsp,xvmulsp,Implemented,v2.06,VSX,919,943,VSX Vector Multiply Single-Precision XX3-form
+xvnabsdp,xvnabsdp,xvnabsdp,Implemented,v2.06,VSX,921,945,VSX Vector Negative Absolute Double-Precision XX2-form
+xvnabssp,xvnabssp,xvnabssp,Implemented,v2.06,VSX,921,945,VSX Vector Negative Absolute Single-Precision XX2-form
+xvnegdp,xvnegdp,xvnegdp,Implemented,v2.06,VSX,922,946,VSX Vector Negate Double-Precision XX2-form
+xvnegsp,xvnegsp,xvnegsp,Implemented,v2.06,VSX,922,946,VSX Vector Negate Single-Precision XX2-form
+xvnmaddadp,xvnmaddadp,xvnmaddadp,Implemented,v2.06,VSX,923,947,VSX Vector Negative Multiply-Add Type-A Double-Precision XX3-form
+xvnmaddmdp,xvnmaddmdp,xvnmaddmdp,Implemented,v2.06,VSX,923,947,VSX Vector Negative Multiply-Add Type-M Double-Precision XX3-form
+xvnmaddasp,xvnmaddasp,xvnmaddasp,Implemented,v2.06,VSX,927,951,VSX Vector Negative Multiply-Add Type-A Single-Precision XX3-form
+xvnmaddmsp,xvnmaddmsp,xvnmaddmsp,Implemented,v2.06,VSX,927,951,VSX Vector Negative Multiply-Add Type-M Single-Precision XX3-form
+xvnmsubadp,xvnmsubadp,xvnmsubadp,Implemented,v2.06,VSX,930,954,VSX Vector Negative Multiply-Subtract Type-A Double-Precision XX3-form
+xvnmsubmdp,xvnmsubmdp,xvnmsubmdp,Implemented,v2.06,VSX,930,954,VSX Vector Negative Multiply-Subtract Type-M Double-Precision XX3-form
+xvnmsubasp,xvnmsubasp,xvnmsubasp,Implemented,v2.06,VSX,933,957,VSX Vector Negative Multiply-Subtract Type-A Single-Precision XX3-form
+xvnmsubmsp,xvnmsubmsp,xvnmsubmsp,Implemented,v2.06,VSX,933,957,VSX Vector Negative Multiply-Subtract Type-M Single-Precision XX3-form
+xvrdpi,xvrdpi,xvrdpi,Implemented,v2.06,VSX,936,960,VSX Vector Round to Double-Precision Integer using round to Nearest Away XX2-form
+xvrdpic,xvrdpic,xvrdpic,Implemented,v2.06,VSX,937,961,VSX Vector Round to Double-Precision Integer Exact using Current rounding mode XX2-form
+xvrdpim,xvrdpim,xvrdpim,Implemented,v2.06,VSX,938,962,VSX Vector Round to Double-Precision Integer using round toward -Infinity XX2-form
+xvrdpip,xvrdpip,xvrdpip,Implemented,v2.06,VSX,939,963,VSX Vector Round to Double-Precision Integer using round toward +Infinity XX2-form
+xvrdpiz,xvrdpiz,xvrdpiz,Implemented,v2.06,VSX,939,963,VSX Vector Round to Double-Precision Integer using round toward Zero XX2-form
+xvredp,xvredp,xvredp,Unimplemented,v2.06,VSX,940,964,VSX Vector Reciprocal Estimate Double-Precision XX2-form
+xvresp,xvresp,xvresp,Unimplemented,v2.06,VSX,941,965,VSX Vector Reciprocal Estimate Single-Precision XX2-form
+xvrspi,xvrspi,xvrspi,Implemented,v2.06,VSX,942,966,VSX Vector Round to Single-Precision Integer using round to Nearest Away XX2-form
+xvrspic,xvrspic,xvrspic,Implemented,v2.06,VSX,943,967,VSX Vector Round to Single-Precision Integer Exact using Current rounding mode XX2-form
+xvrspim,xvrspim,xvrspim,Implemented,v2.06,VSX,944,968,VSX Vector Round to Single-Precision Integer using round toward -Infinity XX2-form
+xvrspip,xvrspip,xvrspip,Implemented,v2.06,VSX,945,969,VSX Vector Round to Single-Precision Integer using round toward +Infinity XX2-form
+xvrspiz,xvrspiz,xvrspiz,Implemented,v2.06,VSX,945,969,VSX Vector Round to Single-Precision Integer using round toward Zero XX2-form
+xvrsqrtedp,xvrsqrtedp,xvrsqrtedp,Unimplemented,v2.06,VSX,946,970,VSX Vector Reciprocal Square Root Estimate Double-Precision XX2-form
+xvrsqrtesp,xvrsqrtesp,xvrsqrtesp,Unimplemented,v2.06,VSX,947,971,VSX Vector Reciprocal Square Root Estimate Single-Precision XX2-form
+xvsqrtdp,xvsqrtdp,xvsqrtdp,Implemented,v2.06,VSX,948,972,VSX Vector Square Root Double-Precision XX2-form
+xvsqrtsp,xvsqrtsp,xvsqrtsp,Implemented,v2.06,VSX,949,973,VSX Vector Square Root Single-Precision XX2-form
+xvsubdp,xvsubdp,xvsubdp,Implemented,v2.06,VSX,950,974,VSX Vector Subtract Double-Precision XX3-form
+xvsubsp,xvsubsp,xvsubsp,Implemented,v2.06,VSX,952,976,VSX Vector Subtract Single-Precision XX3-form
+xvtdivdp,xvtdivdp,xvtdivdp,Implemented,v2.06,VSX,954,978,VSX Vector Test for software Divide Double-Precision XX3-form
+xvtdivsp,xvtdivsp,xvtdivsp,Implemented,v2.06,VSX,955,979,VSX Vector Test for software Divide Single-Precision XX3-form
+xvtsqrtdp,xvtsqrtdp,xvtsqrtdp,Unimplemented,v2.06,VSX,956,980,VSX Vector Test for software Square Root Double-Precision XX2-form
+xvtsqrtsp,xvtsqrtsp,xvtsqrtsp,Implemented,v2.06,VSX,956,980,VSX Vector Test for software Square Root Single-Precision XX2-form
+xxland,xxland,xxland,Implemented,v2.06,VSX,978,1002,VSX Vector Logical AND XX3-form
+xxlandc,xxlandc,xxlandc,Implemented,v2.06,VSX,978,1002,VSX Vector Logical AND with Complement XX3-form
+xxleqv,xxleqv,xxleqv,Implemented,v2.07,VSX,979,1003,VSX Vector Logical Equivalence XX3-form
+xxlnand,xxlnand,xxlnand,Implemented,v2.07,VSX,979,1003,VSX Vector Logical NAND XX3-form
+xxlnor,xxlnor,xxlnor,Implemented,v2.06,VSX,980,1004,VSX Vector Logical NOR XX3-form
+xxlorc,xxlorc,xxlorc,Implemented,v2.07,VSX,980,1004,VSX Vector Logical OR with Complement XX3-form
+xxlor,xxlor,xxlor,Implemented,v2.06,VSX,981,1005,VSX Vector Logical OR XX3-form
+xxlxor,xxlxor,xxlxor,Implemented,v2.06,VSX,981,1005,VSX Vector Logical XOR XX3-form
+xxmrghw,xxmrghw,xxmrghw,Implemented,v2.06,VSX,982,1006,VSX Vector Merge High Word XX3-form
+xxmrglw,xxmrglw,xxmrglw,Implemented,v2.06,VSX,982,1006,VSX Vector Merge Low Word XX3-form
+xxpermdi,xxpermdi,xxpermdi,Implemented,v2.06,VSX,986,1010,VSX Vector Permute Doubleword Immediate XX3-form
+xxsel,xxsel,xxsel,Implemented,v2.06,VSX,988,1012,VSX Vector Select XX4-form
+xxsldwi,xxsldwi,xxsldwi,Implemented,v2.06,VSX,990,1014,VSX Vector Shift Left Double by Word Immediate XX3-form
+xxspltw,xxspltw,xxspltw,Implemented,v2.06,VSX,993,1017,VSX Vector Splat Word XX2-form 
+icbi,icbi,icbi,Implemented,PPC,MEM,1052,1076,Instruction Cache Block Invalidate X-form
+icbt,icbt,icbt,Unimplemented,v2.07,MEM,1052,1076,Instruction Cache Block Touch X-form
+dcbt,dcbt,dcbt,Implemented,PPC,MEM,1061,1085,Data Cache Block Touch X-form
+dcbtst,dcbtst,dcbtst,Implemented,PPC,MEM,1062,1086,Data Cache Block Touch for Store X-form
+dcbz,dcbz,dcbz,Implemented,P1,MEM,1063,1087,Data Cache Block set to Zero X-form
+dcbst,dcbst,dcbst,Unimplemented,PPC,MEM,1063,1087,Data Cache Block Store X-form
+dcbf,dcbf,dcbf,Implemented,PPC,MEM,1064,1088,Data Cache Block Flush X-form
+isync,isync,isync,Implemented,P1,MEM,1076,1100,Instruction Synchronize XL-form
+lbarx,lbarx,lbarx,Implemented,v2.06,MEM,1077,1101,Load Byte And Reserve Indexed X-form
+lwarx,lwarx,lwarx,Implemented,PPC,MEM,1078,1102,Load Word & Reserve Indexed X-form
+lharx,lharx,lharx,Implemented,v2.06,MEM,1078,1102,Load Halfword And Reserve Indexed X-form
+stbcx.,stbcx,stbcx,Implemented,v2.06,MEM,1079,1103,Store Byte Conditional Indexed X-form
+sthcx.,sthcx,sthcx,Implemented,v2.06,MEM,1080,1104,Store Halfword Conditional Indexed X-form
+stwcx.,stwcx,stwcx,Implemented,PPC,MEM,1081,1105,Store Word Conditional Indexed X-form
+ldarx,ldarx,ldarx,Implemented,PPC,MEM,1082,1106,Load Doubleword And Reserve Indexed X-form
+stdcx.,stdcx,stdcx,Implemented,PPC,MEM,1082,1106,Store Doubleword Conditional Indexed X-form
+lqarx,lqarx,lqarx,Unimplemented,v2.07,MEM,1084,1108,Load Quadword And Reserve Indexed X-form
+stqcx.,stqcx,stqcx,Unimplemented,v2.07,MEM,1085,1109,Store Quadword Conditional Indexed X-form
+sync,sync,sync,Implemented,P1,MEM,1086,1110,Synchronize X-form
+eieio,eieio,eieio,Implemented,PPC,MEM,1088,1112,Enforce In-order Execution of I/O X-form
+mftb,mftb,mftb,Implemented,PPC,MEM,1094,1118,Move From Time Base XFX-form
+rfebb,rfebb,rfebb,Unimplemented,v2.07,MEM,1100,1124,Return from Event Based Branch XL-form
+clrbhrb,clrbhrb,clrbhrb,Unimplemented,v2.07,MEM,1103,1127,Clear BHRB X-form
+mfbhrbe,mfbhrbe,mfbhrbe,Unimplemented,v2.07,MEM,1103,1127,Move From BHRB XFX-form
+rfid,rfid,rfid,Unimplemented,PPC,SPECIAL,1152,1176,Return from Interrupt Doubleword XL-form
+hrfid,hrfid,hrfid,Unimplemented,v2.02,SPECIAL,1152,1176,Return From Interrupt Doubleword Hypervisor XL-form
+lbzcix,lbzcix,lbzcix,Unimplemented,v2.05,SPECIAL,1164,1188,Load Byte & Zero Caching Inhibited Indexed X-form
+ldcix,ldcix,ldcix,Unimplemented,v2.05,SPECIAL,1164,1188,Load Doubleword Caching Inhibited Indexed X-form
+lhzcix,lhzcix,lhzcix,Unimplemented,v2.05,SPECIAL,1164,1188,Load Halfword & Zero Caching Inhibited Indexed X-form
+lwzcix,lwzcix,lwzcix,Unimplemented,v2.05,SPECIAL,1164,1188,Load Word & Zero Caching Inhibited Indexed X-form
+stbcix,stbcix,stbcix,Unimplemented,v2.05,SPECIAL,1165,1189,Store Byte Caching Inhibited Indexed X-form
+stdcix,stdcix,stdcix,Unimplemented,v2.05,SPECIAL,1165,1189,Store Doubleword Caching Inhibited Indexed X-form
+sthcix,sthcix,sthcix,Unimplemented,v2.05,SPECIAL,1165,1189,Store Halfword Caching Inhibited Indexed X-form
+stwcix,stwcix,stwcix,Unimplemented,v2.05,SPECIAL,1165,1189,Store Word Caching Inhibited Indexed X-form
+mtspr,mtspr,mtspr,Unimplemented,P1,SPECIAL,1171,1195,Move To Special Purpose Register XFX-form
+mfspr,mfspr,mfspr,Implemented,P1,SPECIAL,1173,1197,Move From Special Purpose Register XFX-form
+mtmsr,mtmsr,mtmsr,Implemented,P1,SPECIAL,1174,1198,Move To MSR X-form
+mtmsrd,mtmsrd,mtmsrd,Implemented,PPC,SPECIAL,1175,1199,Move To MSR Doubleword X-form
+mfmsr,mfmsr,mfmsr,Implemented,P1,SPECIAL,1176,1200,Move From MSR X-form
+slbie,slbie,slbie,Unimplemented,PPC,SPECIAL,1221,1245,SLB Invalidate Entry X-form
+slbia,slbia,slbia,Implemented,PPC,SPECIAL,1224,1248,SLB Invalidate All X-form
+slbmte,slbmte,slbmte,Unimplemented,v2.00,SPECIAL,1227,1251,SLB Move To Entry X-form
+slbmfev,slbmfev,slbmfev,Unimplemented,v2.00,SPECIAL,1228,1252,SLB Move From Entry VSID X-form
+slbmfee,slbmfee,slbmfee,Unimplemented,v2.00,SPECIAL,1229,1253,SLB Move From Entry ESID X-form
+slbfee.,slbfee,slbfee,Unimplemented,v2.05,SPECIAL,1229,1253,SLB Find Entry ESID X-form
+tlbie,tlbie,tlbie,Implemented,P1,SPECIAL,1231,1255,TLB Invalidate Entry X-form
+tlbiel,tlbiel,tlbiel,Implemented,v2.03,SPECIAL,1236,1260,TLB Invalidate Entry Local X-form
+tlbsync,tlbsync,tlbsync,Implemented,PPC,SPECIAL,1240,1264,TLB Synchronize X-form
+msgsnd,msgsnd,msgsnd,Implemented,v2.07,SPECIAL,1328,1352,Message Send X-form
+msgclr,msgclr,msgclr,Implemented,v2.07,SPECIAL,1329,1353,Message Clear X-form
+msgsndp,msgsndp,msgsndp,Unimplemented,v2.07,SPECIAL,1330,1354,Message Send Privileged X-form
+msgclrp,msgclrp,msgclrp,Implemented,v2.07,SPECIAL,1331,1355,Message Clear Privileged X-form
