@@ -88,7 +88,7 @@ restore-all: $(EXECUTABLE)
 bbv-simpoint: $(EXECUTABLE)
 	@echo ---------------------bbv_simpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
 	@$(TIMEH) $(GEM5) --outdir=$(FILE)_bbv $(GEM5_PY) --simpoint-profile --simpoint-interval=$(INTERVAL_SIZE) --cpu-type=NonCachingSimpleCPU -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --mem-size=16384MB >$(FILE)_gem5_bbv.log 2>&1 ; \
-	gunzip -c simpoint.bb.gz > simpoint.bb ; \
+	gunzip -c ./$(FILE)_bbv/simpoint.bb.gz >./$(FILE)_bbv/simpoint.bb ; \
 	MAXK=`wc -l ./$(FILE)_bbv/simpoint.bb | awk 'END{print sqrt($$1)}'` ; \
 	$(SIMPOINT_EXE) -loadFVFile ./$(FILE)_bbv/simpoint.bb.gz -maxK $${MAXK} -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights -inputVectorsGzipped >$(FILE)_simpoint.log 2>&1 ; \
 	#$(SIMPOINT_EXE) -loadFVFile $(FILE).bb.out -maxK $(MAXK) -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights >>$(FILE)_trace.log 2>&1 ; \
