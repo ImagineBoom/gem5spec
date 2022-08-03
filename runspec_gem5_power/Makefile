@@ -1,5 +1,5 @@
 DATE = $(shell date +%Y%m%d%H%M%S)
-GEM5_REPO_PATH = $(shell awk '$$1=="GEM5_REPO_PATH"{print $$3}' Makefile.inc)
+GEM5_REPO_PATH ?= $(shell awk '$$1=="GEM5_REPO_PATH"{print $$3}' Makefile.inc)
 
 .PHONY: all
 
