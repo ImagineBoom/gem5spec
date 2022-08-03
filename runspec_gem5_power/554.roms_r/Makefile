@@ -52,7 +52,7 @@ checkpoints: $(EXECUTABLE)
 
 restore: $(EXECUTABLE)
 	@echo ---------------------rscpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIMEH) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out --input $(EXECUTABLE) -o "$(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1
+	$(TIMEH) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) --input "$(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1
 	@cat $(FILE)_restore.log >> $(FILE)_trace.log
 	@echo ---------------------rscpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log; true
@@ -60,7 +60,7 @@ restore: $(EXECUTABLE)
 gem5_pipeview: $(EXECUTABLE)
 	@echo ---------------------gem5pv handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
 	tick_nums=(`grep -oP 'Entering event queue @ \d+' $(FILE)_restore.log|grep -oP '\d+'`);\
-	$(TIMEG) $(GEM5) --debug-flags=O3PipeView --debug-start=$${tick_nums[0]} --debug-file=trace.out $(GEM5_PY) -c $(EXECUTABLE) --input " $(ARGS4GEM5)" $(GEM5_PY_OPT) -m $${tick_nums[-1]}
+	$(TIMEG) $(GEM5) --debug-flags=O3PipeView --debug-start=$${tick_nums[0]} --debug-file=trace.out $(GEM5_PY) -c $(EXECUTABLE) --input "$(ARGS4GEM5)" $(GEM5_PY_OPT) -m $${tick_nums[-1]}
 	$(GEM5_REPO_PATH)/util/o3-pipeview.py -c 500 -o pipeview.out --color m5out/trace.out
 	less -r pipeview.out
 	@echo ---------------------gem5pv handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
@@ -76,7 +76,7 @@ restore-all: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out --input $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1;\
+		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) --input "$(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1;\
 		cat $(FILE)_restore.log >> $(FILE)_trace.log;\
 		grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log; true;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
@@ -89,7 +89,7 @@ restore-all: $(EXECUTABLE)
 
 simpoint: $(EXECUTABLE)
 	@echo ---------------------bbv_simpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	@$(TIMEH) $(GEM5) --outdir=$(FILE)_bbv $(GEM5_PY) --simpoint-profile --simpoint-interval=$(INTERVAL_SIZE) -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=NonCachingSimpleCPU --mem-size=16384MB >$(FILE)_gem5_bbv.log 2>&1;\
+	@$(TIMEH) $(GEM5) --outdir=$(FILE)_bbv $(GEM5_PY) --simpoint-profile --simpoint-interval=$(INTERVAL_SIZE) -c $(EXECUTABLE) --input "$(ARGS4GEM5)" --cpu-type=NonCachingSimpleCPU --mem-size=16384MB >$(FILE)_gem5_bbv.log 2>&1;\
 	gunzip -c ./$(FILE)_bbv/simpoint.bb.gz >./$(FILE)_bbv/simpoint.bb;\
 	MAXK=`wc -l ./$(FILE)_bbv/simpoint.bb | awk 'END{print sqrt($$1)}'`;\
 	$(SIMPOINT_EXE) -loadFVFile ./$(FILE)_bbv/simpoint.bb.gz -maxK $${MAXK} -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights -inputVectorsGzipped >$(FILE)_simpoint.log 2>&1;\
