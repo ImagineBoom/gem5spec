@@ -48,14 +48,14 @@ inst_count:$(EXECUTABLE)
 	insts=`grep -oP 'Total instructions: \d+' $(FILE)_inst.log|grep -oP '\d+'`;\
 	printf "%-20s %22d \n" $(FILE) $${insts}>>../inst_count.log
 
-simpoint: $(EXECUTABLE)
+valgrind_simpoint: $(EXECUTABLE)
 	@echo ---------------------simpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
 	$(TIME) $(VALGRIND_EXE) --tool=exp-bbv --interval-size=$(INTERVAL_SIZE) --bb-out-file=$(FILE).bb.out ./$(EXECUTABLE) $(ARGS) >$(FILE)_valgrind.log 2>&1 ; \
 	MAXK=`wc -l $(FILE).bb.out | awk 'END{print sqrt($$1)}'` ; \
 	$(SIMPOINT_EXE) -loadFVFile $(FILE).bb.out -maxK $${MAXK} -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights >$(FILE)_simpoint.log 2>&1 ; \
 	#$(SIMPOINT_EXE) -loadFVFile $(FILE).bb.out -maxK $(MAXK) -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights >>$(FILE)_trace.log 2>&1 ; \
 	paste $(FILE).simpts $(FILE).weights | awk '{printf "%-20d %-20d %-15.5f\n",$$2,$$1,$$3}' 1>$(FILE).merge ; \
-	sort $(FILE).merge -n -k 2 -o $(FILE).merge 2>>$(FILE)_sort.log
+	sort $(FILE).merge -n -k 2 -o $(FILE).merge
 	@echo ---------------------simpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
 
