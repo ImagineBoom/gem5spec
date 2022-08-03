@@ -5,7 +5,7 @@ VGI2QT_EXE     = /home/lizongping/dev/valgrind-install/bin/vgi2qt
 FILE           = $$(basename $(BENCH_PATH))
 FILE_FOR_FINDINTERVALSIZE = "$(FILE)"
 #Simpoint
-INTERVAL_SIZE  = 100000
+INTERVAL_SIZE  = 5000000
 MAXK           = 35
 WARMUP_LENGTH  = 0
 NUM_CKP        = 1
@@ -50,12 +50,12 @@ inst_count:$(EXECUTABLE)
 
 simpoint: $(EXECUTABLE)
 	@echo ---------------------simpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIME) $(VALGRIND_EXE) --tool=exp-bbv --interval-size=$(INTERVAL_SIZE) --bb-out-file=$(FILE).bb.out ./$(EXECUTABLE) $(ARGS) >>$(FILE)_trace.log 2>&1 ; \
+	$(TIME) $(VALGRIND_EXE) --tool=exp-bbv --interval-size=$(INTERVAL_SIZE) --bb-out-file=$(FILE).bb.out ./$(EXECUTABLE) $(ARGS) >$(FILE)_valgrind.log 2>&1 ; \
 	MAXK=`wc -l $(FILE).bb.out | awk 'END{print sqrt($$1)}'` ; \
-	$(SIMPOINT_EXE) -loadFVFile $(FILE).bb.out -maxK $${MAXK} -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights >>$(FILE)_trace.log 2>&1 ; \
+	$(SIMPOINT_EXE) -loadFVFile $(FILE).bb.out -maxK $${MAXK} -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights >$(FILE)_simpoint.log 2>&1 ; \
 	#$(SIMPOINT_EXE) -loadFVFile $(FILE).bb.out -maxK $(MAXK) -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights >>$(FILE)_trace.log 2>&1 ; \
 	paste $(FILE).simpts $(FILE).weights | awk '{printf "%-20d %-20d %-15.5f\n",$$2,$$1,$$3}' 1>$(FILE).merge ; \
-	sort $(FILE).merge -n -k 2 -o $(FILE).merge 2>>$(FILE)_trace.log
+	sort $(FILE).merge -n -k 2 -o $(FILE).merge 2>>$(FILE)_sort.log
 	@echo ---------------------simpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true
 
@@ -104,7 +104,7 @@ cpi: $(EXECUTABLE)
 		echo ckp$${i} $${weights} $${cpi} $${weightedCPI} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
 	done;
 	result=`awk '{sum+=$$4}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
-	awk -F, 'NR==1 {print "Checkpoint#","Weights","CPI","WeightedCPI"} {print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log | column -t > $(FILE)_final_result_$${result}.csv;\
+	awk -F, 'NR==1 {print "Checkpoint#","Weights","CPI","WeightedCPI"} {print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log | column -t >$(FILE)_final_result_$${result}.csv;\
 	case_name=$(FILE);\
 	sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;\
 	sed -i '$$G' ./$(FILE)_final_result_$${result}.csv;
