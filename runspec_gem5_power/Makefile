@@ -454,7 +454,7 @@ cpi_999:
 cpi-all:
 	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log 
 	@sed -i 's/.csv//' weightedCPI_results.log;
-	@awk -F, 'NR==1 {print "SpecCase#","WeightedCPI"} {print $$1,$$2}' weightedCPI_results.log | column -t > weightedCPI_results.csv;
+	@awk -F, 'NR==1 {print "SpecCase#","WeightedCPI"} {print $$1,$$2}' weightedCPI_results.log | column -t > All_case_weightedCPI.csv;
 	@rm -rf weightedCPI_results.log;
 	@gedit weightedCPI_results.csv;
 
