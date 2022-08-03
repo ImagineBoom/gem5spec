@@ -50,7 +50,7 @@ checkpoints: $(EXECUTABLE)
 
 restore: $(EXECUTABLE)
 	@echo ---------------------rscpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIMEH) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1
+	$(TIMEH) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$(NUM_CKP).log 2>&1
 	@cat $(FILE)_restore.log >> $(FILE)_trace.log
 	@echo ---------------------rscpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log; true
@@ -74,7 +74,7 @@ restore-all: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1;\
+		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
 		cat $(FILE)_restore.log >> $(FILE)_trace.log;\
 		grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
@@ -104,7 +104,7 @@ restore-case: $(EXECUTABLE)
 	@rm -rf ./$(FILE)_RS_NUM.log;
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	for i in `seq $${m}`; do (\
-		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore.log 2>&1;\
+		$(TIMEH) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
 		cat $(FILE)_restore.log >> $(FILE)_trace.log;\
 		grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log ; true;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
