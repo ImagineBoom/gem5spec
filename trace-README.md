@@ -286,7 +286,13 @@ make cpi
 
 该命令会对`xxx_CKPS_CPI.log`中每一个Checkpoint的权重与CPI进行乘法运算，并将结果插入到第四列中，保存到`xxx_CKPS_Weighted_CPI.log`中。除此以外，该命令还会对每个带有权重的CPI的进行求和，得到该测例综合的CPI结果，并生成一个新的csv文件保存上述结果，文件名为`xxx_final_result_N.csv`(xxx为当前测例的名字；N为权重CPI的总和)。
 
-为方便后期测试，可以在`runspec_gem5_power`目录下使用以下命令
+如果需要一次让所有的测例生成`xxx_final_result_N.csv`数据记录，可以在`runspec_gem5_power`目录下使用以下命令
+
+```bash
+make cpi-case
+```
+
+为方便后期根据CPI数据选择片段，可以在`runspec_gem5_power`目录下使用以下命令
 
 ```bash
 make cpi-all
@@ -298,7 +304,7 @@ make cpi-all
 make collect-csv
 ```
 
-该命令会遍历每个测例的`xxx_final_result_N.csv`文件，并将数据整合到文件`Each_case_ckp_data.csv`。因此该文件会记录每个测例中全部checkpoints的CPI数据信息
+该命令会遍历每个测例的`xxx_final_result_N.csv`文件，并将数据整合到文件`Each_case_ckp_data.csv`。因此该文件会记录所有测例的全部checkpoints的CPI数据信息
 
 ### 5.输出文件/目录说明
 
