@@ -214,7 +214,7 @@ make simpoint
 make simpoints -j24
 ```
 
-另外，对于一些不知道指令数目的程序，可以使用下面的命令，通过使用Valgrind获取程序的指令数，以便决定interval的大小。
+另外，对于一些不知道指令数目的程序，可以使用下面的命令，通过使用Valgrind获取程序的指令数，以便决定interval的大小，结果会保存到当前目录下的`xxx_inst_count.log`中。另外在`runspec_gem5_power`目录下的`inst_count.log`会记录各个测例指令数目的数据情况。
 
 ```shell
 make inst_count
