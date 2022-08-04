@@ -254,7 +254,7 @@ make restore NUM_CKP=1 CPU_TYPE=O3CPU
 make restore-case
 ```
 
-该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，Terminal中会输出`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。
+该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，会在xxx_RS_NUM.log中记录`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。
 
 由于该命令会将每个Checkpoint的`restore`操作压入后台运行，为方便查看所有的Checkpoints完成情况，可以使用命令
 
