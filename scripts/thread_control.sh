@@ -1,10 +1,3 @@
-with_add_thread=false
-with_add_thread_10=false
-with_reduce_thread=false
-with_reduce_thread_10=false
-with_del_thread_pool=false
-with_get_thread_pool_size=false
-
 
 #线程控制
 FLOODGATE=/opt/run-p8-m1/running/run.fifo
@@ -70,6 +63,12 @@ clear_redundant_thread_pool(){
 }
 
 set_thread_pool(){
+  with_add_thread=false
+  with_add_thread_10=false
+  with_reduce_thread=false
+  with_reduce_thread_10=false
+  with_del_thread_pool=false
+  with_get_thread_pool_size=false
   if [ ! -p ${FLOODGATE} ]; then
     #最大线程数
     max_threads=5
