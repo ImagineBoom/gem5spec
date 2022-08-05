@@ -50,8 +50,8 @@ for ((i=0;i<${#interval_size[@]};i++)) do
         if [[ $qt_records == 5000000 ]]; then
           # make m1 NUM_INST=${Interval_size} CPI_INTERVAL=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE} SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=2
           # SCROLL_END=${Interval_size}
-          # 每个片段取50个子片段打印流水线，子片段步长100000，因为生成5,000,000的文本>12小时
-          for (( p=1;p<5000001;p=p+100000 )) do
+          # 每个片段取10个子片段打印流水线，子片段步长500000，因为生成5,000,000的文本>12小时
+          for (( p=1;p<5000001;p=p+500000 )) do
             b=$p
             e=`expr $b + 5000 - 1`
             make m1 NUM_INST=${Interval_size} CPI_INTERVAL=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE} SCROLL_PIPE=1 SCROLL_BEGIN=${b} SCROLL_END=${e}
