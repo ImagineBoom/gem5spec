@@ -4,6 +4,11 @@ FLOODGATE=/opt/run-p8-m1/running/run.fifo
 #FLOODGATE=./run-p8-m1/running/run.fifo
 
 add_thread(){
+  if [[ ! -p ${FLOODGATE} ]];then
+    mkfifo ${FLOODGATE}
+    rm -rf runThreadPoolSize*.log
+    touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_0.log
+  fi
   exec 6<>${FLOODGATE}
   echo >&6
   echo "add done"
