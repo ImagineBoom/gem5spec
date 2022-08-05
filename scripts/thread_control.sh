@@ -9,8 +9,6 @@ with_get_thread_pool_size=false
 #线程控制
 FLOODGATE=/opt/run-p8-m1/running/run.fifo
 #FLOODGATE=./run-p8-m1/running/run.fifo
-#最大线程数
-max_threads=5
 
 add_thread(){
   exec 6<>${FLOODGATE}
@@ -73,13 +71,15 @@ clear_redundant_thread_pool(){
 
 set_thread_pool(){
   if [ ! -p ${FLOODGATE} ]; then
+    #最大线程数
+    max_threads=5
     sudo mkdir -p "$(dirname ${FLOODGATE})"
     sudo chmod 777 "$(dirname ${FLOODGATE})"
     mkfifo ${FLOODGATE}
     exec 6<>${FLOODGATE}
     touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_${max_threads}.log
     sudo chmod 666 "$(dirname ${FLOODGATE})"/*
-    for (( i=0;i<${max_threads};i++ )); do
+    for (( i=0;i<max_threads;i++ )); do
       echo >&6
     done
     echo "no pipe"
