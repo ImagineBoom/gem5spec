@@ -29,7 +29,7 @@ set_thread_pool
 #  rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
 #fi
 
-rm -rf M1_result Valgrind_Simpoint_result CPI_result
+rm -rf M1_result Valgrind_Simpoint_result CPI_result *.qt *.log *.results *.pipe *.config
 mkdir -p M1_result
 mkdir -p Valgrind_Simpoint_result
 mkdir -p CPI_result
