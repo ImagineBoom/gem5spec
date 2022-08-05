@@ -458,3 +458,8 @@ func_itrace_all_benchmarks(){
   make itrace -C runspec_gem5_power/${bm[548]} NUM_INSNS_TO_COLLECT=${bm_insts[548]} &
   make itrace -C runspec_gem5_power/${bm[527]} NUM_INSNS_TO_COLLECT=${bm_insts[527]} &
 }
+
+func_collect_all_m1_restore_data(){
+  sed -i '$G' ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge
+  cat ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge >>each_bm_cpt_m1.csv
+}
