@@ -456,11 +456,11 @@ collect_all_cases_CPI:
 	@sed -i 's/.csv//' weightedCPI_results.log;
 	@awk -F, 'NR==1 {print "SpecCase#","WeightedCPI"} {print $$1,$$2}' weightedCPI_results.log | column -t > All_case_weightedCPI.csv;
 	@rm -rf weightedCPI_results.log;
-	@gedit All_case_weightedCPI.csv &;
+	@gedit All_case_weightedCPI.csv &
 
 collect_all_checkpoints_data:
 	@cat ./*/*.csv > Each_case_ckp_data.csv;
-	@gedit Each_case_ckp_data.csv &;
+	@gedit Each_case_ckp_data.csv &
 
 collect_checkpoints_number:
 	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
@@ -469,4 +469,4 @@ collect_checkpoints_number:
 	@paste temp1.log temp2.log > temp.log;
 	@awk -F, 'NR==1 {print "SpecCase#","Checkpoints#"} {print $$1,$$2}' temp.log | column -t > Checkpoint_Num.csv;
 	@rm -rf temp*;
-	@gedit Checkpoint_Num.log &;
+	@gedit Checkpoint_Num.csv &
