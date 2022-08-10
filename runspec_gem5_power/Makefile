@@ -16,7 +16,7 @@ simpoints_all_cases: simpoint_500 simpoint_502 simpoint_503 simpoint_505 simpoin
 
 checkpoints_all_cases: checkpoints_500 checkpoints_502 checkpoints_503 checkpoints_505 checkpoints_507 checkpoints_508 checkpoints_510 checkpoints_511 checkpoints_519 checkpoints_520 checkpoints_521 checkpoints_523 checkpoints_525 checkpoints_526 checkpoints_527 checkpoints_531 checkpoints_538 checkpoints_541 checkpoints_544 checkpoints_548 checkpoints_549 checkpoints_554 checkpoints_557 checkpoints_999
 
-restore_all_cases: restore-all_500 restore-all_502 restore-all_503 restore-all_505 restore-all_507 restore-all_508 restore-all_510 restore-all_511 restore-all_519 restore-all_520 restore-all_521 restore-all_523 restore-all_525 restore-all_526 restore-all_527 restore-all_531 restore-all_538 restore-all_541 restore-all_544 restore-all_548 restore-all_549 restore-all_554 restore-all_557 restore-all_999
+restore_all_cases: restore_all_500 restore_all_502 restore_all_503 restore_all_505 restore_all_507 restore_all_508 restore_all_510 restore_all_511 restore_all_519 restore_all_520 restore_all_521 restore_all_523 restore_all_525 restore_all_526 restore_all_527 restore_all_531 restore_all_538 restore_all_541 restore_all_544 restore_all_548 restore_all_549 restore_all_554 restore_all_557 restore_all_999
 
 cpi_all_cases: cpi_500 cpi_502 cpi_503 cpi_505 cpi_507 cpi_508 cpi_510 cpi_511 cpi_519 cpi_520 cpi_521 cpi_523 cpi_525 cpi_526 cpi_527 cpi_531 cpi_538 cpi_541 cpi_544 cpi_548 cpi_549 cpi_554 cpi_557 cpi_999
 
@@ -317,54 +317,54 @@ checkpoints_557:simpoint_557
 checkpoints_999:simpoint_999
 	@-make checkpoints -C 999.specrand_ir
 
-restore-all_500:
-	@-make restore-all -C 500.perlbench_r
-restore-all_502:
-	@-make restore-all -C 502.gcc_r
-restore-all_503:
-	@-make restore-all -C 503.bwaves_r
-restore-all_505:
-	@-make restore-all -C 505.mcf_r
-restore-all_507:
-	@-make restore-all -C 507.cactuBSSN_r
-restore-all_508:
-	@-make restore-all -C 508.namd_r
-restore-all_510:
-	@-make restore-all -C 510.parest_r
-restore-all_511:
-	@-make restore-all -C 511.povray_r
-restore-all_519:
-	@-make restore-all -C 519.lbm_r
-restore-all_520:
-	@-make restore-all -C 520.omnetpp_r
-restore-all_521:
-	@-make restore-all -C 521.wrf_r
-restore-all_523:
-	@-make restore-all -C 523.xalancbmk_r
-restore-all_525:
-	@-make restore-all -C 525.x264_r
-restore-all_526:
-	@-make restore-all -C 526.blender_r
-restore-all_527:
-	@-make restore-all -C 527.cam4_r
-restore-all_531:
-	@-make restore-all -C 531.deepsjeng_r
-restore-all_538:
-	@-make restore-all -C 538.imagick_r
-restore-all_541:
-	@-make restore-all -C 541.leela_r
-restore-all_544:
-	@-make restore-all -C 544.nab_r
-restore-all_548:
-	@-make restore-all -C 548.exchange2_r
-restore-all_549:
-	@-make restore-all -C 549.fotonik3d_r
-restore-all_554:
-	@-make restore-all -C 554.roms_r
-restore-all_557:
-	@-make restore-all -C 557.xz_r
-restore-all_999:
-	@-make restore-all -C 999.specrand_ir
+restore_all_500:
+	@-make restore_all -C 500.perlbench_r
+restore_all_502:
+	@-make restore_all -C 502.gcc_r
+restore_all_503:
+	@-make restore_all -C 503.bwaves_r
+restore_all_505:
+	@-make restore_all -C 505.mcf_r
+restore_all_507:
+	@-make restore_all -C 507.cactuBSSN_r
+restore_all_508:
+	@-make restore_all -C 508.namd_r
+restore_all_510:
+	@-make restore_all -C 510.parest_r
+restore_all_511:
+	@-make restore_all -C 511.povray_r
+restore_all_519:
+	@-make restore_all -C 519.lbm_r
+restore_all_520:
+	@-make restore_all -C 520.omnetpp_r
+restore_all_521:
+	@-make restore_all -C 521.wrf_r
+restore_all_523:
+	@-make restore_all -C 523.xalancbmk_r
+restore_all_525:
+	@-make restore_all -C 525.x264_r
+restore_all_526:
+	@-make restore_all -C 526.blender_r
+restore_all_527:
+	@-make restore_all -C 527.cam4_r
+restore_all_531:
+	@-make restore_all -C 531.deepsjeng_r
+restore_all_538:
+	@-make restore_all -C 538.imagick_r
+restore_all_541:
+	@-make restore_all -C 541.leela_r
+restore_all_544:
+	@-make restore_all -C 544.nab_r
+restore_all_548:
+	@-make restore_all -C 548.exchange2_r
+restore_all_549:
+	@-make restore_all -C 549.fotonik3d_r
+restore_all_554:
+	@-make restore_all -C 554.roms_r
+restore_all_557:
+	@-make restore_all -C 557.xz_r
+restore_all_999:
+	@-make restore_all -C 999.specrand_ir
 
 diff:
 	find -maxdepth 1 -type d -regex ".*r" -exec make diff -C {} \;
