@@ -206,12 +206,12 @@ benchmark和自定义程序皆可
 make simpoint
 ```
 
-该命令会自动完成使用Gem5的NonCachingSimpleCPU模型对程序分割片段生成Basic Block Vector(BBV)文件，Simpoint对该文件进行分类生成.simpts和.weights文件。同时脚本中还会对Simpoint结果进行合并排序操作，并将结果保存到.merge文件中，方便阅读Simpoint分类后的结果。
+该命令会自动完成使用Gem5的`NonCachingSimpleCPU`模型对程序分割片段生成Basic Block Vector(BBV)文件，Simpoint对该文件进行分类生成`.simpts`和`.weights`文件。同时脚本中还会对Simpoint结果进行合并排序操作，并将结果保存到`.merge`文件中，方便阅读Simpoint分类后的结果。
 
 如果想一次对24个测例同时生成BBV文件，在`runspec_gem5_power`目录下执行如下命令
 
 ```bash
-make simpoints -j24
+make simpoints_all_cases -j24
 ```
 
 另外，对于一些不知道指令数目的程序，可以使用下面的命令，通过使用Valgrind获取程序的指令数，以便决定interval的大小，结果会保存到当前目录下的`xxx_inst_count.log`中。另外在`runspec_gem5_power`目录下的`inst_count.log`会记录各个测例指令数目的数据情况。
@@ -219,6 +219,14 @@ make simpoints -j24
 ```shell
 make inst_count
 ```
+
+如果想查看每个测例有多少个片段，可以在`runspec_gem5_power`目录下执行如下命令
+
+```shell
+make collect_checkpoints_number
+```
+
+结果保存在`runspec_gem5_power`目录下的`Each_case_ckp_data.csv`文件中
 
 ### 2. 读取Simpoint结果使用Gem5生成Checkpoints
 
@@ -228,11 +236,17 @@ make inst_count
 make checkpoints
 ```
 
-该命令会使用Gem5读取.simpts和.weights文件，并使用Gem5的AtomicSimpleCPU模型完整执行完一遍程序后，生成对应的Checkpoints在`m5out`目录下。
+该命令会使用Gem5读取`.simpts`和`.weights`文件，并使用Gem5的`AtomicSimpleCPU`模型完整执行完一遍程序后，生成对应的Checkpoints在`m5out`目录下。
+
+如果想一次对24个测例同时生成Checkpoints文件，在`runspec_gem5_power`目录下执行如下命令
+
+```shell
+make checkpoints_all_cases -j24
+```
 
 ### 3.使用Gem5恢复Checkpoints
 
-#### 3.1单独恢复某一个Checkpoint
+#### 3.1恢复某一个Checkpoint
 
 得到Checkpoints后，使用Gem5恢复某一个Checkpoint可以使用如下命令
 
@@ -251,15 +265,15 @@ make restore NUM_CKP=1 CPU_TYPE=O3CPU
 进入`runspec_gem5_power`目录下某个测例的文件后，输入以下命令
 
 ```bash
-make restore-case
+make restore_case CPU_TYPE=O3CPU
 ```
 
-该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，会在xxx_RS_NUM.log中记录`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。
+该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，会在`xxx_RS_NUM.log`中记录`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。
 
 由于该命令会将每个Checkpoint的`restore`操作压入后台运行，为方便查看所有的Checkpoints完成情况，可以使用命令
 
 ```bash
-make restore-status
+make restore_status
 ```
 
 如果当前测例的所有Checkpoint都已完成`restore`，则Termianl会输出`All Checkpoints Restore Have Finshed!`
@@ -289,19 +303,19 @@ make cpi
 如果需要一次让所有的测例生成`xxx_final_result_N.csv`数据记录，可以在`runspec_gem5_power`目录下使用以下命令
 
 ```bash
-make cpi-case
+make cpi_all_cases
 ```
 
 为方便后期根据CPI数据选择片段，可以在`runspec_gem5_power`目录下使用以下命令
 
 ```bash
-make cpi-all
+make collect_all_checkpoints_data
 ```
 
 该命令会遍历每个测例的综合权重CPI数据，并将统计结果保存到`All_case_weightedCPI.csv`中
 
 ```bash
-make collect-csv
+make collect_checkpoints_number
 ```
 
 该命令会遍历每个测例的`xxx_final_result_N.csv`文件，并将数据整合到文件`Each_case_ckp_data.csv`。因此该文件会记录所有测例的全部checkpoints的CPI数据信息
@@ -313,9 +327,9 @@ make collect-csv
 1. xxx_gem5_bbv.log: 使用gem5生成basic block vector(BBV)过程的输出信息
 2. xxx_simpoints.log:使用Simpoint对BBV分类过程的输出信息
 3. xxx_checkpoints.log: 使用gem5生成checkpoints过程的输出信息
-4. xxx_restore.log: 使用gem5恢复某个checkpoint过程的输出信息
+4. xxx_restore.log: 使用gem5恢复checkpoint过程的输出信息
 5. xxx_trace.log: 记录执行过的命令以及部分命令的输出信息
 6. xxx_trace_error.log: 记录发生错误的命令
 7. xxx_bbv: 保存通过gem5生成的BBV文件，以及生成过程的仿真数据(stats.txt)
 8. m5out: 保存生成的checkpoints的与生成checkpoints过程的仿真数据(stats.txt)
-9. out_ckpn: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，n表示第n个checkpoint
+9. out_ckpN: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，N表示第N个checkpoint
