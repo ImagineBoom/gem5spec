@@ -112,6 +112,6 @@ cpi: $(EXECUTABLE)
 	sed -i '$$G' ./$(FILE)_final_result_$${result}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
-restore-status: $(EXECUTABLE)
+restore_status: $(EXECUTABLE)
 	@[ x`awk 'END {print NR}' ./$(FILE).merge` == x`awk 'END {print NR}' ./$(FILE)_RS_NUM.log` ] \
 	&& echo All Checkpoints Restore Have Finshed! || echo Some Checkpoints Are Restoring!

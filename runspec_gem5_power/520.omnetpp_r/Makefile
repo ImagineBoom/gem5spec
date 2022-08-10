@@ -68,7 +68,7 @@ gem5_pipeview: $(EXECUTABLE)
 find_interval_size:  $(EXECUTABLE)
 	../Find_IntervalSize.sh $(SIMPOINT_EXE) $(VALGRIND_EXE) $(EXECUTABLE) $(FILE_FOR_FINDINTERVALSIZE) "$(ARGS)" $(FILE).merge
 
-restore-all: $(EXECUTABLE)
+restore_all: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./output_ckp*;
 	@rm -rf ./$(FILE)_CKPS_CPI.log;
@@ -100,7 +100,7 @@ simpoint: $(EXECUTABLE)
 	@echo ---------------------bbv_simpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_trace.log >> $(FILE)_trace_err.log; true
 
-restore-case: $(EXECUTABLE)
+restore_case: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./output_ckp*;
 	@rm -rf ./$(FILE)_CKPS_CPI.log;
