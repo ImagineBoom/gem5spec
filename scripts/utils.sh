@@ -51,6 +51,85 @@ slice_len=-1
 target=""
 args=""
 
+#spec2017 benchmark
+bm_insts=(\
+[502]=19000000 [999]=62000000 [538]=210000000 [523]=480000000 [557]=740000000 [526]=1400000000 [525]=2400000000 [511]=2800000000 \
+[500]=3300000000 [519]=6800000000 [544]=7000000000 [503]=15000000000 [520]=15000000000 [554]=18000000000 [507]=19000000000 [541]=29000000000 \
+[505]=32000000000 [510]=33000000000 [531]=45000000000 [521]=46000000000 [549]=48000000000 [508]=72000000000 [548]=100000000000 [527]=140000000000 )
+
+bm=(\
+[502]="502.gcc_r" [999]="999.specrand_ir" [538]="538.imagick_r" [523]="523.xalancbmk_r" [557]="557.xz_r" [526]="526.blender_r" [525]="525.x264_r" [511]="511.povray_r" \
+[500]="500.perlbench_r" [519]="519.lbm_r" [544]="544.nab_r" [503]="503.bwaves_r" [520]="520.omnetpp_r" [554]="554.roms_r" [507]="507.cactuBSSN_r" [541]="541.leela_r" \
+[505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
+#${bm[502]}
+
+#at gem5spec dir
+func_create_vgi_soft_link(){
+  bm=(\
+  [502]="502.gcc_r" [999]="999.specrand_ir" [538]="538.imagick_r" [523]="523.xalancbmk_r" [557]="557.xz_r" [526]="526.blender_r" [525]="525.x264_r" [511]="511.povray_r" \
+  [500]="500.perlbench_r" [519]="519.lbm_r" [544]="544.nab_r" [503]="503.bwaves_r" [520]="520.omnetpp_r" [554]="554.roms_r" [507]="507.cactuBSSN_r" [541]="541.leela_r" \
+  [505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
+  TARGET="/home/lizongping/dev/gitlab/gem5spec/runspec_gem5_power"
+  ln -nfs ${TARGET}/${bm[502]}/${bm[502]}.vgi ./runspec_gem5_power/${bm[502]}/${bm[502]}.vgi
+  ln -nfs ${TARGET}/${bm[999]}/${bm[999]}.vgi ./runspec_gem5_power/${bm[999]}/${bm[999]}.vgi
+  ln -nfs ${TARGET}/${bm[538]}/${bm[538]}.vgi ./runspec_gem5_power/${bm[538]}/${bm[538]}.vgi
+  ln -nfs ${TARGET}/${bm[523]}/${bm[523]}.vgi ./runspec_gem5_power/${bm[523]}/${bm[523]}.vgi
+  ln -nfs ${TARGET}/${bm[557]}/${bm[557]}.vgi ./runspec_gem5_power/${bm[557]}/${bm[557]}.vgi
+  ln -nfs ${TARGET}/${bm[526]}/${bm[526]}.vgi ./runspec_gem5_power/${bm[526]}/${bm[526]}.vgi
+  ln -nfs ${TARGET}/${bm[525]}/${bm[525]}.vgi ./runspec_gem5_power/${bm[525]}/${bm[525]}.vgi
+  ln -nfs ${TARGET}/${bm[511]}/${bm[511]}.vgi ./runspec_gem5_power/${bm[511]}/${bm[511]}.vgi
+  ln -nfs ${TARGET}/${bm[500]}/${bm[500]}.vgi ./runspec_gem5_power/${bm[500]}/${bm[500]}.vgi
+  ln -nfs ${TARGET}/${bm[519]}/${bm[519]}.vgi ./runspec_gem5_power/${bm[519]}/${bm[519]}.vgi
+  ln -nfs ${TARGET}/${bm[544]}/${bm[544]}.vgi ./runspec_gem5_power/${bm[544]}/${bm[544]}.vgi
+  ln -nfs ${TARGET}/${bm[503]}/${bm[503]}.vgi ./runspec_gem5_power/${bm[503]}/${bm[503]}.vgi
+  ln -nfs ${TARGET}/${bm[520]}/${bm[520]}.vgi ./runspec_gem5_power/${bm[520]}/${bm[520]}.vgi
+  ln -nfs ${TARGET}/${bm[554]}/${bm[554]}.vgi ./runspec_gem5_power/${bm[554]}/${bm[554]}.vgi
+  ln -nfs ${TARGET}/${bm[507]}/${bm[507]}.vgi ./runspec_gem5_power/${bm[507]}/${bm[507]}.vgi
+  ln -nfs ${TARGET}/${bm[541]}/${bm[541]}.vgi ./runspec_gem5_power/${bm[541]}/${bm[541]}.vgi
+  ln -nfs ${TARGET}/${bm[505]}/${bm[505]}.vgi ./runspec_gem5_power/${bm[505]}/${bm[505]}.vgi
+  ln -nfs ${TARGET}/${bm[510]}/${bm[510]}.vgi ./runspec_gem5_power/${bm[510]}/${bm[510]}.vgi
+  ln -nfs ${TARGET}/${bm[531]}/${bm[531]}.vgi ./runspec_gem5_power/${bm[531]}/${bm[531]}.vgi
+  ln -nfs ${TARGET}/${bm[521]}/${bm[521]}.vgi ./runspec_gem5_power/${bm[521]}/${bm[521]}.vgi
+  ln -nfs ${TARGET}/${bm[549]}/${bm[549]}.vgi ./runspec_gem5_power/${bm[549]}/${bm[549]}.vgi
+  ln -nfs ${TARGET}/${bm[508]}/${bm[508]}.vgi ./runspec_gem5_power/${bm[508]}/${bm[508]}.vgi
+  ln -nfs ${TARGET}/${bm[548]}/${bm[548]}.vgi ./runspec_gem5_power/${bm[548]}/${bm[548]}.vgi
+  ln -nfs ${TARGET}/${bm[527]}/${bm[527]}.vgi ./runspec_gem5_power/${bm[527]}/${bm[527]}.vgi
+}
+
+#at gem5spec dir
+func_cp_merge(){
+  bm=(\
+  [502]="502.gcc_r" [999]="999.specrand_ir" [538]="538.imagick_r" [523]="523.xalancbmk_r" [557]="557.xz_r" [526]="526.blender_r" [525]="525.x264_r" [511]="511.povray_r" \
+  [500]="500.perlbench_r" [519]="519.lbm_r" [544]="544.nab_r" [503]="503.bwaves_r" [520]="520.omnetpp_r" [554]="554.roms_r" [507]="507.cactuBSSN_r" [541]="541.leela_r" \
+  [505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
+  TARGET="/home/lizongping/prj/data/gem5spec_5m_x86_backup/runspec_gem5_power"
+  rm -rf ./runspec_gem5_power/*r/*.merge
+  cp -r ${TARGET}/${bm[502]}/${bm[502]}.merge ./runspec_gem5_power/${bm[502]}/${bm[502]}.merge
+  cp -r ${TARGET}/${bm[999]}/${bm[999]}.merge ./runspec_gem5_power/${bm[999]}/${bm[999]}.merge
+  cp -r ${TARGET}/${bm[538]}/${bm[538]}.merge ./runspec_gem5_power/${bm[538]}/${bm[538]}.merge
+  cp -r ${TARGET}/${bm[523]}/${bm[523]}.merge ./runspec_gem5_power/${bm[523]}/${bm[523]}.merge
+  cp -r ${TARGET}/${bm[557]}/${bm[557]}.merge ./runspec_gem5_power/${bm[557]}/${bm[557]}.merge
+  cp -r ${TARGET}/${bm[526]}/${bm[526]}.merge ./runspec_gem5_power/${bm[526]}/${bm[526]}.merge
+  cp -r ${TARGET}/${bm[525]}/${bm[525]}.merge ./runspec_gem5_power/${bm[525]}/${bm[525]}.merge
+  cp -r ${TARGET}/${bm[511]}/${bm[511]}.merge ./runspec_gem5_power/${bm[511]}/${bm[511]}.merge
+  cp -r ${TARGET}/${bm[500]}/${bm[500]}.merge ./runspec_gem5_power/${bm[500]}/${bm[500]}.merge
+  cp -r ${TARGET}/${bm[519]}/${bm[519]}.merge ./runspec_gem5_power/${bm[519]}/${bm[519]}.merge
+  cp -r ${TARGET}/${bm[544]}/${bm[544]}.merge ./runspec_gem5_power/${bm[544]}/${bm[544]}.merge
+  cp -r ${TARGET}/${bm[503]}/${bm[503]}.merge ./runspec_gem5_power/${bm[503]}/${bm[503]}.merge
+  cp -r ${TARGET}/${bm[520]}/${bm[520]}.merge ./runspec_gem5_power/${bm[520]}/${bm[520]}.merge
+  cp -r ${TARGET}/${bm[554]}/${bm[554]}.merge ./runspec_gem5_power/${bm[554]}/${bm[554]}.merge
+  cp -r ${TARGET}/${bm[507]}/${bm[507]}.merge ./runspec_gem5_power/${bm[507]}/${bm[507]}.merge
+  cp -r ${TARGET}/${bm[541]}/${bm[541]}.merge ./runspec_gem5_power/${bm[541]}/${bm[541]}.merge
+  cp -r ${TARGET}/${bm[505]}/${bm[505]}.merge ./runspec_gem5_power/${bm[505]}/${bm[505]}.merge
+  cp -r ${TARGET}/${bm[510]}/${bm[510]}.merge ./runspec_gem5_power/${bm[510]}/${bm[510]}.merge
+  cp -r ${TARGET}/${bm[531]}/${bm[531]}.merge ./runspec_gem5_power/${bm[531]}/${bm[531]}.merge
+  cp -r ${TARGET}/${bm[521]}/${bm[521]}.merge ./runspec_gem5_power/${bm[521]}/${bm[521]}.merge
+  cp -r ${TARGET}/${bm[549]}/${bm[549]}.merge ./runspec_gem5_power/${bm[549]}/${bm[549]}.merge
+  cp -r ${TARGET}/${bm[508]}/${bm[508]}.merge ./runspec_gem5_power/${bm[508]}/${bm[508]}.merge
+  cp -r ${TARGET}/${bm[548]}/${bm[548]}.merge ./runspec_gem5_power/${bm[548]}/${bm[548]}.merge
+  cp -r ${TARGET}/${bm[527]}/${bm[527]}.merge ./runspec_gem5_power/${bm[527]}/${bm[527]}.merge
+}
+
 func_help(){
   cat <<- EOF
   1.Desc: run some spec2017 benchmarks and custom programs help
