@@ -452,11 +452,21 @@ cpi_999:
 	@-make cpi -C 999.specrand_ir
 
 collect_all_cases_CPI:
-	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log
+	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log;
 	@sed -i 's/.csv//' weightedCPI_results.log;
 	@awk -F, 'NR==1 {print "SpecCase#","WeightedCPI"} {print $$1,$$2}' weightedCPI_results.log | column -t > All_case_weightedCPI.csv;
 	@rm -rf weightedCPI_results.log;
-	@gedit All_case_weightedCPI.csv;
+	@gedit All_case_weightedCPI.csv &;
 
 collect_all_checkpoints_data:
-	@cat ./*/*.csv > Each_case_ckp_data.csv
+	@cat ./*/*.csv > Each_case_ckp_data.csv;
+	@gedit Each_case_ckp_data.csv &;
+
+collect-checkpoints_number:
+	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
+	@sed -i '$$a Total' temp1.log;
+	@wc -l ./*/*.merge | awk '{print $$1}' > temp2.log;
+	@paste temp1.log temp2.log > temp.log;
+	@awk -F, 'NR==1 {print "SpecCase#","Checkpoints#"} {print $$1,$$2}' temp.log | column -t > Checkpoint_Num.log;
+	@rm -rf temp*;
+	@gedit Checkpoint_Num.log &;
