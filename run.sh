@@ -18,18 +18,6 @@ version,verbose,help \
 [ $? -ne 0 ] && exit 1
 eval set -- "${getopt_cmd}"
 
-#spec2017 benchmark
-bm_insts=(\
-[502]=19000000 [999]=62000000 [538]=110000000 [523]=380000000 [557]=740000000 [526]=1400000000 [525]=2400000000 [511]=2800000000 \
-[500]=3300000000 [519]=6800000000 [544]=7000000000 [503]=15000000000 [520]=15000000000 [554]=18000000000 [507]=19000000000 [541]=29000000000 \
-[505]=32000000000 [510]=33000000000 [531]=45000000000 [521]=46000000000 [549]=48000000000 [508]=72000000000 [548]=100000000000 [527]=140000000000 )
-
-bm=(\
-[502]="502.gcc_r" [999]="999.specrand_ir" [538]="538.imagick_r" [523]="523.xalancbmk_r" [557]="557.xz_r" [526]="526.blender_r" [525]="525.x264_r" [511]="511.povray_r" \
-[500]="500.perlbench_r" [519]="519.lbm_r" [544]="544.nab_r" [503]="503.bwaves_r" [520]="520.omnetpp_r" [554]="554.roms_r" [507]="507.cactuBSSN_r" [541]="541.leela_r" \
-[505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
-#${bm[502]}
-
 source ./scripts/utils.sh
 source ./scripts/thread_control.sh
 
@@ -282,7 +270,12 @@ if [[ $is_m1 == true ]]; then
         (( pipe_b=pipe_b-1 ))
         pipe_e=$(echo "${args[@]}" | grep -oP "SCROLL_END=\d+" | grep -oP "\d+")
         (( insts = pipe_e - pipe_b ))
-        make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
+#        make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
+        if [[ ! -e runspec_gem5_power/"${bm[${spec2017_bm}]}"/"${bm[${spec2017_bm}]}".vgi ]]; then
+          make itrace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
+        fi
+        make qtrace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
+        make m1 -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
         make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
       fi
     fi
