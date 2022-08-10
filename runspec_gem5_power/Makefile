@@ -12,13 +12,13 @@ gem5: log-pre gem5_500 gem5_502 gem5_503 gem5_505 gem5_507 gem5_508 gem5_510 gem
 
 trace: trace_500 trace_502 trace_503 trace_505 trace_507 trace_508 trace_510 trace_511 trace_519 trace_520 trace_521 trace_523 trace_525 trace_526 trace_527 trace_531 trace_538 trace_541 trace_544 trace_548 trace_549 trace_554 trace_557 trace_999
 
-simpoints-all-case: simpoint_500 simpoint_502 simpoint_503 simpoint_505 simpoint_507 simpoint_508 simpoint_510 simpoint_511 simpoint_519 simpoint_520 simpoint_521 simpoint_523 simpoint_525 simpoint_526 simpoint_527 simpoint_531 simpoint_538 simpoint_541 simpoint_544 simpoint_548 simpoint_549 simpoint_554 simpoint_557 simpoint_999
+simpoints-all-cases: simpoint_500 simpoint_502 simpoint_503 simpoint_505 simpoint_507 simpoint_508 simpoint_510 simpoint_511 simpoint_519 simpoint_520 simpoint_521 simpoint_523 simpoint_525 simpoint_526 simpoint_527 simpoint_531 simpoint_538 simpoint_541 simpoint_544 simpoint_548 simpoint_549 simpoint_554 simpoint_557 simpoint_999
 
-checkpoints-all-case: checkpoints_500 checkpoints_502 checkpoints_503 checkpoints_505 checkpoints_507 checkpoints_508 checkpoints_510 checkpoints_511 checkpoints_519 checkpoints_520 checkpoints_521 checkpoints_523 checkpoints_525 checkpoints_526 checkpoints_527 checkpoints_531 checkpoints_538 checkpoints_541 checkpoints_544 checkpoints_548 checkpoints_549 checkpoints_554 checkpoints_557 checkpoints_999
+checkpoints-all-cases: checkpoints_500 checkpoints_502 checkpoints_503 checkpoints_505 checkpoints_507 checkpoints_508 checkpoints_510 checkpoints_511 checkpoints_519 checkpoints_520 checkpoints_521 checkpoints_523 checkpoints_525 checkpoints_526 checkpoints_527 checkpoints_531 checkpoints_538 checkpoints_541 checkpoints_544 checkpoints_548 checkpoints_549 checkpoints_554 checkpoints_557 checkpoints_999
 
-restore-all-case: restore-all_500 restore-all_502 restore-all_503 restore-all_505 restore-all_507 restore-all_508 restore-all_510 restore-all_511 restore-all_519 restore-all_520 restore-all_521 restore-all_523 restore-all_525 restore-all_526 restore-all_527 restore-all_531 restore-all_538 restore-all_541 restore-all_544 restore-all_548 restore-all_549 restore-all_554 restore-all_557 restore-all_999
+restore-all-cases: restore-all_500 restore-all_502 restore-all_503 restore-all_505 restore-all_507 restore-all_508 restore-all_510 restore-all_511 restore-all_519 restore-all_520 restore-all_521 restore-all_523 restore-all_525 restore-all_526 restore-all_527 restore-all_531 restore-all_538 restore-all_541 restore-all_544 restore-all_548 restore-all_549 restore-all_554 restore-all_557 restore-all_999
 
-cpi-all-case: cpi_500 cpi_502 cpi_503 cpi_505 cpi_507 cpi_508 cpi_510 cpi_511 cpi_519 cpi_520 cpi_521 cpi_523 cpi_525 cpi_526 cpi_527 cpi_531 cpi_538 cpi_541 cpi_544 cpi_548 cpi_549 cpi_554 cpi_557 cpi_999
+cpi-all-cases: cpi_500 cpi_502 cpi_503 cpi_505 cpi_507 cpi_508 cpi_510 cpi_511 cpi_519 cpi_520 cpi_521 cpi_523 cpi_525 cpi_526 cpi_527 cpi_531 cpi_538 cpi_541 cpi_544 cpi_548 cpi_549 cpi_554 cpi_557 cpi_999
 
 log-pre:
 	@LOG_DIR=$(DATE); \
@@ -451,7 +451,7 @@ cpi_557:
 cpi_999:
 	@-make cpi -C 999.specrand_ir
 
-collect-all-case-CPI:
+collect-all-cases-CPI:
 	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log
 	@sed -i 's/.csv//' weightedCPI_results.log;
 	@awk -F, 'NR==1 {print "SpecCase#","WeightedCPI"} {print $$1,$$2}' weightedCPI_results.log | column -t > All_case_weightedCPI.csv;
