@@ -79,7 +79,8 @@ restore-all: $(EXECUTABLE)
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
 		cpi=0;\
 		[ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\		echo ckp$${i} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
+		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
+		echo ckp$${i} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
 		echo >&6 )& \
 	done;
