@@ -467,6 +467,6 @@ collect_checkpoints_number:
 	@sed -i '$$a Total' temp1.log;
 	@wc -l ./*/*.merge | awk '{print $$1}' > temp2.log;
 	@paste temp1.log temp2.log > temp.log;
-	@awk -F, 'NR==1 {print "SpecCase#","Checkpoints#"} {print $$1,$$2}' temp.log | column -t > Checkpoint_Num.log;
+	@awk -F, 'NR==1 {print "SpecCase#","Checkpoints#"} {print $$1,$$2}' temp.log | column -t > Checkpoint_Num.csv;
 	@rm -rf temp*;
 	@gedit Checkpoint_Num.log &;
