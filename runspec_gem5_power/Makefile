@@ -462,7 +462,7 @@ collect_all_checkpoints_data:
 	@cat ./*/*.csv > Each_case_ckp_data.csv;
 	@gedit Each_case_ckp_data.csv &;
 
-collect-checkpoints_number:
+collect_checkpoints_number:
 	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
 	@sed -i '$$a Total' temp1.log;
 	@wc -l ./*/*.merge | awk '{print $$1}' > temp2.log;
