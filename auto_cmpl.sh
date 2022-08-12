@@ -29,7 +29,9 @@ with_slice_len=false
 
 with_restore_all=false
 with_cpi_all=false
-
+with_kill_restore_all=false
+with_control_gem5=false
+with_control_m1=false
 
 with_add_thread=false
 with_add_thread_10=false
@@ -38,7 +40,7 @@ with_reduce_thread_10=false
 with_del_thread_pool=false
 with_get_thread_pool_size=false
 
-cmd_control(){
+cmd_gem5_m1_control(){
   for option in "${COMP_WORDS[@]}";do
     case "${option}" in
       --m1)
@@ -147,7 +149,7 @@ cmd_m1_steps(){
 cmd_m1_myexe(){
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};
-  cmd_control
+  cmd_gem5_m1_control
   if [[ $pre == "--myexe" ]];then
     COMPREPLY=( $(compgen -f -- ${cur} ) )
     return
@@ -173,11 +175,10 @@ cmd_m1_myexe(){
   COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
 }
 
-
 cmd_m1_spec2017(){
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};
-  cmd_control
+  cmd_gem5_m1_control
   if [[ $pre == "--spec2017" ]];then
     options="502 999 538 523 557 526 525 511 500 519 544 503 520 554 507 541 505 510 531 521 549 508 548 527 --all_benchmarks --entire_all_benchmarks --restore_all --cpi_all"
   elif [[ $pre == "--all_benchmarks" ]];then
@@ -211,9 +212,20 @@ cmd_m1_spec2017(){
 cmd_gem5_spec2017(){
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};
-  cmd_control
+  cmd_gem5_m1_control
   if [[ $pre == "--spec2017" ]];then
     options="--restore_all --cpi_all"
+  else
+    options=""
+  fi
+  COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
+}
+
+cmd_control(){
+  local cur=${COMP_WORDS[COMP_CWORD]};
+  local pre=${COMP_WORDS[COMP_CWORD-1]};
+  if [[ $pre == "--kill_restore_all" ]];then
+    options="--gem5 --m1"
   else
     options=""
   fi
@@ -253,6 +265,9 @@ cmd_hub(){
   with_slice_len=false
   with_restore_all=false
   with_cpi_all=false
+  with_kill_restore_all=false
+  with_control_gem5=false
+  with_control_m1=false
 
   with_add_thread=false
   with_add_thread_10=false
@@ -277,7 +292,7 @@ cmd_hub(){
       elif [[ ${pre} == "--m1" ]]; then
         COMPREPLY=( $(compgen -W "--myexe --spec2017" -- ${cur}) )
       elif [[ ${pre} == "--control" ]]; then
-        COMPREPLY=( $(compgen -W "--add_thread --reduce_thread --add_thread_10 --reduce_thread_10 --get_thread_pool_size --del_thread_pool" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "--add_thread --reduce_thread --add_thread_10 --reduce_thread_10 --get_thread_pool_size --del_thread_pool --kill_restore_all" -- ${cur}) )
       else
         exit 1
       fi
@@ -290,7 +305,9 @@ cmd_hub(){
         #1代表被调用脚本从COMP_WORDS的第几个下标开始
         eval cmd_"${cmd_f}"
       elif [[ ${COMP_WORDS[1]} == "--control" ]]; then
-        :
+        cmd_f="${COMP_WORDS[1]##*-}"
+        cmd_f="${cmd_f%%=*}"
+        eval cmd_"${cmd_f}"
       fi
       ;;
   esac

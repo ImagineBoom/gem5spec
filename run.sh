@@ -9,7 +9,7 @@ getopt_cmd=$(getopt \
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
-restore_all,cpi_all,\
+restore_all,cpi_all,kill_restore_all,\
 control,add_thread,reduce_thread,del_thread_pool,add_thread_10,reduce_thread_10,get_thread_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
@@ -21,7 +21,7 @@ eval set -- "${getopt_cmd}"
 source ./scripts/utils.sh
 source ./scripts/thread_control.sh
 
-set_thread_pool
+#set_thread_pool
 
 rm -rf nohup.out 2>/dev/null
 
@@ -101,6 +101,26 @@ case "${1#*=}" in
   --get_thread_pool_size)
     with_get_thread_pool_size=true
     shift
+    ;;
+  --kill_restore_all)
+    with_kill_restore_all=true
+    shift
+    case "${1#*=}" in
+      --m1)
+        with_control_m1=true
+        shift
+        ;;
+      --gem5)
+        with_control_gem5=true
+        shift
+        ;;
+      --)
+        shift
+        ;;
+      *)
+        exit 1
+        ;;
+    esac
     ;;
   --)
     shift
@@ -294,7 +314,6 @@ elif [[ $is_gem5 == true ]]; then
   else
     exit 1
   fi
-
 elif [[ $is_control == true ]]; then
   if [[ $with_add_thread == true ]]; then
     add_thread
@@ -308,6 +327,14 @@ elif [[ $is_control == true ]]; then
     delete_thread_pool
   elif [[ $with_get_thread_pool_size == true ]]; then
     get_thread_pool_size
+  elif [[ $with_kill_restore_all == true ]]; then
+    killobj=""
+    if [[ $with_control_gem5 == true ]]; then
+      killobj="gem5.opt"
+    elif [[ $with_control_m1 == true ]]; then
+      killobj="valgrind|simpoint|vgi2qt|run_timer|otimer|itrace"
+    fi
+    func_kill_restore_all ${killobj}
   else
     exit 1
   fi

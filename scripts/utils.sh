@@ -31,6 +31,9 @@ with_slice_len=false
 
 with_restore_all=false
 with_cpi_all=false
+with_kill_restore_all=false
+with_control_gem5=false
+with_control_m1=false
 
 #m1需要的变量
 #itrace
@@ -152,6 +155,7 @@ func_help(){
               --reduce_thread|--reduce_thread_10                                        减少可运行的线程数
               --del_thread_pool                                                         删除线程池
               --kill_all                                                               【kill通过run.sh启动的进程】
+              --kill_restore_all                                                        kill restore_all 的任务
 
     [SEC_OPTS]:
       --myexe)
@@ -552,4 +556,15 @@ func_itrace_all_benchmarks(){
 func_collect_all_m1_restore_data(){
   sed -i '$G' ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge
   cat ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge >>each_bm_cpt_m1.csv
+}
+
+func_kill_restore_all(){
+  while : ; do
+      run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
+      if [[ ${#run_nums[@]} -gt 0 ]]; then
+        echo ${run_nums[@]}|xargs kill
+      else
+        break
+      fi
+  done
 }
