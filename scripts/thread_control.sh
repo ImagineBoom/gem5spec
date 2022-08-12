@@ -1,6 +1,6 @@
 
 #线程控制
-FLOODGATE=/opt/run-p8-m1/running/run.fifo
+FLOODGATE=./running/run.fifo
 #FLOODGATE=./run-p8-m1/running/run.fifo
 
 add_thread(){
@@ -74,7 +74,7 @@ set_thread_pool(){
   with_reduce_thread_10=false
   with_del_thread_pool=false
   with_get_thread_pool_size=false
-  if [ ! -p ${FLOODGATE} ]; then
+  if [[ ! -p ${FLOODGATE} ]]; then
     #最大线程数
     max_threads=5
     sudo mkdir -p "$(dirname ${FLOODGATE})"
