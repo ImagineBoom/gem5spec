@@ -55,8 +55,8 @@ get_thread_pool_size(){
 }
 
 delete_thread_pool(){
-  sudo rm -f ${FLOODGATE}
-  sudo rm -f $(dirname ${FLOODGATE})/runThreadPoolSize_*.log
+  rm -f ${FLOODGATE}
+  rm -f $(dirname ${FLOODGATE})/runThreadPoolSize_*.log
 }
 
 #Uncontrollable, not recommended
@@ -77,12 +77,12 @@ set_thread_pool(){
   if [[ ! -p ${FLOODGATE} ]]; then
     #最大线程数
     max_threads=5
-    sudo mkdir -p "$(dirname ${FLOODGATE})"
-    sudo chmod 777 "$(dirname ${FLOODGATE})"
+    mkdir -p "$(dirname ${FLOODGATE})"
+    chmod 777 "$(dirname ${FLOODGATE})"
     mkfifo ${FLOODGATE}
     exec 6<>${FLOODGATE}
     touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_${max_threads}.log
-    sudo chmod 666 "$(dirname ${FLOODGATE})"/*
+    chmod 666 "$(dirname ${FLOODGATE})"/*
     for (( i=0;i<max_threads;i++ )); do
       echo >&6
     done
