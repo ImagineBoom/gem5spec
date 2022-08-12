@@ -377,6 +377,18 @@ clean-all:
 	rm -rf *.log
 	find -maxdepth 1 -type d -regex ".*r" -exec make clean-all -C {} \;
 
+clean-simpoints:
+	rm -rf ./*/*bbv ./*/*gem5_bbv.log ./*/*merge ./*/*simpoint.log ./*/*simpts ./*/.weights ./*/*trace*
+
+clean-checkpoints:
+	rm -rf ./*/*checkpoints.log ./*/m5out
+
+clean-restore:
+	rm -rf ./*/*restore* ./*/output* ./*/*CKPS_CPI.log ./*/*csv ./*/*Weighted_CPI.log ./*/*RS_NUM.log
+
+clean-result:
+	rm -rf ./*.csv ./restore_all_consumed_time.log
+
 time:
 	@echo grep -nr "^Host Consumed Time:"
 	@grep -nr "^Host Consumed Time:" | sort -h| sed "s/\..\+: /,/g" || true
