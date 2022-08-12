@@ -466,9 +466,8 @@ cpi_999:
 collect_all_cases_CPI:
 	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log;
 	@sed -i 's/.csv//' weightedCPI_results.log;
-	@sed -i 's/ /,/g' weightedCPI_results.log;
-	@sed -i '1i "SpecCase#","WeightedCPI"' weightedCPI_results.log;
-	@mv weightedCPI_results.log  All_case_weightedCPI.csv;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","WeightedCPI"} {OFS=",";print $$1,$$2}' weightedCPI_results.log > All_case_weightedCPI.csv;
+	@rm -rf weightedCPI_results.log;
 	@gedit All_case_weightedCPI.csv &
 
 collect_all_checkpoints_data:
@@ -478,8 +477,8 @@ collect_all_checkpoints_data:
 collect_checkpoints_number:
 	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
 	@sed -i '$$a Total' temp1.log;
-	@wc -l ./*/*.merge | awk '{print ","$$1}' > temp2.log;
+	@wc -l ./*/*.merge | awk '{print $$1}' > temp2.log;
 	@paste temp1.log temp2.log > temp.log;
-	@sed -i '1i "SpecCase#","Checkpoints#"' temp.log;
-	@mv temp.log Checkpoint_Num.csv;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","Checkpoints#"} {OFS=",";print $$1,$$2}' temp.log > Checkpoint_Num.csv;
+	@rm -rf temp*;
 	@gedit Checkpoint_Num.csv &

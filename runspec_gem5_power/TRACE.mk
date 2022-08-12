@@ -106,9 +106,7 @@ cpi: $(EXECUTABLE)
 	done;
 	rm -rf ./$(FILE)_CKPS_CPI_sorted.log;\
 	result=`awk '{sum+=$$4}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
-	sed -i 's/ /,/g' ./$(FILE)_CKPS_Weighted_CPI.log;\
-	sed -i '1i "Checkpoint#","Weights","CPI","WeightedCPI"' ./$(FILE)_CKPS_Weighted_CPI.log;\
-	cp ./$(FILE)_CKPS_Weighted_CPI.log ./$(FILE)_final_result_$${result}.csv;\
+	awk 'NR==1 {OFS=",";print "Checkpoint#","Weights","CPI","WeightedCPI"} {OFS=",";print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_final_result_$${result}.csv;\
 	case_name=$(FILE);\
 	sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;\
 	sed -i '$$G' ./$(FILE)_final_result_$${result}.csv;
