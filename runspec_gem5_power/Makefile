@@ -478,8 +478,8 @@ collect_all_checkpoints_data:
 collect_checkpoints_number:
 	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
 	@sed -i '$$a Total' temp1.log;
-	@wc -l ./*/*.merge | awk '{print $$1}' > temp2.log;
+	@wc -l ./*/*.merge | awk '{print ","$$1}' > temp2.log;
 	@paste temp1.log temp2.log > temp.log;
-	@awk -F, 'NR==1 {print "SpecCase#","Checkpoints#"} {print $$1,$$2}' temp.log | column -t > Checkpoint_Num.csv;
-	@rm -rf temp*;
+	@sed -i '1i "SpecCase#","Checkpoints#"' temp.log;
+	@mv temp.log Checkpoint_Num.csv;
 	@gedit Checkpoint_Num.csv &
