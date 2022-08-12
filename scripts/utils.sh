@@ -329,30 +329,30 @@ func_with_entire_all_benchmarks(){
 func_with_restore_all_benchmarks(){
   if [[ $is_gem5 == true ]]; then
     opts=(
-      "make restore-all -C runspec_gem5_power/${bm[502]} "
-      "make restore-all -C runspec_gem5_power/${bm[999]} "
-      "make restore-all -C runspec_gem5_power/${bm[538]} "
-      "make restore-all -C runspec_gem5_power/${bm[523]} "
-      "make restore-all -C runspec_gem5_power/${bm[557]} "
-      "make restore-all -C runspec_gem5_power/${bm[526]} "
-      "make restore-all -C runspec_gem5_power/${bm[525]} "
-      "make restore-all -C runspec_gem5_power/${bm[511]} "
-      "make restore-all -C runspec_gem5_power/${bm[500]} "
-      "make restore-all -C runspec_gem5_power/${bm[519]} "
-      "make restore-all -C runspec_gem5_power/${bm[544]} "
-      "make restore-all -C runspec_gem5_power/${bm[503]} "
-      "make restore-all -C runspec_gem5_power/${bm[520]} "
-      "make restore-all -C runspec_gem5_power/${bm[554]} "
-      "make restore-all -C runspec_gem5_power/${bm[507]} "
-      "make restore-all -C runspec_gem5_power/${bm[541]} "
-      "make restore-all -C runspec_gem5_power/${bm[505]} "
-      "make restore-all -C runspec_gem5_power/${bm[510]} "
-      "make restore-all -C runspec_gem5_power/${bm[531]} "
-      "make restore-all -C runspec_gem5_power/${bm[521]} "
-      "make restore-all -C runspec_gem5_power/${bm[549]} "
-      "make restore-all -C runspec_gem5_power/${bm[508]} "
-      "make restore-all -C runspec_gem5_power/${bm[548]} "
-      "make restore-all -C runspec_gem5_power/${bm[527]} "
+      "make restore_all -C runspec_gem5_power/${bm[502]} "
+      "make restore_all -C runspec_gem5_power/${bm[999]} "
+      "make restore_all -C runspec_gem5_power/${bm[538]} "
+      "make restore_all -C runspec_gem5_power/${bm[523]} "
+      "make restore_all -C runspec_gem5_power/${bm[557]} "
+      "make restore_all -C runspec_gem5_power/${bm[526]} "
+      "make restore_all -C runspec_gem5_power/${bm[525]} "
+      "make restore_all -C runspec_gem5_power/${bm[511]} "
+      "make restore_all -C runspec_gem5_power/${bm[500]} "
+      "make restore_all -C runspec_gem5_power/${bm[519]} "
+      "make restore_all -C runspec_gem5_power/${bm[544]} "
+      "make restore_all -C runspec_gem5_power/${bm[503]} "
+      "make restore_all -C runspec_gem5_power/${bm[520]} "
+      "make restore_all -C runspec_gem5_power/${bm[554]} "
+      "make restore_all -C runspec_gem5_power/${bm[507]} "
+      "make restore_all -C runspec_gem5_power/${bm[541]} "
+      "make restore_all -C runspec_gem5_power/${bm[505]} "
+      "make restore_all -C runspec_gem5_power/${bm[510]} "
+      "make restore_all -C runspec_gem5_power/${bm[531]} "
+      "make restore_all -C runspec_gem5_power/${bm[521]} "
+      "make restore_all -C runspec_gem5_power/${bm[549]} "
+      "make restore_all -C runspec_gem5_power/${bm[508]} "
+      "make restore_all -C runspec_gem5_power/${bm[548]} "
+      "make restore_all -C runspec_gem5_power/${bm[527]} "
     )
   elif [[ $is_m1 == true ]]; then
     opts=(
@@ -382,6 +382,7 @@ func_with_restore_all_benchmarks(){
       "make find_interval_size -C runspec_gem5_power/${bm[527]} "
     )
   fi
+  date1=$(date +"%Y-%m-%d %H:%M:%S")
   for opt in "${opts[@]}" ;do
     read -u6
     {
@@ -389,6 +390,16 @@ func_with_restore_all_benchmarks(){
       echo >&6
     }&
   done
+  wait
+  date2=$(date +"%Y-%m-%d %H:%M:%S")
+  sys_date1=$(date -d "$date1" +%s)
+  sys_date2=$(date -d "$date2" +%s)
+  seconds=`expr $sys_date2 - $sys_date1`
+  hour=$(( $seconds/3600 ))
+  min=$(( ($seconds-${hour}*3600)/60 ))
+  sec=$(( $seconds-${hour}*3600-${min}*60 ))
+  HMS=`echo ${hour}:${min}:${sec}`
+  echo "restore_all consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
 }
 
 func_with_cpi_all_benchmarks(){
