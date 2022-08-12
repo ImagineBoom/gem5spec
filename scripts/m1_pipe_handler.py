@@ -58,7 +58,7 @@ class Trace:
         self.lines: list[str] = []  # 流水线图的行
         self.cur_line = ""  # 当前处理的流水线图的行
         self.pattern = re.compile(
-            r'^\|(?P<pipe>[\.\w]+)[\+\-\|\s]+(?P<iop_id>\d+)\s*\|\s*(?P<mnemonic_key>[\w\?\-]+)\s*(?P<mnemonic_value>[\w\,\.\(\)\?\+\-]*)\s*\|\s*(?P<inst_addr_low32>\w+)\s*\|\s*(?P<data_addr_low32>\w*)\s*\|$')
+            r'^\|(?P<pipe>.*)[\+\-\|]+\s+(?P<iop_id>\d+)\s*\|\s*(?P<mnemonic_key>[\w\?\-]+)\s*(?P<mnemonic_value>[\w\,\.\(\)\?\+\-]*)\s*\|\s*(?P<inst_addr_low32>\w+)\s*\|\s*(?P<data_addr_low32>\w*)\s*\|$')
         self.existed_files = existed_files
 
     def m1pipe_read(self, fname: str):
@@ -119,7 +119,7 @@ class Trace:
                 pass
 
     def calculate_exe_cycles(self):
-        exe_pattern = re.compile(r'(I*\.*E+\.*)\.*f\.*C')
+        exe_pattern = re.compile(r'.(E+)[^EI]*f\.*C')
         for this_key, this_insts in self.instruction_dict.items():
             for index, val in enumerate(this_insts.list):
                 exe = exe_pattern.search(val.Pipe)
@@ -358,9 +358,9 @@ if __name__ == '__main__':
     # 0. 检查
     existed_files = Trace.get_existed()
     # 1. 并行
-    pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/M1_result/*.txt"])
+    pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/ -name '*.txt'"])
     # pipe_list_temp = runcmd(["find ../*.txt"])
-    # pipe_list_temp = ["../1test.txt"]
+    # pipe_list_temp = ["../114_5000000_554.roms_r.txt"]
     pipe_list = list(sorted(set(pipe_list_temp)))
     # [print(f) for f in pipe_list]
     if "" in pipe_list:
