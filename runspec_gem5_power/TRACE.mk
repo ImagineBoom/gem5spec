@@ -95,7 +95,7 @@ cpi: $(EXECUTABLE)
 	@echo ---------------------cpi handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./$(FILE)_CKPS_Weighted_CPI.log;
 	@rm -rf ./*.csv;
-	@sort -n -k 1.4,1.5 ./$(FILE)_CKPS_CPI.log -o ./$(FILE)_CKPS_CPI_sorted.log;
+	@sort -n -k 2 ./$(FILE)_CKPS_CPI.log -o ./$(FILE)_CKPS_CPI_sorted.log;
 	@m=(`awk 'END {print NR}' ./$(FILE)_CKPS_CPI_sorted.log;`);\
 	for i in `seq $${m}`; do( \
 		weights=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$2}' `; \

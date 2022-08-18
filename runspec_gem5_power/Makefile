@@ -471,7 +471,30 @@ collect_all_cases_CPI:
 	@gedit All_case_weightedCPI.csv &
 
 collect_all_checkpoints_data:
-	@cat ./*/*.csv > Each_case_ckp_data.csv;
+	@cat ./500*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./502*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./505*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./520*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./523*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./525*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./531*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./541*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./548*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./557*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./503*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./507*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./508*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./510*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./511*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./519*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./521*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./526*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./527*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./538*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./544*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./549*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./554*/*.csv >> /Each_case_ckp_data.csv;
+	@cat ./999*/*.csv >> /Each_case_ckp_data.csv;
 	@gedit Each_case_ckp_data.csv &
 
 collect_checkpoints_number:
@@ -484,30 +507,30 @@ collect_checkpoints_number:
 	@gedit Checkpoint_Num.csv &
 
 classify_result:
-		@find ./500*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./502*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./505*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./520*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./523*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./525*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./531*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./541*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./548*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./557*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./503*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./507*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./508*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./510*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./511*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./519*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./521*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./526*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./527*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./538*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./544*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./549*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./554*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@find ./999*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
-		@sed -i 's/ /,/' ./Sort_All_case_weightedCPI.csv;
-		@sed -i '1i "SpecCase#","Checkpoints#"' ./Sort_All_case_weightedCPI.csv;
-		@gedit ./Sort_All_case_weightedCPI.csv &
+	@find ./500*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./502*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./505*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./520*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./523*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./525*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./531*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./541*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./548*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./557*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./503*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./507*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./508*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./510*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./511*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./519*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./521*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./526*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./527*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./538*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./544*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./549*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./554*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./999*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@sed -i 's/ /,/' ./Sort_All_case_weightedCPI.csv;
+	@sed -i '1i "SpecCase#","Checkpoints#"' ./Sort_All_case_weightedCPI.csv;
+	@gedit ./Sort_All_case_weightedCPI.csv &
