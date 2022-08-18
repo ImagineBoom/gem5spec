@@ -21,7 +21,7 @@ eval set -- "${getopt_cmd}"
 source ./scripts/utils.sh
 source ./scripts/thread_control.sh
 
-#set_thread_pool
+set_thread_pool
 
 rm -rf nohup.out 2>/dev/null
 

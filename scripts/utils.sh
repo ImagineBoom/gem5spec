@@ -132,6 +132,7 @@ func_cp_merge(){
   cp -r ${TARGET}/${bm[548]}/${bm[548]}.merge ./runspec_gem5_power/${bm[548]}/${bm[548]}.merge
   cp -r ${TARGET}/${bm[527]}/${bm[527]}.merge ./runspec_gem5_power/${bm[527]}/${bm[527]}.merge
 }
+
 # gem5spec目录下执行
 func_cp_simpts_weights(){
   bm=(\
