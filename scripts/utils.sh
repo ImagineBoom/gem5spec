@@ -132,6 +132,64 @@ func_cp_merge(){
   cp -r ${TARGET}/${bm[548]}/${bm[548]}.merge ./runspec_gem5_power/${bm[548]}/${bm[548]}.merge
   cp -r ${TARGET}/${bm[527]}/${bm[527]}.merge ./runspec_gem5_power/${bm[527]}/${bm[527]}.merge
 }
+# gem5spec目录下执行
+func_cp_simpts_weights(){
+  bm=(\
+  [502]="502.gcc_r" [999]="999.specrand_ir" [538]="538.imagick_r" [523]="523.xalancbmk_r" [557]="557.xz_r" [526]="526.blender_r" [525]="525.x264_r" [511]="511.povray_r" \
+  [500]="500.perlbench_r" [519]="519.lbm_r" [544]="544.nab_r" [503]="503.bwaves_r" [520]="520.omnetpp_r" [554]="554.roms_r" [507]="507.cactuBSSN_r" [541]="541.leela_r" \
+  [505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
+  TARGET="/home/lizongping/prj/data/gem5spec_5m_x86_backup/runspec_gem5_power"
+  rm -rf ./runspec_gem5_power/*r/*.simpts ./runspec_gem5_power/*r/*.weights
+  cp -r ${TARGET}/${bm[502]}/${bm[502]}.simpts ./runspec_gem5_power/${bm[502]}/${bm[502]}.simpts
+  cp -r ${TARGET}/${bm[999]}/${bm[999]}.simpts ./runspec_gem5_power/${bm[999]}/${bm[999]}.simpts
+  cp -r ${TARGET}/${bm[538]}/${bm[538]}.simpts ./runspec_gem5_power/${bm[538]}/${bm[538]}.simpts
+  cp -r ${TARGET}/${bm[523]}/${bm[523]}.simpts ./runspec_gem5_power/${bm[523]}/${bm[523]}.simpts
+  cp -r ${TARGET}/${bm[557]}/${bm[557]}.simpts ./runspec_gem5_power/${bm[557]}/${bm[557]}.simpts
+  cp -r ${TARGET}/${bm[526]}/${bm[526]}.simpts ./runspec_gem5_power/${bm[526]}/${bm[526]}.simpts
+  cp -r ${TARGET}/${bm[525]}/${bm[525]}.simpts ./runspec_gem5_power/${bm[525]}/${bm[525]}.simpts
+  cp -r ${TARGET}/${bm[511]}/${bm[511]}.simpts ./runspec_gem5_power/${bm[511]}/${bm[511]}.simpts
+  cp -r ${TARGET}/${bm[500]}/${bm[500]}.simpts ./runspec_gem5_power/${bm[500]}/${bm[500]}.simpts
+  cp -r ${TARGET}/${bm[519]}/${bm[519]}.simpts ./runspec_gem5_power/${bm[519]}/${bm[519]}.simpts
+  cp -r ${TARGET}/${bm[544]}/${bm[544]}.simpts ./runspec_gem5_power/${bm[544]}/${bm[544]}.simpts
+  cp -r ${TARGET}/${bm[503]}/${bm[503]}.simpts ./runspec_gem5_power/${bm[503]}/${bm[503]}.simpts
+  cp -r ${TARGET}/${bm[520]}/${bm[520]}.simpts ./runspec_gem5_power/${bm[520]}/${bm[520]}.simpts
+  cp -r ${TARGET}/${bm[554]}/${bm[554]}.simpts ./runspec_gem5_power/${bm[554]}/${bm[554]}.simpts
+  cp -r ${TARGET}/${bm[507]}/${bm[507]}.simpts ./runspec_gem5_power/${bm[507]}/${bm[507]}.simpts
+  cp -r ${TARGET}/${bm[541]}/${bm[541]}.simpts ./runspec_gem5_power/${bm[541]}/${bm[541]}.simpts
+  cp -r ${TARGET}/${bm[505]}/${bm[505]}.simpts ./runspec_gem5_power/${bm[505]}/${bm[505]}.simpts
+  cp -r ${TARGET}/${bm[510]}/${bm[510]}.simpts ./runspec_gem5_power/${bm[510]}/${bm[510]}.simpts
+  cp -r ${TARGET}/${bm[531]}/${bm[531]}.simpts ./runspec_gem5_power/${bm[531]}/${bm[531]}.simpts
+  cp -r ${TARGET}/${bm[521]}/${bm[521]}.simpts ./runspec_gem5_power/${bm[521]}/${bm[521]}.simpts
+  cp -r ${TARGET}/${bm[549]}/${bm[549]}.simpts ./runspec_gem5_power/${bm[549]}/${bm[549]}.simpts
+  cp -r ${TARGET}/${bm[508]}/${bm[508]}.simpts ./runspec_gem5_power/${bm[508]}/${bm[508]}.simpts
+  cp -r ${TARGET}/${bm[548]}/${bm[548]}.simpts ./runspec_gem5_power/${bm[548]}/${bm[548]}.simpts
+  cp -r ${TARGET}/${bm[527]}/${bm[527]}.simpts ./runspec_gem5_power/${bm[527]}/${bm[527]}.simpts
+
+  cp -r ${TARGET}/${bm[502]}/${bm[502]}.weights ./runspec_gem5_power/${bm[502]}/${bm[502]}.weights
+  cp -r ${TARGET}/${bm[999]}/${bm[999]}.weights ./runspec_gem5_power/${bm[999]}/${bm[999]}.weights
+  cp -r ${TARGET}/${bm[538]}/${bm[538]}.weights ./runspec_gem5_power/${bm[538]}/${bm[538]}.weights
+  cp -r ${TARGET}/${bm[523]}/${bm[523]}.weights ./runspec_gem5_power/${bm[523]}/${bm[523]}.weights
+  cp -r ${TARGET}/${bm[557]}/${bm[557]}.weights ./runspec_gem5_power/${bm[557]}/${bm[557]}.weights
+  cp -r ${TARGET}/${bm[526]}/${bm[526]}.weights ./runspec_gem5_power/${bm[526]}/${bm[526]}.weights
+  cp -r ${TARGET}/${bm[525]}/${bm[525]}.weights ./runspec_gem5_power/${bm[525]}/${bm[525]}.weights
+  cp -r ${TARGET}/${bm[511]}/${bm[511]}.weights ./runspec_gem5_power/${bm[511]}/${bm[511]}.weights
+  cp -r ${TARGET}/${bm[500]}/${bm[500]}.weights ./runspec_gem5_power/${bm[500]}/${bm[500]}.weights
+  cp -r ${TARGET}/${bm[519]}/${bm[519]}.weights ./runspec_gem5_power/${bm[519]}/${bm[519]}.weights
+  cp -r ${TARGET}/${bm[544]}/${bm[544]}.weights ./runspec_gem5_power/${bm[544]}/${bm[544]}.weights
+  cp -r ${TARGET}/${bm[503]}/${bm[503]}.weights ./runspec_gem5_power/${bm[503]}/${bm[503]}.weights
+  cp -r ${TARGET}/${bm[520]}/${bm[520]}.weights ./runspec_gem5_power/${bm[520]}/${bm[520]}.weights
+  cp -r ${TARGET}/${bm[554]}/${bm[554]}.weights ./runspec_gem5_power/${bm[554]}/${bm[554]}.weights
+  cp -r ${TARGET}/${bm[507]}/${bm[507]}.weights ./runspec_gem5_power/${bm[507]}/${bm[507]}.weights
+  cp -r ${TARGET}/${bm[541]}/${bm[541]}.weights ./runspec_gem5_power/${bm[541]}/${bm[541]}.weights
+  cp -r ${TARGET}/${bm[505]}/${bm[505]}.weights ./runspec_gem5_power/${bm[505]}/${bm[505]}.weights
+  cp -r ${TARGET}/${bm[510]}/${bm[510]}.weights ./runspec_gem5_power/${bm[510]}/${bm[510]}.weights
+  cp -r ${TARGET}/${bm[531]}/${bm[531]}.weights ./runspec_gem5_power/${bm[531]}/${bm[531]}.weights
+  cp -r ${TARGET}/${bm[521]}/${bm[521]}.weights ./runspec_gem5_power/${bm[521]}/${bm[521]}.weights
+  cp -r ${TARGET}/${bm[549]}/${bm[549]}.weights ./runspec_gem5_power/${bm[549]}/${bm[549]}.weights
+  cp -r ${TARGET}/${bm[508]}/${bm[508]}.weights ./runspec_gem5_power/${bm[508]}/${bm[508]}.weights
+  cp -r ${TARGET}/${bm[548]}/${bm[548]}.weights ./runspec_gem5_power/${bm[548]}/${bm[548]}.weights
+  cp -r ${TARGET}/${bm[527]}/${bm[527]}.weights ./runspec_gem5_power/${bm[527]}/${bm[527]}.weights
+}
 
 func_help(){
   cat <<- EOF
