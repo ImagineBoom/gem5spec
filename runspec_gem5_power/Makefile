@@ -471,31 +471,32 @@ collect_all_cases_CPI:
 	@gedit All_case_weightedCPI.csv &
 
 collect_all_checkpoints_data:
-	@cat ./500*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./502*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./505*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./520*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./523*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./525*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./531*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./541*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./548*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./557*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./503*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./507*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./508*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./510*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./511*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./519*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./521*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./526*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./527*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./538*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./544*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./549*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./554*/*.csv >> /Each_case_ckp_data.csv;
-	@cat ./999*/*.csv >> /Each_case_ckp_data.csv;
-	@gedit Each_case_ckp_data.csv &
+	@rm -rf ./Each_case_ckp_data.csv;
+	@cat ./500*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./502*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./505*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./520*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./523*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./525*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./531*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./541*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./548*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./557*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./503*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./507*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./508*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./510*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./511*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./519*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./521*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./526*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./527*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./538*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./544*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./549*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./554*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./999*/*.csv >> ./Each_case_ckp_data.csv;
+	@gedit ./Each_case_ckp_data.csv &
 
 collect_checkpoints_number:
 	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
@@ -507,6 +508,7 @@ collect_checkpoints_number:
 	@gedit Checkpoint_Num.csv &
 
 classify_result:
+	@rm -rf ./Sort_All_case_weightedCPI.csv;
 	@find ./500*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
 	@find ./502*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
 	@find ./505*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
