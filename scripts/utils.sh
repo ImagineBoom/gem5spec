@@ -558,6 +558,53 @@ func_collect_all_m1_restore_data(){
   cat ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge >>each_bm_cpt_m1.csv
 }
 
+func_collect_handle_all_m1_restore_data(){
+#sum=0
+  bm=(
+    "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
+    "503.bwaves_r" "507.cactuBSSN_r" "508.namd_r" "510.parest_r" "511.povray_r" "519.lbm_r" "521.wrf_r" "526.blender_r" "527.cam4_r" "538.imagick_r" "544.nab_r" "549.fotonik3d_r" "554.roms_r" "999.specrand_ir"
+  )
+  rm -rf each_bm_cpt_m1.csv summary_bm_cpt_m1.csv
+  for FILE in ${bm[@]}
+  do
+    #FILE="502.gcc_r"
+    find ./runspec_gem5_power/"${FILE}"/CPI_result/5000000_Calculate_WeightedCPI.log -exec sort -n -b -r -k 2 {} \; | \
+    awk -v FILE="${FILE}" 'BEGIN {
+        OFS = ",";
+        sum_weight = 0;sum = 0;cred=0;
+        print "simpts","Weights","CPI","WeightedCPI"
+      }
+      {
+        sum_weight += $2;
+        if ($3 != 0)
+          cred += $2;
+        sum += $4;
+        print $1,$2,$3,$4
+      }
+      END {
+        if (sum_weight > 0.999)
+          print "COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+        else
+          print "UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+      }' >>each_bm_cpt_m1.csv
+    echo >> each_bm_cpt_m1.csv
+  done
+  echo "Benchmark,Credibility,M1 Sum Weighted CPI"| tee -a summary_bm_cpt_m1.csv
+  for FILE in ${bm[@]}
+  do
+    array=(`grep -oP "(.*),(${FILE}.*),(Credibility:.*),(SumWeightedCPI:\d+\.*\d*)" each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4 }'`)
+#    for a in ${array[@]}
+#    do
+#      echo $a
+#    done
+    if [[ ${#array[@]} -gt 0 && "${array[0]}" == "COMPLETED" ]]; then
+      echo "${array[1]},${array[2]#Credibility:},${array[3]#SumWeightedCPI:}" |tee -a summary_bm_cpt_m1.csv
+    else
+      echo "${FILE}," |tee -a summary_bm_cpt_m1.csv
+    fi
+  done
+}
+
 func_kill_restore_all(){
   while : ; do
       run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
