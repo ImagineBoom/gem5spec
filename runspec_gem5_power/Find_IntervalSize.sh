@@ -5,6 +5,7 @@ EXECUTABLE=$3
 FILE=$4
 ARGS=$5
 MERGE_FILE_PATH=$6
+BACKUP_PATH=$7
 CPI_log_PATH=./CPI_result
 M1_log_PATH=./M1_result
 Valgrind_Simpts_log_PATH=./Valgrind_Simpoint_result
@@ -29,7 +30,7 @@ set_thread_pool
 #  rm -rf ./CPI_result ./M1_result ./Valgrind_Simpoint_result
 #fi
 
-rm -rf M1_result Valgrind_Simpoint_result CPI_result *.qt *.log *.results *.pipe *.config *.dir
+#rm -rf M1_result Valgrind_Simpoint_result CPI_result *.qt *.log *.results *.pipe *.config *.dir
 mkdir -p M1_result
 mkdir -p Valgrind_Simpoint_result
 mkdir -p CPI_result
@@ -42,31 +43,18 @@ for ((i=0;i<${#interval_size[@]};i++)) do
     for (( j=0;j<${#Simpts_Array[@]};j++)) do
       read -u6
       {
-        if [[ ! -e M1_result/${Simpts}_${Interval_size}_${FILE}.results ]]; then
-          Simpts=${Simpts_Array[j]}
-          Weight=${Weight_Array[j]}
+        Simpts=${Simpts_Array[j]}
+        Weight=${Weight_Array[j]}
+        if [[ ! -e pipe_result/1_5000_${Simpts}_${Interval_size}_${FILE}.txt ]]; then
+          echo "not existing,${Simpts}_${Interval_size}_${FILE}.results"
           make qtrace JUMP_NUM=$[Simpts*Interval_size] CONVERT_NUM_Vgi_RECS=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE}
-          qt_records=0
-          qt_records=$(grep -oP "Created \d+ qt records" ${Simpts}_${Interval_size}_${FILE}_trace.log |grep -oP "\d+")
-          if [[ $qt_records == 5000000 ]]; then
-            # make m1 NUM_INST=${Interval_size} CPI_INTERVAL=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE} SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=2
-            # SCROLL_END=${Interval_size}
-            # 每个片段取10个子片段打印流水线，子片段步长500000，因为生成5,000,000的文本>12小时
-            for (( p=1;p<5000001;p=p+500000 )) do
-              b=$p
-              e=`expr $b + 5000 - 1`
-              make m1 NUM_INST=${Interval_size} CPI_INTERVAL=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE} SCROLL_PIPE=1 SCROLL_BEGIN=${b} SCROLL_END=${e}
-              make m1_pipeview pipeFILE=${Simpts}_${Interval_size}_${FILE} pipeARGS="-out_file ${b}_${e}_${Simpts}_${Interval_size}_${FILE}.txt  -overwrite "
-            done
-          else
-            :
-          fi
           CPI=`grep 'CMPL: CPI--------------------------------------- .* inst.*' ./${Simpts}_${Interval_size}_${FILE}.results |awk '{print $3}'`
           echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" "$2*$3)}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
           # rm -rf ${Simpts}_${Interval_size}_${FILE}.qt ${Simpts}_${Interval_size}_${FILE}.pipe
           mv ${Simpts}_${Interval_size}_${FILE}.* M1_result 2>/dev/null
-          mv ${Simpts}_${Interval_size}_${FILE}_trace.* M1_result 2>/dev/null
           mv *${Simpts}_${Interval_size}_${FILE}.txt pipe_result 2>/dev/null
+          cp -r ./M1_result/${Simpts}_${Interval_size}_${FILE}.results ${BACKUP_PATH}
+          cp -r -f ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log ${BACKUP_PATH}
         else
           echo "existing,${Simpts}_${Interval_size}_${FILE}.results"
           :
@@ -76,8 +64,8 @@ for ((i=0;i<${#interval_size[@]};i++)) do
     done
     wait
     Sum_WeightedCPI=`awk '{s += $4} END {print s}' ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log`
-    sort -n -k 1 ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log | awk 'BEGIN {print "simpts","Weights","CPI","WeightedCPI"} {print $1,$2,$3,$4}' |  column -t > ./CPI_result/${Interval_size}_CPI_result.merge
-    echo "${FILE} interval size: ${Interval_size}, sum weighted CPI: $Sum_WeightedCPI" >> ./CPI_result/${Interval_size}_CPI_result.merge
+    sort -r -n -k 2 ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log | awk 'BEGIN {OFS = ",";print "simpts","Weights","CPI","WeightedCPI"} {print $1,$2,$3,$4}' |  column -t > ./CPI_result/${Interval_size}_CPI_result.merge
+    echo ",${FILE} interval size: ${Interval_size}, sum weighted CPI:, $Sum_WeightedCPI" >> ./CPI_result/${Interval_size}_CPI_result.merge
     echo ${Interval_size}_${FILE}:"$Sum_WeightedCPI" >> ./CPI_result/${FILE}_CPI_result_${Sum_WeightedCPI}.log
   }
 done

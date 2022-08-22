@@ -42,6 +42,7 @@ CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=64kB --l1d_assoc=8 --
 TIME = /usr/bin/time --format="Consumed Time: %E  --  $$(basename $${PWD})"
 
 FLOODGATE=../../running/run.fifo
+BACKUP_PATH=
 
 inst_count:$(EXECUTABLE)
 	$(TIME) $(VALGRIND_EXE) --tool=exp-bbv --instr-count-only=yes --bb-out-file=/dev/null ./$(EXECUTABLE) $(ARGS) >$(FILE)_inst.log 2>&1

@@ -23,7 +23,7 @@ source ./scripts/thread_control.sh
 
 set_thread_pool
 
-rm -rf nohup.out 2>/dev/null
+#rm -rf nohup.out 2>/dev/null
 
 #echo ${@}
 

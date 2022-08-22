@@ -389,69 +389,72 @@ func_with_entire_all_benchmarks(){
   done
 }
 
+func_collect_handle_all_m1_restore_data(){
+#sum=0
+  bm=(
+    "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
+    "503.bwaves_r" "507.cactuBSSN_r" "508.namd_r" "510.parest_r" "511.povray_r" "519.lbm_r" "521.wrf_r" "526.blender_r" "527.cam4_r" "538.imagick_r" "544.nab_r" "549.fotonik3d_r" "554.roms_r" "999.specrand_ir"
+  )
+  rm -rf each_bm_cpt_m1.csv summary_bm_cpt_m1.csv
+  for FILE in ${bm[@]}
+  do
+    #FILE="502.gcc_r"
+    find ./runspec_gem5_power/"${FILE}"/CPI_result/5000000_Calculate_WeightedCPI.log -exec sort -n -b -r -k 2 {} \; | \
+    awk -v FILE="${FILE}" 'BEGIN {
+        OFS = ",";
+        sum_weight = 0;sum = 0;cred=0;
+        print "simpts","Weights","CPI","WeightedCPI"
+      }
+      {
+        sum_weight += $2;
+        if ($3 != 0)
+          cred += $2;
+        sum += $4;
+        print $1,$2,$3,$4
+      }
+      END {
+        if (sum_weight > 0.999)
+          print "COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+        else
+          print "UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+      }' >>each_bm_cpt_m1.csv
+    echo >> each_bm_cpt_m1.csv
+  done
+  echo "Benchmark,Credibility,M1 Sum Weighted CPI"| tee -a summary_bm_cpt_m1.csv
+  for FILE in ${bm[@]}
+  do
+    array=(`grep -oP "(.*),(${FILE}.*),(Credibility:.*),(SumWeightedCPI:\d+\.*\d*)" each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4 }'`)
+#    for a in ${array[@]}
+#    do
+#      echo $a
+#    done
+    if [[ ${#array[@]} -gt 0 && "${array[0]}" == "COMPLETED" ]]; then
+      echo "${array[1]},${array[2]#Credibility:},${array[3]#SumWeightedCPI:}" |tee -a summary_bm_cpt_m1.csv
+    else
+      echo "${FILE}," |tee -a summary_bm_cpt_m1.csv
+    fi
+  done
+}
+
 func_with_restore_all_benchmarks(){
-  if [[ $is_gem5 == true ]]; then
-    opts=(
-      "make restore_all -C runspec_gem5_power/${bm[502]} "
-      "make restore_all -C runspec_gem5_power/${bm[999]} "
-      "make restore_all -C runspec_gem5_power/${bm[538]} "
-      "make restore_all -C runspec_gem5_power/${bm[523]} "
-      "make restore_all -C runspec_gem5_power/${bm[557]} "
-      "make restore_all -C runspec_gem5_power/${bm[526]} "
-      "make restore_all -C runspec_gem5_power/${bm[525]} "
-      "make restore_all -C runspec_gem5_power/${bm[511]} "
-      "make restore_all -C runspec_gem5_power/${bm[500]} "
-      "make restore_all -C runspec_gem5_power/${bm[519]} "
-      "make restore_all -C runspec_gem5_power/${bm[544]} "
-      "make restore_all -C runspec_gem5_power/${bm[503]} "
-      "make restore_all -C runspec_gem5_power/${bm[520]} "
-      "make restore_all -C runspec_gem5_power/${bm[554]} "
-      "make restore_all -C runspec_gem5_power/${bm[507]} "
-      "make restore_all -C runspec_gem5_power/${bm[541]} "
-      "make restore_all -C runspec_gem5_power/${bm[505]} "
-      "make restore_all -C runspec_gem5_power/${bm[510]} "
-      "make restore_all -C runspec_gem5_power/${bm[531]} "
-      "make restore_all -C runspec_gem5_power/${bm[521]} "
-      "make restore_all -C runspec_gem5_power/${bm[549]} "
-      "make restore_all -C runspec_gem5_power/${bm[508]} "
-      "make restore_all -C runspec_gem5_power/${bm[548]} "
-      "make restore_all -C runspec_gem5_power/${bm[527]} "
-    )
-  elif [[ $is_m1 == true ]]; then
-    opts=(
-      "make find_interval_size -C runspec_gem5_power/${bm[502]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[999]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[538]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[523]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[557]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[526]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[525]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[511]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[500]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[519]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[544]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[503]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[520]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[554]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[507]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[541]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[505]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[510]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[531]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[521]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[549]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[508]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[548]} "
-      "make find_interval_size -C runspec_gem5_power/${bm[527]} "
-    )
-  fi
+  bm=(
+    "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
+    "503.bwaves_r" "507.cactuBSSN_r" "508.namd_r" "510.parest_r" "511.povray_r" "519.lbm_r" "521.wrf_r" "526.blender_r" "527.cam4_r" "538.imagick_r" "544.nab_r" "549.fotonik3d_r" "554.roms_r" "999.specrand_ir"
+  )
+  begin_time=$(date +"%Y-%m-%d-%H-%M-%S")
   date1=$(date +"%Y-%m-%d %H:%M:%S")
-  for opt in "${opts[@]}" ;do
+  for FILE in ${bm[@]}
+  do
+    if [[ $is_gem5 == true ]]; then
+      mkdir -p ./data/"${begin_time}"/gem5/"${FILE}"
+      opt="make restore_all -C runspec_gem5_power/${FILE} "
+    elif [[ $is_m1 == true ]]; then
+      mkdir -p ./data/"${begin_time}"/M1/"${FILE}"
+      opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/${begin_time}/M1/${FILE}/"
+    fi
     read -u6
-    {
-      ${opt} >>nohup.out 2>&1
-      echo >&6
-    }&
+    ${opt} >>nohup.out 2>&1
+    echo >&6
   done
   wait
   date2=$(date +"%Y-%m-%d %H:%M:%S")
@@ -463,6 +466,22 @@ func_with_restore_all_benchmarks(){
   sec=$(( $seconds-${hour}*3600-${min}*60 ))
   HMS=`echo ${hour}:${min}:${sec}`
   echo "restore_all consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
+  # backup
+  if [[ $is_gem5 == true ]]; then
+    for FILE in ${bm[@]}
+    do
+        cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/"${begin_time}"/gem5/"${FILE}"
+        cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
+        cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
+        mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/"${begin_time}"/gem5/"${FILE}"/ 2>/dev/null
+    done
+  elif [[ $is_m1 == true ]]; then
+    func_collect_handle_all_m1_restore_data
+    for FILE in ${bm[@]}
+    do
+        mv *.csv ./data/"${begin_time}"/M1/"${FILE}"/ 2>/dev/null
+    done
+  fi
 }
 
 func_with_cpi_all_benchmarks(){
@@ -615,53 +634,6 @@ func_itrace_all_benchmarks(){
 func_collect_all_m1_restore_data(){
   sed -i '$G' ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge
   cat ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge >>each_bm_cpt_m1.csv
-}
-
-func_collect_handle_all_m1_restore_data(){
-#sum=0
-  bm=(
-    "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
-    "503.bwaves_r" "507.cactuBSSN_r" "508.namd_r" "510.parest_r" "511.povray_r" "519.lbm_r" "521.wrf_r" "526.blender_r" "527.cam4_r" "538.imagick_r" "544.nab_r" "549.fotonik3d_r" "554.roms_r" "999.specrand_ir"
-  )
-  rm -rf each_bm_cpt_m1.csv summary_bm_cpt_m1.csv
-  for FILE in ${bm[@]}
-  do
-    #FILE="502.gcc_r"
-    find ./runspec_gem5_power/"${FILE}"/CPI_result/5000000_Calculate_WeightedCPI.log -exec sort -n -b -r -k 2 {} \; | \
-    awk -v FILE="${FILE}" 'BEGIN {
-        OFS = ",";
-        sum_weight = 0;sum = 0;cred=0;
-        print "simpts","Weights","CPI","WeightedCPI"
-      }
-      {
-        sum_weight += $2;
-        if ($3 != 0)
-          cred += $2;
-        sum += $4;
-        print $1,$2,$3,$4
-      }
-      END {
-        if (sum_weight > 0.999)
-          print "COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
-        else
-          print "UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
-      }' >>each_bm_cpt_m1.csv
-    echo >> each_bm_cpt_m1.csv
-  done
-  echo "Benchmark,Credibility,M1 Sum Weighted CPI"| tee -a summary_bm_cpt_m1.csv
-  for FILE in ${bm[@]}
-  do
-    array=(`grep -oP "(.*),(${FILE}.*),(Credibility:.*),(SumWeightedCPI:\d+\.*\d*)" each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4 }'`)
-#    for a in ${array[@]}
-#    do
-#      echo $a
-#    done
-    if [[ ${#array[@]} -gt 0 && "${array[0]}" == "COMPLETED" ]]; then
-      echo "${array[1]},${array[2]#Credibility:},${array[3]#SumWeightedCPI:}" |tee -a summary_bm_cpt_m1.csv
-    else
-      echo "${FILE}," |tee -a summary_bm_cpt_m1.csv
-    fi
-  done
 }
 
 func_kill_restore_all(){
