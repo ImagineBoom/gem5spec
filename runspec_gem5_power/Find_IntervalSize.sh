@@ -15,7 +15,7 @@ Sum_WeightedCPI=0
 
 source ../Set_IntervalSize.sh
 source ../../scripts/thread_control.sh
-set_thread_pool
+set_thread_pool "${8}"
 #echo >&6
 
 #if [[ ! -f ${FILE}.vgi ]];then

@@ -447,10 +447,10 @@ func_with_restore_all_benchmarks(){
   do
     if [[ $is_gem5 == true ]]; then
       mkdir -p ./data/"${begin_time}"/gem5/"${FILE}"
-      opt="make restore_all -C runspec_gem5_power/${FILE} "
+      opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${1}"
     elif [[ $is_m1 == true ]]; then
       mkdir -p ./data/"${begin_time}"/M1/"${FILE}"
-      opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/${begin_time}/M1/${FILE}/"
+      opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/${begin_time}/M1/${FILE}/ FLOODGATE=${1}"
     fi
     read -u6
     ${opt} >>nohup.out 2>&1

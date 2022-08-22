@@ -62,9 +62,6 @@ gem5_pipeview: $(EXECUTABLE)
 	less -r pipeview.out
 	@echo ---------------------gem5pv handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 
-find_interval_size:  $(EXECUTABLE)
-	../Find_IntervalSize.sh $(SIMPOINT_EXE) $(VALGRIND_EXE) $(EXECUTABLE) $(FILE_FOR_FINDINTERVALSIZE) "$(ARGS)" $(FILE).merge $(BACKUP_PATH)
-
 restore_all: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./output_ckp*;

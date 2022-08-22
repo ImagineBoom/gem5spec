@@ -21,7 +21,9 @@ eval set -- "${getopt_cmd}"
 source ./scripts/utils.sh
 source ./scripts/thread_control.sh
 
-set_thread_pool
+FLOODGATE=$(cd "$(dirname "${0}")" && pwd )/running/run.fifo
+
+set_thread_pool "${FLOODGATE}"
 
 #rm -rf nohup.out 2>/dev/null
 
@@ -268,7 +270,7 @@ if [[ $is_m1 == true ]]; then
     elif [[ $with_entire_all_benchmarks == true ]]; then
       (func_with_entire_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_restore_all == true ]]; then
-      (func_with_restore_all_benchmarks >>nohup.out 2>&1 &)
+      (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.out 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     else

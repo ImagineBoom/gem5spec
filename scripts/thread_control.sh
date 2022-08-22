@@ -1,6 +1,6 @@
 
 #线程控制
-FLOODGATE=./running/run.fifo
+#FLOODGATE=$1
 #FLOODGATE=./run-p8-m1/running/run.fifo
 
 add_thread(){
@@ -68,6 +68,7 @@ clear_redundant_thread_pool(){
 }
 
 set_thread_pool(){
+  FLOODGATE=${1}
   with_add_thread=false
   with_add_thread_10=false
   with_reduce_thread=false
@@ -78,11 +79,11 @@ set_thread_pool(){
     #最大线程数
     max_threads=5
     mkdir -p "$(dirname ${FLOODGATE})"
-    chmod 777 "$(dirname ${FLOODGATE})"
+    #chmod 777 "$(dirname ${FLOODGATE})"
     mkfifo ${FLOODGATE}
     exec 6<>${FLOODGATE}
     touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_${max_threads}.log
-    chmod 666 "$(dirname ${FLOODGATE})"/*
+    #chmod 666 "$(dirname ${FLOODGATE})"/*
     for (( i=0;i<max_threads;i++ )); do
       echo >&6
     done

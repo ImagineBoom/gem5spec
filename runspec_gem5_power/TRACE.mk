@@ -117,3 +117,6 @@ cpi: $(EXECUTABLE)
 restore_status: $(EXECUTABLE)
 	@[ x`awk 'END {print NR}' ./$(FILE).merge` == x`awk 'END {print NR}' ./$(FILE)_RS_NUM.log` ] \
 	&& echo All Checkpoints Restore Have Finshed! || echo Some Checkpoints Are Restoring!
+
+find_interval_size:  $(EXECUTABLE)
+	../Find_IntervalSize.sh $(SIMPOINT_EXE) $(VALGRIND_EXE) $(EXECUTABLE) $(FILE_FOR_FINDINTERVALSIZE) "$(ARGS)" $(FILE).merge $(BACKUP_PATH) $(FLOODGATE)
