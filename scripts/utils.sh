@@ -453,8 +453,10 @@ func_with_restore_all_benchmarks(){
       opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/${begin_time}/M1/${FILE}/ FLOODGATE=${1}"
     fi
     read -u6
-    ${opt} >>nohup.out 2>&1
-    echo >&6
+    {
+      ${opt} >>nohup.out 2>&1
+      echo >&6
+    }&
   done
   wait
   date2=$(date +"%Y-%m-%d %H:%M:%S")
