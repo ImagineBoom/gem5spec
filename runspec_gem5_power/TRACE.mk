@@ -99,19 +99,20 @@ cpi: $(EXECUTABLE)
 	@sort -n -r -k 2 ./$(FILE)_CKPS_CPI.log -o ./$(FILE)_CKPS_CPI_sorted.log;
 	@m=(`awk 'END {print NR}' ./$(FILE)_CKPS_CPI_sorted.log;`);\
 	for i in `seq $${m}`; do( \
-		num=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$1}' `; \
-		weights=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$2}' `; \
-		cpi=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$3}' `;\
+		num=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$1}'`; \
+		simpts=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$2}'`; \
+		weights=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$3}'`; \
+		cpi=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$4}'`;\
 		#weightedCPI=`echo "$${weights}*$${cpi}" | bc`;\
 		weightedCPI=`echo $${weights} $${cpi} | awk '{printf "%.6f", $$1*$$2}'`;\
-		echo $${num} $${weights} $${cpi} $${weightedCPI} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
+		echo $${num} $${simpts} $${weights} $${cpi} $${weightedCPI} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
 	done;
 	rm -rf ./$(FILE)_CKPS_CPI_sorted.log;\
 	result=`awk '{sum+=$$4}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
-	awk 'NR==1 {OFS=",";print "Checkpoint#","Weights","CPI","WeightedCPI"} {OFS=",";print $$1,$$2,$$3,$$4}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_final_result_$${result}.csv;\
+	awk 'NR==1 {OFS=",";print "Checkpoint#","Simpts","Weights","CPI","WeightedCPI"} {OFS=",";print $$1,$$2,$$3,$$4,$$5}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_Final_Result_$${result}.csv;\
 	case_name=$(FILE);\
-	sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_final_result_$${result}.csv;\
-	sed -i '$$G' ./$(FILE)_final_result_$${result}.csv;
+	sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
+	sed -i '$$G' ./$(FILE)_Final_Result_$${result}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 restore_status: $(EXECUTABLE)
