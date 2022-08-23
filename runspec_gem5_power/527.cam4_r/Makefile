@@ -75,11 +75,12 @@ restore_all: $(EXECUTABLE)
 	for i in `seq $${m}`; do read -u6; (\
 		$(TIMEG) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
 		grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
+		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
 		cpi=0;\
 		[ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
-		echo ckp$${i} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
+		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
 		echo >&6 )& \
 	done;
