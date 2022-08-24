@@ -45,18 +45,40 @@ for ((i=0;i<${#interval_size[@]};i++)) do
       {
         Simpts=${Simpts_Array[j]}
         Weight=${Weight_Array[j]}
-        if [[ ! -e pipe_result/1_5000_${Simpts}_${Interval_size}_${FILE}.txt ]]; then
-          echo "not existing,${Simpts}_${Interval_size}_${FILE}.results"
+        had_result=false
+        if [[ -e ../../each_bm_cpt_m1.csv ]]; then
+          echo "existing, ../../each_bm_cpt_m1.csv"
+          array=(`grep -oP "(.*${FILE}.*),(${Simpts}),(.*${Weight}.*),(.*\d+\.*\d*),(.*)" ../../each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4,$5}'`)
+          echo ${array[@]}
+          if [[ ${#array[@]} == 4 || ${#array[@]} == 5 ]]; then
+            echo "existing,FILE=${FILE},Simpts=${Simpts},Weight=${Weight},,"${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
+            had_result=true
+          elif [ ${#array[@]} -gt 0 ]; then
+            echo "exception,"${array[0]}","${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
+            had_result=false
+          else
+            echo "not existing,FILE=${FILE},Simpts=${Simpts},Weight=${Weight},${Simpts}_${Interval_size}_${FILE}.results"|tee -a gen_m1_results.csv
+            had_result=false
+          fi
+        fi
+        if [[ $had_result == false ]]; then
           make qtrace JUMP_NUM=$[Simpts*Interval_size] CONVERT_NUM_Vgi_RECS=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE}
-          CPI=`grep 'CMPL: CPI--------------------------------------- .* inst.*' ./${Simpts}_${Interval_size}_${FILE}.results |awk '{print $3}'`
-          echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" "$2*$3)}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
-          # rm -rf ${Simpts}_${Interval_size}_${FILE}.qt ${Simpts}_${Interval_size}_${FILE}.pipe
-          mv ${Simpts}_${Interval_size}_${FILE}.* M1_result 2>/dev/null
+          echo "Simpts=${Simpts}  Weight=${Weight}  FILE=${FILE}"
+          b=1;e=5000
+          qt_records=0
+          qt_records=$(grep -oP "Created \d+ qt records" ${Simpts}_${Interval_size}_${FILE}_trace.log |grep -oP "\d+")
+          if [[ $qt_records == 5000000 ]]; then
+            make m1 NUM_INST=${Interval_size} CPI_INTERVAL=${Interval_size} qtFILE=${Simpts}_${Interval_size}_${FILE} SCROLL_PIPE=1 SCROLL_BEGIN=${b} SCROLL_END=${e}
+            make m1_pipeview pipeFILE=${Simpts}_${Interval_size}_${FILE} pipeARGS="-out_file ${b}_${e}_${Simpts}_${Interval_size}_${FILE}.txt  -overwrite "
+            CPI=`grep 'CMPL: CPI--------------------------------------- .* inst.*' ./${Simpts}_${Interval_size}_${FILE}.results |awk '{print $3}'`
+            echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" "$2*$3)}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+            # rm -rf ${Simpts}_${Interval_size}_${FILE}.qt ${Simpts}_${Interval_size}_${FILE}.pipe
+          fi
+          mv ${Simpts}_${Interval_size}_${FILE}* M1_result 2>/dev/null
           mv *${Simpts}_${Interval_size}_${FILE}.txt pipe_result 2>/dev/null
-          cp -r ./M1_result/${Simpts}_${Interval_size}_${FILE}.results ${BACKUP_PATH}
-          cp -r -f ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log ${BACKUP_PATH}
+          cp -r ./M1_result/${Simpts}_${Interval_size}_${FILE}.results ${BACKUP_PATH} 2>/dev/null
+          cp -r -f ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log ${BACKUP_PATH} 2>/dev/null
         else
-          echo "existing,${Simpts}_${Interval_size}_${FILE}.results"
           :
         fi
         echo >&6
