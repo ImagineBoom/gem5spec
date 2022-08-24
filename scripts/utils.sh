@@ -403,7 +403,7 @@ func_collect_handle_all_m1_restore_data(){
     awk -v FILE="${FILE}" 'BEGIN {
         OFS = ",";
         sum_weight = 0;sum = 0;cred=0;
-        print "simpts","Weights","CPI","WeightedCPI"
+        print "Simpts","Weights","CPI","WeightedCPI"
       }
       {
         sum_weight += $2;
