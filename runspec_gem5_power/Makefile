@@ -268,53 +268,53 @@ simpoint_999:
 	@-make simpoint -C 999.specrand_ir
 
 
-checkpoints_500:simpoint_500
+checkpoints_500:
 	@-make checkpoints -C 500.perlbench_r
-checkpoints_502:simpoint_502
+checkpoints_502:
 	@-make checkpoints -C 502.gcc_r
-checkpoints_503:simpoint_503
+checkpoints_503:
 	@-make checkpoints -C 503.bwaves_r
-checkpoints_505:simpoint_505
+checkpoints_505:
 	@-make checkpoints -C 505.mcf_r
-checkpoints_507:simpoint_507
+checkpoints_507:
 	@-make checkpoints -C 507.cactuBSSN_r
-checkpoints_508:simpoint_508
+checkpoints_508:
 	@-make checkpoints -C 508.namd_r
-checkpoints_510:simpoint_510
+checkpoints_510:
 	@-make checkpoints -C 510.parest_r
-checkpoints_511:simpoint_511
+checkpoints_511:
 	@-make checkpoints -C 511.povray_r
-checkpoints_519:simpoint_519
+checkpoints_519:
 	@-make checkpoints -C 519.lbm_r
-checkpoints_520:simpoint_520
+checkpoints_520:
 	@-make checkpoints -C 520.omnetpp_r
-checkpoints_521:simpoint_521
+checkpoints_521:
 	@-make checkpoints -C 521.wrf_r
-checkpoints_523:simpoint_523
+checkpoints_523:
 	@-make checkpoints -C 523.xalancbmk_r
-checkpoints_525:simpoint_525
+checkpoints_525:
 	@-make checkpoints -C 525.x264_r
-checkpoints_526:simpoint_526
+checkpoints_526:
 	@-make checkpoints -C 526.blender_r
-checkpoints_527:simpoint_527
+checkpoints_527:
 	@-make checkpoints -C 527.cam4_r
-checkpoints_531:simpoint_531
+checkpoints_531:
 	@-make checkpoints -C 531.deepsjeng_r
-checkpoints_538:simpoint_538
+checkpoints_538:
 	@-make checkpoints -C 538.imagick_r
-checkpoints_541:simpoint_541
+checkpoints_541:
 	@-make checkpoints -C 541.leela_r
-checkpoints_544:simpoint_544
+checkpoints_544:
 	@-make checkpoints -C 544.nab_r
-checkpoints_548:simpoint_548
+checkpoints_548:
 	@-make checkpoints -C 548.exchange2_r
-checkpoints_549:simpoint_549
+checkpoints_549:
 	@-make checkpoints -C 549.fotonik3d_r
-checkpoints_554:simpoint_554
+checkpoints_554:
 	@-make checkpoints -C 554.roms_r
-checkpoints_557:simpoint_557
+checkpoints_557:
 	@-make checkpoints -C 557.xz_r
-checkpoints_999:simpoint_999
+checkpoints_999:
 	@-make checkpoints -C 999.specrand_ir
 
 restore_all_500:
