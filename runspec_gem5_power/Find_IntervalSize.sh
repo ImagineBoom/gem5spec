@@ -49,7 +49,7 @@ for ((i=0;i<${#interval_size[@]};i++)) do
         if [[ -e ../../each_bm_cpt_m1.csv ]]; then
           echo "existing, ../../each_bm_cpt_m1.csv"
           array=(`grep -oP "(.*${FILE}.*),(${Simpts}),(.*${Weight}.*),(.*\d+\.*\d*),(.*)" ../../each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4,$5}'`)
-          echo ${array[@]}
+          #echo ${array[@]}
           if [[ ${#array[@]} == 4 || ${#array[@]} == 5 ]]; then
             echo "existing,FILE=${FILE},Simpts=${Simpts},Weight=${Weight},,"${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
             had_result=true
@@ -73,6 +73,12 @@ for ((i=0;i<${#interval_size[@]};i++)) do
             CPI=`grep 'CMPL: CPI--------------------------------------- .* inst.*' ./${Simpts}_${Interval_size}_${FILE}.results |awk '{print $3}'`
             echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" "$2*$3)}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
             # rm -rf ${Simpts}_${Interval_size}_${FILE}.qt ${Simpts}_${Interval_size}_${FILE}.pipe
+          elif [[ $qt_records == 0 ]]; then
+            CPI=0
+            echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" ")}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+          else
+            CPI=-1
+            echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" ")}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
           fi
           mv ${Simpts}_${Interval_size}_${FILE}* M1_result 2>/dev/null
           mv *${Simpts}_${Interval_size}_${FILE}.txt pipe_result 2>/dev/null
