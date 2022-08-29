@@ -403,27 +403,27 @@ func_collect_handle_all_m1_restore_data(){
     awk -v FILE="${FILE}" 'BEGIN {
         OFS = ",";
         sum_weight = 0;sum = 0;cred=0;
-        print "Simpts","Weights","CPI","WeightedCPI"
+        print FILE,"Simpts","Weights","CPI","WeightedCPI"
       }
       {
         sum_weight += $2;
         if ($3 != 0)
           cred += $2;
         sum += $4;
-        print $1,$2,$3,$4
+        print FILE,$1,$2,$3,$4
       }
       END {
         if (sum_weight > 0.999)
-          print "COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+          print FILE,"COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
         else
-          print "UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+          print FILE,"UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
       }' >>each_bm_cpt_m1.csv
     echo >> each_bm_cpt_m1.csv
   done
   echo "Benchmark,Credibility,M1 Sum Weighted CPI"| tee -a summary_bm_cpt_m1.csv
   for FILE in ${bm[@]}
   do
-    array=(`grep -oP "(.*),(${FILE}.*),(Credibility:.*),(SumWeightedCPI:\d+\.*\d*)" each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4 }'`)
+    array=(`grep -oP "(.*),(.*),(${FILE}.*),(Credibility:.*),(SumWeightedCPI:\d+\.*\d*)" each_bm_cpt_m1.csv|awk -F ',' '{print $2,$3,$4,$5 }'`)
 #    for a in ${array[@]}
 #    do
 #      echo $a
@@ -436,6 +436,16 @@ func_collect_handle_all_m1_restore_data(){
   done
 }
 
+# 运行完会备份结果
+# gem5: -->./data/"${begin_time}"/gem5/"${FILE}
+# 包含以下文件
+#       gem5_stats.log
+#       stdout_gem5.log
+#       stderr_gem5.log
+# m1:   -->./data/"${begin_time}"/M1/"${FILE}"'
+# 包含以下文件
+#       each_bm_cpt_m1.csv
+#       summary_bm_cpt_m1.csv
 func_with_restore_all_benchmarks(){
   bm=(
     "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
@@ -472,6 +482,7 @@ func_with_restore_all_benchmarks(){
   if [[ $is_gem5 == true ]]; then
     for FILE in ${bm[@]}
     do
+        mkdir -p ./data/"${begin_time}"/gem5/"${FILE}"
         cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/"${begin_time}"/gem5/"${FILE}"
         cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
         cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
@@ -481,8 +492,10 @@ func_with_restore_all_benchmarks(){
     func_collect_handle_all_m1_restore_data
     for FILE in ${bm[@]}
     do
-        mv *.csv ./data/"${begin_time}"/M1/"${FILE}"/ 2>/dev/null
+      mkdir -p ./data/"${begin_time}"/M1/"${FILE}"
+      mv ./runspec_gem5_power/"${FILE}"/*.csv ./data/"${begin_time}"/M1/"${FILE}"/ 2>/dev/null
     done
+    mv *.csv ./data/"${begin_time}"/M1/
   fi
 }
 
