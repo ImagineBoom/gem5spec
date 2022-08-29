@@ -13,6 +13,13 @@ from os.path import basename
 from time import sleep
 
 
+#
+# 在scripts目录下执行
+#
+# ../data/pipeline_result/ 保存最终结果
+# ../data/pipeline_graph/ 保存展开折叠后的所有流水线图文件
+# ../data/scripts_csv_power-isa-implementation.csv 是依赖的源文件，用做检索的key
+
 def runcmd(command):
     ret = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="utf-8",
                          timeout=None)
@@ -117,6 +124,10 @@ class Trace:
             else:
                 # print("pipeline is empty")
                 pass
+        if start:
+            return True
+        else:
+            return False
 
     def calculate_exe_cycles(self):
         exe_pattern = re.compile(r'.(E+)[^EI]*f\.*C')
@@ -158,16 +169,18 @@ class Trace:
         pass
 
     # 写入文本
-    def wirte(self, file_type="txt"):
-        tup_path = os.path.splitext(self.fname)
-        this_fname = self.fname
+    def wirte(self, write_path="../data/pipeline_graph/", write_name="", file_type="txt"):
+        this_fname = write_name
+        if write_name == "":
+            this_fname = self.fname
+        tup_path = os.path.splitext(this_fname)
         if tup_path[1] == ".txt":
             this_fname = tup_path[0] + "." + file_type
         if "." not in this_fname:
             this_fname += "." + file_type
         # this_fname = self.fname.removesuffix(".txt") + "."+file_type
         # print("basename: "+basename(this_fname))
-        with open("../data/" + basename(this_fname), 'w', encoding='utf-8') as f:
+        with open(write_path + basename(this_fname), 'w', encoding='utf-8') as f:
             f.write(format("MNEMONIC-L", "<20") +
                     format("IOP-ID", "<20") + format("MNEMONIC-R", "<20") +
                     format("EXE-CYCLES", "<20") + format("INST-ADDR-LOW-32", "<20") +
@@ -188,16 +201,18 @@ class Trace:
         for f in self.existed_files:
             if tup_path[0] in f:
                 # print("EXISTED: " + self.fname)
-                return {"name": self.fname, "state": "EXISTED"}
-        self.m1pipe_grep(self.fname)
-        self.calculate_exe_cycles()
-        self.calculate_count_inst_before_merge()
-        self.wirte()
-        self.tidy()
-        # sleep(10)
-        # print(self.instruction_dict.setdefault("addi", Instruction()).list[0].MnemonicValue)
-        print(self.fname + " done")
-        return {"name": self.fname, "state": "RE-CONSTRUCTED", "thread": self}
+                return {"name": self.fname, "state": "EXISTED", "thread": self}
+        if self.m1pipe_grep(self.fname):
+            self.calculate_exe_cycles()
+            self.calculate_count_inst_before_merge()
+            self.wirte()
+            self.tidy()
+            # sleep(10)
+            # print(self.instruction_dict.setdefault("addi", Instruction()).list[0].MnemonicValue)
+            # print(self.fname + " done")
+            return {"name": self.fname, "state": "RE-CONSTRUCTED", "thread": self}
+        else:
+            return {"name": self.fname, "state": "NOT-PIPELINE_GRAPH", "thread": self}
 
     # exe_cycle编码
     def marshal(self, exe_cycle_list):
@@ -240,8 +255,8 @@ class Trace:
                 self.instruction_dict[key].list[
                     index].exeCycle.exe_cycle_frequency = inst.exeCycle.exe_cycle_count / exe_cycle_count_sum
 
-    def sort(self, source_csv_file):
-        p8_insts_headers = ["MNEMONIC", " FREQUENCY", "EXE_CYCLES", "STATUS", "CATEGORY", "VERSION", "PDF_REAL", "DESC"]
+    def sort(self, source_csv_file,write_path="../data/pipeline_result/",write_name="P8_Insts.csv"):
+        p8_insts_headers = ["MNEMONIC", "FREQUENCY", "EXE_CYCLES", "STATUS", "CATEGORY", "VERSION", "PDF_REAL", "DESC"]
         exe_cycle_set = set()
         exe_cycle = ""
         # if os.path.isfile("../data/p8_insts.csv"):
@@ -270,7 +285,7 @@ class Trace:
             headers = ["MNEMONIC_L0", "MNEMONIC_L1", "MNEMONIC_L2", "STATUS", "VERSION", "CATEGORY", "PDF_SHOW",
                        "PDF_REAL", "DESC"]
             p8_insts_class = namedtuple('p8_insts_class', headers)
-            with open("../data/p8_insts.csv", 'w+', encoding="utf-8") as fw:
+            with open(write_path+write_name, 'w+', encoding="utf-8") as fw:
                 p8_insts_csv = csv.writer(fw)
                 p8_insts_csv.writerow(p8_insts_headers)
                 for r in csv_reader:
@@ -321,7 +336,7 @@ class Trace:
     @staticmethod
     def get_existed():
         existed_files = []
-        for root, dirs, files in os.walk("../data", topdown=False):
+        for root, dirs, files in os.walk("../data/pipeline_graph/", topdown=False):
             for name in files:
                 existed_files.append(os.path.join(root, name))
         return existed_files
@@ -358,8 +373,10 @@ if __name__ == '__main__':
     # 0. 检查
     existed_files = Trace.get_existed()
     # 1. 并行
-    pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/ -name '*.txt'"])
     # pipe_list_temp = runcmd(["find ../*.txt"])
+    pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
+    runcmd(["mkdir -p ../data/pipeline_graph/"])
+    runcmd(["mkdir -p ../data/pipeline_result/"])
     # pipe_list_temp = ["../114_5000000_554.roms_r.txt"]
     pipe_list = list(sorted(set(pipe_list_temp)))
     # [print(f) for f in pipe_list]
@@ -372,7 +389,7 @@ if __name__ == '__main__':
         threads.append(t)
 
     # 线程异步回调
-    threads_num = 10
+    threads_num = 20
     process_pool = ProcessPoolExecutor(max_workers=threads_num)
     todo = []
     for index, t in enumerate(threads):
@@ -383,7 +400,7 @@ if __name__ == '__main__':
     for t in new_threads:
         pass
 
-# 2. 合并(按指令)
+    # 2. 合并(按指令)
     merge = Trace(fname="merge", existed_files=existed_files)
     for t in new_threads:
         inst_count = 0
@@ -399,11 +416,11 @@ if __name__ == '__main__':
 
     merge.tidy()
     print("TIDY-ENDED")
-    merge.wirte()
+    merge.wirte(write_path="../data/pipeline_result/",write_name=start_time.strftime('%Y%m%d')+"-"+merge.fname)
     print("MERGE-ENDED")
     merge.calculate_exe_cycle_frequency()
-    merge.sort(source_csv_file="../data/scripts_csv_power-isa-implementation.csv")
+    merge.sort(source_csv_file="../data/scripts_csv_power-isa-implementation.csv",write_path="../data/pipeline_result/",write_name=start_time.strftime('%Y%m%d')+"-"+"P8_Insts.csv")
     print("SORT-ENDED")
     end_time = datetime.datetime.now()
-
+    # runcmd("cp -r"+start_time.strftime('%Y%m%d%H%M%S'))
     print("CONSUMED TIME", end_time - start_time)
