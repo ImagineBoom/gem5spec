@@ -47,11 +47,12 @@ for ((i=0;i<${#interval_size[@]};i++)) do
         Weight=${Weight_Array[j]}
         had_result=false
         if [[ -e ../../each_bm_cpt_m1.csv ]]; then
-          echo "existing, ../../each_bm_cpt_m1.csv"
+          #echo "existing, ../../each_bm_cpt_m1.csv"
           array=(`grep -oP "(.*${FILE}.*),(${Simpts}),(.*${Weight}.*),(.*\d+\.*\d*),(.*)" ../../each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4,$5}'`)
           #echo ${array[@]}
           if [[ ${#array[@]} == 4 || ${#array[@]} == 5 ]]; then
-            echo "existing,FILE=${FILE},Simpts=${Simpts},Weight=${Weight},,"${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
+            echo "existing,FILE=${FILE},Simpts=${Simpts},Weight=${Weight},"${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
+            echo "${array[1]} ${array[2]} ${array[3]} ${array[4]}">>./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
             had_result=true
           elif [ ${#array[@]} -gt 0 ]; then
             echo "exception,"${array[0]}","${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
