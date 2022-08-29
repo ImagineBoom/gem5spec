@@ -377,10 +377,10 @@ clean-all:
 	rm -rf *.log
 	find -maxdepth 1 -type d -regex ".*r" -exec make clean-all -C {} \;
 
-clean-simpoints:
-	rm -rf ./*/*bbv ./*/*gem5_bbv.log ./*/*merge ./*/*simpoint.log ./*/*simpts ./*/.weights ./*/*trace*
+clean-simpoint:
+	rm -rf ./*/*bbv ./*/*gem5_bbv.log ./*/*merge ./*/*simpoint.log ./*/*simpts ./*/*weights ./*/*trace*
 
-clean-checkpoints:
+clean-checkpoint:
 	rm -rf ./*/*checkpoints.log ./*/m5out
 
 clean-restore:
