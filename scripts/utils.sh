@@ -661,3 +661,48 @@ func_kill_restore_all(){
       fi
   done
 }
+
+# 进入单个benchmark目录下运行，若第一次运行时生成了each_bm_cpt_m1.csv，受到异常被中断后继续运行，M1的结果已保存在M1_result目录，
+# 将根据each_bm_cpt_m1.csv和M1_result中的results文件进行结果合并，恢复数据
+func_recovery(){
+  FILE=$(basename $PWD)
+  Simpts_Array=(`awk '{print $(NF-1)}' ${FILE}.merge`)
+  Weight_Array=(`awk '{print $(NF)}' ${FILE}.merge`)
+  Interval_size=5000000
+
+  rm ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+  for (( j=0;j<${#Simpts_Array[@]};j++)) do
+    Simpts=${Simpts_Array[j]}
+    Weight=${Weight_Array[j]}
+    had_result=false
+    if [[ -e ../../each_bm_cpt_m1.csv ]]; then
+      array=(`grep -oP "(.*${FILE}.*),(${Simpts}),(.*${Weight}.*),(.*\d+\.*\d*),(.*)" ../../each_bm_cpt_m1.csv|awk -F ',' '{print $1,$2,$3,$4,$5}'`)
+      #echo ${array[@]}
+      if [[ ${#array[@]} == 4 || ${#array[@]} == 5 ]]; then
+        echo "existing,FILE=${FILE},Simpts=${Simpts},Weight=${Weight},,"${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
+        echo "${array[1]} ${array[2]} ${array[3]} ${array[4]}">>./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+        had_result=true
+      elif [ ${#array[@]} -gt 0 ]; then
+        echo "exception,"${array[0]}","${array[1]}"_${Interval_size}_"${array[0]}".results"|tee -a gen_m1_results.csv
+        had_result=false
+      else
+        echo "not existing,FILE=${FILE},Simpts=${Simpts},Weight=${Weight},${Simpts}_${Interval_size}_${FILE}.results"|tee -a gen_m1_results.csv
+        had_result=false
+      fi
+    fi
+    if [[ $had_result == false ]]; then
+      qt_records=0
+      qt_records=$(grep -oP "Created \d+ qt records" M1_result/"${Simpts}"_${Interval_size}_${FILE}_trace.log |grep -oP "\d+")
+      if [[ $qt_records == 5000000 ]]; then
+        CPI=`grep 'CMPL: CPI--------------------------------------- .* inst.*' ./M1_result/${Simpts}_${Interval_size}_${FILE}.results |awk '{print $3}'`
+        echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" "$2*$3)}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+      elif [[ $qt_records == 0 ]]; then
+        CPI=0
+        echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" ")}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+      else
+        CPI=-1
+        echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" ")}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+      fi
+    fi
+  done
+}
