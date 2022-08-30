@@ -32,12 +32,20 @@ def runcmd(command):
 
 
 class ExeCycle:
-    def __init__(self, exe_cycle_num=-1, exe_cycle_frequency=0.0, exe_cycle_count=0):
-        self.exe_cycle_num = exe_cycle_num  # 执行周期数,-1代表当前片段未执行完该指令，无法统计指令执行周期
-        self.exe_cycle_frequency = exe_cycle_frequency  # 对应执行周期数出现的频率
-        self.exe_cycle_count = exe_cycle_count  # 对应执行周期数出现的次数
+    def __init__(self, cycle_num=-1, cycle_frequency=0.0, cycle_count=0):
+        self.cycle_num = cycle_num  # 执行周期数,-1代表当前片段未执行完该指令，无法统计指令执行周期
+        self.cycle_frequency = cycle_frequency  # 对应执行周期数出现的频率
+        self.cycle_count = cycle_count  # 对应执行周期数出现的次数
 
 
+class IssueCycle:
+    def __init__(self, cycle_num=-1, cycle_frequency=0.0, cycle_count=0):
+        self.cycle_num = cycle_num  # 周期数,-1代表当前片段未执行完该指令，无法统计指令周期
+        self.cycle_frequency = cycle_frequency  # 对应周期数出现的频率
+        self.cycle_count = cycle_count  # 对应周期数出现的次数
+
+
+# 具体的每条指令
 class instruction:
     def __init__(self, IopId, MnemonicValue, InstAddrLow32, DataAddrLow32, Pipe) -> None:
         self.IopId: int = IopId
@@ -45,15 +53,19 @@ class instruction:
         self.InstAddrLow32: str = InstAddrLow32
         self.DataAddrLow32: str = DataAddrLow32
         self.exeCycle = ExeCycle()
+        self.issueCycle = IssueCycle()
         self.inst_place: int = 0  # 当前Instruction是第几条
         self.Pipe = Pipe
 
 
+# 每种(助记符相同的)指令
 class Instruction:
     def __init__(self, count=0, frequency=0.0):
         self.list: list[instruction] = []
         self.count = count
         self.frequency = frequency
+        self.exeCycle: dict[int,ExeCycle] = {}
+        self.issueCycle: dict[int,IssueCycle] = {}
 
 
 class Trace:
@@ -129,14 +141,28 @@ class Trace:
         else:
             return False
 
-    def calculate_exe_cycles(self):
+    def calculate_cycles(self):
         exe_pattern = re.compile(r'.(E+)[^EI]*f\.*C')
+        issue_pattern = re.compile(r'M([^sI]*)I[^s]*f\.*C')
         for this_key, this_insts in self.instruction_dict.items():
             for index, val in enumerate(this_insts.list):
                 exe = exe_pattern.search(val.Pipe)
+                issue = issue_pattern.search(val.Pipe)
                 if exe:
                     # print(exe.group(0))
                     self.instruction_dict[this_key].list[index].exeCycle = ExeCycle(exe.group(0).count('E'), 1, 1)
+                if issue:
+                    # print(exe.group(0))
+                    self.instruction_dict[this_key].list[index].issueCycle = IssueCycle(len(issue.group(1)), 1, 1)
+
+    # def calculate_issue_cycles(self):
+    #     issue_pattern = re.compile(r'M([^s]*)I.*f\.*C')
+    #     for this_key, this_insts in self.instruction_dict.items():
+    #         for index, val in enumerate(this_insts.list):
+    #             issue = issue_pattern.search(val.Pipe)
+    #             if issue:
+    #                 # print(exe.group(0))
+    #                 self.instruction_dict[this_key].list[index].issueCycle = IssueCycle(len(exe.group(0)), 1, 1)
 
     def calculate_count_inst_before_merge(self):
         for key, insts in self.instruction_dict.items():
@@ -144,6 +170,41 @@ class Trace:
 
     def calculate_frequency_inst(self):
         pass
+
+    # 计算每指令每个发射周期的出现的次数
+    def issueCycleCount(self):
+        new_insts: list[instruction] = []
+        new_inst = None
+        for key, insts in self.instruction_dict.items():
+            new_insts.clear()
+            for index, inst in enumerate(insts.list):
+                for new_inst_index, new_inst in enumerate(new_insts):
+                    if inst.issueCycle.cycle_num == new_inst.issueCycle.cycle_num:
+                        self.instruction_dict[key].issueCycle.setdefault(inst.issueCycle.cycle_num,IssueCycle(inst.issueCycle.cycle_num)).cycle_count += 1
+                        break
+                    elif inst.issueCycle.cycle_num == -1:
+                        break
+                else:
+                    if inst.issueCycle.cycle_num != -1:
+                        self.instruction_dict[key].issueCycle.setdefault(inst.issueCycle.cycle_num,IssueCycle(inst.issueCycle.cycle_num)).cycle_count = 1
+                        new_insts.append(inst)
+
+    def exeCycleCount(self):
+        new_insts: list[instruction] = []
+        new_inst = None
+        for key, insts in self.instruction_dict.items():
+            new_insts.clear()
+            for index, inst in enumerate(insts.list):
+                for new_inst_index, new_inst in enumerate(new_insts):
+                    if inst.exeCycle.cycle_num == new_inst.exeCycle.cycle_num:
+                        self.instruction_dict[key].exeCycle.setdefault(inst.exeCycle.cycle_num,ExeCycle(inst.exeCycle.cycle_num)).cycle_count += 1
+                        break
+                    elif inst.exeCycle.cycle_num == -1:
+                        break
+                else:
+                    if inst.exeCycle.cycle_num != -1:
+                        self.instruction_dict[key].exeCycle.setdefault(inst.exeCycle.cycle_num,ExeCycle(inst.exeCycle.cycle_num)).cycle_count = 1
+                        new_insts.append(inst)
 
     # 精简的流水线图,去除每种指令中执行周期数相同的出现，并计算每指令每个执行周期的出现的次数
     def tidy(self):
@@ -153,13 +214,13 @@ class Trace:
             new_insts.clear()
             for index, inst in enumerate(insts.list):
                 for new_inst_index, new_inst in enumerate(new_insts):
-                    if inst.exeCycle.exe_cycle_num == new_inst.exeCycle.exe_cycle_num:
-                        new_insts[new_inst_index].exeCycle.exe_cycle_count += 1
+                    if inst.exeCycle.cycle_num == new_inst.exeCycle.cycle_num:
+                        new_insts[new_inst_index].exeCycle.cycle_count += 1
                         break
-                    elif inst.exeCycle.exe_cycle_num == -1:
+                    elif inst.exeCycle.cycle_num == -1:
                         break
                 else:
-                    if inst.exeCycle.exe_cycle_num != -1:
+                    if inst.exeCycle.cycle_num != -1:
                         new_insts.append(inst)
             self.instruction_dict[key].list.clear()
             self.instruction_dict[key].list.extend(new_insts)
@@ -182,16 +243,22 @@ class Trace:
         # print("basename: "+basename(this_fname))
         with open(write_path + basename(this_fname), 'w', encoding='utf-8') as f:
             f.write(format("MNEMONIC-L", "<20") +
-                    format("IOP-ID", "<20") + format("MNEMONIC-R", "<20") +
-                    format("EXE-CYCLES", "<20") + format("INST-ADDR-LOW-32", "<20") +
+                    format("IOP-ID", "<20") +
+                    format("MNEMONIC-R", "<20") +
+                    format("EXE-CYCLES", "<20") +
+                    format("ISSUE-CYCLES", "<20") +
+                    format("INST-ADDR-LOW-32", "<20") +
                     format("DATA-ADDR-LOW-32", "<20") + "PIPE-JOBS" +
                     '\n')
             for this_key, this_insts in self.instruction_dict.items():
                 # f.write(this_key + '\n')
                 for i in this_insts.list:
                     f.write(format(this_key, "<20") +
-                            format(str(i.IopId), "<20") + format(i.MnemonicValue, "<20") +
-                            format(str(i.exeCycle.exe_cycle_num), "<20") + format(i.InstAddrLow32, "<20") +
+                            format(str(i.IopId), "<20") +
+                            format(i.MnemonicValue, "<20") +
+                            format(str(i.exeCycle.cycle_num), "<20") +
+                            format(str(i.issueCycle.cycle_num), "<20") +
+                            format(i.InstAddrLow32, "<20") +
                             format(i.DataAddrLow32, "<20") + i.Pipe +
                             '\n')
 
@@ -203,9 +270,11 @@ class Trace:
                 # print("EXISTED: " + self.fname)
                 return {"name": self.fname, "state": "EXISTED", "thread": self}
         if self.m1pipe_grep(self.fname):
-            self.calculate_exe_cycles()
+            self.calculate_cycles()
             self.calculate_count_inst_before_merge()
             self.wirte()
+            self.issueCycleCount()
+            self.exeCycleCount()
             self.tidy()
             # sleep(10)
             # print(self.instruction_dict.setdefault("addi", Instruction()).list[0].MnemonicValue)
@@ -218,20 +287,20 @@ class Trace:
     def marshal(self, exe_cycle_list):
         s = ""
         for e in exe_cycle_list:
-            s += str(e.exe_cycle_num) + "(" + str(e.exe_cycle_frequency) + "," + str(e.exe_cycle_count) + ")"
+            s += str(e.cycle_num) + "(" + str(e.cycle_frequency) + "," + str(e.cycle_count) + ")"
         return s
 
     # exe_cycle解码
     def unmarshal(self, exe_cycles):
         exe_cycle_list = []
         exe_cycles_iter = re.finditer(
-            r'(?P<exe_cycle_num>\d+)\((?P<exe_cycle_frequency>0\.\d+),(?P<exe_cycle_count>\d+)\)', exe_cycles
+            r'(?P<cycle_num>\d+)\((?P<cycle_frequency>0\.\d+),(?P<cycle_count>\d+)\)', exe_cycles
         )
         for exe_cycle in exe_cycles_iter:
             e = ExeCycle(
-                exe_cycle.group("exe_cycle_num"),
-                exe_cycle.group("exe_cycle_frequency"),
-                exe_cycle.group("exe_cycle_count")
+                exe_cycle.group("cycle_num"),
+                exe_cycle.group("cycle_frequency"),
+                exe_cycle.group("cycle_count")
             )
             exe_cycle_list.append(e)
         return exe_cycle_list
@@ -243,20 +312,66 @@ class Trace:
             for e_new in exe_cycle_list_new:
                 pass
 
+    # 合并后使用
     def calculate_exe_cycle_frequency(self):
         new_insts: list[Instruction] = []
         new_inst = None
-        exe_cycle_count_sum = 0
+        cycle_count_sum = 0
         for key, insts in self.instruction_dict.items():
-            exe_cycle_count_sum = 0
-            for index, inst in enumerate(insts.list):
-                exe_cycle_count_sum += inst.exeCycle.exe_cycle_count
-            for index, inst in enumerate(insts.list):
-                self.instruction_dict[key].list[
-                    index].exeCycle.exe_cycle_frequency = inst.exeCycle.exe_cycle_count / exe_cycle_count_sum
+            cycle_count_sum = 0
+            for CycleNum, CycleObj in insts.exeCycle.items():
+                cycle_count_sum += CycleObj.cycle_count
+            for CycleNum, CycleObj in insts.exeCycle.items():
+                self.instruction_dict.setdefault(key,Instruction()).exeCycle.setdefault(CycleNum,ExeCycle(CycleNum)).cycle_frequency = \
+                    CycleObj.cycle_count/cycle_count_sum
 
-    def sort(self, source_csv_file,write_path="../data/pipeline_result/",write_name="P8_Insts.csv"):
-        p8_insts_headers = ["MNEMONIC", "FREQUENCY", "EXE_CYCLES", "STATUS", "CATEGORY", "VERSION", "PDF_REAL", "DESC"]
+    def calculate_issue_cycle_frequency(self):
+        new_insts: list[Instruction] = []
+        new_inst = None
+        issue_cycle_count_sum = 0
+        for key, insts in self.instruction_dict.items():
+            issue_cycle_count_sum = 0
+            for issueCycleNum, issueCycleObj in insts.issueCycle.items():
+                issue_cycle_count_sum += issueCycleObj.cycle_count
+            for issueCycleNum, issueCycleObj in insts.issueCycle.items():
+                self.instruction_dict.setdefault(key,Instruction()).issueCycle.setdefault(issueCycleNum,IssueCycle(issueCycleNum)).cycle_frequency =\
+                    issueCycleObj.cycle_count/issue_cycle_count_sum
+    def list2str_sort(self,cycle_list):
+        exe_cycles = ""
+        if len(cycle_list) == 1:
+            exe_cycles = str(cycle_list[0].cycle_num) + "(" + \
+                         str(cycle_list[0].cycle_frequency) + "," + \
+                         str(cycle_list[0].cycle_count) + "/" + str(
+                cycle_list[0].cycle_count) + ")"
+        elif len(cycle_list) > 1:
+            # print(new_insts)
+            exe_cycles_list = [[]]
+            exe_cycles_list.clear()
+            for inst in cycle_list:
+                exe_cycles_list.append(
+                    [
+                        inst.cycle_num,
+                        inst.cycle_frequency,
+                        inst.cycle_count,
+                        int(inst.cycle_count / inst.cycle_frequency)
+                    ]
+                )
+            exe_cycles_list.sort(key=lambda x: (-x[1], -x[2]))
+            for e in exe_cycles_list:
+                # print(e)
+                exe_cycles += (
+                        str(e[0]) + "(" +
+                        format(e[1], ".3f") + "," +
+                        str(e[2]) + "/" + str(e[3]) +
+                        ")" + ";"
+                )
+        else:
+            # continue
+            exe_cycles = ""
+        return exe_cycles
+
+    def sort(self, source_csv_file, write_path="../data/pipeline_result/", write_name="P8_Insts.csv"):
+        p8_insts_headers = ["MNEMONIC", "FREQUENCY", "EXE_CYCLES", "ISSUE_CYCLES", "STATUS", "CATEGORY", "VERSION", "PDF_REAL", "DESC"]
         exe_cycle_set = set()
         exe_cycle = ""
         # if os.path.isfile("../data/p8_insts.csv"):
@@ -269,7 +384,7 @@ class Trace:
         #                 row_info = p8_insts_class(*r)
         #                 new_insts = self.instruction.setdefault(row_info.MNEMONIC, [])
         #                 if len(new_insts) == 1:
-        #                     row_info.EXE_CYCLES += str(new_insts[0].exeCycle.exe_cycle_num)
+        #                     row_info.EXE_CYCLES += str(new_insts[0].exeCycle.cycle_num)
         #                 elif len(new_insts) > 1:
         #                     for inst in self.instruction[row_info.MNEMONIC]:
         #                         row_info.EXE_CYCLES += str(inst.EXE_Cycles) + ";"
@@ -285,50 +400,22 @@ class Trace:
             headers = ["MNEMONIC_L0", "MNEMONIC_L1", "MNEMONIC_L2", "STATUS", "VERSION", "CATEGORY", "PDF_SHOW",
                        "PDF_REAL", "DESC"]
             p8_insts_class = namedtuple('p8_insts_class', headers)
-            with open(write_path+write_name, 'w+', encoding="utf-8") as fw:
+            with open(write_path + write_name, 'w+', encoding="utf-8") as fw:
                 p8_insts_csv = csv.writer(fw)
                 p8_insts_csv.writerow(p8_insts_headers)
                 for r in csv_reader:
                     row_info = p8_insts_class(*r)
                     # print(row_info)
                     exe_cycles = ""
-                    new_insts = self.instruction_dict.setdefault(row_info.MNEMONIC_L2, Instruction())
-                    if len(new_insts.list) == 1:
-                        exe_cycles = str(new_insts.list[0].exeCycle.exe_cycle_num) + "(" + \
-                                     str(new_insts.list[0].exeCycle.exe_cycle_frequency) + "," + \
-                                     str(new_insts.list[0].exeCycle.exe_cycle_count) + "/" + str(
-                            new_insts.list[0].exeCycle.exe_cycle_count) + ")"
-                    elif len(new_insts.list) > 1:
-                        # print(new_insts)
-                        exe_cycles_list = [[]]
-                        exe_cycles_list.clear()
-                        for inst in self.instruction_dict[row_info.MNEMONIC_L2].list:
-                            exe_cycles_list.append(
-                                [
-                                    inst.exeCycle.exe_cycle_num,
-                                    inst.exeCycle.exe_cycle_frequency,
-                                    inst.exeCycle.exe_cycle_count,
-                                    int(inst.exeCycle.exe_cycle_count / inst.exeCycle.exe_cycle_frequency)
-                                ]
-                            )
-                        exe_cycles_list.sort(key=lambda x: (-x[1], -x[2]))
-                        for e in exe_cycles_list:
-                            # print(e)
-                            exe_cycles += (
-                                    str(e[0]) + "(" +
-                                    format(e[1], ".3f") + "," +
-                                    str(e[2]) + "/" + str(e[3]) +
-                                    ")" + ";"
-                            )
-                    else:
-                        # continue
-                        exe_cycles = ""
+                    insts = self.instruction_dict.setdefault(row_info.MNEMONIC_L2, Instruction())
+                    exe_cycles = self.list2str_sort(list(insts.exeCycle.values()))
+                    issue_insts = list(self.instruction_dict.setdefault(row_info.MNEMONIC_L2, Instruction()).issueCycle.values())
+                    issue_cycles = self.list2str_sort(issue_insts)
                     p8_insts_csv.writerow(
                         [
                             row_info.MNEMONIC_L2,
-                            "(" + format(new_insts.frequency, ".3f") + "," + str(new_insts.count) + "/" + str(
-                                self.inst_count) + ")",
-                            exe_cycles, row_info.STATUS, row_info.CATEGORY,
+                            "(" + format(insts.frequency, ".3f") + "," + str(insts.count) + "/" + str(self.inst_count) + ")",
+                            exe_cycles, issue_cycles, row_info.STATUS, row_info.CATEGORY,
                             row_info.VERSION, row_info.PDF_REAL, row_info.DESC
                         ]
                     )
@@ -350,7 +437,7 @@ class Trace:
 #     else:
 #         print("end:" + str(i))
 
-new_threads = []
+return_TRACE = []
 threadLock = threading.Lock()
 
 
@@ -358,7 +445,7 @@ def job_done(this_future: Future):
     # sleep(5)
     job = this_future.result()
     threadLock.acquire()
-    new_threads.append(job["thread"])
+    return_TRACE.append(job["thread"])
     threadLock.release()
     print(job["state"] + " : " + job["name"])
 
@@ -397,18 +484,25 @@ if __name__ == '__main__':
         todo.append(future)
         future.add_done_callback(job_done)
     process_pool.shutdown(wait=True)
-    for t in new_threads:
+    for t in return_TRACE:
         pass
 
     # 2. 合并(按指令)
     merge = Trace(fname="merge", existed_files=existed_files)
-    for t in new_threads:
+    for t in return_TRACE:
         inst_count = 0
         for key, insts in t.instruction_dict.items():
             merge.inst_count += insts.count
             merge.instruction_dict.setdefault(key, Instruction()).count += insts.count
             merge.instruction_dict.setdefault(key, Instruction()).list.extend(insts.list)
-            # print(key)
+
+            # 统计相同助记符下出现的不同执行周期数
+            for exeCycleNum,exeCycleObj in insts.exeCycle.items():
+                merge.instruction_dict.setdefault(key,Instruction()).exeCycle.setdefault(exeCycleNum,ExeCycle(exeCycleNum)).cycle_count += exeCycleObj.cycle_count
+            # 统计相同助记符下出现的不同发射周期数
+            for issueCycleNum,issueCycleObj in insts.issueCycle.items():
+                merge.instruction_dict.setdefault(key,Instruction()).issueCycle.setdefault(issueCycleNum,IssueCycle(issueCycleNum)).cycle_count += issueCycleObj.cycle_count
+            # # print(key)
     # 计算指令频率
     for key, insts in merge.instruction_dict.items():
         merge.instruction_dict.setdefault(key, Instruction()).frequency = \
@@ -416,10 +510,12 @@ if __name__ == '__main__':
 
     merge.tidy()
     print("TIDY-ENDED")
-    merge.wirte(write_path="../data/pipeline_result/",write_name=start_time.strftime('%Y%m%d')+"-"+merge.fname)
+    merge.wirte(write_path="../data/pipeline_result/", write_name=start_time.strftime('%Y%m%d') + "-" + merge.fname)
     print("MERGE-ENDED")
+    merge.calculate_issue_cycle_frequency()
     merge.calculate_exe_cycle_frequency()
-    merge.sort(source_csv_file="../data/scripts_csv_power-isa-implementation.csv",write_path="../data/pipeline_result/",write_name=start_time.strftime('%Y%m%d')+"-"+"P8_Insts.csv")
+    merge.sort(source_csv_file="../data/scripts_csv_power-isa-implementation.csv",
+               write_path="../data/pipeline_result/", write_name=start_time.strftime('%Y%m%d') + "-" + "P8_Insts.csv")
     print("SORT-ENDED")
     end_time = datetime.datetime.now()
     # runcmd("cp -r"+start_time.strftime('%Y%m%d%H%M%S'))
