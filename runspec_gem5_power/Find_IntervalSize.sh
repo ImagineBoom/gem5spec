@@ -227,6 +227,8 @@ func_normal_qt_run(){
               CPI=0
               echo ${Simpts} $Weight $CPI | awk '{print($1" "$2" "$3" ")}' >> ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
             fi
+            mv ${Simpts}_${Interval_size}_${FILE}* M1_result 2>/dev/null
+            mv *${Simpts}_${Interval_size}_${FILE}.txt pipe_result 2>/dev/null
             cp -r -f ./M1_result/${Simpts}_${Interval_size}_${FILE}.results ${BACKUP_PATH} 2>/dev/null
             cp -r -f ./M1_result/${Simpts}_${Interval_size}_${FILE}.config ${BACKUP_PATH} 2>/dev/null
             cp -r -f ./M1_result/${Simpts}_${Interval_size}_${FILE}.pipe ${BACKUP_PATH} 2>/dev/null
