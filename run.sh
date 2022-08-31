@@ -307,7 +307,7 @@ if [[ $is_m1 == true ]]; then
 elif [[ $is_gem5 == true ]]; then
   if [[ $is_spec2017 == true ]];then
     if [[ $with_restore_all == true ]]; then
-      (func_with_restore_all_benchmarks >>nohup.out 2>&1 &)
+      (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.out 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     else
