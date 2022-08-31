@@ -55,8 +55,9 @@ get_thread_pool_size(){
 }
 
 delete_thread_pool(){
-  rm -f ${FLOODGATE}
-  rm -f $(dirname ${FLOODGATE})/runThreadPoolSize_*.log
+#  rm -rf ${FLOODGATE}
+#  rm -rf $(dirname ${FLOODGATE})/runThreadPoolSize_*.log
+  rm -rf $(dirname ${FLOODGATE})
 }
 
 #Uncontrollable, not recommended
