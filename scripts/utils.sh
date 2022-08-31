@@ -486,8 +486,8 @@ func_with_restore_all_benchmarks(){
         cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/"${begin_time}"/gem5/"${FILE}"
         cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
         cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
-        mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/"${begin_time}"/gem5/"${FILE}"/ 2>/dev/null
     done
+    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/"${begin_time}"/gem5/ 2>/dev/null
   elif [[ $is_m1 == true ]]; then
     func_collect_handle_all_m1_restore_data
     for FILE in ${bm[@]}
@@ -496,6 +496,7 @@ func_with_restore_all_benchmarks(){
       mv ./runspec_gem5_power/"${FILE}"/*.csv ./data/"${begin_time}"/M1/"${FILE}"/ 2>/dev/null
     done
     mv *.csv ./data/"${begin_time}"/M1/
+    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/"${begin_time}"/M1/ 2>/dev/null
   fi
 }
 
