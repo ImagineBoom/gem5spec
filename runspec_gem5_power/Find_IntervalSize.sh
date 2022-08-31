@@ -113,13 +113,13 @@ func_incremental_run(){
 # 汇总出新的${Interval_size}_Calculate_WeightedCPI.log;
 # 不涉及到运行M1
 func_recovery(){
-  rm -f gen_m1_results.csv
+  rm -rf gen_m1_results.csv
   for ((i=0;i<${#interval_size[@]};i++)) do
     {
       Simpts_Array=(`awk '{print $(NF-1)}' ${MERGE_FILE_PATH}`)
       Weight_Array=(`awk '{print $(NF)}' ${MERGE_FILE_PATH}`)
       Interval_size=${interval_size[i]}
-      rm ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+      rm -rf ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
       for (( j=0;j<${#Simpts_Array[@]};j++)) do
         read -u6
         {
@@ -188,7 +188,7 @@ func_normal_qt_run(){
       Simpts_Array=(`awk '{print $(NF-1)}' ${MERGE_FILE_PATH}`)
       Weight_Array=(`awk '{print $(NF)}' ${MERGE_FILE_PATH}`)
       Interval_size=${interval_size[i]}
-      rm ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
+      rm -rf ./CPI_result/${Interval_size}_Calculate_WeightedCPI.log
       for (( j=0;j<${#Simpts_Array[@]};j++)) do
         read -u6
         {
