@@ -403,7 +403,7 @@ func_collect_handle_all_m1_restore_data(){
     awk -v FILE="${FILE}" 'BEGIN {
         OFS = ",";
         sum_weight = 0;sum = 0;cred=0;
-        print FILE,"Simpts","Weights","CPI","WeightedCPI"
+        print "Benchmark","Simpts","Weights","CPI","WeightedCPI"
       }
       {
         sum_weight += $2;
@@ -413,10 +413,11 @@ func_collect_handle_all_m1_restore_data(){
         print FILE,$1,$2,$3,$4
       }
       END {
-        if (sum_weight > 0.999)
-          print FILE,"COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
-        else
-          print FILE,"UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+        #if (sum_weight > 0.999)
+        #  print FILE,"COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+        #else
+        #  print FILE,"UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
+        :
       }' >>each_bm_cpt_m1.csv
     echo >> each_bm_cpt_m1.csv
   done
