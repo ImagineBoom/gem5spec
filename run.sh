@@ -307,7 +307,14 @@ if [[ $is_m1 == true ]]; then
 elif [[ $is_gem5 == true ]]; then
   if [[ $is_spec2017 == true ]];then
     if [[ $with_restore_all == true ]]; then
-      (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.out 2>&1 &)
+      {
+        begin_time=$(date +"%Y%m%d%H%M%S")
+        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" >>nohup.out 2>&1
+        make cpi_all_cases -C runspec_gem5_power
+        make collect_all_checkpoints_data -C runspec_gem5_power
+        cp ./runspec_gem5_power/Each_case_ckp_data.csv ./data/gem5/"${begin_time}"/
+        python3 ./scripts/gem5_M1_host_results_compare.py "${begin_time}"
+      }&
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     else
