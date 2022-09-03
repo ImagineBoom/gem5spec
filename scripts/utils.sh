@@ -452,16 +452,16 @@ func_with_restore_all_benchmarks(){
     "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
     "503.bwaves_r" "507.cactuBSSN_r" "508.namd_r" "510.parest_r" "511.povray_r" "519.lbm_r" "521.wrf_r" "526.blender_r" "527.cam4_r" "538.imagick_r" "544.nab_r" "549.fotonik3d_r" "554.roms_r" "999.specrand_ir"
   )
-  begin_time=$(date +"%Y-%m-%d-%H-%M-%S")
+  begin_time=${2}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
   for FILE in ${bm[@]}
   do
     if [[ $is_gem5 == true ]]; then
-      mkdir -p ./data/"${begin_time}"/gem5/"${FILE}"
+      mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
       opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${1}"
     elif [[ $is_m1 == true ]]; then
-      mkdir -p ./data/"${begin_time}"/M1/"${FILE}"
-      opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/${begin_time}/M1/${FILE}/ FLOODGATE=${1}"
+      mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
+      opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${1}"
     fi
     read -u6
     {
@@ -483,23 +483,23 @@ func_with_restore_all_benchmarks(){
   if [[ $is_gem5 == true ]]; then
     for FILE in ${bm[@]}
     do
-        mkdir -p ./data/"${begin_time}"/gem5/"${FILE}"
-        cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/"${begin_time}"/gem5/"${FILE}"
-        cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
-        cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/"${begin_time}"/gem5/"${FILE}"
+        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+        cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
+        cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+        cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
     done
-    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/"${begin_time}"/gem5/ 2>/dev/null
-    mv ./nohup.out ./data/"${begin_time}"/gem5/ 2>/dev/null
+    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
   elif [[ $is_m1 == true ]]; then
     func_collect_handle_all_m1_restore_data
     for FILE in ${bm[@]}
     do
-      mkdir -p ./data/"${begin_time}"/M1/"${FILE}"
-      mv ./runspec_gem5_power/"${FILE}"/*.csv ./data/"${begin_time}"/M1/"${FILE}"/ 2>/dev/null
+      mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
+      mv ./runspec_gem5_power/"${FILE}"/*.csv ./data/M1/"${begin_time}"/"${FILE}"/ 2>/dev/null
     done
-    mv *.csv ./data/"${begin_time}"/M1/ 2>/dev/null
-    mv ./nohup.out ./data/"${begin_time}"/M1/ 2>/dev/null
-    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/"${begin_time}"/M1/ 2>/dev/null
+    mv *.csv ./data/M1/"${begin_time}"/ 2>/dev/null
+    mv ./nohup.out ./data/M1/"${begin_time}"/ 2>/dev/null
+    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/M1/"${begin_time}"/ 2>/dev/null
   fi
 }
 
