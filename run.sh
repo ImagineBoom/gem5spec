@@ -313,8 +313,11 @@ elif [[ $is_gem5 == true ]]; then
         ( func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" >>nohup.out 2>&1 )
         wait
         make cpi_all_cases -C runspec_gem5_power
+        wait
         make collect_all_checkpoints_data -C runspec_gem5_power
+        wait
         cp ./runspec_gem5_power/Each_case_ckp_data.csv ./data/gem5/"${begin_time}"/
+        wait
         python3 ./scripts/gem5_M1_host_results_compare.py "${begin_time}"
       }&
     elif [[ $with_cpi_all == true ]]; then
