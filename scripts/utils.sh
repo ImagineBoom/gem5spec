@@ -464,6 +464,7 @@ func_with_restore_all_benchmarks(){
     }&
   done
   wait
+
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
   sys_date2=$(date -d "$date2" +%s)
@@ -472,6 +473,7 @@ func_with_restore_all_benchmarks(){
   min=$(( ($seconds-${hour}*3600)/60 ))
   sec=$(( $seconds-${hour}*3600-${min}*60 ))
   HMS=`echo ${hour}:${min}:${sec}`
+  wait
   echo "restore_all consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
   # backup
   if [[ $is_gem5 == true ]]; then
