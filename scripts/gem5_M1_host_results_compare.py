@@ -15,8 +15,8 @@ from openpyxl.styles import Alignment, Border, Side, Font, PatternFill
 from openpyxl.formatting.rule import CellIsRule, FormulaRule
 
 # 在gem5spec目录下调用
-begin_time=sys.argv[1]
-gem5_ckp_results_csv = "./data/gem5/"+begin_time+"Each_case_ckp_data.csv"
+begin_time=str(sys.argv[1])
+gem5_ckp_results_csv = "./data/gem5/"+begin_time+"/Each_case_ckp_data.csv"
 M1_ckp_results_csv = "./data/M1/each_bm_cpt_m1.csv"
 
 
