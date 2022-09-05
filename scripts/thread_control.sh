@@ -58,6 +58,7 @@ delete_thread_pool(){
 #  rm -rf ${FLOODGATE}
 #  rm -rf $(dirname ${FLOODGATE})/runThreadPoolSize_*.log
   rm -rf $(dirname ${FLOODGATE})
+  echo "The thread pool has been deleted"
 }
 
 #Uncontrollable, not recommended
@@ -88,9 +89,9 @@ set_thread_pool(){
     for (( i=0;i<max_threads;i++ )); do
       echo >&6
     done
-    echo "no pipe"
+    echo "Create thread pool"
   else
-    echo "with pipe"
     exec 6<>${FLOODGATE}
+    echo "Thread pool has been created"
   fi
 }
