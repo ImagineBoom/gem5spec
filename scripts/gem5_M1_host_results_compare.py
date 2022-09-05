@@ -3,6 +3,7 @@ import re
 import subprocess
 import datetime
 import sys
+import os
 from collections import defaultdict
 from collections import namedtuple
 
@@ -277,5 +278,7 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
     sheet2.freeze_panes = 'A2'
     workbook.active=sheet1
     workbook.save(gen_file)
+
+    print("result Excel: ",os.getcwd()+"/data/gem5/"+begin_time+"_M1_gem5_SPEC2017_sampling_results" + ".xlsx")
     # print(sheet1.max_column)
 gen_cmp_results()
