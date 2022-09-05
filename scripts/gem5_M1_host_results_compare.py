@@ -122,7 +122,7 @@ def pyCellFontStyle(wss, onlyRow=False, rowNumStart: int = 1, onlyCol=False,
 
 def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ckp_results_csv, write_path="",write_name=""):
     runcmd("mkdir -p ./data/gem5/"+begin_time)
-    runcmd("paste -d ',' "+M1_source_csv_file+" "+gem5_source_csv_file+" >M1_gem5_paste.csv")
+    runcmd("paste -d ',' "+M1_source_csv_file+" "+gem5_source_csv_file+" >./data/gem5/M1_gem5_paste.csv")
     # datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     gen_file="./data/gem5/"+begin_time+"_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
     with open("./data/gem5/M1_gem5_paste.csv", "r", encoding='utf-8') as fr_M1_gem5:
