@@ -344,7 +344,7 @@ elif [[ $is_control == true ]]; then
     elif [[ $with_control_m1 == true ]]; then
       killobj="valgrind|simpoint|vgi2qt|run_timer|otimer|itrace|ScrollPipeViewer"
     fi
-    func_kill_restore_all ${killobj}
+    func_kill_restore_all ${killobj} "${FLOODGATE}"
   else
     exit 1
   fi

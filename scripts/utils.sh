@@ -484,9 +484,10 @@ func_with_restore_all_benchmarks(){
     for FILE in ${bm[@]}
     do
         mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-        cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
-        cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-        cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+        find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
+        # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
+        # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+        # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
     done
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
     mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
@@ -655,15 +656,34 @@ func_collect_all_m1_restore_data(){
   cat ./runspec_gem5_power/*r/CPI_result/*_CPI_result.merge >>each_bm_cpt_m1.csv
 }
 
+# kill 之后会删除线程池
 func_kill_restore_all(){
+  echo "running: kill ${1}..."
+  FLOODGATE=${2}
   while : ; do
-      run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
-      if [[ ${#run_nums[@]} -gt 0 ]]; then
-        echo ${run_nums[@]}|xargs kill
-      else
-        break
-      fi
+    # check thread run
+    if [[ ! -p ${FLOODGATE} ]];then
+      mkfifo ${FLOODGATE}
+      rm -rf runThreadPoolSize*.log
+      touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_0.log
+    fi
+    exec 6<>${FLOODGATE}
+    echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;
+    max_threads=$(find $(dirname ${FLOODGATE})/runThreadPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+    ((max_threads+=8))
+    if [[ -p ${FLOODGATE} ]];then
+      rename "s/runThreadPoolSize_\d+/runThreadPoolSize_${max_threads}/" "$(dirname ${FLOODGATE})"/runThreadPoolSize_*.log
+    fi
+    # kill run thread
+    run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
+    if [[ ${#run_nums[@]} -gt 0 ]]; then
+      echo ${run_nums[@]}|xargs kill
+    else
+      break
+    fi
   done
+  # delete thread pool
+  rm -rf $(dirname ${FLOODGATE})
 }
 
 # 进入单个benchmark目录下运行，若第一次运行时生成了each_bm_cpt_m1.csv，受到异常被中断后继续运行，M1的结果已保存在M1_result目录，
