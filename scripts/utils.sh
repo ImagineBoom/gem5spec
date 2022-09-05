@@ -213,31 +213,25 @@ func_help(){
               --add_thread|--add_thread_10                                              增加可运行的线程数
               --reduce_thread|--reduce_thread_10                                        减少可运行的线程数
               --del_thread_pool                                                         删除线程池
-              --kill_all                                                               【kill通过run.sh启动的进程】
               --kill_restore_all                                                        kill restore_all 的任务
 
     [SEC_OPTS]:
       --myexe)
-              --entire                                                                  按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
               -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
               -i --i_insts=<num>                                                        生成i_insts条指令的itrace
               -q -j=<num> -c=<num>                                                      生成[j,j+c]指令区间的qtrace
               -r --r_insts=<num> -b=<num> -e=<num>                                      在qtrace区间中执行r_insts条指令,流水线图指令区间为[j+b,j+e-b+1]
-              -p [--gen_txt]                                                            【查看流水线图;启用--gen_txt会生成文本而不是启动UI工具】
+              -p                                                                        查看流水线图
               -b=<num> -e=<num>                                                         缺省参数模式
 
       --spec2017)
               <benchmark num>                                                           [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
-              --all_benchmarks -j=<num> -c=<num> -b=<num> -e=<num>                      所有的benchmark执行指令数均为-c指定,itrace按最大指令数转换,流水线图指令区间为[j+b,j+e-b+1]
-              --entire_all_benchmarks [--max_insts|--slice_len=<num>]                   所有的benchmark默认--max_insts按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行;
-                                                                                        可通过--slice_len=<num>指定分段的指令数目,不超过5000条,使用--slice_len时会自动生成每个slice对应的流水线文本图
               --restore_all                                                             run all benchmark checkpoints segments
-              --cpi_all                                                                 收集所有的benchmark cpi
               -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
               -i --i_insts=<num>                                                        生成i_insts条指令的itrace
               -q -j=<num> -c=<num>                                                      生成[j,j+c]指令区间的qtrace
               -r --r_insts=<num> -b=<num> -e=<num>                                      在qtrace区间中执行r_insts条指令,流水线图指令区间为[j+b,j+e-b+1]
-              -p [--gen_txt]                                                            查看流水线图;启用--gen_txt会生成文本而不是启动UI工具
+              -p                                                                        查看流水线图
               -b=<num> -e=<num>                                                         缺省参数模式
 
   4.OPTS解释:
