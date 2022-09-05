@@ -310,7 +310,8 @@ elif [[ $is_gem5 == true ]]; then
       {
         make clean-restore -C runspec_gem5_power >/dev/null 2>&1
         begin_time=$(date +"%Y%m%d%H%M%S")
-        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" >>nohup.out 2>&1
+        ( func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" >>nohup.out 2>&1 )
+        wait
         make cpi_all_cases -C runspec_gem5_power
         make collect_all_checkpoints_data -C runspec_gem5_power
         cp ./runspec_gem5_power/Each_case_ckp_data.csv ./data/gem5/"${begin_time}"/
