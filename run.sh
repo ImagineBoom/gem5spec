@@ -308,6 +308,7 @@ elif [[ $is_gem5 == true ]]; then
   if [[ $is_spec2017 == true ]];then
     if [[ $with_restore_all == true ]]; then
       {
+        make clean-restore -C runspec_gem5_power
         begin_time=$(date +"%Y%m%d%H%M%S")
         func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" >>nohup.out 2>&1
         make cpi_all_cases -C runspec_gem5_power
