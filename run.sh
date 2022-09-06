@@ -320,8 +320,8 @@ elif [[ $is_gem5 == true ]]; then
       (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
-    elif [[ with_func_gen_restore_compare_excel == true ]]; then
-      (func_gen_restore_compare_excel "$(date +"%Y%m%d%H%M%S") ">>nohup.out 2>&1)
+    elif [[ $with_func_gen_restore_compare_excel == true ]]; then
+      (func_gen_restore_compare_excel "$(date +"%Y%m%d%H%M%S")" >>nohup.out 2>&1)
     else
       exit 1
     fi
