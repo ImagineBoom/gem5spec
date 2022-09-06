@@ -433,17 +433,24 @@ func_collect_handle_all_m1_restore_data(){
 
 # 检查当前后台restore运行情况
 func_detect_restore_bg(){
-  echo "DETECTING background tasks..."
+  detect_task_regex=${1}
+  is_print=${2}
+
+  if [[ ${is_print} == true ]];then
+    echo "DETECTING background tasks..."
+  fi
   while : ; do
     # kill run thread
-    run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$5}'`)
-    run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
+    run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${detect_task_regex}" | grep -v grep| awk '{print \$5}'`)
+    run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${detect_task_regex}" | grep -v grep| awk '{print \$1}'`)
     if [[ ${#run_nums[@]} -gt 0 ]]; then
       :
       sleep 1s
       for run_name in ${run_names[@]}; do
         if [[ ${run_name} =~ .*output_ckp.* ]]; then
-          echo "RUNNING: ${run_name}..."
+          if [[ ${is_print} == true ]];then
+            echo "RUNNING: ${run_name}..."
+          fi
         fi
       done
     else
@@ -482,7 +489,7 @@ func_with_restore_all_benchmarks(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+"
+        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
         opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
         ${opt} >>nohup.out 2>&1
       elif [[ $is_m1 == true ]]; then
@@ -494,7 +501,7 @@ func_with_restore_all_benchmarks(){
     }&
   done
   wait
-  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+"
+  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
