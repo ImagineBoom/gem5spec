@@ -459,6 +459,21 @@ func_detect_restore_bg(){
   done
 }
 
+# gem5spec目录下调用
+# 统计restore数据, 生成对比表格
+func_gen_restore_compare_excel(){
+  begin_time="${1}"
+  echo "make cpi_all_cases -C runspec_gem5_power start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+  make cpi_all_cases -C runspec_gem5_power >/dev/null 2>&1
+  echo "make cpi_all_cases -C runspec_gem5_power done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+  make collect_all_checkpoints_data -C runspec_gem5_power >>nohup.out 2>&1
+  echo "make collect_all_checkpoints_data -C runspec_gem5_power done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+  mkdir -p ./data/gem5/"${begin_time}"/
+  cp ./runspec_gem5_power/Each_case_ckp_data.csv ./data/gem5/"${begin_time}"/ >>nohup.out 2>&1
+  python3 ./scripts/gem5_M1_host_results_compare.py "${begin_time}"
+  echo "python3 ./scripts/gem5_M1_host_results_compare.py ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+}
+
 #gem5spec目录下执行
 # 运行完会备份结果
 # gem5: -->./data/"${begin_time}"/gem5/"${FILE}
@@ -516,14 +531,7 @@ func_with_restore_all_benchmarks(){
   # backup
   if [[ $is_gem5 == true ]]; then
     # 统计数据
-    echo "make cpi_all_cases -C runspec_gem5_power start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
-    make cpi_all_cases -C runspec_gem5_power >/dev/null 2>&1
-    echo "make cpi_all_cases -C runspec_gem5_power done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
-    make collect_all_checkpoints_data -C runspec_gem5_power >>nohup.out 2>&1
-    echo "make collect_all_checkpoints_data -C runspec_gem5_power done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
-    cp ./runspec_gem5_power/Each_case_ckp_data.csv ./data/gem5/"${begin_time}"/ >>nohup.out 2>&1
-    python3 ./scripts/gem5_M1_host_results_compare.py "${begin_time}" >>nohup.out 2>&1
-    echo "python3 ./scripts/gem5_M1_host_results_compare.py ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+    func_gen_restore_compare_excel "${begin_time}"
     # 备份数据
     for FILE in ${bm[@]}
     do
