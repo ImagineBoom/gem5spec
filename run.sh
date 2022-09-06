@@ -311,7 +311,7 @@ if [[ $is_m1 == true ]]; then
 elif [[ $is_gem5 == true ]]; then
   if [[ $is_spec2017 == true ]];then
     if [[ $with_restore_all == true ]]; then
-      echo "PIDIS $$"
+      # echo "PIDIS $$"
       # 清空
       echo >nohup.out
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
