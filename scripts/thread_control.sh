@@ -104,6 +104,6 @@ set_thread_pool(){
     echo "Create thread pool"
   else
     exec 6<>${FLOODGATE}
-    echo "Thread pool has been created"
+    # echo "Thread pool has been created"
   fi
 }
