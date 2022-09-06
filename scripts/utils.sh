@@ -479,6 +479,7 @@ func_with_restore_all_benchmarks(){
         opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${1} WORK_DIR=${3}"
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
+        wait
         opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${1} WORK_DIR=${3}"
         ${opt} >>nohup.out 2>&1
       elif [[ $is_m1 == true ]]; then
