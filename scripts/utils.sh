@@ -547,7 +547,9 @@ func_with_restore_all_benchmarks(){
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/M1/"${begin_time}"/ 2>/dev/null
   fi
   exec 6>&-
-  exec 6<&-;
+  exec 6<&-
+  # delete thread pool
+  rm -rf $(dirname ${FLOODGATE})
 }
 
 func_with_cpi_all_benchmarks(){
