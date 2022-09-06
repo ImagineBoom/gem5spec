@@ -491,7 +491,7 @@ func_with_restore_all_benchmarks(){
         wait
         func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
         opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
-        ${opt} >>nohup.out 2>&1
+        ${opt} >/dev/null 2>&1
       elif [[ $is_m1 == true ]]; then
         mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
         opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
