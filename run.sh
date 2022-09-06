@@ -9,7 +9,7 @@ getopt_cmd=$(getopt \
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
-restore_all,cpi_all,kill_restore_all,\
+restore_all,cpi_all,kill_restore_all,gen_restore_compare_excel,\
 control,add_thread,reduce_thread,del_thread_pool,add_thread_10,reduce_thread_10,get_thread_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
@@ -226,6 +226,10 @@ case "${1#*=}" in
     with_restore_all=true
     shift
     ;;
+  --gen_restore_compare_excel)
+    with_func_gen_restore_compare_excel=true
+    shift
+    ;;
   --cpi_all)
     with_cpi_all=true
     shift
@@ -316,6 +320,8 @@ elif [[ $is_gem5 == true ]]; then
       (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
+    elif [[ with_func_gen_restore_compare_excel == true ]]; then
+      (func_gen_restore_compare_excel "$(date +"%Y%m%d%H%M%S") ">>nohup.out 2>&1)
     else
       exit 1
     fi

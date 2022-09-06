@@ -39,6 +39,7 @@ with_reduce_thread=false
 with_reduce_thread_10=false
 with_del_thread_pool=false
 with_get_thread_pool_size=false
+with_func_gen_restore_compare_excel=false
 
 cmd_gem5_m1_control(){
   for option in "${COMP_WORDS[@]}";do
@@ -214,7 +215,7 @@ cmd_gem5_spec2017(){
   local pre=${COMP_WORDS[COMP_CWORD-1]};
   cmd_gem5_m1_control
   if [[ $pre == "--spec2017" ]];then
-    options="--restore_all"
+    options="--restore_all --gen_restore_compare_excel"
   else
     options=""
   fi
@@ -275,6 +276,7 @@ cmd_hub(){
   with_reduce_thread_10=false
   with_del_thread_pool=false
   with_get_thread_pool_size=false
+  with_func_gen_restore_compare_excel=false
 
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};

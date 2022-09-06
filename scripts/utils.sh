@@ -34,6 +34,7 @@ with_cpi_all=false
 with_kill_restore_all=false
 with_control_gem5=false
 with_control_m1=false
+with_func_gen_restore_compare_excel=false
 
 #m1需要的变量
 #itrace
