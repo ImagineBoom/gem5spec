@@ -518,6 +518,12 @@ func_with_restore_all_benchmarks(){
     }&
   done
   wait
+
+  # 检测是否被中断，如果被中断则不存在FLOODGATE，程序退出
+  if [[ ! -p ${FLOODGATE} ]];then
+    exit 1
+  fi
+
   func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
