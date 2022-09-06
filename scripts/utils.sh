@@ -666,7 +666,6 @@ func_collect_all_m1_restore_data(){
 
 # kill 之后会删除线程池
 func_kill_restore_all(){
-  echo "running: kill ${1}..."
   FLOODGATE=${2}
   while : ; do
     # check thread run
@@ -683,8 +682,14 @@ func_kill_restore_all(){
       rename "s/runThreadPoolSize_\d+/runThreadPoolSize_${max_threads}/" "$(dirname ${FLOODGATE})"/runThreadPoolSize_*.log
     fi
     # kill run thread
+    run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$5}'`)
     run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
     if [[ ${#run_nums[@]} -gt 0 ]]; then
+      for run_name in ${run_names[@]}; do
+        if [[ ${run_name} =~ .*output_ckp.* ]]; then
+          echo "RUNNING: kill ${run_name}..."
+        fi
+      done
       echo ${run_nums[@]}|xargs kill
     else
       break

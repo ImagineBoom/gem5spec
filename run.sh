@@ -338,11 +338,11 @@ elif [[ $is_control == true ]]; then
   elif [[ $with_kill_restore_all == true ]]; then
     killobj=""
     if [[ $with_control_gem5 == true ]]; then
-      killobj="gem5.opt"
+      killobj="gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+"
     elif [[ $with_control_m1 == true ]]; then
       killobj="valgrind|simpoint|vgi2qt|run_timer|otimer|itrace|ScrollPipeViewer"
     fi
-    func_kill_restore_all ${killobj} "${FLOODGATE}"
+    func_kill_restore_all "${killobj}" "${FLOODGATE}"
   else
     exit 1
   fi
