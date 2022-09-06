@@ -124,7 +124,7 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
     runcmd("mkdir -p ./data/gem5/"+begin_time)
     runcmd("paste -d ',' "+M1_source_csv_file+" "+gem5_source_csv_file+" >./data/gem5/M1_gem5_paste.csv")
     # datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    gen_file="./data/gem5/"+begin_time+"_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
+    gen_file="./data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
     with open("./data/gem5/M1_gem5_paste.csv", "r", encoding='utf-8') as fr_M1_gem5:
         read_csv(fr_M1_gem5).to_excel(gen_file)
     M1_gem5_ckp_class = namedtuple('M1_gem5_ckp_class',
@@ -281,7 +281,7 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
     print("")
     print("")
     print("==================================================================================================")
-    print("result Excel: ",os.getcwd()+"/data/gem5/"+begin_time+"_M1_gem5_SPEC2017_sampling_results" + ".xlsx")
+    print("result Excel: ",os.getcwd()+"/data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx")
     print("==================================================================================================")
     print("")
     # print(sheet1.max_column)
