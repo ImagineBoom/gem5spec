@@ -21,10 +21,22 @@ add_thread(){
 }
 
 add_thread_10(){
-  exec 6<>${FLOODGATE}
+  origin_max_threads=$(find $(dirname ${FLOODGATE})/runThreadPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
   for (( i=0;i<10;i++ )); do
-    add_thread
+    if [[ ! -p ${FLOODGATE} ]];then
+      mkfifo ${FLOODGATE}
+      rm -rf runThreadPoolSize*.log
+      touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_0.log
+    fi
+    exec 6<>${FLOODGATE}
+    echo >&6
+    max_threads=$(find $(dirname ${FLOODGATE})/runThreadPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+    ((max_threads+=1))
+    if [[ -p ${FLOODGATE} ]];then
+      rename "s/runThreadPoolSize_\d+/runThreadPoolSize_${max_threads}/" "$(dirname ${FLOODGATE})"/runThreadPoolSize_*.log
+    fi
   done
+  echo "max_threads from ${origin_max_threads} + 10 to ${max_threads}"
 }
 
 reduce_thread(){
