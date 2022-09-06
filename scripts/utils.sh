@@ -433,7 +433,7 @@ func_collect_handle_all_m1_restore_data(){
 
 # 检查当前后台restore运行情况
 func_detect_restore_bg(){
-  echo "detect: ${1}..."
+  echo "DETECTING background tasks..."
   while : ; do
     # kill run thread
     run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$5}'`)
