@@ -321,7 +321,7 @@ elif [[ $is_gem5 == true ]]; then
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_func_gen_restore_compare_excel == true ]]; then
-      (func_gen_restore_compare_excel "$(date +"%Y%m%d%H%M%S")" >>nohup.out 2>&1)
+      (func_gen_restore_compare_excel "$(date +"%Y%m%d%H%M%S")" 2>&1)
     else
       exit 1
     fi
