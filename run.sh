@@ -312,8 +312,8 @@ elif [[ $is_gem5 == true ]]; then
       echo >nohup.out
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
-      echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S")" >>nohup.out 2>&1
-      (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" 2>&1 &)
+      echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     else
