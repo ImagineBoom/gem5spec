@@ -58,7 +58,7 @@ delete_thread_pool(){
 #  rm -rf ${FLOODGATE}
 #  rm -rf $(dirname ${FLOODGATE})/runThreadPoolSize_*.log
   rm -rf $(dirname ${FLOODGATE})
-  echo "The thread pool has been deleted"
+  echo "Now the thread pool has been deleted"
 }
 
 #Uncontrollable, not recommended

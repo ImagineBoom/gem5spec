@@ -48,20 +48,6 @@ source auto_cmpl.sh
 ./run.sh --m1 --spec2017 999 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
-##### 执行全部benchmark
-
-- 运行m1的整个流程，所有的benchmark执行指令数均为5,000,000(q_convert\r_insts),itrace按最大指令数转换，流水线区间为[jump+1,jump+400]
-
-```bash
-./run.sh --m1 --spec2017 --all_benchmarks --q_jump=9999 --q_convert=5000000 --r_pipe_begin=1 --r_pipe_end=400
-```
-
-- 运行m1的整个流程，所有的benchmark按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
-
-```bash
-./run.sh --m1 --spec2017 --entire_all_benchmarks
-```
-
 #### 1.2 m1-执行自定义程序
 
 **完整参数模式**
@@ -119,67 +105,89 @@ benchmark和自定义程序皆可
 ### 3. NOTION
 
 ```
-./run.sh -v
-  Desc: run some spec2017 benchmarks and custom programs help
-  Notion: []内表示可选，｜表示选择一个，<>内表示必须填
-  Usage: ./run.sh MAIN_OPTS FIR_OPTS SEC_OPTS
+1.Desc: run some spec2017 benchmarks and custom programs help
+  2.Notion: )表示输入的上一级命令, []内表示可选, |表示选择一个, <>内表示必填项
+  3.Usage: ./run.sh  [MAIN_OPTS]  [FIR_OPTS]  [SEC_OPTS]
 
-    MAIN_OPTS:
-    |  --m1,                                                                     使用power8模拟器
-    FIR_OPTS:
-    |  --myexe <exepath> [--entire]                                              使用自定义的程序(编译后的)
-                          --entire                                               按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
-    |  --spec2017 <benchmark num>|--all_benchmarks|--entire_all_benchmarks       使用spec2017某一个或者全部
-                  --all_benchmarks -j=<num> -c=<num> -b=<num> -e=<num>           所有的benchmark执行指令数均为-c指定,itrace按最大指令数转换,流水线图指令区间为[j+b,j+e-b+1]
-                  --entire_all_benchmarks                                        所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
-                  <benchmark num>                                                [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
+    [MAIN_OPTS]:
+              --m1,                                                                     使用power8模拟器
+              --gem5                                                                    使用gem5模拟器
+              --control                                                                 线程控制
 
-    SEC_OPTS:
-    |  -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
-    |  -i --i_insts=<num>                                                        生成i_insts条指令的itrace
-    |  -q -j=<num> -c=<num>                                                      生成[j,j+c]指令区间的qtrace
-    |  -r --r_insts=<num> -b=<num> -e=<num>                                      在qtrace区间中执行r_insts条指令,流水线图指令区间为[j+b,j+e-b+1]
-    |  -p                                                                        查看流水线图
+    [FIR_OPTS]:
+      --m1)
+              --myexe <exepath>                                                         使用自定义的程序(编译后的)
+              --spec2017                                                                使用spec2017某一个或者全部
+      --gem5)
+              --spec2017                                                                使用spec2017全部
+      --control)
+              --add_thread|--add_thread_10                                              增加可运行的线程数
+              --reduce_thread|--reduce_thread_10                                        减少可运行的线程数
+              --del_thread_pool                                                         删除线程池
+              --kill_restore_all                                                        kill restore_all 的任务
 
-    OPTS解释:
+    [SEC_OPTS]:
+      --myexe)
+              -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
+              -i --i_insts=<num>                                                        生成i_insts条指令的itrace
+              -q -j=<num> -c=<num>                                                      生成[j,j+c]指令区间的qtrace
+              -r --r_insts=<num> -b=<num> -e=<num>                                      在qtrace区间中执行r_insts条指令,流水线图指令区间为[j+b,j+e-b+1]
+              -p                                                                        查看流水线图
+              -b=<num> -e=<num>                                                         缺省参数模式
+
+      --spec2017)
+              <benchmark num>                                                           [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
+              --restore_all                                                             run all benchmark checkpoints segments
+              -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
+              -i --i_insts=<num>                                                        生成i_insts条指令的itrace
+              -q -j=<num> -c=<num>                                                      生成[j,j+c]指令区间的qtrace
+              -r --r_insts=<num> -b=<num> -e=<num>                                      在qtrace区间中执行r_insts条指令,流水线图指令区间为[j+b,j+e-b+1]
+              -p                                                                        查看流水线图
+              -b=<num> -e=<num>                                                         缺省参数模式
+
+  4.OPTS解释:
     --m1
-    |  -a | --all             | --all_steps                                      执行使用m1的所有步骤
-    |  -i | --itrace                                                             只生成itrace
-    |  -q | --qtrace                                                             只转换qtrace
-    |  -r | --run_timer                                                          只执行run_timer
-    |  -p | --pipe_view                                                          只查看流水线
-    |       --i_insts         | --NUM_INSNS_TO_COLLECT                           生成itrace指定的指令数
-    |  -j | --q_jump          | --JUMP_NUM                                       生成qtrace跳过的指令数
-    |  -c | --q_convert       | --CONVERT_NUM_Vgi_RECS                           生成qtrace转换的指令数
-    |       --r_insts         | --NUM_INST                                       run_timer执行的指令数
-    |       --r_cpi_interval  | --CPI_INTERVAL                                   可打印CPI的INTERVAL大小
-    |       --r_reset_stats   | --RESET_STATS
-    |       --r_pipe_type     | --SCROLL_PIPE                                    流水线类型 1为architected inst, 2为internal instruction, 3为cycle count
-    |  -b | --r_pipe_begin    | --SCROLL_BEGIN                                   流水线图指令区间起始位置
-    |  -e | --r_pipe_end      | --SCROLL_END                                     流水线图指令区间结束位置
+      --all             | --all_steps             | -a                                  执行使用m1的所有步骤
+      --itrace                                    | -i                                  只生成itrace
+      --qtrace                                    | -q                                  只转换qtrace
+      --run_timer                                 | -r                                  只执行run_timer
+      --pipe_view                                 | -p                                  只查看流水线
+      --i_insts         | --NUM_INSNS_TO_COLLECT                                        生成itrace指定的指令数
+      --q_jump          | --JUMP_NUM              | -j                                  生成qtrace跳过的指令数
+      --q_convert       | --CONVERT_NUM_Vgi_RECS  | -c                                  生成qtrace转换的指令数
+      --r_insts         | --NUM_INST                                                    run_timer执行的指令数
+      --r_cpi_interval  | --CPI_INTERVAL                                                可打印CPI的INTERVAL大小
+      --r_reset_stats   | --RESET_STATS
+      --r_pipe_type     | --SCROLL_PIPE                                                 流水线类型 1为architected inst, 2为internal instruction, 3为cycle count
+      --r_pipe_begin    | --SCROLL_BEGIN          | -b                                  流水线图指令区间起始位置
+      --r_pipe_end      | --SCROLL_END            | -e                                  流水线图指令区间结束位置
 
-    运行:
+  5.RUN:
     PATTERN-1: 完整参数模式
 
-    |  运行m1的整个流程,生成前2000000条指令的itrace,转换[9999,19999]条指令的qtrace,执行10000条,查看qtrace中前400条指令的流水线
+    *  运行m1的整个流程,生成前2000000条指令的itrace,转换[9999,19999]条指令的qtrace,执行10000条,查看qtrace中前400条指令的流水线
        ./run.sh --m1 --spec2017 999 -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
        ./run.sh --m1 --myexe ./test -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
 
-    |  所有的benchmark执行指令数均为5,000,000(q_convert\r_insts),itrace按最大指令数转换,流水线区间为[jump+1,jump+400]
+    *  所有的benchmark执行指令数均为5,000,000(q_convert\r_insts),itrace按最大指令数转换,流水线区间为[jump+1,jump+400]
        ./run.sh --m1 --spec2017 --all_benchmarks --q_jump=9999 --q_convert=5000000 --r_pipe_begin=1 --r_pipe_end=400
 
-    |  所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
+    *  所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
        ./run.sh --m1 --spec2017 --entire_all_benchmarks
+       ./run.sh --m1 --spec2017 --entire_all_benchmarks --max_insts
 
-    |  test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
+    *  所有的benchmark按1000条指令分段执行
+       ./run.sh --m1 --spec2017 --entire_all_benchmarks --slice_len=1000
+
+    *  test-p8按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
        ./run.sh --m1 --myexe ./test-p8 --entire
 
     PATTERN-2: 缺省参数模式【推荐】
 
-    |  运行m1的整个流程,生成前最大指令数的itrace,qtrace区间为[begin,end],执行400条(end-begin+1),流水线区间为[begin,end]
+    *  运行m1的整个流程,生成前最大指令数的itrace,qtrace区间为[begin,end],执行400条(end-begin+1),流水线区间为[begin,end]
        ./run.sh --m1 --spec2017 999 -b=1 -e=400
        ./run.sh --m1 --myexe ./test -b=1 -e=400
-    
+
   :)END
 
 ```

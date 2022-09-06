@@ -431,6 +431,7 @@ func_collect_handle_all_m1_restore_data(){
   done
 }
 
+#gem5spec目录下执行
 # 运行完会备份结果
 # gem5: -->./data/"${begin_time}"/gem5/"${FILE}
 # 包含以下文件
@@ -450,21 +451,20 @@ func_with_restore_all_benchmarks(){
   date1=$(date +"%Y-%m-%d %H:%M:%S")
   for FILE in ${bm[@]}
   do
-    if [[ $is_gem5 == true ]]; then
-      mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-      opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${1}"
-    elif [[ $is_m1 == true ]]; then
-      mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
-      opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${1}"
-    fi
     read -u6
     {
+      if [[ $is_gem5 == true ]]; then
+        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+        opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${1}"
+      elif [[ $is_m1 == true ]]; then
+        mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
+        opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${1}"
+      fi
       ${opt} >>nohup.out 2>&1
       echo >&6
     }&
   done
   wait
-
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
   sys_date2=$(date -d "$date2" +%s)
@@ -473,10 +473,20 @@ func_with_restore_all_benchmarks(){
   min=$(( ($seconds-${hour}*3600)/60 ))
   sec=$(( $seconds-${hour}*3600-${min}*60 ))
   HMS=`echo ${hour}:${min}:${sec}`
-  wait
+
   echo "restore_all consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
   # backup
   if [[ $is_gem5 == true ]]; then
+    # 统计数据
+#    echo "func_with_restore_all_benchmarks ${1} ${2} done @ ${date2}" >>nohup.out 2>&1
+#    make cpi_all_cases -C runspec_gem5_power >/dev/null 2>&1
+#    echo "make cpi_all_cases -C runspec_gem5_power done @ $(date +"%Y-%m-%d %H:%M:%S")" >>nohup.out 2>&1
+#    make collect_all_checkpoints_data -C runspec_gem5_power >>nohup.out 2>&1
+#    echo "make collect_all_checkpoints_data -C runspec_gem5_power done @ $(date +"%Y-%m-%d %H:%M:%S")" >>nohup.out 2>&1
+#    cp ./runspec_gem5_power/Each_case_ckp_data.csv ./data/gem5/"${begin_time}"/ >>nohup.out 2>&1
+#    python3 ./scripts/gem5_M1_host_results_compare.py "${begin_time}" >>nohup.out 2>&1
+#    echo "python3 ./scripts/gem5_M1_host_results_compare.py ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S")" >>nohup.out 2>&1
+    # 备份数据
     for FILE in ${bm[@]}
     do
         mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
@@ -498,6 +508,8 @@ func_with_restore_all_benchmarks(){
     mv ./nohup.out ./data/M1/"${begin_time}"/ 2>/dev/null
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/M1/"${begin_time}"/ 2>/dev/null
   fi
+  exec 6>&-
+  exec 6<&-;
 }
 
 func_with_cpi_all_benchmarks(){
