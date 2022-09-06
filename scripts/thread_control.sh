@@ -101,7 +101,7 @@ set_thread_pool(){
     for (( i=0;i<max_threads;i++ )); do
       echo >&6
     done
-    echo "Create thread pool"
+    # echo "Create thread pool"
   else
     exec 6<>${FLOODGATE}
     # echo "Thread pool has been created"
