@@ -468,7 +468,9 @@ func_with_restore_all_benchmarks(){
     "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
     "503.bwaves_r" "507.cactuBSSN_r" "508.namd_r" "510.parest_r" "511.povray_r" "519.lbm_r" "521.wrf_r" "526.blender_r" "527.cam4_r" "538.imagick_r" "544.nab_r" "549.fotonik3d_r" "554.roms_r" "999.specrand_ir"
   )
+  FLOODGATE=${1}
   begin_time=${2}
+  WORK_DIR=${3}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
   for FILE in ${bm[@]}
   do
@@ -476,23 +478,24 @@ func_with_restore_all_benchmarks(){
     {
       if [[ $is_gem5 == true ]]; then
         mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-        opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${1} WORK_DIR=${3}"
+        opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${1} WORK_DIR=${3}"
+        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+"
+        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
         ${opt} >>nohup.out 2>&1
       elif [[ $is_m1 == true ]]; then
         mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
-        opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${1}"
+        opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
         ${opt} >>nohup.out 2>&1
       fi
       echo >&6
     }&
   done
   wait
-  func_detect_restore_bg "gem5.opt -d ${3}/[\/\w\.]+/output_ckp\d+"
-  echo "func_with_restore_all_benchmarks ${1} ${2} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+"
+  echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
   sys_date2=$(date -d "$date2" +%s)
