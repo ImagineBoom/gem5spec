@@ -464,6 +464,7 @@ func_detect_restore_bg(){
 # 统计restore数据, 生成对比表格
 func_gen_restore_compare_excel(){
   begin_time="${1}"
+  echo >>nohup.out
   echo "make cpi_all_cases -C runspec_gem5_power start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   make cpi_all_cases -C runspec_gem5_power >/dev/null 2>&1
   echo "make cpi_all_cases -C runspec_gem5_power done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
