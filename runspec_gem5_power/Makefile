@@ -496,7 +496,7 @@ collect_all_checkpoints_data:
 	@cat ./549*/*.csv >> ./Each_case_ckp_data.csv;
 	@cat ./554*/*.csv >> ./Each_case_ckp_data.csv;
 	@cat ./999*/*.csv >> ./Each_case_ckp_data.csv;
-	@gedit ./Each_case_ckp_data.csv &
+	#@gedit ./Each_case_ckp_data.csv &
 
 collect_checkpoints_number:
 	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
