@@ -227,8 +227,8 @@ case "${1#*=}" in
     shift
     case "${1#*=}" in
       -j)
-        parallel_jobs=${1#*=}
-        shift
+        parallel_jobs=${2#*=}
+        shift 2
         ;;
       --)
         shift
@@ -329,10 +329,11 @@ elif [[ $is_gem5 == true ]]; then
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
       echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
-      if [[ $add_thread -gt 5 ]]; then
+      if [[ $parallel_jobs -gt 5 ]]; then
         (( add_thread = parallel_jobs - 5 ))
-      elif [[ $add_thread -gt 0 ]]; then
-        :
+      elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
+        echo "WARNING: -j minimum(default) = 5, use default 5"
+        add_thread=0
       else
         echo "ERROR: -j must > 0 & integer"
         exit 1

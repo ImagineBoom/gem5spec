@@ -502,6 +502,7 @@ func_with_restore_all_benchmarks(){
   do
     read -u6
     {
+      echo >&6
       if [[ $is_gem5 == true ]]; then
         mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
         opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
@@ -516,7 +517,6 @@ func_with_restore_all_benchmarks(){
         opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
         ${opt} >>nohup.out 2>&1
       fi
-      echo >&6
     }&
   done
   wait
