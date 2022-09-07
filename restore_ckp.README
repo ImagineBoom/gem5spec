@@ -15,7 +15,7 @@ source auto_cmpl.sh
 
 
 
-- 执行restore ckp,-j指定并行数, 执行完后会自动进行对比，得到与gem5与M1对比的Excel
+- 执行restore ckp, -j指定并行数, 执行完后会自动进行对比，得到与gem5与M1对比的Excel
 
 ```bash
 /run.sh --gem5 --spec2017 --restore_all -j 10
