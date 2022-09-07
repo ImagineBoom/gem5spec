@@ -20,6 +20,28 @@ add_thread(){
   fi
 }
 
+add_thread_n(){
+  add_num=${1}
+  origin_max_threads=$(find $(dirname ${FLOODGATE})/runThreadPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  if [[ ! -p ${FLOODGATE} ]];then
+    mkfifo ${FLOODGATE}
+    rm -rf runThreadPoolSize*.log
+    touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_0.log
+  fi
+  max_threads=$(find $(dirname ${FLOODGATE})/runThreadPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  for index in `seq $add_num`; do
+    exec 6<>${FLOODGATE}
+    echo >&6
+    # echo "add done"
+    ((max_threads+=1))
+    # echo "max_threads=${max_threads}"
+  done
+  if [[ -p ${FLOODGATE} ]];then
+    rename "s/runThreadPoolSize_\d+/runThreadPoolSize_${max_threads}/" "$(dirname ${FLOODGATE})"/runThreadPoolSize_*.log
+  fi
+  echo "max_threads from ${origin_max_threads} to ${max_threads} (+${add_num}, default=5)"
+}
+
 add_thread_10(){
   origin_max_threads=$(find $(dirname ${FLOODGATE})/runThreadPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
   for (( i=0;i<10;i++ )); do
