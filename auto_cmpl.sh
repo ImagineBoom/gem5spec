@@ -217,7 +217,7 @@ cmd_gem5_spec2017(){
   if [[ $pre == "--spec2017" ]];then
     options="--restore_all --gen_restore_compare_excel"
   elif [ $pre == "--restore_all" ]; then
-    options="-j="
+    options="-j"
   else
     options=""
   fi
