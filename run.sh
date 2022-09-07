@@ -4,7 +4,7 @@ version="1.0.0"
 #解析命令行选项<optstring>及参数<parameters>
 
 getopt_cmd=$(getopt \
--o aiqrphvVj:c:b:e: \
+-o aiqrphvVj:c:b:e:j: \
 -l m1,gem5,spec2017:,myexe:,\
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
@@ -225,6 +225,18 @@ case "${1#*=}" in
   --restore_all)
     with_restore_all=true
     shift
+    case "${1#*=}" in
+      -j)
+        parallel_jobs=${1#*=}
+        shift
+        ;;
+      --)
+        shift
+        ;;
+      *)
+        exit 1
+        ;;
+    esac
     ;;
   --gen_restore_compare_excel)
     with_func_gen_restore_compare_excel=true
@@ -317,7 +329,9 @@ elif [[ $is_gem5 == true ]]; then
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
       echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
-      (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" 2>&1 &)
+      (( add_thread = parallel_jobs - 5 ))
+      add_thread_n ${add_thread}
+      (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_thread}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_func_gen_restore_compare_excel == true ]]; then

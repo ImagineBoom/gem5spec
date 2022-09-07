@@ -35,6 +35,7 @@ with_kill_restore_all=false
 with_control_gem5=false
 with_control_m1=false
 with_func_gen_restore_compare_excel=false
+parallel_jobs=5
 
 #m1需要的变量
 #itrace
@@ -495,6 +496,7 @@ func_with_restore_all_benchmarks(){
   FLOODGATE=${1}
   begin_time=${2}
   WORK_DIR=${3}
+  parallel_jobs=${4}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
   for FILE in ${bm[@]}
   do
