@@ -2,7 +2,7 @@
 
 gem5spec目录已有checkpoint数据
 
-稳定版commit ID: d9356fb3825cf5b1fdbdd84f8d2393c63aa06f6f
+稳定版commit ID: 8bd8a954f6eafcc43f7d0754adab8203eb406d3d
 
 
 ## 以下命令全都在gem5spec目录下执行
