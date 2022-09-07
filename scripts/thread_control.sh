@@ -36,7 +36,7 @@ add_thread_10(){
       rename "s/runThreadPoolSize_\d+/runThreadPoolSize_${max_threads}/" "$(dirname ${FLOODGATE})"/runThreadPoolSize_*.log
     fi
   done
-  echo "max_threads from ${origin_max_threads} + 10 to ${max_threads}"
+  echo "max_threads from ${origin_max_threads} to ${max_threads} (+10)"
 }
 
 reduce_thread(){
