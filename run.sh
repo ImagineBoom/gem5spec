@@ -23,7 +23,7 @@ source ./scripts/job_control.sh
 
 FLOODGATE=$(cd "$(dirname "${0}")" && pwd )/running/run.fifo
 
-set_job_pool "${FLOODGATE}"
+func_set_job_pool "${FLOODGATE}"
 
 #rm -rf nohup.out 2>/dev/null
 
@@ -326,14 +326,15 @@ elif [[ $is_gem5 == true ]]; then
       # echo "PIDIS $$"
       # 清空
       echo >nohup.out
+      func_delete_job_pool >/dev/null 2>&1
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
       echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
-        (( add_job = parallel_jobs - 5 ))
+        (( add_job = parallel_jobs ))
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         echo "WARNING: -j minimum(default) = 5, use default 5"
-        add_job=0
+        add_job=5
       else
         echo "ERROR: -j must > 0 & integer"
         exit 1

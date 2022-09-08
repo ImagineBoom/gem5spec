@@ -5,16 +5,16 @@
 
 func_add_job(){
   if [[ ! -p ${FLOODGATE} ]];then
+    mkdir -p "$(dirname ${FLOODGATE})"
     mkfifo ${FLOODGATE}
     rm -rf runJobPoolSize*.log
     touch "$(dirname ${FLOODGATE})"/runJobPoolSize_0.log
   fi
   exec 6<>${FLOODGATE}
   echo >&6
-  echo "add done"
-  max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
-  ((max_jobs+=1))
-  echo "max_jobs=${max_jobs}"
+  origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  (( max_jobs=origin_max_jobs+1 ))
+  echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (+1)"
   if [[ -p ${FLOODGATE} ]];then
     rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
   fi
@@ -22,12 +22,13 @@ func_add_job(){
 
 func_add_job_n(){
   add_num=${1}
-  origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
-  if [[ ! -p ${FLOODGATE} ]];then
+  if [[ ! -p ${FLOODGATE} ]]; then
+    mkdir -p "$(dirname ${FLOODGATE})"
     mkfifo ${FLOODGATE}
     rm -rf runJobPoolSize*.log
     touch "$(dirname ${FLOODGATE})"/runJobPoolSize_0.log
   fi
+  origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
   max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
   for index in `seq $add_num`; do
     exec 6<>${FLOODGATE}
@@ -43,9 +44,16 @@ func_add_job_n(){
 }
 
 func_add_job_10(){
+  if [[ ! -p ${FLOODGATE} ]];then
+    mkdir -p "$(dirname ${FLOODGATE})"
+    mkfifo ${FLOODGATE}
+    rm -rf runJobPoolSize*.log
+    touch "$(dirname ${FLOODGATE})"/runJobPoolSize_0.log
+  fi
   origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
   for (( i=0;i<10;i++ )); do
     if [[ ! -p ${FLOODGATE} ]];then
+      mkdir -p "$(dirname ${FLOODGATE})"
       mkfifo ${FLOODGATE}
       rm -rf runJobPoolSize*.log
       touch "$(dirname ${FLOODGATE})"/runJobPoolSize_0.log
@@ -62,25 +70,65 @@ func_add_job_10(){
 }
 
 func_reduce_job(){
-  max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
-  if [[ $max_jobs -gt 2 ]]; then
-    if [[ -p ${FLOODGATE} ]]; then
-      exec 6<>${FLOODGATE}
-      read -u6
-      echo "reduce done"
-      ((max_jobs-=1))
-      echo "max_jobs=${max_jobs}"
-      rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+  mkdir -p "$(dirname ${FLOODGATE})"
+  {
+    origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+    if [[ $origin_max_jobs -gt 1 ]]; then
+      if [[ -p ${FLOODGATE} ]]; then
+        exec 6<>${FLOODGATE}
+        read -u6
+        origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+        if [[ $origin_max_jobs -gt 1 ]]; then
+          (( max_jobs = origin_max_jobs-1 ))
+        else
+          echo "reduce done, max_jobs=${origin_max_jobs}"
+          exit 0
+        fi
+        echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (-1, min=1)"
+        rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+      fi
+    else
+      echo "min=1, not reduce!"
     fi
-  else
-    echo "min 1, not reduce!"
-  fi
+  }&
 }
 
 func_reduce_job_10(){
-  for i in `seq 10`; do
-    reduce_job &
-  done
+  origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  reduce_num=0
+  if [[ $origin_max_jobs -gt 10 ]]; then
+    reduce_num=10
+  elif [[ $origin_max_jobs -gt 1 && $origin_max_jobs -le 10 ]]; then
+    (( reduce_num=origin_max_jobs-1 ))
+  else
+    echo "min=1, not reduce"
+    exit 1
+  fi
+  {
+    for i in `seq ${reduce_num}`; do
+    {
+      sleep 1s
+      if [[ -p ${FLOODGATE} ]]; then
+        exec 6<>${FLOODGATE}
+        read -u6
+        # echo "reduce ${i}"
+      fi
+    }&
+    done
+    wait
+    origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+    if [[ $origin_max_jobs -gt 10 ]]; then
+      reduce_num=10
+    elif [[ $origin_max_jobs -gt 1 && $origin_max_jobs -le 10 ]]; then
+      (( reduce_num=origin_max_jobs-1 ))
+    else
+      echo "reduce done, max_jobs=${origin_max_jobs}"
+      exit 0
+    fi
+    (( max_jobs=origin_max_jobs-reduce_num ))
+    echo "reduce done, max_jobs from ${origin_max_jobs} to ${max_jobs} (-${reduce_num}, min=1)"
+    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+  }&
 }
 
 func_get_job_pool_size(){
@@ -113,16 +161,12 @@ func_set_job_pool(){
   with_get_job_pool_size=false
   if [[ ! -p ${FLOODGATE} ]]; then
     #最大线程数
-    max_jobs=5
     mkdir -p "$(dirname ${FLOODGATE})"
     #chmod 777 "$(dirname ${FLOODGATE})"
     mkfifo ${FLOODGATE}
     exec 6<>${FLOODGATE}
     touch "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
     #chmod 666 "$(dirname ${FLOODGATE})"/*
-    for (( i=0;i<max_jobs;i++ )); do
-      echo >&6
-    done
     # echo "Create job pool"
   else
     exec 6<>${FLOODGATE}
