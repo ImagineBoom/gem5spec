@@ -33,12 +33,12 @@ with_kill_restore_all=false
 with_control_gem5=false
 with_control_m1=false
 
-with_add_thread=false
-with_add_thread_10=false
-with_reduce_thread=false
-with_reduce_thread_10=false
-with_del_thread_pool=false
-with_get_thread_pool_size=false
+with_add_job=false
+with_add_job_10=false
+with_reduce_job=false
+with_reduce_job_10=false
+with_del_job_pool=false
+with_get_job_pool_size=false
 with_func_gen_restore_compare_excel=false
 
 cmd_gem5_m1_control(){
@@ -227,7 +227,7 @@ cmd_gem5_spec2017(){
 cmd_control(){
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};
-  if [[ $pre == "--kill_restore_all" ]];then
+  if [[ $pre == "--kill_restore_all_jobs" ]];then
     options="--gem5 --m1"
   else
     options=""
@@ -272,12 +272,12 @@ cmd_hub(){
   with_control_gem5=false
   with_control_m1=false
 
-  with_add_thread=false
-  with_add_thread_10=false
-  with_reduce_thread=false
-  with_reduce_thread_10=false
-  with_del_thread_pool=false
-  with_get_thread_pool_size=false
+  with_add_job=false
+  with_add_job_10=false
+  with_reduce_job=false
+  with_reduce_job_10=false
+  with_del_job_pool=false
+  with_get_job_pool_size=false
   with_func_gen_restore_compare_excel=false
 
   local cur=${COMP_WORDS[COMP_CWORD]};
@@ -296,7 +296,7 @@ cmd_hub(){
       elif [[ ${pre} == "--m1" ]]; then
         COMPREPLY=( $(compgen -W "--myexe --spec2017" -- ${cur}) )
       elif [[ ${pre} == "--control" ]]; then
-        COMPREPLY=( $(compgen -W "--add_thread --reduce_thread --add_thread_10 --reduce_thread_10 --get_thread_pool_size --del_thread_pool --kill_restore_all" -- ${cur}) )
+        COMPREPLY=( $(compgen -W "--add_job --reduce_job --add_job_10 --reduce_job_10 --get_job_pool_size --del_job_pool --kill_restore_all_jobs" -- ${cur}) )
       else
         exit 1
       fi

@@ -26,7 +26,7 @@ source auto_cmpl.sh
 - 增加并行数
 
 ```bash
-./run.sh --control --add_thread_10
+./run.sh --control --add_job_10
 ```
 
 
@@ -34,7 +34,7 @@ source auto_cmpl.sh
 - kill所有restore ckp相关进程
 
 ```bash
-./run.sh --control --kill_restore_all --gem5
+./run.sh --control --kill_restore_all_jobs --gem5
 ```
 
 

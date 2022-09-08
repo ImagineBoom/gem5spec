@@ -9,8 +9,8 @@ getopt_cmd=$(getopt \
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
-restore_all,cpi_all,kill_restore_all,gen_restore_compare_excel,\
-control,add_thread,reduce_thread,del_thread_pool,add_thread_10,reduce_thread_10,get_thread_pool_size,\
+restore_all,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
+control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
 )
@@ -19,11 +19,11 @@ version,verbose,help \
 eval set -- "${getopt_cmd}"
 
 source ./scripts/utils.sh
-source ./scripts/thread_control.sh
+source ./scripts/job_control.sh
 
 FLOODGATE=$(cd "$(dirname "${0}")" && pwd )/running/run.fifo
 
-set_thread_pool "${FLOODGATE}"
+set_job_pool "${FLOODGATE}"
 
 #rm -rf nohup.out 2>/dev/null
 
@@ -80,31 +80,31 @@ case "${1#*=}" in
     WORK_DIR=$(cd "$(dirname "${0}")" && pwd )/runspec_gem5_power
     shift
     ;;
-  --add_thread)
-    with_add_thread=true
+  --add_job)
+    with_add_job=true
     shift
     ;;
-  --add_thread_10)
-    with_add_thread_10=true
+  --add_job_10)
+    with_add_job_10=true
     shift
     ;;
-  --reduce_thread)
-    with_reduce_thread=true
+  --reduce_job)
+    with_reduce_job=true
     shift
     ;;
-  --reduce_thread_10)
-    with_reduce_thread_10=true
+  --reduce_job_10)
+    with_reduce_job_10=true
     shift
     ;;
-  --del_thread_pool)
-    with_del_thread_pool=true
+  --del_job_pool)
+    with_del_job_pool=true
     shift
     ;;
-  --get_thread_pool_size)
-    with_get_thread_pool_size=true
+  --get_job_pool_size)
+    with_get_job_pool_size=true
     shift
     ;;
-  --kill_restore_all)
+  --kill_restore_all_jobs)
     with_kill_restore_all=true
     shift
     case "${1#*=}" in
@@ -330,16 +330,16 @@ elif [[ $is_gem5 == true ]]; then
       begin_time=$(date +"%Y%m%d%H%M%S")
       echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
-        (( add_thread = parallel_jobs - 5 ))
+        (( add_job = parallel_jobs - 5 ))
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         echo "WARNING: -j minimum(default) = 5, use default 5"
-        add_thread=0
+        add_job=0
       else
         echo "ERROR: -j must > 0 & integer"
         exit 1
       fi
-      add_thread_n ${add_thread}
-      (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_thread}" 2>&1 &)
+      func_add_job_n ${add_job}
+      (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_func_gen_restore_compare_excel == true ]]; then
@@ -351,18 +351,18 @@ elif [[ $is_gem5 == true ]]; then
     exit 1
   fi
 elif [[ $is_control == true ]]; then
-  if [[ $with_add_thread == true ]]; then
-    add_thread
-  elif [[ $with_add_thread_10 == true ]]; then
-    add_thread_10
-  elif [[ $with_reduce_thread == true ]]; then
-    reduce_thread
-  elif [[ $with_reduce_thread_10 == true ]]; then
-    reduce_thread_10
-  elif [[ $with_del_thread_pool == true ]]; then
-    delete_thread_pool
-  elif [[ $with_get_thread_pool_size == true ]]; then
-    get_thread_pool_size
+  if [[ $with_add_job == true ]]; then
+    func_add_job
+  elif [[ $with_add_job_10 == true ]]; then
+    func_add_job_10
+  elif [[ $with_reduce_job == true ]]; then
+    func_reduce_job
+  elif [[ $with_reduce_job_10 == true ]]; then
+    func_reduce_job_10
+  elif [[ $with_del_job_pool == true ]]; then
+    func_delete_job_pool
+  elif [[ $with_get_job_pool_size == true ]]; then
+    func_get_job_pool_size
   elif [[ $with_kill_restore_all == true ]]; then
     killobj=""
     if [[ $with_control_gem5 == true ]]; then
@@ -370,7 +370,7 @@ elif [[ $is_control == true ]]; then
     elif [[ $with_control_m1 == true ]]; then
       killobj="valgrind|simpoint|vgi2qt|run_timer|otimer|itrace|ScrollPipeViewer"
     fi
-    func_kill_restore_all "${killobj}" "${FLOODGATE}"
+    func_kill_restore_all_jobs "${killobj}" "${FLOODGATE}"
   else
     exit 1
   fi

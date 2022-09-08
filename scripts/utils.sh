@@ -212,10 +212,10 @@ func_help(){
       --gem5)
               --spec2017                                                                使用spec2017全部
       --control)
-              --add_thread|--add_thread_10                                              增加可运行的线程数
-              --reduce_thread|--reduce_thread_10                                        减少可运行的线程数
-              --del_thread_pool                                                         删除线程池
-              --kill_restore_all                                                        kill restore_all 的任务
+              --add_job|--add_job_10                                                    增加可运行的线程数
+              --reduce_job|--reduce_job_10                                              减少可运行的线程数
+              --del_job_pool                                                            删除线程池
+              --kill_restore_all_jobs                                                   kill restore_all 的任务
 
     [SEC_OPTS]:
       --myexe)
@@ -442,7 +442,7 @@ func_detect_restore_bg(){
     echo "DETECTING background tasks..."
   fi
   while : ; do
-    # kill run thread
+    # kill run job
     run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${detect_task_regex}" | grep -v grep| awk '{print \$5}'`)
     run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${detect_task_regex}" | grep -v grep| awk '{print \$1}'`)
     if [[ ${#run_nums[@]} -gt 0 ]]; then
@@ -566,7 +566,7 @@ func_with_restore_all_benchmarks(){
   fi
   exec 6>&-
   exec 6<&-
-  # delete thread pool
+  # delete job pool
   rm -rf $(dirname ${FLOODGATE})
 }
 
@@ -723,23 +723,23 @@ func_collect_all_m1_restore_data(){
 }
 
 # kill 之后会删除线程池
-func_kill_restore_all(){
+func_kill_restore_all_jobs(){
   FLOODGATE=${2}
   while : ; do
-    # check thread run
+    # check job run
     if [[ ! -p ${FLOODGATE} ]];then
       mkfifo ${FLOODGATE}
-      rm -rf runThreadPoolSize*.log
-      touch "$(dirname ${FLOODGATE})"/runThreadPoolSize_0.log
+      rm -rf runJobPoolSize*.log
+      touch "$(dirname ${FLOODGATE})"/runJobPoolSize_0.log
     fi
     exec 6<>${FLOODGATE}
     echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;echo >&6;
-    max_threads=$(find $(dirname ${FLOODGATE})/runThreadPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
-    ((max_threads+=8))
+    max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+    ((max_jobs+=8))
     if [[ -p ${FLOODGATE} ]];then
-      rename "s/runThreadPoolSize_\d+/runThreadPoolSize_${max_threads}/" "$(dirname ${FLOODGATE})"/runThreadPoolSize_*.log
+      rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
     fi
-    # kill run thread
+    # kill run job
     run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$5}'`)
     run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
     if [[ ${#run_nums[@]} -gt 0 ]]; then
@@ -753,7 +753,7 @@ func_kill_restore_all(){
       break
     fi
   done
-  # delete thread pool
+  # delete job pool
   rm -rf $(dirname ${FLOODGATE})
 }
 
