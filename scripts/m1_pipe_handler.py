@@ -12,6 +12,8 @@ from os import getpid as pid
 from os.path import basename
 from time import sleep
 
+from openpyxl.reader.excel import load_workbook
+
 
 #
 # 在scripts目录下执行
@@ -428,7 +430,47 @@ class Trace:
                 existed_files.append(os.path.join(root, name))
         return existed_files
 
-
+# 进行对比, 流水线图中抓取的执行周期数目跟UM10.16表格
+def insertUMinfo(source_csv_file="../data/20220829-P8_Insts.csv",write_path="../data/",write_name="20220908_p8_instr.csv"):
+    # 读取UM中整理好的数据
+    workbook = load_workbook(filename="../data/UM_10_16Table.xlsx")
+    sheet1 = workbook.active
+    with open(source_csv_file, "r", encoding='utf-8') as fr:
+        csv_reader = csv.reader(fr)
+        next(csv_reader)
+        headers = ["MNEMONIC","FREQUENCY","EXE_CYCLES","ISSUE_CYCLES","CATEGORY","VERSION","PDF_REAL","DESC"]
+        p8_insts_headers = ["MNEMONIC","FREQUENCY","EXE_CYCLES","UM_DESC","ISSUE_CYCLES","CATEGORY","VERSION","PDF_REAL","DESC"]
+        p8_insts_class = namedtuple('p8_insts_class', headers)
+        with open(write_path + write_name, 'w+', encoding="utf-8") as fw:
+            p8_insts_csv = csv.writer(fw)
+            p8_insts_csv.writerow(p8_insts_headers)
+            UM_MNEMONIC_dict = {}
+            # 从UM里查询
+            for row_num, row_cells in enumerate(sheet1["1:" + str(sheet1.max_row)], start=1):
+                MNEMONICS = str(row_cells[0].value).split(" ")
+                for MNEMONIC in MNEMONICS:
+                    value = str(row_cells[2].value)
+                    if value == "None":
+                        value=""
+                    UM_MNEMONIC_dict.setdefault(MNEMONIC, value)
+            for r in csv_reader:
+                row_info = p8_insts_class(*r)
+                print(row_info.MNEMONIC)
+                if UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")!=UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "") and UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "") != "":
+                    if UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")!="":
+                        UM_DESC=UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")+"; if with dot suffix: "+UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "")
+                    else:
+                        UM_DESC="only with dot suffix: "+UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "")
+                else:
+                    UM_DESC = UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")
+                # 写入
+                p8_insts_csv.writerow(
+                    [
+                        row_info.MNEMONIC,row_info.FREQUENCY,row_info.EXE_CYCLES,
+                        UM_DESC,
+                        row_info.ISSUE_CYCLES,row_info.CATEGORY,row_info.VERSION,row_info.PDF_REAL,row_info.DESC
+                    ]
+                )
 # def t():
 #     a = [1, 2, 3, 4, 5, 6]
 #     i = 0
