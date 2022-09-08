@@ -4,7 +4,7 @@ version="1.0.0"
 #解析命令行选项<optstring>及参数<parameters>
 
 getopt_cmd=$(getopt \
--o aiqrphvVj:c:b:e:j: \
+-o aiqrphvVc:b:e:j: \
 -l m1,gem5,spec2017:,myexe:,\
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
@@ -331,15 +331,27 @@ elif [[ $is_gem5 == true ]]; then
       begin_time=$(date +"%Y%m%d%H%M%S")
       echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
-        (( add_job = parallel_jobs ))
+        func_set_job_n_quiet 5
+        (( add_job = parallel_jobs-5 ))
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
-        echo "WARNING: -j minimum(default) = 5, use default 5"
-        add_job=5
+        read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
+        case $para in
+          [yY])
+            # echo "use default -j 5"
+            add_job=5
+            ;;
+          [nN])
+            add_job=$parallel_jobs
+            ;;
+          *)
+            read -p "Invalid input, please enter any key to exit" _
+            exit 0
+        esac # end case
       else
         echo "ERROR: -j must > 0 & integer"
         exit 1
       fi
-      func_add_job_n ${add_job}
+      func_set_job_n_default ${add_job}
       (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)

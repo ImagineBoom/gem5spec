@@ -20,6 +20,51 @@ func_add_job(){
   fi
 }
 
+func_set_job_n_default(){
+  add_num=${1}
+  if [[ ! -p ${FLOODGATE} ]]; then
+    mkdir -p "$(dirname ${FLOODGATE})"
+    mkfifo ${FLOODGATE}
+    rm -rf runJobPoolSize*.log
+    touch "$(dirname "${FLOODGATE}")"/runJobPoolSize_0.log
+  fi
+  origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  for index in `seq $add_num`; do
+    exec 6<>${FLOODGATE}
+    echo >&6
+    # echo "add done"
+    ((max_jobs+=1))
+    # echo "max_jobs=${max_jobs}"
+  done
+  if [[ -p ${FLOODGATE} ]];then
+    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+  fi
+  echo "max_jobs is set to ${max_jobs}"
+}
+
+func_set_job_n_quiet(){
+  add_num=${1}
+  if [[ ! -p ${FLOODGATE} ]]; then
+    mkdir -p "$(dirname ${FLOODGATE})"
+    mkfifo ${FLOODGATE}
+    rm -rf runJobPoolSize*.log
+    touch "$(dirname ${FLOODGATE})"/runJobPoolSize_0.log
+  fi
+  origin_max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
+  for index in `seq $add_num`; do
+    exec 6<>${FLOODGATE}
+    echo >&6
+    # echo "add done"
+    ((max_jobs+=1))
+    # echo "max_jobs=${max_jobs}"
+  done
+  if [[ -p ${FLOODGATE} ]];then
+    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+  fi
+}
+
 func_add_job_n(){
   add_num=${1}
   if [[ ! -p ${FLOODGATE} ]]; then
@@ -40,7 +85,7 @@ func_add_job_n(){
   if [[ -p ${FLOODGATE} ]];then
     rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
   fi
-  echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (+${add_num}, default=5)"
+  echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (+${add_num}"
 }
 
 func_add_job_10(){
