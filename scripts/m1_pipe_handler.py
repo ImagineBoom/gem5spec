@@ -20,7 +20,7 @@ from openpyxl.reader.excel import load_workbook
 #
 # ../data/pipeline_result/ 保存最终结果
 # ../data/pipeline_graph/ 保存展开折叠后的所有流水线图文件
-# ../data/scripts_csv_power-isa-implementation.csv 是依赖的源文件，用做检索的key
+# ../data/meta/scripts_csv_power-isa-implementation.csv 是依赖的源文件，用做检索的key
 
 def runcmd(command):
     ret = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="utf-8",
@@ -455,7 +455,7 @@ class Trace:
 # 进行对比, 流水线图中抓取的执行周期数目跟UM10.16表格
 def insertUMinfo(source_csv_file="../data/20220829-P8_Insts.csv",write_path="../data/",write_name="20220908_p8_instr.csv"):
     # 读取UM中整理好的数据
-    workbook = load_workbook(filename="../data/UM_10_16Table.xlsx")
+    workbook = load_workbook(filename="../data/meta/UM_10_16Table.xlsx")
     sheet1 = workbook.active
     with open(source_csv_file, "r", encoding='utf-8') as fr:
         csv_reader = csv.reader(fr)
@@ -579,7 +579,7 @@ if __name__ == '__main__':
     print("MERGE-ENDED")
     merge.calculate_issue_cycle_frequency()
     merge.calculate_exe_cycle_frequency()
-    merge.sort(source_csv_file="../data/scripts_csv_power-isa-implementation.csv",
+    merge.sort(source_csv_file="../data/meta/scripts_csv_power-isa-implementation.csv",
                write_path="../data/pipeline_result/", write_name=start_time.strftime('%Y%m%d') + "-" + "P8_Insts.csv")
     print("SORT-ENDED")
     end_time = datetime.datetime.now()
