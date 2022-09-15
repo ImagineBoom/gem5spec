@@ -189,7 +189,10 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
                     if col == 9:
                         cell.number_format='0.000%'
                         # =IFS(E2=0,"",F2=0,"",G2<>0,(H2-G2)/G2)
-                sheet2.cell(bm_end_row,9).value="=IFS(E"+str(bm_end_row)+"=0,\"\",F"+str(bm_end_row)+"=0,\"\",G"+str(bm_end_row)+"<>0,(H"+str(bm_end_row)+"-G"+str(bm_end_row)+")/G"+str(bm_end_row)+")"
+                if str(sheet2.cell(bm_end_row,column_index_from_string('E')).value)=="0" or str(sheet2.cell(bm_end_row,column_index_from_string('F')).value)=="0":
+                    sheet2.cell(bm_end_row,9).value=""
+                else:
+                    sheet2.cell(bm_end_row,9).value="=IFS(E"+str(bm_end_row)+"=0,\"\",F"+str(bm_end_row)+"=0,\"\",G"+str(bm_end_row)+"<>0,(H"+str(bm_end_row)+"-G"+str(bm_end_row)+")/G"+str(bm_end_row)+")"
             else:
                 # print("N",next_row_idx,next_row_cells[0].value,"A"+str(bm_begin_row)+":"+"A"+str(bm_end_row))
                 # print(bm_end_row,sheet2.max_row)
