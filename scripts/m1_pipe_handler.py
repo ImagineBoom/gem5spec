@@ -49,7 +49,7 @@ class IssueCycle:
 
 # 具体的每条指令
 class instruction:
-    def __init__(self, IopId, MnemonicValue, InstAddrLow32, DataAddrLow32, Pipe) -> None:
+    def __init__(self, IopId, MnemonicValue, InstAddrLow32, DataAddrLow32, Pipe, filename="") -> None:
         self.IopId: int = IopId
         self.MnemonicValue: str = MnemonicValue
         self.InstAddrLow32: str = InstAddrLow32
@@ -58,7 +58,15 @@ class instruction:
         self.issueCycle = IssueCycle()
         self.inst_place: int = 0  # 当前Instruction是第几条
         self.Pipe = Pipe
+        self.filename = filename
+        self.benchmark = ""
+        self.location = -1
 
+    def set_benchmark(self,benchmark_name):
+        self.benchmark = benchmark_name
+
+    def set_location(self,instruction_location):
+        self.location = instruction_location
 
 # 每种(助记符相同的)指令
 class Instruction:
@@ -113,8 +121,8 @@ class Trace:
                 InstAddrLow32 = pipeline.group('inst_addr_low32')
                 DataAddrLow32 = pipeline.group('data_addr_low32')
                 Pipe = pipeline.group('pipe')
-                new_inst = instruction(IopId=IopId, MnemonicValue=MnemonicValue, InstAddrLow32=InstAddrLow32,
-                                       DataAddrLow32=DataAddrLow32, Pipe=Pipe)
+                new_inst = instruction(IopId=int(IopId), MnemonicValue=MnemonicValue, InstAddrLow32=InstAddrLow32,
+                                       DataAddrLow32=DataAddrLow32, Pipe=Pipe, filename=fname)
                 haveSameInst = False
                 # print(MnemonicKey)
                 # print(IopId,MnemonicValue,InstAddrLow32,DataAddrLow32,Pipe)
@@ -246,17 +254,32 @@ class Trace:
         with open(write_path + basename(this_fname), 'w', encoding='utf-8') as f:
             f.write(format("MNEMONIC-L", "<20") +
                     format("IOP-ID", "<20") +
+                    format("Benchmark", "<20") +
+                    # format("Location", "<20") +
+                    format("Pipeline-File", "<60") +
                     format("MNEMONIC-R", "<20") +
                     format("EXE-CYCLES", "<20") +
                     format("ISSUE-CYCLES", "<20") +
                     format("INST-ADDR-LOW-32", "<20") +
-                    format("DATA-ADDR-LOW-32", "<20") + "PIPE-JOBS" +
+                    format("DATA-ADDR-LOW-32", "<20") + "Pipeline-Graph" +
                     '\n')
+            pipeline_file_pattern = re.compile(
+                r'(?P<begin>\d+)_(?P<end>\d+)_(?P<simpt>\d+)_(?P<interval>\d+)_(?P<benchmark>.*)\.txt')
             for this_key, this_insts in self.instruction_dict.items():
                 # f.write(this_key + '\n')
                 for i in this_insts.list:
+                    pipeline_file_name_group = pipeline_file_pattern.search(os.path.basename(i.filename))
+                    if pipeline_file_name_group:
+                        if len(pipeline_file_name_group.groups()) == 5:
+                            i.set_benchmark(pipeline_file_name_group.group("benchmark"))
+                            i.set_location(
+                                int(pipeline_file_name_group.group("simpt"))*int(pipeline_file_name_group.group("interval"))+i.IopId
+                            )
                     f.write(format(this_key, "<20") +
                             format(str(i.IopId), "<20") +
+                            format(str(i.benchmark), "<20") +
+                            # format(str(i.location), "<20") +
+                            format(str(i.filename), "<60") +
                             format(i.MnemonicValue, "<20") +
                             format(str(i.exeCycle.cycle_num), "<20") +
                             format(str(i.issueCycle.cycle_num), "<20") +
@@ -503,10 +526,11 @@ if __name__ == '__main__':
     existed_files = Trace.get_existed()
     # 1. 并行
     # pipe_list_temp = runcmd(["find ../*.txt"])
-    pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
+    pipe_list_temp = ["../500001_505000_1_5000000_523.xalancbmk_r.txt"]
+
+    # pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
     runcmd(["mkdir -p ../data/pipeline_graph/"])
     runcmd(["mkdir -p ../data/pipeline_result/"])
-    # pipe_list_temp = ["../114_5000000_554.roms_r.txt"]
     pipe_list = list(sorted(set(pipe_list_temp)))
     # [print(f) for f in pipe_list]
     if "" in pipe_list:
@@ -549,7 +573,7 @@ if __name__ == '__main__':
     for key, insts in merge.instruction_dict.items():
         merge.instruction_dict.setdefault(key, Instruction()).frequency = \
             merge.instruction_dict.setdefault(key, Instruction()).count / merge.inst_count
-
+    merge.wirte(write_path="../data/pipeline_result/", write_name="mid")
     merge.tidy()
     print("TIDY-ENDED")
     merge.wirte(write_path="../data/pipeline_result/", write_name=start_time.strftime('%Y%m%d') + "-" + merge.fname)
