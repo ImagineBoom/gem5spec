@@ -152,7 +152,7 @@ class Trace:
 
     def calculate_cycles(self):
         exe_pattern = re.compile(r'.(E+)[^EI]*f\.*C')
-        issue_pattern = re.compile(r'M([^sI]*)I[^s]*f\.*C')
+        issue_pattern = re.compile(r'M([^uSdsI]*)I[^sS]*f\.*C')
         for this_key, this_insts in self.instruction_dict.items():
             for index, val in enumerate(this_insts.list):
                 exe = exe_pattern.search(val.Pipe)
