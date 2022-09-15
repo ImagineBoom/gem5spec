@@ -56,11 +56,10 @@ class instruction:
         self.DataAddrLow32: str = DataAddrLow32
         self.exeCycle = ExeCycle()
         self.issueCycle = IssueCycle()
-        self.inst_place: int = 0  # 当前Instruction是第几条
         self.Pipe = Pipe
         self.filename = filename
         self.benchmark = ""
-        self.location = -1
+        self.location = -1 # 当前Instruction是第几条
 
     def set_benchmark(self,benchmark_name):
         self.benchmark = benchmark_name
@@ -129,7 +128,7 @@ class Trace:
                 insts = self.instruction_dict.setdefault(MnemonicKey, Instruction())
                 for index, inst in enumerate(insts.list):
                     if inst.MnemonicValue == MnemonicValue and inst.InstAddrLow32 == InstAddrLow32 and inst.DataAddrLow32 == DataAddrLow32:
-                        if inst.IopId == IopId:
+                        if str(inst.IopId) == str(IopId):
                             self.instruction_dict[MnemonicKey].list[index].Pipe += Pipe
                             haveSameInst = True
                             break
@@ -526,9 +525,9 @@ if __name__ == '__main__':
     existed_files = Trace.get_existed()
     # 1. 并行
     # pipe_list_temp = runcmd(["find ../*.txt"])
-    pipe_list_temp = ["../500001_505000_1_5000000_523.xalancbmk_r.txt"]
+    # pipe_list_temp = ["../500001_505000_1_5000000_523.xalancbmk_r.txt"]
 
-    # pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
+    pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
     runcmd(["mkdir -p ../data/pipeline_graph/"])
     runcmd(["mkdir -p ../data/pipeline_result/"])
     pipe_list = list(sorted(set(pipe_list_temp)))
