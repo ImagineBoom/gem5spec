@@ -188,11 +188,11 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
                         cell.data_type='float'
                     if col == 9:
                         cell.number_format='0.000%'
-                        # =IFS(E2=0,"",F2=0,"",G2<>0,(H2-G2)/G2)
+                # =IFS(E2=0,"",F2=0,"",G2<>0,(H2-G2)/G2)
                 if str(sheet2.cell(bm_end_row,column_index_from_string('E')).value)=="0" or str(sheet2.cell(bm_end_row,column_index_from_string('F')).value)=="0":
-                    sheet2.cell(bm_end_row,9).value=""
+                    sheet2.cell(bm_end_row,9).value="."
                 else:
-                    sheet2.cell(bm_end_row,9).value="=IFS(E"+str(bm_end_row)+"=0,\"\",F"+str(bm_end_row)+"=0,\"\",G"+str(bm_end_row)+"<>0,(H"+str(bm_end_row)+"-G"+str(bm_end_row)+")/G"+str(bm_end_row)+")"
+                    sheet2.cell(bm_end_row,9).value="=(H"+str(bm_end_row)+"-G"+str(bm_end_row)+")/G"+str(bm_end_row)
             else:
                 # print("N",next_row_idx,next_row_cells[0].value,"A"+str(bm_begin_row)+":"+"A"+str(bm_end_row))
                 # print(bm_end_row,sheet2.max_row)
@@ -247,7 +247,7 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
 
     # 条件格式
     rule2=CellIsRule(operator='between',formula=[-0.25,0.25],fill=PatternFill(end_color='33cc33'))#筛选25%以内的绿色显示
-    sheet2.conditional_formatting.add("I1:"+"I"+str(sheet2.max_row),rule2)
+    sheet2.conditional_formatting.add("I1:"+"I"+str(sheet2.max_row-1),rule2)
     rule3 = FormulaRule(formula=['AND(I2>-0.25,I2<0.25)'], fill=PatternFill(end_color='33cc33'))
     sheet2.conditional_formatting.add("B2:"+"B"+str(sheet2.max_row-1),rule3)
     rule3 = FormulaRule(formula=['AND(F2>-0.25,F2<0.25)'], fill=PatternFill(end_color='33cc33'))
