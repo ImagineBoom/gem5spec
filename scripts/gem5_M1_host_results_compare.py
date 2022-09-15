@@ -9,16 +9,21 @@ from collections import namedtuple
 
 import openpyxl
 from pandas import read_csv
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
 from openpyxl.chart import LineChart, Reference, Series
 from openpyxl.utils import get_column_letter, column_index_from_string
 from openpyxl.styles import Alignment, Border, Side, Font, PatternFill
 from openpyxl.formatting.rule import CellIsRule, FormulaRule
 
 # 在gem5spec目录下调用
+# 改
 begin_time=str(sys.argv[1])
+# begin_time="20220915"
 gem5_ckp_results_csv = "./data/gem5/"+begin_time+"/Each_case_ckp_data.csv"
 M1_ckp_results_csv = "./data/M1/each_bm_cpt_m1.csv"
+# 改
+gen_file="./data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
+# gen_file="../data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
 
 
 def runcmd(command):
@@ -119,32 +124,78 @@ def pyCellFontStyle(wss, onlyRow=False, rowNumStart: int = 1, onlyCol=False,
                                 ws.cell(rowNumStart + i, colNumStart + j).border = Border(bottom=side)
                         # print(rowNumStart + i,colNumStart + j,ws.cell(rowNumStart + i, colNumStart + j).value)
 
+# copy sheet from src->dst, 当默认Sheet1时，默认直接写入，不用指定sheet name
+def copy_sheet(src_xlsx,dst_xlsx,src_sheetname="Sheet1",dst_sheetname="Sheet1"):
+    sw=load_workbook(f'{src_xlsx}')
+    dw=load_workbook(f'{dst_xlsx}')
+    src_sheet=sw[f'{src_sheetname}']
+    dst_sheet = dw[f'{dst_sheetname}']
 
-def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ckp_results_csv, write_path="",write_name=""):
+    for row in src_sheet.iter_rows():
+        row_list=[]
+        for cell in row:
+            row_list.append(cell.value)
+        dst_sheet.append(row_list)
+    dw.save(f'{dst_xlsx}')
+
+
+def data_pre(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ckp_results_csv,template_excel_path="./data/meta/gem5_statistics_result_template.xlsx"):
+    # 改
     runcmd("mkdir -p ./data/gem5/"+begin_time)
     runcmd("paste -d ',' "+M1_source_csv_file+" "+gem5_source_csv_file+" >./data/gem5/M1_gem5_paste.csv")
+    excel_path="./temp.xlsx"
+
     # datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    gen_file="./data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
     with open("./data/gem5/M1_gem5_paste.csv", "r", encoding='utf-8') as fr_M1_gem5:
-        read_csv(fr_M1_gem5).to_excel(gen_file)
+        read_csv(fr_M1_gem5).to_excel(excel_path)
+
+    workbook = load_workbook(filename=excel_path)
+    sheet=workbook.active
+    sheet.delete_cols(1)
+    sheet.insert_cols(2)
+    sheet.insert_cols(6)
+    sheet.insert_cols(8)
+    # print(sheet.max_row)
+    sheet.move_range("J1:"+"J"+str(sheet.max_row),rows=0,cols=-8)
+    sheet.move_range("M1:"+"M"+str(sheet.max_row),rows=0,cols=-7)
+    sheet.move_range("N1:"+"N"+str(sheet.max_row),rows=0,cols=-6)
+    sheet.delete_cols(9,4)
+    sheet.insert_cols(9)
+    sheet.cell(1,9).value="WeightedCPI Err(Ckp gem5/M1)"
+    merge_cols=[]
+    delete_rows=[]
+    row_num=1
+    # 数据清洗
+    for row_num,row_cells in enumerate(sheet["2:"+str(sheet.max_row)],start=2):
+        if row_cells[0].value == "Benchmark" or row_cells[0].value == None:
+            # print(row_num)
+            delete_rows.append(row_num)
+    for row_num in delete_rows[::-1]:
+        sheet.delete_rows(row_num)
+    workbook.save(excel_path)
+
+    workbook2 = load_workbook(filename=template_excel_path)
+    sheet0=workbook2.active
+    sheet1=workbook2.create_sheet("summary",1)
+    sheet2=workbook2.create_sheet("eachCkp",2)
+    workbook2.save(gen_file)
+
+    copy_sheet("./temp.xlsx",gen_file,"Sheet1","eachCkp")
+    runcmd('rm -rf ./temp.xlsx')
+
+def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta/gem5_statistics_result_template.xlsx"):
     M1_gem5_ckp_class = namedtuple('M1_gem5_ckp_class',
                                    [
                                        "Benchmark","Checkpoint","Simpts","Weights","CPI_M1","CPI_gem5","WeightedCPI_M1","WeightedCPI_gem5",
                                    ])
+
     workbook = load_workbook(filename=gen_file)
-    workbook._active_sheet_index=1
-    sheet1=workbook.create_sheet("summary",0)
-    sheet2=workbook.active
-    sheet2.title="eachCkp"
-    sheet2.delete_cols(1)
-    sheet2.insert_cols(2)
-    sheet2.insert_cols(6)
-    sheet2.insert_cols(8)
-    # print(sheet2.max_row)
-    sheet2.move_range("J1:"+"J"+str(sheet2.max_row),rows=0,cols=-8)
-    sheet2.move_range("M1:"+"M"+str(sheet2.max_row),rows=0,cols=-7)
-    sheet2.move_range("N1:"+"N"+str(sheet2.max_row),rows=0,cols=-6)
-    sheet2.delete_cols(9,4)
+    sheet0=workbook.active
+    sheet1=workbook["summary"]
+    sheet2=workbook["eachCkp"]
+
+    # 处理sheet0
+
     # 处理sheet1-summary
     initial_data=[["","Benchmark","Sum WeightedCPI(Ckp M1)","Sum WeightedCPI(Ckp gem5)","Total WeightedCPI(Ckp gem5)","Sum WeightedCPI Err(Ckp gem5/M1)","Credibility(Ckp M1)"],
                   ["int","500.perlbench_r"],["int","502.gcc_r"],["int","505.mcf_r"],["int","520.omnetpp_r"],["int","523.xalancbmk_r"],["int","525.x264_r"],["int","531.deepsjeng_r"],["int","541.leela_r"],["int","548.exchange2_r"],["int","557.xz_r"],
@@ -160,19 +211,7 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
     bm_end_row=0
     bm=""
     # print(sheet2.max_row)
-    sheet2.insert_cols(9)
-    sheet2.cell(1,9).value="WeightedCPI Err(Ckp gem5/M1)"
-    merge_cols=[]
-    delete_rows=[]
-    row_num=1
-    # 数据清洗
-    for row_num,row_cells in enumerate(sheet2["2:"+str(sheet2.max_row)],start=2):
-        if row_cells[0].value == "Benchmark" or row_cells[0].value == None:
-            # print(row_num)
-            delete_rows.append(row_num)
-    for row_num in delete_rows[::-1]:
-        sheet2.delete_rows(row_num)
-    workbook.save("new0.xlsx")
+
     # 数据处理
     bm_begin_row=2
     sheet2.append(["","","","","","","","",""]) # 最后一行特殊处理，用于识别
@@ -227,6 +266,10 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
                 # print(bm_begin_row)
                 break
 
+    # 刷新sheet0
+    for index,row_cells in enumerate(sheet0["N2:N25"],start=2):
+        for cell in row_cells:
+            cell.value="=summary!F"+str(index)
 
     # results_compare.writerow(["Benchmark#","Checkpoint#","Simpts","Weights","M1_CPI","gem5_CPI","M1_WeightedCPI","gem5_WeightedCPI"])
 
@@ -279,7 +322,7 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
     # 冻结首行, A2是因为会冻结选定单元格左边的所有列和上面的所有行
     sheet1.freeze_panes = 'A2'
     sheet2.freeze_panes = 'A2'
-    workbook.active=sheet1
+    workbook.active=sheet0
     workbook.save(gen_file)
     print("")
     print("")
@@ -288,4 +331,5 @@ def gen_cmp_results(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=
     print("==================================================================================================")
     print("")
     # print(sheet1.max_column)
+data_pre()
 gen_cmp_results()
