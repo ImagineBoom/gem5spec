@@ -269,7 +269,7 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     # 刷新sheet0
     for index,row_cells in enumerate(sheet0["N2:N25"],start=2):
         for cell in row_cells:
-            cell.value="=summary!F"+str(index)
+            cell.value="=summary!E"+str(index)
 
     # results_compare.writerow(["Benchmark#","Checkpoint#","Simpts","Weights","M1_CPI","gem5_CPI","M1_WeightedCPI","gem5_WeightedCPI"])
 
