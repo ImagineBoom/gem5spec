@@ -278,7 +278,7 @@ class Trace:
                             format(str(i.IopId), "<20") +
                             format(str(i.benchmark), "<20") +
                             # format(str(i.location), "<20") +
-                            format(str(i.filename), "<60") +
+                            format(os.path.basename(str(i.filename)), "<60") +
                             format(i.MnemonicValue, "<20") +
                             format(str(i.exeCycle.cycle_num), "<20") +
                             format(str(i.issueCycle.cycle_num), "<20") +
