@@ -172,16 +172,6 @@ benchmark和自定义程序皆可
     *  所有的benchmark执行指令数均为5,000,000(q_convert\r_insts),itrace按最大指令数转换,流水线区间为[jump+1,jump+400]
        ./run.sh --m1 --spec2017 --all_benchmarks --q_jump=9999 --q_convert=5000000 --r_pipe_begin=1 --r_pipe_end=400
 
-    *  所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
-       ./run.sh --m1 --spec2017 --entire_all_benchmarks
-       ./run.sh --m1 --spec2017 --entire_all_benchmarks --max_insts
-
-    *  所有的benchmark按1000条指令分段执行
-       ./run.sh --m1 --spec2017 --entire_all_benchmarks --slice_len=1000
-
-    *  test-p8按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
-       ./run.sh --m1 --myexe ./test-p8 --entire
-
     PATTERN-2: 缺省参数模式【推荐】
 
     *  运行m1的整个流程,生成前最大指令数的itrace,qtrace区间为[begin,end],执行400条(end-begin+1),流水线区间为[begin,end]
@@ -192,7 +182,11 @@ benchmark和自定义程序皆可
 
 ```
 
-
+### 4. 输出文件/目录说明
+gem5spec_v0_M1/runspec_gem5_power/*r/
+1. pipe_result/目录下存放采集后处理为每条指令只输出一行的流水线文本图, 命名规则: 起始指令_结束指令_Simpts_intervalSize_benchmarkName.txt
+2. M1_result/目录下存放M1的输出文件, 包括后缀为.result/.config/.qt/.pipe 的文件, 命名规则: Simpts_intervalSize_benchmarkName.后缀名
+3. CPI_result/5000000_Calculate_WeightedCPI.log文件存放所有采样点的有效trace运行后对应的CPI结果，总共4列，分别表示：Simpts,Weights,CPI(Ckp M1),WeightedCPI(Ckp M1)
 
 
 
