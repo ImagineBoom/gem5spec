@@ -71,7 +71,6 @@ Benchmark,Simpts,Weights,CPI,WeightedCPI
 520.omnetpp_r,2027,0.00282,0.9581,0.00270184
 520.omnetpp_r,407,0.00176,2.20084,0.00387348
 520.omnetpp_r,2030,0.00141,0.97046,0.00136835
-520.omnetpp_r,1,0.00106,0.81079,0.000859437
 ,,,,
 Benchmark,Simpts,Weights,CPI,WeightedCPI
 523.xalancbmk_r,36,0.44304,0.92179,0.40839
