@@ -267,7 +267,7 @@ make restore NUM_CKP=1 CPU_TYPE=O3CPU
 进入`runspec_gem5_power`目录下某个测例的文件后，输入以下命令
 
 ```bash
-make restore_case CPU_TYPE=O3CPU
+make restore_case CPU_TYPE=XXXCPU
 ```
 
 该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，会在`xxx_RS_NUM.log`中记录`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。
@@ -288,8 +288,7 @@ make restore_status
 
 ```bash
 source auto_cmpl.sh #激活自动补全
-./run.sh --gem5 --spec2017 --restore_all
-./run.sh --control --add_thread_10 #增加线程数量，可根据运行环境决定使用线程的数量 
+./run.sh --gem5 --spec2017 --restore_all -j N
 ```
 
 ### 4.CPI统计
