@@ -9,7 +9,7 @@ getopt_cmd=$(getopt \
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
-restore_all,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
+restore_all,restore_all_4,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
 control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
@@ -238,6 +238,22 @@ case "${1#*=}" in
         ;;
     esac
     ;;
+  --restore_all_4)
+    with_restore_all_4=true
+    shift
+    case "${1#*=}" in
+      -j)
+        parallel_jobs=${2#*=}
+        shift 2
+        ;;
+      --)
+        shift
+        ;;
+      *)
+        exit 1
+        ;;
+    esac
+    ;;
   --gen_restore_compare_excel)
     with_func_gen_restore_compare_excel=true
     shift
@@ -287,6 +303,8 @@ if [[ $is_m1 == true ]]; then
       (func_with_entire_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_restore_all == true ]]; then
       (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.out 2>&1 &)
+    elif [[ $with_restore_all_4 == true ]]; then
+      (func_with_restore_all_benchmarks_n4 "${FLOODGATE}" >>nohup.out 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     else

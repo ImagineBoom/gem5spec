@@ -30,6 +30,7 @@ with_max_insts=false
 with_slice_len=false
 
 with_restore_all=false
+with_restore_all_4=false
 with_cpi_all=false
 with_kill_restore_all=false
 with_control_gem5=false
@@ -564,6 +565,88 @@ func_with_restore_all_benchmarks(){
     mv ./nohup.out ./data/M1/"${begin_time}"/ 2>/dev/null
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/M1/"${begin_time}"/ 2>/dev/null
   fi
+  exec 6>&-
+  exec 6<&-
+  # delete job pool
+  rm -rf $(dirname ${FLOODGATE})
+}
+
+func_with_restore_all_benchmarks_n4(){
+  bm=(
+    "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
+    "503.bwaves_r" "507.cactuBSSN_r" "508.namd_r" "510.parest_r" "511.povray_r" "519.lbm_r" "521.wrf_r" "526.blender_r" "527.cam4_r" "538.imagick_r" "544.nab_r" "549.fotonik3d_r" "554.roms_r" "999.specrand_ir"
+  )
+  FLOODGATE=${1}
+  begin_time=${2}
+  WORK_DIR=${3}
+  parallel_jobs=${4}
+  date1=$(date +"%Y-%m-%d %H:%M:%S")
+  for FILE in ${bm[@]}
+  do
+    read -u6
+    {
+      echo >&6
+      if [[ $is_gem5 == true ]]; then
+        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+        opt="make restore_all_4 -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
+        ${opt} >>nohup.out 2>&1
+        # 每运行完一个benchmark做出统计
+        wait
+#        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+#        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
+#        ${opt} >/dev/null 2>&1
+      elif [[ $is_m1 == true ]]; then
+        mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
+        opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
+        ${opt} >>nohup.out 2>&1
+      fi
+    }&
+  done
+  wait
+
+  # 检测是否被中断，如果被中断则不存在FLOODGATE，程序退出
+  if [[ ! -p ${FLOODGATE} ]];then
+    exit 1
+  fi
+
+  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  echo "func_with_restore_all_benchmarks_n4 ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+  date2=$(date +"%Y-%m-%d %H:%M:%S")
+  sys_date1=$(date -d "$date1" +%s)
+  sys_date2=$(date -d "$date2" +%s)
+  seconds=`expr $sys_date2 - $sys_date1`
+  hour=$(( $seconds/3600 ))
+  min=$(( ($seconds-${hour}*3600)/60 ))
+  sec=$(( $seconds-${hour}*3600-${min}*60 ))
+  HMS=`echo ${hour}:${min}:${sec}`
+
+  echo "restore_all_4 consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
+#  # backup
+#  if [[ $is_gem5 == true ]]; then
+#    # 统计数据
+#    func_gen_restore_compare_excel "${begin_time}"
+#    # 备份数据
+#    for FILE in ${bm[@]}
+#    do
+#        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+#        find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
+#        # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
+#        # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+#        # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+#    done
+#    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+#    mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
+#  elif [[ $is_m1 == true ]]; then
+#    func_collect_handle_all_m1_restore_data
+#    for FILE in ${bm[@]}
+#    do
+#      mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
+#      mv ./runspec_gem5_power/"${FILE}"/*.csv ./data/M1/"${begin_time}"/"${FILE}"/ 2>/dev/null
+#    done
+#    mv *.csv ./data/M1/"${begin_time}"/ 2>/dev/null
+#    mv ./nohup.out ./data/M1/"${begin_time}"/ 2>/dev/null
+#    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/M1/"${begin_time}"/ 2>/dev/null
+#  fi
   exec 6>&-
   exec 6<&-
   # delete job pool
