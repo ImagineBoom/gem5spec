@@ -52,6 +52,12 @@ checkpoints: $(EXECUTABLE)
 	@echo ---------------------cpts handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_checkpoints.log >> $(FILE)_trace_err.log; true
 
+checkpoints_4: $(EXECUTABLE)
+	@echo ---------------------cpts handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
+	$(TIMEG) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoints=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -n 4 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS)" --mem-size=16384MB >$(FILE)_checkpoints.log 2>&1
+	@echo ---------------------cpts handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_checkpoints.log >> $(FILE)_trace_err.log; true
+
 restore: $(EXECUTABLE)
 	@echo ---------------------rscpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
 	$(TIMEG) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$(NUM_CKP).log 2>&1
@@ -111,8 +117,8 @@ restore_case: $(EXECUTABLE)
 		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
 		cpi=0;\
-		[ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
+		[ `grep "system.switch_cpus.totalCpi" ./output_ckp$${1}/stats.txt | wc -l` == 2 ] \
+		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${1}/stats.txt | awk 'END{print $$2}'`;\
 		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log)& \
 	done;
