@@ -183,16 +183,12 @@ benchmark和自定义程序皆可
 ```
 
 ### 4. 输出文件/目录说明
+
 gem5spec_v0_M1/runspec_gem5_power/*r/
+
 1. pipe_result/目录下存放采集后处理为每条指令只输出一行的流水线文本图, 命名规则: 起始指令_结束指令_Simpts_intervalSize_benchmarkName.txt
 2. M1_result/目录下存放M1的输出文件, 包括后缀为.result/.config/.qt/.pipe 的文件, 命名规则: Simpts_intervalSize_benchmarkName.后缀名
 3. CPI_result/5000000_Calculate_WeightedCPI.log文件存放所有采样点的有效trace运行后对应的CPI结果，总共4列，分别表示：Simpts,Weights,CPI(Ckp M1),WeightedCPI(Ckp M1)
-
-
-
-
-
-
 
 ------
 
@@ -246,6 +242,12 @@ make checkpoints
 make checkpoints_all_cases -j24
 ```
 
+如果使用4核模式生成24个测例的Checkpoints文件，在`runspec_gem5_power`目录下执行如下命令
+
+```bash
+make checkpoints_all_cases_4 -j24
+```
+
 ### 3.使用Gem5恢复Checkpoints
 
 #### 3.1恢复某一个Checkpoint
@@ -290,6 +292,16 @@ make restore_status
 source auto_cmpl.sh #激活自动补全
 ./run.sh --gem5 --spec2017 --restore_all -j N
 ```
+
+> 这里的N指定的是线程池最大的线程数量，可根据机器硬件情况和当前任务量决定
+
+如果想要用4核模式restore checkpoints可以使用下面的命令(checkpoints需要是4核模式生成的)
+
+```bash
+./run.sh --gem5 --spec2017 --restore_all_4 -j N
+```
+
+执行该命令后，任务会放入后台执行，根据指定的线程数量循环restore所有测例的全部checkpoints。所有的checkpoints完成restore后，会自动生成存放统计数据表格的路径。
 
 ### 4.CPI统计
 
