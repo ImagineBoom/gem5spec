@@ -30,7 +30,9 @@ def runcmd(command):
         return ret.stdout.split('\n')
     else:
         # print("error:", ret)
-        return ret.stderr.split('\n')
+        temp_list=ret.stderr.split('\n')
+        temp_list.insert(0,"error")
+        return temp_list
 
 
 class ExeCycle:
@@ -541,18 +543,22 @@ def pd():
 if __name__ == '__main__':
     threads = []
     start_time = datetime.datetime.now()
-    # 0. 检查
-    existed_files = Trace.get_existed()
+    # 0. 检查[]
+    # existed_files = Trace.get_existed()
+    existed_files = []
     # 1. 并行
     # pipe_list_temp = runcmd(["find ../*.txt"])
     # pipe_list_temp = ["../500001_505000_1_5000000_523.xalancbmk_r.txt"]
+    pipe_list_temp=[]
 
-    pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
-    list_temp = runcmd(["find ../*/ -name '*.txt'"])
+    list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
+    if len(list_temp)>0 and "error" not in list_temp[0]:
+        pipe_list_temp.extend(list_temp)
+    list_temp = runcmd(["find ../* -maxdepth 1  -name '*.txt'"])
     if len(list_temp) > 0:
         pipe_list_temp.extend(list_temp)
-    runcmd(["mkdir -p ../data/pipeline_graph/"])
     runcmd(["rm -rf ../data/pipeline_graph/"])
+    runcmd(["mkdir -p ../data/pipeline_graph/"])
     runcmd(["mkdir -p ../data/pipeline_result/"])
     pipe_list = list(sorted(set(pipe_list_temp)))
     # [print(f) for f in pipe_list]
@@ -611,3 +617,5 @@ if __name__ == '__main__':
     end_time = datetime.datetime.now()
     # runcmd("cp -r"+start_time.strftime('%Y%m%d%H%M%S'))
     print("CONSUMED TIME", end_time - start_time)
+    print("results IN:",runcmd(["cd ../data/pipeline_result/ && pwd"])[0])
+    print("pipeline txt IN:",runcmd(["cd ../data/pipeline_graph/ && pwd"])[0])
