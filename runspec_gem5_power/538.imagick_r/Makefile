@@ -117,6 +117,19 @@ restore_all: $(EXECUTABLE)
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 
+restore_all_2: $(EXECUTABLE)
+	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
+	@rm -rf ./output_ckp*;
+	@rm -rf ./$(FILE)_CKPS_CPI.log;
+	@rm -rf ./$(FILE)_RS_NUM.log;
+	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
+	exec 6<>$(FLOODGATE);\
+	for i in `seq $${m}`; do read -u6; (\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 2 -c "$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS4GEM5); $(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		echo >&6 )& \
+	done;
+	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+
 restore_all_4: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./output_ckp*;
