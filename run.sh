@@ -304,8 +304,6 @@ if [[ $is_m1 == true ]]; then
       (func_with_entire_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_restore_all == true ]]; then
       (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.out 2>&1 &)
-    elif [[ $with_restore_all_4 == true ]]; then
-      (func_with_restore_all_benchmarks_n4 "${FLOODGATE}" >>nohup.out 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     else
@@ -372,6 +370,37 @@ elif [[ $is_gem5 == true ]]; then
       fi
       func_set_job_n_default ${add_job}
       (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
+    elif [[ $with_restore_all_4 == true ]]; then
+      # echo "PIDIS $$"
+      # 清空
+      echo >nohup.out
+      func_delete_job_pool >/dev/null 2>&1
+      make clean-restore -C runspec_gem5_power >/dev/null 2>&1
+      begin_time=$(date +"%Y%m%d%H%M%S")
+      echo "func_with_restore_all_benchmarks_n4 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      if [[ $parallel_jobs -gt 5 ]]; then
+        func_set_job_n_quiet 5
+        (( add_job = parallel_jobs-5 ))
+      elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
+        read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
+        case $para in
+          [yY])
+            # echo "use default -j 5"
+            add_job=5
+            ;;
+          [nN])
+            add_job=$parallel_jobs
+            ;;
+          *)
+            read -p "Invalid input, please enter any key to exit" _
+            exit 0
+        esac # end case
+      else
+        echo "ERROR: -j must > 0 & integer"
+        exit 1
+      fi
+      func_set_job_n_default ${add_job}
+      (func_with_restore_all_benchmarks_n4 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_func_gen_restore_compare_excel == true ]]; then
