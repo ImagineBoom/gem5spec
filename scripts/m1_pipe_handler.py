@@ -153,6 +153,7 @@ class Trace:
         else:
             return False
 
+    # 常规匹配规则，根据执行和发射的规则进行匹配
     def calculate_cycles(self):
         exe_pattern = re.compile(r'.(E+)[^EI]*f\.*C')
         issue_pattern = re.compile(r'M([^uSdsI]*)I[^sS]*f\.*C')
@@ -167,6 +168,23 @@ class Trace:
                     # print(exe.group(0))
                     self.instruction_dict[this_key].list[index].issueCycle = IssueCycle(len(issue.group(1)), 1, 1)
 
+    # 计算mem load的规则，对一条指令的相邻的每对!进行匹配，选取其中最长的作为统计量
+    def calculate_cycles_mem_load(self):
+        # exe_pattern = re.compile(r'![^!]*!')
+        issue_pattern = re.compile(r'M([^uSdsI]*)I[^sS]*f\.*C')
+        for this_key, this_insts in self.instruction_dict.items():
+            for index, val in enumerate(this_insts.list):
+                exe = re.split(r'!',val.Pipe)
+                issue = issue_pattern.search(val.Pipe)
+                if len(exe)>1:
+                    exe.pop(0)
+                    exe.pop(-1)
+                    for e in exe:
+                        if len(e)>self.instruction_dict[this_key].list[index].exeCycle.cycle_num:
+                            self.instruction_dict[this_key].list[index].exeCycle = ExeCycle(len(e), 1, 1)
+                if issue:
+                    # print(exe.group(0))
+                    self.instruction_dict[this_key].list[index].issueCycle = IssueCycle(len(issue.group(1)), 1, 1)
     # def calculate_issue_cycles(self):
     #     issue_pattern = re.compile(r'M([^s]*)I.*f\.*C')
     #     for this_key, this_insts in self.instruction_dict.items():
