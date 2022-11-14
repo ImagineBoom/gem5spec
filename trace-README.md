@@ -20,13 +20,6 @@ source auto_cmpl.sh
 
 #### 1.1 m1-执行spec2017
 
-##### 执行单个benchmark
-
-- 以999为例, 运行m1的整个流程，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看qtrace中前400条指令的流水线
-
-```bash
-./run.sh --m1 --spec2017 999 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
-```
 
 | 选项                                | 解释                                                            |
 |:----------------------------------|---------------------------------------------------------------|
@@ -36,10 +29,16 @@ source auto_cmpl.sh
 | --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert]        |
 | --r_insts=10000                   | 在qtrace区间中执行10000条指令                                          |
 | --r_pipe_begin=1 --r_pipe_end=400 | 用于查看[10000,10399]指令区间的流水线图；流水线图指令区间为[jump+1,jump+400]，相对于jump |
-| --gen_txt          | 生成流水线的文本文件                                    |
-| --not_gen_txt           | 不生成流水线的文本文件                                        |
 
-程序结果保存在.results文件中
+##### 执行单个benchmark
+
+- 以999为例, 运行m1的整个流程，生成前2000000条指令的itrace，转换[9999,19999]条指令的qtrace，执行10000条，查看qtrace中前400条指令的流水线
+
+```bash
+./run.sh --m1 --spec2017 999 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+```
+
+程序结果保存在每一个benchmark目录下的.results文件中
 
 **以上为完整参数模式，提供缺省参数模式**
 
@@ -52,6 +51,32 @@ source auto_cmpl.sh
 
 #### 1.2 m1-执行自定义程序
 
+
+| 选项                                | 解释                                                            |
+|:----------------------------------|---------------------------------------------------------------|
+| --myexe <PATH>                    | 编译后的自定义程序路径                                                   |
+| -b                                | 缺省参数模式，指定m1开始的指令位置                                            |
+| -e                                | 缺省参数模式，指定m1结束的指令位置                                            |
+| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）                    |
+| --i_insts=2000000                 | 生成2000000条指令的itrace                                           |
+| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert]        |
+| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                          |
+| --r_pipe_begin=1 --r_pipe_end=400 | 用于查看[10000,10399]指令区间的流水线图；流水线图指令区间为[jump+1,jump+400]，相对于jump |
+| --gen_txt                         | 生成流水线的文本文件,文件路径为gem5spec/${myexe}/${myexe}.txt                |
+| --not_gen_txt                     | 不生成流水线的文本文件                                                   |
+
+输出文件保存路径为gem5spec/${myexe}/
+
+| 输出文件                                                                      | 解释                                  |
+|:--------------------------------------------------------------------------|-------------------------------------|
+| ${myexe}.vgi                                                              | itrace, 使用valgrind-itrace生成         |
+| ${myexe}.qt                                                               | qtrace，m1所识别的trace文件，使用vgi2qt生成     |
+| ${myexe}.pipe                                                             | 调用scrollpv所需的文件，用于展示流水线图形化或者生成文本    |
+| ${myexe}.config                                                           | 配置文件                                |
+| ${myexe}.results                                                          | m1运行时的统计参数及性能指标                     |
+| ${myexe}.inst.log                                                         | ${myexe}的指令数说明，使用valgrind-exp-bbv生成 |                                                          | 在qtrace区间中执行10000条指令                                          |
+| ${myexe}.txt                                                              | ${myexe}的流水线文本文件                    |
+
 **完整参数模式**
 
 - 此处编译后程序为test-p8,使用步骤与1.1中运行benchmark相同
@@ -61,7 +86,7 @@ source auto_cmpl.sh
 ./run.sh --m1 --myexe ./test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400 --not_gen_txt
 ```
 
-- 运行m1的整个流程，test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
+- 运行m1的整个流程(不会生成流水线文本文件或展示图形化界面)，test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
 
 ```bash
 ./run.sh --m1 --myexe ./test-p8 --entire
