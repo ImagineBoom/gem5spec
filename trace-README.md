@@ -385,3 +385,25 @@ make collect_checkpoints_number
 7. xxx_bbv: 保存通过gem5生成的BBV文件，以及生成过程的仿真数据(stats.txt)
 8. m5out: 保存生成的checkpoints的与生成checkpoints过程的仿真数据(stats.txt)
 9. out_ckpN: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，N表示第N个checkpoint
+
+# scripts
+## 1. 分析m1的流水线，根据规则输出统计表格
+### pre：切换到trace分支，进入gem5spec根目录
+### step1：运行可执行程序
+```bash
+./run.sh --m1 --myexe ./<myexe> --entire --gen_txt
+```
+输出原生流水线文本:`<myexe>.txt`，同一条指令存在多行的情况，并且穿插其他指令
+保存位置`gem5spec/<myexe>/`
+### step2：运行分析分析脚本
+自动读入上一步生成的流水线文本，将每条换行的流水线恢复为一行，并且统计每条总指令数，每条指令出现的次数和频率
+```bash
+(cd scripts && python3 m1_pipe_handler.py)
+```
+输出结果:
+- 统计结果保存位置`gem5spec/data/pipeline_result/`
+- 流水线文件保存位置`gem5spec/data/pipeline_graph/`
+  - `mid.txt` 文件保存了所有指令的单行流水线文本图，按照指令首字母排序，不会去掉执行周期数相同的指令
+  - `xx-merge.txt` 删除了相同周期数的统计结果，按照指令首字母排序
+  - `xx-P8-Insts.csv`是最终的统计结果-
+    - `C列EXE_CYCLES`：`<cycle num>`(`<frequeny>`,`<times>`/`<totol times>`)

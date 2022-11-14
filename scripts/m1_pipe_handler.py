@@ -321,6 +321,7 @@ class Trace:
                 return {"name": self.fname, "state": "EXISTED", "thread": self}
         if self.m1pipe_grep(self.fname):
             self.calculate_cycles()
+            # self.calculate_cycles_mem_load()
             self.calculate_count_inst_before_merge()
             self.wirte()
             self.issueCycleCount()
