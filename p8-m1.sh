@@ -139,7 +139,7 @@ func_m1_pipeview_gen_txt(){
   -pipe "${OUTPUT}".pipe \
   -config "${OUTPUT}".config \
   -wid "$WID" \
-  -len "$LEN" -out_file ${EXE}.txt -overwrite #>>${EXE}_trace.log 2>&1
+  -len "$LEN" -out_file ${WORK_DIR}/${OUTPUT}.txt -overwrite #>>${EXE}_trace.log 2>&1
 }
 
 #all
