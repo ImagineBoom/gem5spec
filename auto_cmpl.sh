@@ -157,8 +157,19 @@ cmd_m1_steps(){
           options=${options/"--gen_txt"/}
         fi
       done
-    elif [[ $with_entire == true || $with_restore_all == true || $with_cpi_all = true ]]; then
-        options=""
+    elif [[ $with_entire == true ]]; then
+      options="--gen_txt --not_gen_txt"
+      for (( i=0;i<${#COMP_WORDS[@]}-1;i++ ));do
+        option=${COMP_WORDS[i]}
+        options=${options/${option}/}
+        if [[ ${option} == --gen_txt ]]; then
+          options=${options/"--not_gen_txt"/}
+        elif [[ ${option} == --not_gen_txt ]]; then
+          options=${options/"--gen_txt"/}
+        fi
+      done
+    elif [[ $with_restore_all == true || $with_cpi_all = true ]]; then
+      options=""
     else
       options="-b -e --gen_txt --not_gen_txt"
       for (( i=0;i<${#COMP_WORDS[@]}-1;i++ ));do

@@ -151,6 +151,7 @@ case "${1#*=}" in
     with_entire=true
     target=entire
     shift 1
+    func_m1_args_parser $@
     ;;
   -a|--all|--all_steps)
     with_all_steps=true

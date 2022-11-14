@@ -239,6 +239,11 @@ case "${SIG}" in
       func_itrace
       func_qtrace
       func_run_timer
+      if [[ $GEN_TXT == true ]]; then
+        func_m1_pipeview_gen_txt
+      else
+        func_m1_pipeview
+      fi
     fi
     ;;
   --all)

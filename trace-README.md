@@ -11,10 +11,21 @@ source auto_cmpl.sh
 ./run.sh [tab][tab]
 ```
 
-==example==
+**example**
 
 ```bash
+# 指定benchmark，999，从1到400条指令，不生成流水线文本文件
+
 ./run.sh --m1 --spec2017 999 -b=1 -e=400 --not_gen_txt
+```
+```bash
+# 指定自定义程序，test，跑完程序的所有指令，不生成流水线文本文件
+
+./run.sh --m1 --myexe ./test --entire --not_gen_txt
+```
+```bash
+# 指定自定义程序，test，从1到400条指令，不生成流水线文本文件
+
 ./run.sh --m1 --myexe ./test -b=1 -e=400 --not_gen_txt
 ```
 
@@ -86,21 +97,22 @@ source auto_cmpl.sh
 ./run.sh --m1 --myexe ./test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400 --not_gen_txt
 ```
 
-- 运行m1的整个流程(不会生成流水线文本文件或展示图形化界面)，test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
-
-```bash
-./run.sh --m1 --myexe ./test-p8 --entire
-```
-
 **缺省参数模式**
 
 - [缺省模式1]
-- 运行m1的整个流程，执行并查看流水线区间[begin,end],区间不超过5000条
+  - 运行m1的整个流程，执行并查看流水线区间[begin,end],区间不超过5000条
 
 ```bash
 ./run.sh --m1 --myexe ./test-p8 --r_pipe_begin=1 --r_pipe_end=400 --not_gen_txt
 ```
+- [缺省模式2]
+  - 运行m1的整个流程，test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
+    - 不会展示图形化界面；
+    - 可选生成流水线文本文件，但程序指令数超过7亿将不会生成，可采用上面的方式指定在一个小范围生成
 
+```bash
+./run.sh --m1 --myexe ./test-p8 --entire --not_gen_txt
+```
 ### 2. 单步骤执行
 
 benchmark和自定义程序皆可
