@@ -59,6 +59,12 @@ checkpoints: $(EXECUTABLE)
 	@echo ---------------------cpts handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_checkpoints.log >> $(FILE)_trace_err.log; true
 
+checkpoints_2: $(EXECUTABLE)
+	@echo ---------------------cpts handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
+	$(TIMEG) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoints=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -n 2 -c "$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS4GEM5); $(ARGS4GEM5)" --mem-size=16384MB >$(FILE)_checkpoints.log 2>&1
+	@echo ---------------------cpts handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_checkpoints.log >> $(FILE)_trace_err.log; true
+
 checkpoints_4: $(EXECUTABLE)
 	@echo ---------------------cpts handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
 	$(TIMEG) $(GEM5) $(GEM5_PY) --take-simpoint-checkpoints=$(FILE).simpts,$(FILE).weights,$(INTERVAL_SIZE),$(WARMUP_LENGTH) -n 4 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS4GEM5); $(ARGS4GEM5); $(ARGS4GEM5); $(ARGS4GEM5)" --mem-size=16384MB >$(FILE)_checkpoints.log 2>&1

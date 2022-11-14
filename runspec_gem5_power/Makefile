@@ -16,6 +16,8 @@ simpoints_all_cases: simpoint_500 simpoint_502 simpoint_503 simpoint_505 simpoin
 
 checkpoints_all_cases: checkpoints_500 checkpoints_502 checkpoints_503 checkpoints_505 checkpoints_507 checkpoints_508 checkpoints_510 checkpoints_511 checkpoints_519 checkpoints_520 checkpoints_521 checkpoints_523 checkpoints_525 checkpoints_526 checkpoints_527 checkpoints_531 checkpoints_538 checkpoints_541 checkpoints_544 checkpoints_548 checkpoints_549 checkpoints_554 checkpoints_557 checkpoints_999
 
+checkpoints_all_cases_2: checkpoints_500_2 checkpoints_502_2 checkpoints_503_2 checkpoints_505_2 checkpoints_507_2 checkpoints_508_2 checkpoints_510_2 checkpoints_511_2 checkpoints_519_2 checkpoints_520_2 checkpoints_521_2 checkpoints_523_2 checkpoints_525_2 checkpoints_526_2 checkpoints_527_2 checkpoints_531_2 checkpoints_538_2 checkpoints_541_2 checkpoints_544_2 checkpoints_548_2 checkpoints_549_2 checkpoints_554_2 checkpoints_557_2 checkpoints_999_2
+
 checkpoints_all_cases_4: checkpoints_500_4 checkpoints_502_4 checkpoints_503_4 checkpoints_505_4 checkpoints_507_4 checkpoints_508_4 checkpoints_510_4 checkpoints_511_4 checkpoints_519_4 checkpoints_520_4 checkpoints_521_4 checkpoints_523_4 checkpoints_525_4 checkpoints_526_4 checkpoints_527_4 checkpoints_531_4 checkpoints_538_4 checkpoints_541_4 checkpoints_544_4 checkpoints_548_4 checkpoints_549_4 checkpoints_554_4 checkpoints_557_4 checkpoints_999_4
 
 restore_all_cases: restore_all_500 restore_all_502 restore_all_503 restore_all_505 restore_all_507 restore_all_508 restore_all_510 restore_all_511 restore_all_519 restore_all_520 restore_all_521 restore_all_523 restore_all_525 restore_all_526 restore_all_527 restore_all_531 restore_all_538 restore_all_541 restore_all_544 restore_all_548 restore_all_549 restore_all_554 restore_all_557 restore_all_999
@@ -318,6 +320,55 @@ checkpoints_557:
 	@-make checkpoints -C 557.xz_r
 checkpoints_999:
 	@-make checkpoints -C 999.specrand_ir
+
+checkpoints_500_2:
+	@-make checkpoints_2 -C 500.perlbench_r
+checkpoints_502_2:
+	@-make checkpoints_2 -C 502.gcc_r
+checkpoints_503_2:
+	@-make checkpoints_2 -C 503.bwaves_r
+checkpoints_505_2:
+	@-make checkpoints_2 -C 505.mcf_r
+checkpoints_507_2:
+	@-make checkpoints_2 -C 507.cactuBSSN_r
+checkpoints_508_2:
+	@-make checkpoints_2 -C 508.namd_r
+checkpoints_510_2:
+	@-make checkpoints_2 -C 510.parest_r
+checkpoints_511_2:
+	@-make checkpoints_2 -C 511.povray_r
+checkpoints_519_2:
+	@-make checkpoints_2 -C 519.lbm_r
+checkpoints_520_2:
+	@-make checkpoints_2 -C 520.omnetpp_r
+checkpoints_521_2:
+	@-make checkpoints_2 -C 521.wrf_r
+checkpoints_523_2:
+	@-make checkpoints_2 -C 523.xalancbmk_r
+checkpoints_525_2:
+	@-make checkpoints_2 -C 525.x264_r
+checkpoints_526_2:
+	@-make checkpoints_2 -C 526.blender_r
+checkpoints_527_2:
+	@-make checkpoints_2 -C 527.cam4_r
+checkpoints_531_2:
+	@-make checkpoints_2 -C 531.deepsjeng_r
+checkpoints_538_2:
+	@-make checkpoints_2 -C 538.imagick_r
+checkpoints_541_2:
+	@-make checkpoints_2 -C 541.leela_r
+checkpoints_544_2:
+	@-make checkpoints_2 -C 544.nab_r
+checkpoints_548_2:
+	@-make checkpoints_2 -C 548.exchange2_r
+checkpoints_549_2:
+	@-make checkpoints_2 -C 549.fotonik3d_r
+checkpoints_554_2:
+	@-make checkpoints_2 -C 554.roms_r
+checkpoints_557_2:
+	@-make checkpoints_2 -C 557.xz_r
+checkpoints_999_2:
+	@-make checkpoints_2 -C 999.specrand_ir
 
 checkpoints_500_4:
 	@-make checkpoints_4 -C 500.perlbench_r
