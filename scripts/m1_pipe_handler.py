@@ -59,13 +59,14 @@ class instruction:
         self.Pipe = Pipe
         self.filename = filename
         self.benchmark = ""
-        self.location = -1 # 当前Instruction是第几条
+        self.location = -1  # 当前Instruction是第几条
 
-    def set_benchmark(self,benchmark_name):
+    def set_benchmark(self, benchmark_name):
         self.benchmark = benchmark_name
 
-    def set_location(self,instruction_location):
+    def set_location(self, instruction_location):
         self.location = instruction_location
+
 
 # 每种(助记符相同的)指令
 class Instruction:
@@ -73,8 +74,8 @@ class Instruction:
         self.list: list[instruction] = []
         self.count = count
         self.frequency = frequency
-        self.exeCycle: dict[int,ExeCycle] = {}
-        self.issueCycle: dict[int,IssueCycle] = {}
+        self.exeCycle: dict[int, ExeCycle] = {}
+        self.issueCycle: dict[int, IssueCycle] = {}
 
 
 class Trace:
@@ -189,13 +190,15 @@ class Trace:
             for index, inst in enumerate(insts.list):
                 for new_inst_index, new_inst in enumerate(new_insts):
                     if inst.issueCycle.cycle_num == new_inst.issueCycle.cycle_num:
-                        self.instruction_dict[key].issueCycle.setdefault(inst.issueCycle.cycle_num,IssueCycle(inst.issueCycle.cycle_num)).cycle_count += 1
+                        self.instruction_dict[key].issueCycle.setdefault(inst.issueCycle.cycle_num, IssueCycle(
+                            inst.issueCycle.cycle_num)).cycle_count += 1
                         break
                     elif inst.issueCycle.cycle_num == -1:
                         break
                 else:
                     if inst.issueCycle.cycle_num != -1:
-                        self.instruction_dict[key].issueCycle.setdefault(inst.issueCycle.cycle_num,IssueCycle(inst.issueCycle.cycle_num)).cycle_count = 1
+                        self.instruction_dict[key].issueCycle.setdefault(inst.issueCycle.cycle_num, IssueCycle(
+                            inst.issueCycle.cycle_num)).cycle_count = 1
                         new_insts.append(inst)
 
     def exeCycleCount(self):
@@ -206,13 +209,15 @@ class Trace:
             for index, inst in enumerate(insts.list):
                 for new_inst_index, new_inst in enumerate(new_insts):
                     if inst.exeCycle.cycle_num == new_inst.exeCycle.cycle_num:
-                        self.instruction_dict[key].exeCycle.setdefault(inst.exeCycle.cycle_num,ExeCycle(inst.exeCycle.cycle_num)).cycle_count += 1
+                        self.instruction_dict[key].exeCycle.setdefault(inst.exeCycle.cycle_num, ExeCycle(
+                            inst.exeCycle.cycle_num)).cycle_count += 1
                         break
                     elif inst.exeCycle.cycle_num == -1:
                         break
                 else:
                     if inst.exeCycle.cycle_num != -1:
-                        self.instruction_dict[key].exeCycle.setdefault(inst.exeCycle.cycle_num,ExeCycle(inst.exeCycle.cycle_num)).cycle_count = 1
+                        self.instruction_dict[key].exeCycle.setdefault(inst.exeCycle.cycle_num, ExeCycle(
+                            inst.exeCycle.cycle_num)).cycle_count = 1
                         new_insts.append(inst)
 
     # 精简的流水线图,去除每种指令中执行周期数相同的出现，并计算每指令每个执行周期的出现的次数
@@ -272,7 +277,8 @@ class Trace:
                         if len(pipeline_file_name_group.groups()) == 5:
                             i.set_benchmark(pipeline_file_name_group.group("benchmark"))
                             i.set_location(
-                                int(pipeline_file_name_group.group("simpt"))*int(pipeline_file_name_group.group("interval"))+i.IopId
+                                int(pipeline_file_name_group.group("simpt")) * int(
+                                    pipeline_file_name_group.group("interval")) + i.IopId
                             )
                     f.write(format(this_key, "<20") +
                             format(str(i.IopId), "<20") +
@@ -346,8 +352,9 @@ class Trace:
             for CycleNum, CycleObj in insts.exeCycle.items():
                 cycle_count_sum += CycleObj.cycle_count
             for CycleNum, CycleObj in insts.exeCycle.items():
-                self.instruction_dict.setdefault(key,Instruction()).exeCycle.setdefault(CycleNum,ExeCycle(CycleNum)).cycle_frequency = \
-                    CycleObj.cycle_count/cycle_count_sum
+                self.instruction_dict.setdefault(key, Instruction()).exeCycle.setdefault(CycleNum, ExeCycle(
+                    CycleNum)).cycle_frequency = \
+                    CycleObj.cycle_count / cycle_count_sum
 
     def calculate_issue_cycle_frequency(self):
         new_insts: list[Instruction] = []
@@ -358,9 +365,11 @@ class Trace:
             for issueCycleNum, issueCycleObj in insts.issueCycle.items():
                 issue_cycle_count_sum += issueCycleObj.cycle_count
             for issueCycleNum, issueCycleObj in insts.issueCycle.items():
-                self.instruction_dict.setdefault(key,Instruction()).issueCycle.setdefault(issueCycleNum,IssueCycle(issueCycleNum)).cycle_frequency =\
-                    issueCycleObj.cycle_count/issue_cycle_count_sum
-    def list2str_sort(self,cycle_list):
+                self.instruction_dict.setdefault(key, Instruction()).issueCycle.setdefault(issueCycleNum, IssueCycle(
+                    issueCycleNum)).cycle_frequency = \
+                    issueCycleObj.cycle_count / issue_cycle_count_sum
+
+    def list2str_sort(self, cycle_list):
         exe_cycles = ""
         if len(cycle_list) == 1:
             exe_cycles = str(cycle_list[0].cycle_num) + "(" + \
@@ -395,7 +404,8 @@ class Trace:
         return exe_cycles
 
     def sort(self, source_csv_file, write_path="../data/pipeline_result/", write_name="P8_Insts.csv"):
-        p8_insts_headers = ["MNEMONIC", "FREQUENCY", "EXE_CYCLES", "ISSUE_CYCLES", "STATUS", "CATEGORY", "VERSION", "PDF_REAL", "DESC"]
+        p8_insts_headers = ["MNEMONIC", "FREQUENCY", "EXE_CYCLES", "ISSUE_CYCLES", "STATUS", "CATEGORY", "VERSION",
+                            "PDF_REAL", "DESC"]
         exe_cycle_set = set()
         exe_cycle = ""
         # if os.path.isfile("../data/p8_insts.csv"):
@@ -433,12 +443,14 @@ class Trace:
                     exe_cycles = ""
                     insts = self.instruction_dict.setdefault(row_info.MNEMONIC_L2, Instruction())
                     exe_cycles = self.list2str_sort(list(insts.exeCycle.values()))
-                    issue_insts = list(self.instruction_dict.setdefault(row_info.MNEMONIC_L2, Instruction()).issueCycle.values())
+                    issue_insts = list(
+                        self.instruction_dict.setdefault(row_info.MNEMONIC_L2, Instruction()).issueCycle.values())
                     issue_cycles = self.list2str_sort(issue_insts)
                     p8_insts_csv.writerow(
                         [
                             row_info.MNEMONIC_L2,
-                            "(" + format(insts.frequency, ".3f") + "," + str(insts.count) + "/" + str(self.inst_count) + ")",
+                            "(" + format(insts.frequency, ".3f") + "," + str(insts.count) + "/" + str(
+                                self.inst_count) + ")",
                             exe_cycles, issue_cycles, row_info.STATUS, row_info.CATEGORY,
                             row_info.VERSION, row_info.PDF_REAL, row_info.DESC
                         ]
@@ -452,16 +464,19 @@ class Trace:
                 existed_files.append(os.path.join(root, name))
         return existed_files
 
+
 # 进行对比, 流水线图中抓取的执行周期数目跟UM10.16表格
-def insertUMinfo(source_csv_file="../data/20220829-P8_Insts.csv",write_path="../data/",write_name="20220908_p8_instr.csv"):
+def insertUMinfo(source_csv_file="../data/20220829-P8_Insts.csv", write_path="../data/",
+                 write_name="20220908_p8_instr.csv"):
     # 读取UM中整理好的数据
     workbook = load_workbook(filename="../data/meta/UM_10_16Table.xlsx")
     sheet1 = workbook.active
     with open(source_csv_file, "r", encoding='utf-8') as fr:
         csv_reader = csv.reader(fr)
         next(csv_reader)
-        headers = ["MNEMONIC","FREQUENCY","EXE_CYCLES","ISSUE_CYCLES","CATEGORY","VERSION","PDF_REAL","DESC"]
-        p8_insts_headers = ["MNEMONIC","FREQUENCY","EXE_CYCLES","UM_DESC","ISSUE_CYCLES","CATEGORY","VERSION","PDF_REAL","DESC"]
+        headers = ["MNEMONIC", "FREQUENCY", "EXE_CYCLES", "ISSUE_CYCLES", "CATEGORY", "VERSION", "PDF_REAL", "DESC"]
+        p8_insts_headers = ["MNEMONIC", "FREQUENCY", "EXE_CYCLES", "UM_DESC", "ISSUE_CYCLES", "CATEGORY", "VERSION",
+                            "PDF_REAL", "DESC"]
         p8_insts_class = namedtuple('p8_insts_class', headers)
         with open(write_path + write_name, 'w+', encoding="utf-8") as fw:
             p8_insts_csv = csv.writer(fw)
@@ -473,26 +488,31 @@ def insertUMinfo(source_csv_file="../data/20220829-P8_Insts.csv",write_path="../
                 for MNEMONIC in MNEMONICS:
                     value = str(row_cells[2].value)
                     if value == "None":
-                        value=""
+                        value = ""
                     UM_MNEMONIC_dict.setdefault(MNEMONIC, value)
             for r in csv_reader:
                 row_info = p8_insts_class(*r)
                 print(row_info.MNEMONIC)
-                if UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")!=UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "") and UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "") != "":
-                    if UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")!="":
-                        UM_DESC=UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")+"; if with dot suffix: "+UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "")
+                if UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "") != UM_MNEMONIC_dict.setdefault(
+                        row_info.MNEMONIC + ".", "") and UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC + ".", "") != "":
+                    if UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "") != "":
+                        UM_DESC = UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC,
+                                                              "") + "; if with dot suffix: " + UM_MNEMONIC_dict.setdefault(
+                            row_info.MNEMONIC + ".", "")
                     else:
-                        UM_DESC="only with dot suffix: "+UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC+".", "")
+                        UM_DESC = "only with dot suffix: " + UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC + ".", "")
                 else:
                     UM_DESC = UM_MNEMONIC_dict.setdefault(row_info.MNEMONIC, "")
                 # 写入
                 p8_insts_csv.writerow(
                     [
-                        row_info.MNEMONIC,row_info.FREQUENCY,row_info.EXE_CYCLES,
+                        row_info.MNEMONIC, row_info.FREQUENCY, row_info.EXE_CYCLES,
                         UM_DESC,
-                        row_info.ISSUE_CYCLES,row_info.CATEGORY,row_info.VERSION,row_info.PDF_REAL,row_info.DESC
+                        row_info.ISSUE_CYCLES, row_info.CATEGORY, row_info.VERSION, row_info.PDF_REAL, row_info.DESC
                     ]
                 )
+
+
 # def t():
 #     a = [1, 2, 3, 4, 5, 6]
 #     i = 0
@@ -528,7 +548,11 @@ if __name__ == '__main__':
     # pipe_list_temp = ["../500001_505000_1_5000000_523.xalancbmk_r.txt"]
 
     pipe_list_temp = runcmd(["find ../runspec_gem5_power/*r/pipe_result/ -name '*.txt'"])
+    list_temp = runcmd(["find ../*/ -name '*.txt'"])
+    if len(list_temp) > 0:
+        pipe_list_temp.extend(list_temp)
     runcmd(["mkdir -p ../data/pipeline_graph/"])
+    runcmd(["rm -rf ../data/pipeline_graph/"])
     runcmd(["mkdir -p ../data/pipeline_result/"])
     pipe_list = list(sorted(set(pipe_list_temp)))
     # [print(f) for f in pipe_list]
@@ -562,11 +586,13 @@ if __name__ == '__main__':
             merge.instruction_dict.setdefault(key, Instruction()).list.extend(insts.list)
 
             # 统计相同助记符下出现的不同执行周期数
-            for exeCycleNum,exeCycleObj in insts.exeCycle.items():
-                merge.instruction_dict.setdefault(key,Instruction()).exeCycle.setdefault(exeCycleNum,ExeCycle(exeCycleNum)).cycle_count += exeCycleObj.cycle_count
+            for exeCycleNum, exeCycleObj in insts.exeCycle.items():
+                merge.instruction_dict.setdefault(key, Instruction()).exeCycle.setdefault(exeCycleNum, ExeCycle(
+                    exeCycleNum)).cycle_count += exeCycleObj.cycle_count
             # 统计相同助记符下出现的不同发射周期数
-            for issueCycleNum,issueCycleObj in insts.issueCycle.items():
-                merge.instruction_dict.setdefault(key,Instruction()).issueCycle.setdefault(issueCycleNum,IssueCycle(issueCycleNum)).cycle_count += issueCycleObj.cycle_count
+            for issueCycleNum, issueCycleObj in insts.issueCycle.items():
+                merge.instruction_dict.setdefault(key, Instruction()).issueCycle.setdefault(issueCycleNum, IssueCycle(
+                    issueCycleNum)).cycle_count += issueCycleObj.cycle_count
             # # print(key)
     # 计算指令频率
     for key, insts in merge.instruction_dict.items():

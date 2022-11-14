@@ -6,8 +6,8 @@ version="1.0.0"
 getopt_cmd=$(getopt \
 -o aiqrphvVc:b:e:j: \
 -l m1,gem5,spec2017:,myexe:,\
-all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,\
-all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gen_txt,\
+all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,gen_txt,not_gen_txt,\
+all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
 restore_all,restore_all_4,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
 control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
@@ -262,7 +262,7 @@ case "${1#*=}" in
     with_cpi_all=true
     shift
     ;;
-  -b|--r_pipe_begin|--SCROLL_BEGIN|-e|--r_pipe_end|--SCROLL_END) #缺省参数模式
+  -b|--r_pipe_begin|--SCROLL_BEGIN|-e|--r_pipe_end|--SCROLL_END|--gen_txt|--not_gen_txt) #缺省参数模式
     # echo "225"
     func_m1_args_parser $@
     # echo $args
@@ -283,7 +283,7 @@ if [[ $is_m1 == true ]]; then
       if [[ "${CPI_INTERVAL}" == "-1" ]];then
         CPI_INTERVAL="${NUM_INST}"
       fi
-      ./p8-m1.sh "${EXE}" --${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
+    ./p8-m1.sh "${EXE}" --${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}" "$with_gen_txt"
     #缺省参数模式1
     elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
       (( SCROLL_BEGIN = SCROLL_BEGIN - 1 ))
@@ -294,7 +294,7 @@ if [[ $is_m1 == true ]]; then
       CPI_INTERVAL="${NUM_INST}"
       SCROLL_BEGIN=1
       SCROLL_END=${insts}
-      ./p8-m1.sh "${EXE}" -- "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}"
+      ./p8-m1.sh "${EXE}" -- "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}" "$with_gen_txt"
     fi
   elif [[ $is_spec2017 == true ]]; then
     if [[ $with_all_benchmarks == true ]]; then

@@ -28,6 +28,7 @@ with_r_pipe_begin=false
 with_r_pipe_end=false
 with_max_insts=false
 with_slice_len=false
+with_gen_txt=false
 
 with_restore_all=false
 with_restore_all_4=false
@@ -759,7 +760,12 @@ func_m1_args_parser(){
         shift
         ;;
       --gen_txt)
-        :
+        with_gen_txt=true
+        shift
+        ;;
+      --not_gen_txt)
+        with_gen_txt=false
+        shift
         ;;
       --)
         shift

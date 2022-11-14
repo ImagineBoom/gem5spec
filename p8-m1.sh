@@ -20,6 +20,7 @@ SCROLL_PIPE=$9
 SCROLL_BEGIN="${10}"
 SCROLL_END="${11}"
 
+GEN_TXT="${12}"
 #echo ${@}
 
 #输出文件位置p8-m1.sh同级目录下 /OUTPUT/*
@@ -130,12 +131,27 @@ func_m1_pipeview(){
   -len "$LEN" #-out_file ${EXE}.txt -overwrite #>>${EXE}_trace.log 2>&1
 }
 
+func_m1_pipeview_gen_txt(){
+  if [[ ! -e "${OUTPUT}".pipe ]];then
+    echo "not find ${WORK_DIR}/${OUTPUT}.pipe &config">&2
+  fi
+  /opt/ibm/sim_ppc/bin/scrollpv \
+  -pipe "${OUTPUT}".pipe \
+  -config "${OUTPUT}".config \
+  -wid "$WID" \
+  -len "$LEN" -out_file ${EXE}.txt -overwrite #>>${EXE}_trace.log 2>&1
+}
+
 #all
 func_m1(){
   func_itrace
   func_qtrace
   func_run_timer
-  func_m1_pipeview
+  if [[ $GEN_TXT == true ]]; then
+    func_m1_pipeview_gen_txt
+  else
+    func_m1_pipeview
+  fi
 }
 
 #EXE=test_power8_gem5_pipeline_v1
@@ -164,7 +180,11 @@ case "${SIG}" in
     func_run_timer
     ;;
   --m1_pipeview)
-    func_m1_pipeview
+    if [[ $GEN_TXT == true ]]; then
+      func_m1_pipeview_gen_txt
+    else
+      func_m1_pipeview
+    fi
     ;;
   --)#缺省值模式
     func_inst_count
@@ -172,7 +192,11 @@ case "${SIG}" in
     func_itrace
     func_qtrace
     func_run_timer
-    func_m1_pipeview
+    if [[ $GEN_TXT == true ]]; then
+      func_m1_pipeview_gen_txt
+    else
+      func_m1_pipeview
+    fi
    ;;
   --entire)
     func_inst_count

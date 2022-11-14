@@ -26,6 +26,7 @@ with_r_pipe_begin=false
 with_r_pipe_end=false
 with_max_insts=false
 with_slice_len=false
+with_gen_txt=false
 
 with_restore_all=false
 with_restore_all_4=false
@@ -96,6 +97,12 @@ cmd_gem5_m1_control(){
       --cpi_all)
         with_cpi_all=true
         ;;
+      --gen_txt)
+        with_gen_txt=true
+        ;;
+      --not_gen_txt)
+        with_gen_txt=false
+        ;;
       *)
         ;;
     esac
@@ -112,10 +119,15 @@ cmd_m1_steps(){
     elif [[ $with_entire_all_benchmarks == true ]]; then
       options=""
     elif [[ $with_all_steps == true ]]; then
-      options="--i_insts --q_jump --q_convert --r_insts --r_pipe_type --r_pipe_begin --r_pipe_end"
+      options="--i_insts --q_jump --q_convert --r_insts --r_pipe_type --r_pipe_begin --r_pipe_end --gen_txt --not_gen_txt"
       for (( i=0;i<${#COMP_WORDS[@]}-1;i++ ));do
         option=${COMP_WORDS[i]}
         options=${options/${option}/}
+        if [[ ${option} == --gen_txt ]]; then
+          options=${options/"--not_gen_txt"/}
+        elif [[ ${option} == --not_gen_txt ]]; then
+          options=${options/"--gen_txt"/}
+        fi
       done
     elif [[ $with_itrace == true ]]; then
       options="--i_insts"
@@ -136,14 +148,27 @@ cmd_m1_steps(){
         options=${options/${option}/}
       done
     elif [[ $with_pipe_view == true ]]; then
-        options=""
-    elif [[ $with_entire == true || $with_restore_all == true || $with_cpi_all = true ]]; then
-        options=""
-    else
-      options="-b -e"
       for (( i=0;i<${#COMP_WORDS[@]}-1;i++ ));do
         option=${COMP_WORDS[i]}
         options=${options/${option}/}
+        if [[ ${option} == --gen_txt ]]; then
+          options=${options/"--not_gen_txt"/}
+        elif [[ ${option} == --not_gen_txt ]]; then
+          options=${options/"--gen_txt"/}
+        fi
+      done
+    elif [[ $with_entire == true || $with_restore_all == true || $with_cpi_all = true ]]; then
+        options=""
+    else
+      options="-b -e --gen_txt --not_gen_txt"
+      for (( i=0;i<${#COMP_WORDS[@]}-1;i++ ));do
+        option=${COMP_WORDS[i]}
+        options=${options/${option}/}
+        if [[ ${option} == --gen_txt ]]; then
+          options=${options/"--not_gen_txt"/}
+        elif [[ ${option} == --not_gen_txt ]]; then
+          options=${options/"--gen_txt"/}
+        fi
       done
     fi
 }
@@ -158,7 +183,7 @@ cmd_m1_myexe(){
   elif [[ ${COMP_WORDS[COMP_CWORD-2]} == "--myexe" ]];then
     options="--entire --all_steps --itrace --qtrace --run_timer --pipe_view -b -e"
   elif [[ $pre == -a || $pre == --all || $pre == --all_steps ]]; then
-    options="--i_insts --q_jump --q_convert --r_insts --r_pipe_type --r_pipe_begin --r_pipe_end"
+    options="--i_insts --q_jump --q_convert --r_insts --r_pipe_type --r_pipe_begin --r_pipe_end --gen_txt --not_gen_txt"
   elif [[ $pre == -i || $pre == --itrace ]]; then
     options="--i_insts"
   elif [[ $pre == -q || $pre == --qtrace ]]; then
@@ -166,7 +191,7 @@ cmd_m1_myexe(){
   elif [[ $pre == -r || $pre == --run_timer ]]; then
     options="--r_insts  --r_pipe_type --r_pipe_begin --r_pipe_end"
   elif [[ $pre == -p || $pre == --pipe_view ]]; then
-    options=""
+    options="--gen_txt --not_gen_txt"
     #缺省模式
 #  elif [[ $with_all_benchmarks == false && $with_entire_all_benchmarks == false && $with_all_steps == false && $with_itrace == false && $with_qtrace == false && $with_run_timer == false && $with_pipe_view == false ]];then
 #    options="-b -e"
@@ -273,6 +298,8 @@ cmd_hub(){
   with_kill_restore_all=false
   with_control_gem5=false
   with_control_m1=false
+  with_gen_txt=false
+
 
   with_add_job=false
   with_add_job_10=false

@@ -14,8 +14,8 @@ source auto_cmpl.sh
 ==example==
 
 ```bash
-./run.sh --m1 --spec2017 999 -b=1 -e=400
-./run.sh --m1 --myexe ./test -b=1 -e=400
+./run.sh --m1 --spec2017 999 -b=1 -e=400 --not_gen_txt
+./run.sh --m1 --myexe ./test -b=1 -e=400 --not_gen_txt
 ```
 
 #### 1.1 m1-执行spec2017
@@ -28,24 +28,26 @@ source auto_cmpl.sh
 ./run.sh --m1 --spec2017 999 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=10000 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
 ```
 
-| 选项                              | 解释                                                         |
-| :-------------------------------- | ------------------------------------------------------------ |
-| --spec2017 999                    | 代表选择的benchmark                                          |
-| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）         |
-| --i_insts=2000000                 | 生成2000000条指令的itrace                                    |
-| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert] |
-| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                |
+| 选项                                | 解释                                                            |
+|:----------------------------------|---------------------------------------------------------------|
+| --spec2017 999                    | 代表选择的benchmark                                                |
+| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）                    |
+| --i_insts=2000000                 | 生成2000000条指令的itrace                                           |
+| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert]        |
+| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                          |
 | --r_pipe_begin=1 --r_pipe_end=400 | 用于查看[10000,10399]指令区间的流水线图；流水线图指令区间为[jump+1,jump+400]，相对于jump |
+| --gen_txt          | 生成流水线的文本文件                                    |
+| --not_gen_txt           | 不生成流水线的文本文件                                        |
 
 程序结果保存在.results文件中
 
 **以上为完整参数模式，提供缺省参数模式**
 
 - [缺省模式1]
-- 运行m1的整个流程，执行并查看流水线区间[begin,end]，区间不超过5000条
+- 运行m1的整个流程，执行并查看流水线区间[begin,end]，区间不超过5000条, 不生成流水线的文本文件
 
 ```bash
-./run.sh --m1 --spec2017 999 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --spec2017 999 --r_pipe_begin=1 --r_pipe_end=400 --not_gen_txt
 ```
 
 #### 1.2 m1-执行自定义程序
@@ -56,7 +58,7 @@ source auto_cmpl.sh
 - 注意将 --spec2017 999 换成 --myexe test-p8
 
 ```bash
-./run.sh --m1 --myexe ./test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --myexe ./test-p8 --all_steps --i_insts=2000000 --q_jump=9999 --q_convert=19999 --r_insts=10000 --r_pipe_begin=1 --r_pipe_end=400 --not_gen_txt
 ```
 
 - 运行m1的整个流程，test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
@@ -71,7 +73,7 @@ source auto_cmpl.sh
 - 运行m1的整个流程，执行并查看流水线区间[begin,end],区间不超过5000条
 
 ```bash
-./run.sh --m1 --myexe ./test-p8 --r_pipe_begin=1 --r_pipe_end=400
+./run.sh --m1 --myexe ./test-p8 --r_pipe_begin=1 --r_pipe_end=400 --not_gen_txt
 ```
 
 ### 2. 单步骤执行
@@ -99,7 +101,7 @@ benchmark和自定义程序皆可
 - 单步执行-pipe_view（只能查看）
 
 ```bash
-./run.sh --m1 --myexe ./test-p8 --pipe_view
+./run.sh --m1 --myexe ./test-p8 --pipe_view --not_gen_txt
 ```
 
 ### 3. NOTION
