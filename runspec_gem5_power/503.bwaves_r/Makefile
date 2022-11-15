@@ -149,6 +149,19 @@ restore_all_4: $(EXECUTABLE)
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 
+restore_all_8: $(EXECUTABLE)
+	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
+	@rm -rf ./output_ckp*;
+	@rm -rf ./$(FILE)_CKPS_CPI.log;
+	@rm -rf ./$(FILE)_RS_NUM.log;
+	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
+	exec 6<>$(FLOODGATE);\
+	for i in `seq $${m}`; do read -u6; (\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 8 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" --input="$(ARGS4GEM5);$(ARGS4GEM5);$(ARGS4GEM5);$(ARGS4GEM5);$(ARGS4GEM5);$(ARGS4GEM5);$(ARGS4GEM5);$(ARGS4GEM5)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		echo >&6 )& \
+	done;
+	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+
 gem5_pipeview: $(EXECUTABLE)
 	@echo ---------------------gem5pv handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
 	tick_nums=(`grep -oP 'Entering event queue @ \d+' $(FILE)_restore.log|grep -oP '\d+'`);\
