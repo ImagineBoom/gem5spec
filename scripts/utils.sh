@@ -538,7 +538,7 @@ func_with_restore_all_benchmarks(){
   min=$(( ($seconds-${hour}*3600)/60 ))
   sec=$(( $seconds-${hour}*3600-${min}*60 ))
   HMS=`echo ${hour}:${min}:${sec}`
-
+  echo "restore_all finished!"
   echo "restore_all consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
   # backup
   if [[ $is_gem5 == true ]]; then
@@ -620,7 +620,7 @@ func_with_restore_all_benchmarks_n4(){
   min=$(( ($seconds-${hour}*3600)/60 ))
   sec=$(( $seconds-${hour}*3600-${min}*60 ))
   HMS=`echo ${hour}:${min}:${sec}`
-
+  echo "restore_all_4 finished!"
   echo "restore_all_4 consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
 #  # backup
 #  if [[ $is_gem5 == true ]]; then
