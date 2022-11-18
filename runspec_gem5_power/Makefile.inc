@@ -15,7 +15,7 @@ GEM5_PY         = $(GEM5_REPO_PATH)/configs/example/se.py
 GEM5_PY_OPT    += --output=../gem5_out.log
 GEM5_PY_OPT    += --mem-size=16384MB
 # for O3 only, Real Power8 Cache Size
-GEM5_PY_OPT    += --cpu-type=DerivO3CPU --ruby --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128
+GEM5_PY_OPT    += --cpu-type=P8CPU --ruby --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128
 
 # OBJDUMP         = objdump
 OBJDUMP         = /opt/at15.0/bin/powerpc64le-linux-gnu-objdump
