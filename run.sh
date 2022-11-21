@@ -401,7 +401,7 @@ elif [[ $is_gem5 == true ]]; then
       func_delete_job_pool >/dev/null 2>&1
       make clean-restore -C runspec_gem5_power/${bm[${spec2017_bm}]} >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
-      echo "func_with_restore_case_${spec2017_bm} ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      echo "func_with_restore_case_${bm[${spec2017_bm}]} ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
         func_set_job_n_quiet 5
         (( add_job = parallel_jobs-5 ))
@@ -424,7 +424,7 @@ elif [[ $is_gem5 == true ]]; then
         exit 1
       fi
       func_set_job_n_default ${add_job}
-      (func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${spec2017_bm}" 2>&1 &)
+      (func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" 2>&1 &)
     elif [[ $with_restore_all == true ]]; then
       # echo "PIDIS $$"
       # 清空
