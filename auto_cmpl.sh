@@ -28,6 +28,7 @@ with_max_insts=false
 with_slice_len=false
 with_gen_txt=false
 
+with_restore_case=false
 with_restore_all=false
 with_restore_all_2=false
 with_restore_all_4=false
@@ -254,7 +255,13 @@ cmd_gem5_spec2017(){
   local pre=${COMP_WORDS[COMP_CWORD-1]};
   cmd_gem5_m1_control
   if [[ $pre == "--spec2017" ]];then
-    options="--restore_all --restore_all_2 --restore_all_4 --restore_all_8 --gen_restore_compare_excel"
+    options="--restore_case --restore_all --restore_all_2 --restore_all_4 --restore_all_8 --gen_restore_compare_excel"
+  elif [[ $pre == "--restore_case" ]];then
+    options="502 999 538 523 557 526 525 511 500 519 544 503 520 554 507 541 505 510 531 521 549 508 548 527"
+  elif [[ $pre == [0-9][0-9][0-9] ]]; then
+    if [[ ${COMP_WORDS[COMP_CWORD-2]} == "--restore_case" ]];then
+      options="-j"
+    fi
   elif [[ $pre == "--restore_all" || $pre == "--restore_all_2" || $pre == "--restore_all_4" || $pre == "--restore_all_8" ]]; then
     options="-j"
   else
@@ -305,6 +312,7 @@ cmd_hub(){
   with_r_pipe_end=false
   with_max_insts=false
   with_slice_len=false
+  with_restore_case=false
   with_restore_all=false
   with_restore_all_2=false
   with_restore_all_4=false

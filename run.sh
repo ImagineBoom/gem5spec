@@ -9,7 +9,7 @@ getopt_cmd=$(getopt \
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,gen_txt,not_gen_txt,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
-restore_all,restore_all_2,restore_all_4,restore_all_8,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
+restore_case:,restore_all,restore_all_2,restore_all_4,restore_all_8,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
 control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
@@ -223,6 +223,29 @@ case "${1#*=}" in
       esac
     done
     ;;
+  --restore_case)
+    with_restore_case=true
+    shift
+    while [ -n "${1#*=}" ]; do
+      case "${1#*=}" in
+        502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527)
+          spec2017_bm="${1#*=}"
+          # echo $spec2017_bm
+          shift 1
+          ;;
+        -j)
+          parallel_jobs=${2#*=}
+          shift 2
+          ;;
+        --)
+          shift
+          ;;
+        *)
+          exit 1
+          ;;
+      esac
+    done
+    ;;
   --restore_all)
     with_restore_all=true
     shift
@@ -357,7 +380,7 @@ if [[ $is_m1 == true ]]; then
         (( pipe_b=pipe_b-1 ))
         pipe_e=$(echo "${args[@]}" | grep -oP "SCROLL_END=\d+" | grep -oP "\d+")
         (( insts = pipe_e - pipe_b ))
-#        make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
+        # make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
         if [[ ! -e runspec_gem5_power/"${bm[${spec2017_bm}]}"/"${bm[${spec2017_bm}]}".vgi ]]; then
           make itrace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
         fi
@@ -371,7 +394,38 @@ if [[ $is_m1 == true ]]; then
   fi
 elif [[ $is_gem5 == true ]]; then
   if [[ $is_spec2017 == true ]];then
-    if [[ $with_restore_all == true ]]; then
+    if [[ $with_restore_case == true ]]; then
+      # echo "PIDIS $$"
+      # 清空
+      echo >nohup.out
+      func_delete_job_pool >/dev/null 2>&1
+      make clean-restore -C runspec_gem5_power/${bm[${spec2017_bm}]} >/dev/null 2>&1
+      begin_time=$(date +"%Y%m%d%H%M%S")
+      echo "func_with_restore_case_${spec2017_bm} ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      if [[ $parallel_jobs -gt 5 ]]; then
+        func_set_job_n_quiet 5
+        (( add_job = parallel_jobs-5 ))
+      elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
+        read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
+        case $para in
+          [yY])
+            # echo "use default -j 5"
+            add_job=5
+            ;;
+          [nN])
+            add_job=$parallel_jobs
+            ;;
+          *)
+            read -p "Invalid input, please enter any key to exit" _
+            exit 0
+        esac # end case
+      else
+        echo "ERROR: -j must > 0 & integer"
+        exit 1
+      fi
+      func_set_job_n_default ${add_job}
+      (func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${spec2017_bm}" 2>&1 &)
+    elif [[ $with_restore_all == true ]]; then
       # echo "PIDIS $$"
       # 清空
       echo >nohup.out
@@ -402,6 +456,7 @@ elif [[ $is_gem5 == true ]]; then
       fi
       func_set_job_n_default ${add_job}
       (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
+
     elif [[ $with_restore_all_2 == true ]]; then
       # echo "PIDIS $$"
       # 清空
