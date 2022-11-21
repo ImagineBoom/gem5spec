@@ -117,6 +117,12 @@ cpi: $(EXECUTABLE)
 	sed -i '$$G' ./$(FILE)_Final_Result_$${result}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
+clean-simpoint:
+	rm -rf ./*bbv ./*gem5_bbv.log ./*merge ./*simpoint.log ./*simpts ./*weights ./*trace*
+
+clean-checkpoint:
+	rm -rf ./*checkpoints.log ./m5out
+
 clean-restore:
 	rm -rf ./*restore* ./output* ./*CKPS_CPI.log ./*csv ./*Weighted_CPI.log ./*RS_NUM.log
 
