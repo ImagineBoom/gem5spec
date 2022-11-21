@@ -9,7 +9,7 @@ getopt_cmd=$(getopt \
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,gen_txt,not_gen_txt,\
 all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
-restore_all,restore_all_4,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
+restore_all,restore_all_2,restore_all_4,restore_all_8,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,\
 control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
 version,verbose,help \
 -n "$(basename "$0")" -- "$@"
@@ -239,8 +239,40 @@ case "${1#*=}" in
         ;;
     esac
     ;;
+  --restore_all_2)
+    with_restore_all_2=true
+    shift
+    case "${1#*=}" in
+      -j)
+        parallel_jobs=${2#*=}
+        shift 2
+        ;;
+      --)
+        shift
+        ;;
+      *)
+        exit 1
+        ;;
+    esac
+    ;;
   --restore_all_4)
     with_restore_all_4=true
+    shift
+    case "${1#*=}" in
+      -j)
+        parallel_jobs=${2#*=}
+        shift 2
+        ;;
+      --)
+        shift
+        ;;
+      *)
+        exit 1
+        ;;
+    esac
+    ;;
+  --restore_all_8)
+    with_restore_all_8=true
     shift
     case "${1#*=}" in
       -j)
@@ -370,6 +402,37 @@ elif [[ $is_gem5 == true ]]; then
       fi
       func_set_job_n_default ${add_job}
       (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
+    elif [[ $with_restore_all_2 == true ]]; then
+      # echo "PIDIS $$"
+      # 清空
+      echo >nohup.out
+      func_delete_job_pool >/dev/null 2>&1
+      make clean-restore -C runspec_gem5_power >/dev/null 2>&1
+      begin_time=$(date +"%Y%m%d%H%M%S")
+      echo "func_with_restore_all_benchmarks_n2 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      if [[ $parallel_jobs -gt 5 ]]; then
+        func_set_job_n_quiet 5
+        (( add_job = parallel_jobs-5 ))
+      elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
+        read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
+        case $para in
+          [yY])
+            # echo "use default -j 5"
+            add_job=5
+            ;;
+          [nN])
+            add_job=$parallel_jobs
+            ;;
+          *)
+            read -p "Invalid input, please enter any key to exit" _
+            exit 0
+        esac # end case
+      else
+        echo "ERROR: -j must > 0 & integer"
+        exit 1
+      fi
+      func_set_job_n_default ${add_job}
+      (func_with_restore_all_benchmarks_n2 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_restore_all_4 == true ]]; then
       # echo "PIDIS $$"
       # 清空
@@ -401,6 +464,37 @@ elif [[ $is_gem5 == true ]]; then
       fi
       func_set_job_n_default ${add_job}
       (func_with_restore_all_benchmarks_n4 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
+    elif [[ $with_restore_all_8 == true ]]; then
+      # echo "PIDIS $$"
+      # 清空
+      echo >nohup.out
+      func_delete_job_pool >/dev/null 2>&1
+      make clean-restore -C runspec_gem5_power >/dev/null 2>&1
+      begin_time=$(date +"%Y%m%d%H%M%S")
+      echo "func_with_restore_all_benchmarks_n8 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      if [[ $parallel_jobs -gt 5 ]]; then
+        func_set_job_n_quiet 5
+        (( add_job = parallel_jobs-5 ))
+      elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
+        read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
+        case $para in
+          [yY])
+            # echo "use default -j 5"
+            add_job=5
+            ;;
+          [nN])
+            add_job=$parallel_jobs
+            ;;
+          *)
+            read -p "Invalid input, please enter any key to exit" _
+            exit 0
+        esac # end case
+      else
+        echo "ERROR: -j must > 0 & integer"
+        exit 1
+      fi
+      func_set_job_n_default ${add_job}
+      (func_with_restore_all_benchmarks_n8 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_func_gen_restore_compare_excel == true ]]; then

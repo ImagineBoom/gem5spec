@@ -29,7 +29,9 @@ with_slice_len=false
 with_gen_txt=false
 
 with_restore_all=false
+with_restore_all_2=false
 with_restore_all_4=false
+with_restore_all_8=false
 with_cpi_all=false
 with_kill_restore_all=false
 with_control_gem5=false
@@ -252,8 +254,8 @@ cmd_gem5_spec2017(){
   local pre=${COMP_WORDS[COMP_CWORD-1]};
   cmd_gem5_m1_control
   if [[ $pre == "--spec2017" ]];then
-    options="--restore_all --restore_all_4 --gen_restore_compare_excel"
-  elif [[ $pre == "--restore_all" || $pre == "--restore_all_4" ]]; then
+    options="--restore_all --restore_all_2 --restore_all_4 --restore_all_8 --gen_restore_compare_excel"
+  elif [[ $pre == "--restore_all" || $pre == "--restore_all_2" || $pre == "--restore_all_4" || $pre == "--restore_all_8" ]]; then
     options="-j"
   else
     options=""
@@ -304,7 +306,9 @@ cmd_hub(){
   with_max_insts=false
   with_slice_len=false
   with_restore_all=false
+  with_restore_all_2=false
   with_restore_all_4=false
+  with_restore_all_8=false
   with_cpi_all=false
   with_kill_restore_all=false
   with_control_gem5=false
