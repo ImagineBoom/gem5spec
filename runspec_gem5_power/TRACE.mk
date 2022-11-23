@@ -96,8 +96,37 @@ m1: $(EXECUTABLE)
 
 cpi: $(EXECUTABLE)
 	@echo ---------------------cpi handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
-	@rm -rf ./$(FILE)_CKPS_Weighted_CPI.log;
-	@rm -rf ./*.csv;
+	@rm -rf ./$(FILE)_CKPS_Weighted_CPI.log
+	@rm -rf ./$(FILE)_CKPS_CPI.log
+	@rm -rf ./$(FILE)_RS_NUM.log
+	@rm -rf ./*.csv
+	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
+	# set up flag for judge ;\
+	flag=true;\
+	# check .merge lines ?= m5out/cpt file nums ;\
+	[ $${m} != ` find ./m5out/ -name "cpt.*" -exec basename {} \; |wc -l` ] \
+	&& flag=false || echo "ckp num right";\
+	# check each cpt weight (on cptfile such as: cpt.simpoint_00_inst_0_weight_0.045455_interval_5000000_warmup_0) ?= weight(in .merge) ;\
+	# because of weights Digital precision problem，gem5 create checkpoint use %.6f and our .merge file use %.5 ;\
+	# so we use the original .weights file directly;\
+	for i in `seq $${m}`; do\
+		weights=`sed -n "$${i}p" $(FILE).weights | awk '{printf "%.6f\n",$$1}'`;\
+		[ ` find ./m5out/ -name "cpt.*" -exec basename {} \;| grep $${weights} -o | wc -l` == 0 ] \
+		&& flag=false || echo "with $${weights}";\
+	done;\
+	# recreate ./$(FILE)_CKPS_CPI.log /$(FILE)_RS_NUM.log, according to above ;\
+	for i in `seq $${m}`; do\
+		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
+		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
+		cpi=0;\
+		[ $${flag} == true ] \
+		&& [ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
+		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		||echo "restore results maybe with problem!  simpts: $${simpts} -- weights: $${weights} -- not have cpi";\
+		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
+		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
+	done;
+	# create cpi files
 	@sort -n -r -k 3 ./$(FILE)_CKPS_CPI.log -o ./$(FILE)_CKPS_CPI_sorted.log;
 	@m=(`awk 'END {print NR}' ./$(FILE)_CKPS_CPI_sorted.log;`);\
 	for i in `seq $${m}`; do( \
