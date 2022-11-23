@@ -448,7 +448,7 @@ func_detect_restore_bg(){
   fi
   while : ; do
     # kill run job
-    run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${detect_task_regex}" | grep -v grep| awk '{print \$5}'`)
+    run_names=(`ps -o pid,time,command -u $(whoami) | grep -oP "${1}" | grep -oP "/[\/\w\.]+/output_ckp\d+"|sort -u`)
     run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${detect_task_regex}" | grep -v grep| awk '{print \$1}'`)
     if [[ ${#run_nums[@]} -gt 0 ]]; then
       :
@@ -512,7 +512,7 @@ func_with_restore_case(){
     ${opt} >>nohup.out 2>&1
     # 每运行完一个benchmark做出统计
     wait
-    func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+    func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
     opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
     ${opt} >/dev/null 2>&1
   elif [[ $is_m1 == true ]]; then
@@ -527,7 +527,7 @@ func_with_restore_case(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_case_${FILE} ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -544,14 +544,11 @@ func_with_restore_case(){
     # 统计数据
     func_gen_restore_compare_excel "${begin_time}"
     # 备份数据
-    for FILE in ${bm[@]}
-    do
-        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-        find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
-        # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
-        # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-        # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-    done
+    mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+    find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
+    # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
+    # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+    # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
     mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
   elif [[ $is_m1 == true ]]; then
@@ -592,7 +589,7 @@ func_with_restore_all_benchmarks(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
         opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
         ${opt} >/dev/null 2>&1
       elif [[ $is_m1 == true ]]; then
@@ -609,7 +606,7 @@ func_with_restore_all_benchmarks(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -674,7 +671,7 @@ func_with_restore_all_benchmarks_n2(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
 #        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
 #        ${opt} >/dev/null 2>&1
 #      elif [[ $is_m1 == true ]]; then
@@ -691,7 +688,7 @@ func_with_restore_all_benchmarks_n2(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks_n2 ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -755,7 +752,7 @@ func_with_restore_all_benchmarks_n4(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
 #        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
 #        ${opt} >/dev/null 2>&1
 #      elif [[ $is_m1 == true ]]; then
@@ -772,7 +769,7 @@ func_with_restore_all_benchmarks_n4(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks_n4 ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -836,7 +833,7 @@ func_with_restore_all_benchmarks_n8(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
 #        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
 #        ${opt} >/dev/null 2>&1
 #      elif [[ $is_m1 == true ]]; then
@@ -853,7 +850,7 @@ func_with_restore_all_benchmarks_n8(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt -d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks_n8 ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -1055,6 +1052,7 @@ func_collect_all_m1_restore_data(){
 }
 
 # kill 之后会删除线程池
+# 每次kill 8个job，直到全部kill，由于top 命令延迟，所以看起来好像一瞬间全部启动了，其实每次只新启动8个随后立刻被kill
 func_kill_restore_all_jobs(){
   FLOODGATE=${2}
   while : ; do
@@ -1072,7 +1070,7 @@ func_kill_restore_all_jobs(){
       rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
     fi
     # kill run job
-    run_names=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$5}'`)
+    run_names=(`ps -o pid,time,command -u $(whoami) | grep -oP "${1}" | grep -oP "/[\/\w\.]+/output_ckp\d+"|sort -u`)
     run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${1}" | grep -v grep| awk '{print \$1}'`)
     if [[ ${#run_nums[@]} -gt 0 ]]; then
       for run_name in ${run_names[@]}; do
