@@ -86,24 +86,24 @@ restore: $(EXECUTABLE)
 	@echo ---------------------rscpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$(NUM_CKP).log >> $(FILE)_trace_err.log; true
 
-restore_case: $(EXECUTABLE)
-	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
-	@rm -rf ./output_ckp*;
-	@rm -rf ./$(FILE)_CKPS_CPI.log;
-	@rm -rf ./$(FILE)_RS_NUM.log;
-	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
-	for i in `seq $${m}`; do (\
-		$(TIMEG) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
-		grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
-		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
-		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
-		cpi=0;\
-		[ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
-		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
-		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log)& \
-	done;
-	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
+#restore_case: $(EXECUTABLE)
+#	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
+#	@rm -rf ./output_ckp*;
+#	@rm -rf ./$(FILE)_CKPS_CPI.log;
+#	@rm -rf ./$(FILE)_RS_NUM.log;
+#	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
+#	for i in `seq $${m}`; do (\
+#		$(TIMEG) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+#		grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
+#		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
+#		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
+#		cpi=0;\
+#		[ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
+#		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
+#		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
+#		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log)& \
+#	done;
+#	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 
 restore_all: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
