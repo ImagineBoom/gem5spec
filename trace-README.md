@@ -1,6 +1,6 @@
 repo:https://git.tsinghua.edu.cn/liuzhiwei/gem5spec/-/tree/trace
 
-# m1
+## m1
 
 ### 1. 全部执行
 
@@ -229,7 +229,7 @@ gem5spec_v0_M1/runspec_gem5_power/*r/
 
 ------
 
-# Simpoint
+## Simpoint
 
 ### 1. 生成BBV文件并使用Simpoint分类
 
@@ -399,13 +399,15 @@ make collect_checkpoints_number
 8. m5out: 保存生成的checkpoints的与生成checkpoints过程的仿真数据(stats.txt)
 9. out_ckpN: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，N表示第N个checkpoint
 
-# scripts
+------
 
-## 1. 分析m1的流水线，根据规则输出统计表格
+## scripts
+
+### 1. 分析m1的流水线，根据规则输出统计表格
 
 ### pre：切换到trace分支，进入gem5spec根目录
 
-### step1：运行可执行程序
+#### step1：运行可执行程序
 
 ```bash
 ./run.sh --m1 --myexe ./<myexe> --entire --gen_txt
@@ -414,7 +416,7 @@ make collect_checkpoints_number
 输出原生流水线文本:`<myexe>.txt`，同一条指令存在多行的情况，并且穿插其他指令
 保存位置`gem5spec/<myexe>/`
 
-### step2：运行分析分析脚本
+#### step2：运行分析分析脚本
 
 自动读入上一步生成的流水线文本，将每条换行的流水线恢复为一行，并且统计每条总指令数，每条指令出现的次数和频率
 
