@@ -17,13 +17,9 @@ source auto_cmpl.sh
 # 指定benchmark，999，从1到400条指令，不生成流水线文本文件
 
 ./run.sh --m1 --spec2017 999 -b=1 -e=400 --not_gen_txt
-```
-```bash
 # 指定自定义程序，test，跑完程序的所有指令，不生成流水线文本文件
 
 ./run.sh --m1 --myexe ./test --entire --not_gen_txt
-```
-```bash
 # 指定自定义程序，test，从1到400条指令，不生成流水线文本文件
 
 ./run.sh --m1 --myexe ./test -b=1 -e=400 --not_gen_txt
@@ -32,13 +28,13 @@ source auto_cmpl.sh
 #### 1.1 m1-执行spec2017
 
 
-| 选项                                | 解释                                                            |
-|:----------------------------------|---------------------------------------------------------------|
-| --spec2017 999                    | 代表选择的benchmark                                                |
-| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）                    |
-| --i_insts=2000000                 | 生成2000000条指令的itrace                                           |
-| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert]        |
-| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                          |
+| 选项                              | 解释                                                         |
+| :-------------------------------- | ------------------------------------------------------------ |
+| --spec2017 999                    | 代表选择的benchmark                                          |
+| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）         |
+| --i_insts=2000000                 | 生成2000000条指令的itrace                                    |
+| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert] |
+| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                |
 | --r_pipe_begin=1 --r_pipe_end=400 | 用于查看[10000,10399]指令区间的流水线图；流水线图指令区间为[jump+1,jump+400]，相对于jump |
 
 ##### 执行单个benchmark
@@ -63,30 +59,30 @@ source auto_cmpl.sh
 #### 1.2 m1-执行自定义程序
 
 
-| 选项                                | 解释                                                            |
-|:----------------------------------|---------------------------------------------------------------|
-| --myexe <PATH>                    | 编译后的自定义程序路径                                                   |
-| -b                                | 缺省参数模式，指定m1开始的指令位置                                            |
-| -e                                | 缺省参数模式，指定m1结束的指令位置                                            |
-| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）                    |
-| --i_insts=2000000                 | 生成2000000条指令的itrace                                           |
-| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert]        |
-| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                          |
+| 选项                              | 解释                                                         |
+| :-------------------------------- | ------------------------------------------------------------ |
+| --myexe <PATH>                    | 编译后的自定义程序路径                                       |
+| -b                                | 缺省参数模式，指定m1开始的指令位置                           |
+| -e                                | 缺省参数模式，指定m1结束的指令位置                           |
+| --all_steps                       | 代表执行全部流程（itrace\qtrace\run_timer\pipeview）         |
+| --i_insts=2000000                 | 生成2000000条指令的itrace                                    |
+| --q_jump=9999 --q_convert=10000   | 生成[9999,19999]指令区间的qtrace；qtrace区间为[jump,jump+convert] |
+| --r_insts=10000                   | 在qtrace区间中执行10000条指令                                |
 | --r_pipe_begin=1 --r_pipe_end=400 | 用于查看[10000,10399]指令区间的流水线图；流水线图指令区间为[jump+1,jump+400]，相对于jump |
-| --gen_txt                         | 生成流水线的文本文件,文件路径为gem5spec/${myexe}/${myexe}.txt                |
-| --not_gen_txt                     | 不生成流水线的文本文件                                                   |
+| --gen_txt                         | 生成流水线的文本文件,文件路径为gem5spec/${myexe}/${myexe}.txt |
+| --not_gen_txt                     | 不生成流水线的文本文件                                       |
 
 输出文件保存路径为gem5spec/${myexe}/
 
-| 输出文件                                                                      | 解释                                  |
-|:--------------------------------------------------------------------------|-------------------------------------|
-| ${myexe}.vgi                                                              | itrace, 使用valgrind-itrace生成         |
-| ${myexe}.qt                                                               | qtrace，m1所识别的trace文件，使用vgi2qt生成     |
-| ${myexe}.pipe                                                             | 调用scrollpv所需的文件，用于展示流水线图形化或者生成文本    |
-| ${myexe}.config                                                           | 配置文件                                |
-| ${myexe}.results                                                          | m1运行时的统计参数及性能指标                     |
-| ${myexe}.inst.log                                                         | ${myexe}的指令数说明，使用valgrind-exp-bbv生成 |                                                          | 在qtrace区间中执行10000条指令                                          |
-| ${myexe}.txt                                                              | ${myexe}的流水线文本文件                    |
+| 输出文件                                                     | 解释                                                     |
+| :----------------------------------------------------------- | -------------------------------------------------------- |
+| ${myexe}.vgi                                                 | itrace, 使用valgrind-itrace生成                          |
+| ${myexe}.qt                                                  | qtrace，m1所识别的trace文件，使用vgi2qt生成              |
+| ${myexe}.pipe                                                | 调用scrollpv所需的文件，用于展示流水线图形化或者生成文本 |
+| ${myexe}.config                                              | 配置文件                                                 |
+| ${myexe}.results                                             | m1运行时的统计参数及性能指标                             |
+| ${myexe}.inst.log                                                         | ${myexe}的指令数说明，使用valgrind-exp-bbv生成 |                                                          |
+| ${myexe}.txt                                                 | ${myexe}的流水线文本文件                                 |
 
 **完整参数模式**
 
@@ -105,6 +101,7 @@ source auto_cmpl.sh
 ```bash
 ./run.sh --m1 --myexe ./test-p8 --r_pipe_begin=1 --r_pipe_end=400 --not_gen_txt
 ```
+
 - [缺省模式2]
   - 运行m1的整个流程，test-p8按最大指令数执行，超过700,000,000条指令的将按照700,000,000分段执行
     - 不会展示图形化界面；
@@ -113,6 +110,7 @@ source auto_cmpl.sh
 ```bash
 ./run.sh --m1 --myexe ./test-p8 --entire --not_gen_txt
 ```
+
 ### 2. 单步骤执行
 
 benchmark和自定义程序皆可
@@ -281,20 +279,22 @@ make checkpoints
 make checkpoints_all_cases -j24
 ```
 
-如果使用4核模式生成24个测例的Checkpoints文件，在`runspec_gem5_power`目录下执行如下命令
+如果使用多核模式生成24个测例的Checkpoints文件，在`runspec_gem5_power`目录下执行如下命令
 
 ```bash
-make checkpoints_all_cases_4 -j24
+make checkpoints_all_cases_X -j24
 ```
+
+其中X可以指定为2、4、8，分别代表双核、四核、八核
 
 ### 3.使用Gem5恢复Checkpoints
 
 #### 3.1恢复某一个Checkpoint
 
-得到Checkpoints后，使用Gem5恢复某一个Checkpoint可以使用如下命令
+得到Checkpoints后，使用Gem5恢复某一个Checkpoint，可以在测例的目录下使用如下命令
 
 ```bash
-make restore NUM_CKP=1 CPU_TYPE=O3CPU
+make restore NUM_CKP=1
 ```
 
 参数`NUM_CKP`用于指定`restore`Checkpoint的序号，注意该参数的值从1开始，而`m5out`目录下的Checkpoint是从0开始，因此在指定该参数时需要加偏移量1。
@@ -305,27 +305,38 @@ make restore NUM_CKP=1 CPU_TYPE=O3CPU
 
 #### 3.2恢复某个测例全部的Checkpoints
 
-进入`runspec_gem5_power`目录下某个测例的文件后，输入以下命令
+~~进入`runspec_gem5_power`目录下某个测例的文件后，输入以下命令~~
 
 ```bash
 make restore_case CPU_TYPE=XXXCPU
 ```
 
-该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，会在`xxx_RS_NUM.log`中记录`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。
+~~该命令会并行执行该测例中的所有Checkpoints，每恢复完成一个Checkpoint，会在`xxx_RS_NUM.log`中记录`Finshed_Restore_CKP_N`的信息（N代表Checkpoint的序号）。同时该命令也会完成各个Checkpoint的CPI统计功能，统计结果会保存在`xxx_CKPS_CPI.log`中。~~
 
-由于该命令会将每个Checkpoint的`restore`操作压入后台运行，为方便查看所有的Checkpoints完成情况，可以使用命令
+~~由于该命令会将每个Checkpoint的`restore`操作压入后台运行，为方便查看所有的Checkpoints完成情况，可以使用命令~~
 
 ```bash
 make restore_status
 ```
 
-如果当前测例的所有Checkpoint都已完成`restore`，则Termianl会输出`All Checkpoints Restore Have Finshed!`
+~~如果当前测例的所有Checkpoint都已完成`restore`，则Termianl会输出`All Checkpoints Restore Have Finshed!`~~
 
-如果还有部分Checkpoint没有完成`restore`，则Termianl会输出`Some Checkpoints Are Restoring!`
+~~如果还有部分Checkpoint没有完成`restore`，则Termianl会输出`Some Checkpoints Are Restoring!`~~
+
+在`gem5spec`目录下输入以下命令可以对某个测例的每个Checkpoint进行`restore`操作
+
+```bash
+source auto_cmpl.sh #激活自动补全
+./run.sh --gem5 --spec2017 --restore_case XXX -j N
+```
+
+> XXX表示需要被restore的测例号，例：500
+>
+> 这里的N指定的是线程池最大的线程数量，可根据机器硬件情况和当前任务量决定
 
 #### 3.3恢复所有测例全部的Checkpoints
 
-在`gem5spec`目录下输入以下命令可以对所有测例的所有Checkpoints进行`restore`操作
+在`gem5spec`目录下输入以下命令可以对全部测例的每个Checkpoint进行`restore`操作
 
 ```bash
 source auto_cmpl.sh #激活自动补全
@@ -334,13 +345,15 @@ source auto_cmpl.sh #激活自动补全
 
 > 这里的N指定的是线程池最大的线程数量，可根据机器硬件情况和当前任务量决定
 
-如果想要用4核模式restore checkpoints可以使用下面的命令(checkpoints需要是4核模式生成的)
+在单核模式下，所有的checkpoints完成restore后，会自动生成存放统计数据表格的路径。
+
+如果想要用多核模式restore checkpoints可以使用下面的命令(checkpoints也需要是多核模式生成的)
 
 ```bash
-./run.sh --gem5 --spec2017 --restore_all_4 -j N
+./run.sh --gem5 --spec2017 --restore_all_X -j N
 ```
 
-执行该命令后，任务会放入后台执行，根据指定的线程数量循环restore所有测例的全部checkpoints。所有的checkpoints完成restore后，会自动生成存放统计数据表格的路径。
+执行该命令后，任务会放入后台执行，根据指定的线程数量循环restore所有测例的全部checkpoints。
 
 ### 4.CPI统计
 
@@ -387,20 +400,30 @@ make collect_checkpoints_number
 9. out_ckpN: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，N表示第N个checkpoint
 
 # scripts
+
 ## 1. 分析m1的流水线，根据规则输出统计表格
+
 ### pre：切换到trace分支，进入gem5spec根目录
+
 ### step1：运行可执行程序
+
 ```bash
 ./run.sh --m1 --myexe ./<myexe> --entire --gen_txt
 ```
+
 输出原生流水线文本:`<myexe>.txt`，同一条指令存在多行的情况，并且穿插其他指令
 保存位置`gem5spec/<myexe>/`
+
 ### step2：运行分析分析脚本
+
 自动读入上一步生成的流水线文本，将每条换行的流水线恢复为一行，并且统计每条总指令数，每条指令出现的次数和频率
+
 ```bash
 (cd scripts && python3 m1_pipe_handler.py)
 ```
+
 输出结果:
+
 - 统计结果保存位置`gem5spec/data/pipeline_result/`
 - 流水线文件保存位置`gem5spec/data/pipeline_graph/`
   - `mid.txt` 文件保存了所有指令的单行流水线文本图，按照指令首字母排序，不会去掉执行周期数相同的指令
