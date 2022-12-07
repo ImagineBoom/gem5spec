@@ -26,6 +26,8 @@ restore_all_cases: restore_all_500 restore_all_502 restore_all_503 restore_all_5
 
 cpi_all_cases: cpi_500 cpi_502 cpi_503 cpi_505 cpi_507 cpi_508 cpi_510 cpi_511 cpi_519 cpi_520 cpi_521 cpi_523 cpi_525 cpi_526 cpi_527 cpi_531 cpi_538 cpi_541 cpi_544 cpi_548 cpi_549 cpi_554 cpi_557 cpi_999
 
+cpi_all_cases_2: cpi_500_2 cpi_502_2 cpi_503_2 cpi_505_2 cpi_507_2 cpi_508_2 cpi_510_2 cpi_511_2 cpi_519_2 cpi_520_2 cpi_521_2 cpi_523_2 cpi_525_2 cpi_526_2 cpi_527_2 cpi_531_2 cpi_538_2 cpi_541_2 cpi_544_2 cpi_548_2 cpi_549_2 cpi_554_2 cpi_557_2 cpi_999_2
+
 log-pre:
 	@LOG_DIR=$(DATE); \
 	echo $(DATE) > DATE.log; \
@@ -615,6 +617,55 @@ cpi_557:
 	@-make cpi -C 557.xz_r
 cpi_999:
 	@-make cpi -C 999.specrand_ir
+
+cpi_500_2:
+	@-make cpi_2 -C 500.perlbench_r
+cpi_502_2:
+	@-make cpi_2 -C 502.gcc_r
+cpi_503_2:
+	@-make cpi_2 -C 503.bwaves_r
+cpi_505_2:
+	@-make cpi_2 -C 505.mcf_r
+cpi_507_2:
+	@-make cpi_2 -C 507.cactuBSSN_r
+cpi_508_2:
+	@-make cpi_2 -C 508.namd_r
+cpi_510_2:
+	@-make cpi_2 -C 510.parest_r
+cpi_511_2:
+	@-make cpi_2 -C 511.povray_r
+cpi_519_2:
+	@-make cpi_2 -C 519.lbm_r
+cpi_520_2:
+	@-make cpi_2 -C 520.omnetpp_r
+cpi_521_2:
+	@-make cpi_2 -C 521.wrf_r
+cpi_523_2:
+	@-make cpi_2 -C 523.xalancbmk_r
+cpi_525_2:
+	@-make cpi_2 -C 525.x264_r
+cpi_526_2:
+	@-make cpi_2 -C 526.blender_r
+cpi_527_2:
+	@-make cpi_2 -C 527.cam4_r
+cpi_531_2:
+	@-make cpi_2 -C 531.deepsjeng_r
+cpi_538_2:
+	@-make cpi_2 -C 538.imagick_r
+cpi_541_2:
+	@-make cpi_2 -C 541.leela_r
+cpi_544_2:
+	@-make cpi_2 -C 544.nab_r
+cpi_548_2:
+	@-make cpi_2 -C 548.exchange2_r
+cpi_549_2:
+	@-make cpi_2 -C 549.fotonik3d_r
+cpi_554_2:
+	@-make cpi_2 -C 554.roms_r
+cpi_557_2:
+	@-make cpi_2 -C 557.xz_r
+cpi_999_2:
+	@-make cpi_2 -C 999.specrand_ir
 
 collect_all_cases_CPI:
 	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log;
