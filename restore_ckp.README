@@ -2,8 +2,7 @@
 
 gem5spec目录已有checkpoint数据
 
-稳定版commit ID: 7bed036e29ec6c59d8b596c68d69e500379f8d1b
-
+- 执行Simpoint 和 Checkpoint 部分(参见runspec_gem5_power/TRACE.mk中Simpoin和Checkpoint部分)
 
 ## 以下命令全都在gem5spec目录下执行
 
@@ -14,13 +13,15 @@ source auto_cmpl.sh
 ```
 
 
-
 - 执行restore ckp, -j指定并行数, 执行完后会自动进行对比，得到与gem5与M1对比的Excel
-
+  - 全部测例
 ```bash
 /run.sh --gem5 --spec2017 --restore_all -j 10
 ```
-
+  - 单个测例
+```bash
+./run.sh --gem5 --spec2017 --restore_case 502 -j 4
+```
 
 
 - 增加并行数
