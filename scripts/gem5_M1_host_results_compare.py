@@ -271,6 +271,10 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
         for cell in row_cells:
             cell.value="=summary!E"+str(index)
 
+    for index,row_cells in enumerate(sheet0["J2:J25"],start=2):
+        for cell in row_cells:
+            cell.value="=IFERROR((1/summary!D"+str(index)+"-G"+str(index)+")/G"+str(index)+",1)"
+
     # results_compare.writerow(["Benchmark#","Checkpoint#","Simpts","Weights","M1_CPI","gem5_CPI","M1_WeightedCPI","gem5_WeightedCPI"])
 
     # 样式处理
@@ -283,6 +287,9 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
             filter_data.append(cells[0].value)
     sheet2.auto_filter.add_filter_column(column_index_from_string("E")-1, filter_data)
     # 修改标题
+    # sheet0.cell(1,column_index_from_string("I")).value="gem5 ckp与完整跑误差"
+    # sheet0.cell(1,column_index_from_string("N")).value="GEM5 ckp CPI"
+    # sheet0.cell(1,column_index_from_string("O")).value="M1 ckp CPI"
     sheet2.cell(1,column_index_from_string("E")).value="CPI(Ckp M1)"
     sheet2.cell(1,column_index_from_string("F")).value="CPI(Ckp gem5)"
     sheet2.cell(1,column_index_from_string("G")).value="WeightedCPI(Ckp M1)"
@@ -298,6 +305,15 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     sheet1.conditional_formatting.add("F2:"+"F"+str(sheet1.max_row-1),rule3)
 
     # 设置边框、对齐、字体
+    for index,row_cells in enumerate(sheet0["E2:E25"],start=2):
+        for cell in row_cells:
+                cell.alignment=Alignment(horizontal='center', vertical='center')
+    for index,row_cells in enumerate(sheet0["H2:H25"],start=2):
+        for cell in row_cells:
+                cell.alignment=Alignment(horizontal='center', vertical='center')
+    for index,row_cells in enumerate(sheet0["I2:I25"],start=2):
+        for cell in row_cells:
+                cell.alignment=Alignment(horizontal='center', vertical='center')
     pyCellFontStyle([sheet1,sheet2],onlyRow=True,set_border=True)
     pyCellFontStyle([sheet1,sheet2],rowAndCol=True,set_align=True,horizontal='center',vertical='center')
     pyCellFontStyle([sheet1,sheet2],rowAndCol=True,set_align=True,rowNumStart=2,colNumStart=2,horizontal='justify')
