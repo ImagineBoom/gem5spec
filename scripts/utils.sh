@@ -512,7 +512,7 @@ func_with_restore_case(){
     ${opt} >>nohup.out 2>&1
     # 每运行完一个benchmark做出统计
     wait
-    func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+    func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
     opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
     ${opt} >/dev/null 2>&1
   elif [[ $is_m1 == true ]]; then
@@ -527,7 +527,7 @@ func_with_restore_case(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_case_${FILE} ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -589,7 +589,7 @@ func_with_restore_all_benchmarks(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
         opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
         ${opt} >/dev/null 2>&1
       elif [[ $is_m1 == true ]]; then
@@ -606,7 +606,7 @@ func_with_restore_all_benchmarks(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -671,7 +671,7 @@ func_with_restore_all_benchmarks_n2(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
 #        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
 #        ${opt} >/dev/null 2>&1
 #      elif [[ $is_m1 == true ]]; then
@@ -688,7 +688,7 @@ func_with_restore_all_benchmarks_n2(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks_n2 ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -752,7 +752,7 @@ func_with_restore_all_benchmarks_n4(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
 #        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
 #        ${opt} >/dev/null 2>&1
 #      elif [[ $is_m1 == true ]]; then
@@ -769,7 +769,7 @@ func_with_restore_all_benchmarks_n4(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks_n4 ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
@@ -833,7 +833,7 @@ func_with_restore_all_benchmarks_n8(){
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
-        func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
+        func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
 #        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
 #        ${opt} >/dev/null 2>&1
 #      elif [[ $is_m1 == true ]]; then
@@ -850,7 +850,7 @@ func_with_restore_all_benchmarks_n8(){
     exit 1
   fi
 
-  func_detect_restore_bg "gem5.opt .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
+  func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" true
   echo "func_with_restore_all_benchmarks_n8 ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")
   sys_date1=$(date -d "$date1" +%s)
