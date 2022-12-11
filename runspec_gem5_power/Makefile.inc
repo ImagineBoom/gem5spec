@@ -2,8 +2,10 @@
 SPEC_HOME      ?= /home/lizongping/cpu2017
 LABEL          ?= ppc
 
-GEM5_REPO_PATH ?= /home/${USER}/prj/gem5
-GEM5            = $(GEM5_REPO_PATH)/build/POWER_MI/gem5.opt
+#GEM5_REPO_PATH ?= /home/${USER}/prj/gem5
+#GEM5            = $(GEM5_REPO_PATH)/build/POWER_MI/gem5.opt
+GEM5_REPO_PATH ?= /home/${USER}/Dev/gem5
+GEM5            = $(GEM5_REPO_PATH)/build/POWER/gem5.fast
 GEM5_OPT       += --redirect-stdout
 GEM5_OPT       += --stdout-file=../stdout_gem5.log
 GEM5_OPT       += --redirect-stderr
