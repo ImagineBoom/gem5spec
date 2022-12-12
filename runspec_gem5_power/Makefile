@@ -776,6 +776,13 @@ collect_all_cases_CPI:
 	@rm -rf weightedCPI_results.log;
 	@gedit All_case_weightedCPI.csv &
 
+collect_all_cases_CPI_2:
+	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$6,$$8}' > weightedCPI_results.log;
+	@sed -i 's/.csv//' weightedCPI_results.log;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","WeightedCPI0","WeightedCPI1"} {OFS=",";print $$1,$$2,$$3}' weightedCPI_results.log > All_case_weightedCPI.csv;
+	@rm -rf weightedCPI_results.log;
+	@gedit All_case_weightedCPI.csv &
+
 collect_all_checkpoints_data:
 	@rm -rf ./Each_case_ckp_data.csv;
 	@cat ./500*/*.csv >> ./Each_case_ckp_data.csv;
