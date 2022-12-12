@@ -777,10 +777,33 @@ collect_all_cases_CPI:
 	@gedit All_case_weightedCPI.csv &
 
 collect_all_cases_IPC:
-	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log;
-	@sed -i 's/.csv//' weightedCPI_results.log;
-	@awk 'NR==1 {OFS=",";print "SpecCase#","IPC"} {OFS=",";print $$1,1/$$2}' weightedCPI_results.log > All_case_IPC.csv;
-	@rm -rf weightedCPI_results.log;
+	@rm -rf ./All_case_IPC.csv;
+	@cat ./500*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./502*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./505*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./520*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./523*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./525*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./531*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./541*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./548*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./557*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./503*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./507*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./508*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./510*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./511*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./519*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./521*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./526*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./527*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./538*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./544*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./549*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./554*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./999*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","IPC"} {OFS=",";print $$1,1/$$2}' All_case_IPC.log > All_case_IPC.csv;
+	@rm -rf All_case_IPC.log;
 	@gedit All_case_IPC.csv &
 
 collect_all_cases_CPI_2:
