@@ -320,7 +320,7 @@ cpi_8: $(EXECUTABLE)
 	for i in `seq $${m}`; do\
 		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
-		cpi=0;\
+		#cpi=0;\
 		cpi0=0;\
 		cpi1=0;\
 		cpi2=0;\
@@ -331,24 +331,24 @@ cpi_8: $(EXECUTABLE)
 		cpi7=0;\
 		[ $${flag} == true ] \
 		&& [ `grep "system.switch_cpus0.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus0.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi0=`grep "system.switch_cpus0.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus1.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus1.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi1=`grep "system.switch_cpus1.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus2.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus2.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi2=`grep "system.switch_cpus2.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus3.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus3.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi3=`grep "system.switch_cpus3.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus4.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus4.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi4=`grep "system.switch_cpus4.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus5.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi5=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus6.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus6.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi6=`grep "system.switch_cpus6.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus7.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus7.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi7=`grep "system.switch_cpus7.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		||echo "restore results maybe with problem!  simpts: $${simpts} -- weights: $${weights} -- not have cpi";\
-		cpi=`echo $${cpi0} $${cpi1} $${cpi2} $${cpi3} $${cpi4} $${cpi5} $${cpi6} $${cpi7} | awk '{printf "%.6f", $$1+$$2+$$3+$$4+$$5+$$6+$$7+$$8}'`;\
-		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
+		#cpi=`echo $${cpi0} $${cpi1} $${cpi2} $${cpi3} $${cpi4} $${cpi5} $${cpi6} $${cpi7} | awk '{printf "%.6f", $$1+$$2+$$3+$$4+$$5+$$6+$$7+$$8}'`;\
+		echo ckp$${i} $${simpts} $${weights} $${cpi0} $${cpi1} $${cpi2} $${cpi3} $${cpi4} $${cpi5} $${cpi6} $${cpi7} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
 	done;
 	# create cpi files
@@ -358,17 +358,39 @@ cpi_8: $(EXECUTABLE)
 		num=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$1}'`; \
 		simpts=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$2}'`; \
 		weights=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$3}'`; \
-		cpi=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$4}'`;\
+		cpi0=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$4}'`;\
+		cpi1=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$5}'`;\
+		cpi2=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$6}'`;\
+		cpi3=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$7}'`;\
+		cpi4=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$8}'`;\
+		cpi5=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$9}'`;\
+		cpi6=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$10}'`;\
+		cpi7=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$11}'`;\
 		#weightedCPI=`echo "$${weights}*$${cpi}" | bc`;\
-		weightedCPI=`echo $${weights} $${cpi} | awk '{printf "%.6f", $$1*$$2}'`;\
-		echo $(FILE) $${num} $${simpts} $${weights} $${cpi} $${weightedCPI} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
+		weightedCPI0=`echo $${weights} $${cpi0} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI1=`echo $${weights} $${cpi1} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI2=`echo $${weights} $${cpi2} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI3=`echo $${weights} $${cpi3} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI4=`echo $${weights} $${cpi4} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI5=`echo $${weights} $${cpi5} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI6=`echo $${weights} $${cpi6} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI7=`echo $${weights} $${cpi7} | awk '{printf "%.6f", $$1*$$2}'`;\
+		echo $(FILE) $${num} $${simpts} $${weights} $${cpi0} $${weightedCPI0} $${cpi1} $${weightedCPI1} $${cpi2} $${weightedCPI2} $${cpi3} $${weightedCPI3} $${cpi4} $${weightedCPI4} $${cpi5} $${weightedCPI5} $${cpi6} $${weightedCPI6} $${cpi7} $${weightedCPI7} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
 	done;
 	rm -rf ./$(FILE)_CKPS_CPI_sorted.log;\
-	result=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
-	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI","WeightedCPI"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_Final_Result_$${result}.csv;\
+	result0=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result1=`awk '{sum+=$$8}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result2=`awk '{sum+=$$10}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result3=`awk '{sum+=$$12}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result4=`awk '{sum+=$$14}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result5=`awk '{sum+=$$16}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result6=`awk '{sum+=$$18}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result7=`awk '{sum+=$$20}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI0","WeightedCPI0","CPI1","WeightedCPI1","CPI2","WeightedCPI2","CPI3","WeightedCPI3","CPI4","WeightedCPI4","CPI5","WeightedCPI5","CPI6","WeightedCPI6","CPI7","WeightedCPI7"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8,$$9,$$10,$$11,$$12,$$13,$$14,$$15,$$16,$$17,$$18,$$19,$$20}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_Final_Result_CPI.csv;\
 	case_name=$(FILE);\
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
-	sed -i '$$G' ./$(FILE)_Final_Result_$${result}.csv;
+	sed -i '$$G' ./$(FILE)_Final_Result_CPI.csv;\
+	echo $(FILE) $${result0} $${result1} $${result2} $${result3} $${result4} $${result5} $${result6} $${result7} >$(FILE)_Total_Result_CPI.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 
