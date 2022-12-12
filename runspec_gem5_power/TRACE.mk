@@ -145,7 +145,7 @@ cpi: $(EXECUTABLE)
 	case_name=$(FILE);\
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
 	sed -i '$$G' ./$(FILE)_Final_Result_$${result}.csv;\
-	echo $(FILE) $${result} >$(FILE)_Total_Result_CPI.csv;
+	echo $(FILE) $${result} >$(FILE)_Total_Result_CPI.log;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 cpi_2: $(EXECUTABLE)
@@ -206,7 +206,7 @@ cpi_2: $(EXECUTABLE)
 	case_name=$(FILE);\
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
 	sed -i '$$G' ./$(FILE)_Final_Result_CPI.csv;\
-	echo $(FILE) $${result0} $${result1} >$(FILE)_Total_Result_CPI.csv;
+	echo $(FILE) $${result0} $${result1} >$(FILE)_Total_Result_CPI.log;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 		# grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
@@ -293,7 +293,7 @@ cpi_4: $(EXECUTABLE)
 	case_name=$(FILE);\
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
 	sed -i '$$G' ./$(FILE)_Final_Result_CPI.csv;\
-	echo $(FILE) $${result0} $${result1} $${result2} $${result3} >$(FILE)_Total_Result_CPI.csv;
+	echo $(FILE) $${result0} $${result1} $${result2} $${result3} >$(FILE)_Total_Result_CPI.log;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 cpi_8: $(EXECUTABLE)
@@ -390,7 +390,7 @@ cpi_8: $(EXECUTABLE)
 	case_name=$(FILE);\
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
 	sed -i '$$G' ./$(FILE)_Final_Result_CPI.csv;\
-	echo $(FILE) $${result0} $${result1} $${result2} $${result3} $${result4} $${result5} $${result6} $${result7} >$(FILE)_Total_Result_CPI.csv;
+	echo $(FILE) $${result0} $${result1} $${result2} $${result3} $${result4} $${result5} $${result6} $${result7} >$(FILE)_Total_Result_CPI.log;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 
