@@ -202,10 +202,11 @@ cpi_2: $(EXECUTABLE)
 	rm -rf ./$(FILE)_CKPS_CPI_sorted.log;\
 	result0=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
 	result1=`awk '{sum+=$$8}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
-	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI0","WeightedCPI0","CPI1","WeightedCPI1"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8}' $(FILE)_CKPS_Weighted_CPI.log >./$(FILE)_Final_Result_C1_$${result0}_C2_$${result1}.csv;\
+	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI0","WeightedCPI0","CPI1","WeightedCPI1"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8}' $(FILE)_CKPS_Weighted_CPI.log >./$(FILE)_Final_Result_CPI.csv;\
 	case_name=$(FILE);\
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
-	sed -i '$$G' ./$(FILE)_Final_Result_C1_$${result0}_C2_$${result1}.csv;
+	sed -i '$$G' ./$(FILE)_Final_Result_CPI.csv;
+	echo $(FILE) $${result0} $${result1} >$(FILE)_Total_Result_CPI.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 		# grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
