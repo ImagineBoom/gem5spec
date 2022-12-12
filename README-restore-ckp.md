@@ -3,6 +3,8 @@
 gem5spec目录已有checkpoint数据
 
 - 执行Simpoint 和 Checkpoint 部分(参见runspec_gem5_power/TRACE.mk中Simpoin和Checkpoint部分)
+- 如果是从别人的目录拷贝过来的ckp，不是自己生成的，restore之前要预先运行`fix_ckp_output_path.sh`处理一下路径问题，替换成当前路径，否则520，511这两个需要写文件权限的部分ckp会出错。
+- 运行`fix_ckp_output_path.sh`之前，要修改一下生成ckp的目录，也就是要替换的目标，否则错了就不能替换成功了。
 
 ## 以下命令全都在gem5spec目录下执行
 
