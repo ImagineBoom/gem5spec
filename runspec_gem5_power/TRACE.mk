@@ -141,10 +141,10 @@ cpi: $(EXECUTABLE)
 	done;
 	rm -rf ./$(FILE)_CKPS_CPI_sorted.log;\
 	result=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
-	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI","WeightedCPI"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_Final_Result_CPI.csv;\
-	case_name=$(FILE);\
+	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI","WeightedCPI"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_Final_Result_$${result}.csv;\
+	case_name=$(FILE);\CPI
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
-	sed -i '$$G' ./$(FILE)_Final_Result_CPI.csv;\
+	sed -i '$$G' ./$(FILE)_Final_Result_$${result}.csv;\
 	echo $(FILE) $${result} >$(FILE)_Total_Result_CPI.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
