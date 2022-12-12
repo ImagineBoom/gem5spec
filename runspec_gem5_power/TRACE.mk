@@ -171,17 +171,17 @@ cpi_2: $(EXECUTABLE)
 	for i in `seq $${m}`; do\
 		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
-		cpi=0;\
+		#cpi=0;\
 		cpi0=0;\
 		cpi1=0;\
 		[ $${flag} == true ] \
 		&& [ `grep "system.switch_cpus0.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus0.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi0=`grep "system.switch_cpus0.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus1.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi=`grep "system.switch_cpus1.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi1=`grep "system.switch_cpus1.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		||echo "restore results maybe with problem!  simpts: $${simpts} -- weights: $${weights} -- not have cpi";\
-		cpi=`echo $${cpi0} $${cpi1} | awk '{printf "%.2f", $$1+$$2}'`;\
-		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
+		#cpi=`echo $${cpi0} $${cpi1} | awk '{printf "%.2f", $$1+$$2}'`;\
+		echo ckp$${i} $${simpts} $${weights} $${cpi0} $${cpi1} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
 	done;
 	# create cpi files
@@ -191,17 +191,20 @@ cpi_2: $(EXECUTABLE)
 		num=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$1}'`; \
 		simpts=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$2}'`; \
 		weights=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$3}'`; \
-		cpi=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$4}'`;\
+		cpi0=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$4}'`;\
+		cpi1=`sed -n "$${i}p" ./$(FILE)_CKPS_CPI_sorted.log | awk '{print $$5}'`;\
 		#weightedCPI=`echo "$${weights}*$${cpi}" | bc`;\
-		weightedCPI=`echo $${weights} $${cpi} | awk '{printf "%.6f", $$1*$$2}'`;\
-		echo $(FILE) $${num} $${simpts} $${weights} $${cpi} $${weightedCPI} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
+		weightedCPI0=`echo $${weights} $${cpi0} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedCPI1=`echo $${weights} $${cpi1} | awk '{printf "%.6f", $$1*$$2}'`;\
+		echo $(FILE) $${num} $${simpts} $${weights} $${cpi0} $${weightedCPI0} $${cpi1} $${weightedCPI1} >> ./$(FILE)_CKPS_Weighted_CPI.log;) \
 	done;
 	rm -rf ./$(FILE)_CKPS_CPI_sorted.log;\
-	result=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
-	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI","WeightedCPI"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6}' $(FILE)_CKPS_Weighted_CPI.log >$(FILE)_Final_Result_$${result}.csv;\
+	result0=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	result1=`awk '{sum+=$$8}END{print sum}' ./$(FILE)_CKPS_Weighted_CPI.log`;\
+	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","CPI0","WeightedCPI0","CPI1","WeightedCPI1"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8}' $(FILE)_CKPS_Weighted_CPI.log >./$(FILE)_Final_Result_C1_$${result0}_C2_$${result1}.csv;\
 	case_name=$(FILE);\
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
-	sed -i '$$G' ./$(FILE)_Final_Result_$${result}.csv;
+	sed -i '$$G' ./$(FILE)_Final_Result_C1_$${result0}_C2_$${result1}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 		# grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
@@ -355,6 +358,7 @@ cpi_8: $(EXECUTABLE)
 	#sed -i '$$a The '$$case_name' total weighted cpi is '$$result'' ./$(FILE)_Final_Result_$${result}.csv;\
 	sed -i '$$G' ./$(FILE)_Final_Result_$${result}.csv;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
+
 
 clean-simpoint:
 	rm -rf ./*bbv ./*gem5_bbv.log ./*merge ./*simpoint.log ./*simpts ./*weights ./*trace*
