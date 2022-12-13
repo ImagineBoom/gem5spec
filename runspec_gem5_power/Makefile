@@ -828,7 +828,7 @@ collect_all_cases_CPI:
 	@gedit All_case_weightedCPI.csv &
 
 collect_all_cases_IPC:
-	@cat ./500*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./500*/*_Total_Result_CPI.log > ./All_case_IPC.log;
 	@cat ./502*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./505*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./520*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
@@ -864,7 +864,7 @@ collect_all_cases_IPC:
 #	@gedit All_case_weightedCPI.csv &
 
 collect_all_cases_IPC_2:
-	@cat ./500*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./500*/*_Total_Result_CPI.log > ./All_case_IPC.log;
 	@cat ./502*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./505*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./520*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
@@ -893,7 +893,7 @@ collect_all_cases_IPC_2:
 	@gedit All_case_IPC_smt2.csv &
 
 collect_all_cases_IPC_4:
-	@cat ./500*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./500*/*_Total_Result_CPI.log > ./All_case_IPC.log;
 	@cat ./502*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./505*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./520*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
@@ -922,7 +922,7 @@ collect_all_cases_IPC_4:
 	@gedit All_case_IPC_smt4.csv &
 
 collect_all_cases_IPC_8:
-	@cat ./500*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
+	@cat ./500*/*_Total_Result_CPI.log > ./All_case_IPC.log;
 	@cat ./502*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./505*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
 	@cat ./520*/*_Total_Result_CPI.log >> ./All_case_IPC.log;
@@ -951,7 +951,7 @@ collect_all_cases_IPC_8:
 	@gedit All_case_IPC_smt8.csv &
 
 collect_all_cases_MKPI_L2:
-	@cat ./500*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
 	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./520*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
@@ -980,8 +980,7 @@ collect_all_cases_MKPI_L2:
 	@gedit All_case_L2_MKPI.csv &
 
 collect_all_checkpoints_data:
-	@rm -rf ./Each_case_ckp_data.csv;
-	@cat ./500*/*.csv >> ./Each_case_ckp_data.csv;
+	@cat ./500*/*.csv > ./Each_case_ckp_data.csv;
 	@cat ./502*/*.csv >> ./Each_case_ckp_data.csv;
 	@cat ./505*/*.csv >> ./Each_case_ckp_data.csv;
 	@cat ./520*/*.csv >> ./Each_case_ckp_data.csv;
@@ -1017,8 +1016,7 @@ collect_checkpoints_number:
 	@gedit Checkpoint_Num.csv &
 
 classify_result:
-	@rm -rf ./Sort_All_case_weightedCPI.csv;
-	@find ./500*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
+	@find ./500*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > ./Sort_All_case_weightedCPI.csv;
 	@find ./502*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
 	@find ./505*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
 	@find ./520*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' >> ./Sort_All_case_weightedCPI.csv;
