@@ -443,7 +443,7 @@ mkpi: $(EXECUTABLE)
 	rm -rf ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log;\
 	Tmiss=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log`;\
 	Taccess=`awk '{sum+=$$8}END{print sum}' ./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log`;\
-	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","Miss#","WeightedMiss#","Access#","WeightedAccess#"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8}'./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log >./$(FILE)_Final_Result_L2_Miss_Access.log;\
+	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","Miss#","WeightedMiss#","Access#","WeightedAccess#"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8}' $(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log >./$(FILE)_Final_Result_L2_Miss_Access.log;\
 	case_name=$(FILE);\
 	sed -i '$$G' ./$(FILE)_Final_Result_L2_Miss_Access.log;\
 	echo $(FILE) $${Tmiss} $${Taccess} >$(FILE)_Total_Result_L2_Miss_Access.log;
