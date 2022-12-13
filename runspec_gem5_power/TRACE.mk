@@ -393,6 +393,61 @@ cpi_8: $(EXECUTABLE)
 	echo $(FILE) $${result0} $${result1} $${result2} $${result3} $${result4} $${result5} $${result6} $${result7} >$(FILE)_Total_Result_CPI.log;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
+mkpi: $(EXECUTABLE)
+	@echo ---------------------mkpi handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
+	@rm -rf ./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log
+	@rm -rf ./$(FILE)_CKPS_L2_MISS_ACCESS.log
+	@rm -rf ./$(FILE)_RS_NUM.log
+	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
+	# set up flag for judge ;\
+	flag=true;\
+	# check .merge lines ?= m5out/cpt file nums ;\
+	[ $${m} != ` find ./m5out/ -name "cpt.*" -exec basename {} \; |wc -l` ] \
+	&& flag=false || echo "ckp num right";\
+	# check each cpt weight (on cptfile such as: cpt.simpoint_00_inst_0_weight_0.045455_interval_5000000_warmup_0) ?= weight(in .merge) ;\
+	# because of weights Digital precision problem，gem5 create checkpoint use %.6f and our .merge file use %.5 ;\
+	# so we use the original .weights file directly;\
+	for i in `seq $${m}`; do\
+		weights=`sed -n "$${i}p" $(FILE).weights | awk '{printf "%.6f\n",$$1}'`;\
+		[ ` find ./m5out/ -name "cpt.*" -exec basename {} \;| grep $${weights} -o | wc -l` == 0 ] \
+		&& flag=false || echo "with $${weights}";\
+	done;\
+	# recreate ./$(FILE)_CKPS_L2_MISS_ACCESS.log /$(FILE)_RS_NUM.log, according to above ;\
+	for i in `seq $${m}`; do\
+		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
+		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
+		miss=0;\
+		access=0;\
+		[ $${flag} == true ] \
+		&& [ `grep "system.ruby.l2_cntrl0.L2cache.m_demand_misses" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
+		&& miss=`grep "system.ruby.l2_cntrl0.L2cache.m_demand_misses.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& [ `grep "system.ruby.l2_cntrl0.L2cache.m_demand_accesses" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
+		&& access=`grep "system.ruby.l2_cntrl0.L2cache.m_demand_accesses.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		||echo "restore results maybe with problem!  simpts: $${simpts} -- weights: $${weights} -- not have miss & access";\
+		echo ckp$${i} $${simpts} $${weights} $${miss} $${access} >> ./$(FILE)_CKPS_L2_MISS_ACCESS.log;\
+		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
+	done;
+	# create cpi files
+	@sort -n -r -k 3 ./$(FILE)_CKPS_L2_MISS_ACCESS.log -o ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log;
+	@m=(`awk 'END {print NR}' ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log;`);\
+	for i in `seq $${m}`; do( \
+		num=`sed -n "$${i}p" ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log | awk '{print $$1}'`; \
+		simpts=`sed -n "$${i}p" ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log | awk '{print $$2}'`; \
+		weights=`sed -n "$${i}p" ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log | awk '{print $$3}'`; \
+		miss=`sed -n "$${i}p" ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log | awk '{print $$4}'`;\
+		access=`sed -n "$${i}p" ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log | awk '{print $$5}'`;\
+		weightedMiss=`echo $${weights} $${miss} | awk '{printf "%.6f", $$1*$$2}'`;\
+		weightedAccess=`echo $${weights} $${access} | awk '{printf "%.6f", $$1*$$2}'`;\
+		echo $(FILE) $${num} $${simpts} $${weights} $${miss} $${weightedMiss} $${access} $${weightedAccess} >> ./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log;) \
+	done;
+	rm -rf ./$(FILE)_CKPS_L2_MISS_ACCESS_sorted.log;\
+	Tmiss=`awk '{sum+=$$6}END{print sum}' ./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log`;\
+	Taccess=`awk '{sum+=$$8}END{print sum}' ./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log`;\
+	awk 'NR==1 {OFS=",";print "Case#","Checkpoint#","Simpts","Weights","Miss#","WeightedMiss#","Access#","WeightedAccess#"} {OFS=",";print $$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8}'./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log >./$(FILE)_Final_Result_L2_Miss_Access.log;\
+	case_name=$(FILE);\
+	sed -i '$$G' ./$(FILE)_Final_Result_L2_Miss_Access.log;\
+	echo $(FILE) $${Tmiss} $${Taccess} >$(FILE)_Total_Result_L2_Miss_Access.log;
+	@echo ---------------------mkpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
 clean-simpoint:
 	rm -rf ./*bbv ./*gem5_bbv.log ./*merge ./*simpoint.log ./*simpts ./*weights ./*trace*
