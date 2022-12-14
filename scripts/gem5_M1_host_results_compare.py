@@ -200,8 +200,8 @@ def data_pre(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ck
     # add qt skip info
     read_qt_skip()
 
-    print(sheet.max_row)
-    print(sheet.max_column)
+    # print(sheet.max_row)
+    # print(sheet.max_column)
     for row_num,row_cells in enumerate(sheet["2:"+str(sheet.max_row)],start=2):
         if qtskip.get(row_cells[0].value,{}).get(str(row_cells[2].value),QtraceSkip(None,None,None)).realSkipVgi!=None:
             sheet.cell(row_num,column_index_from_string("J")).value=int(qtskip.get(row_cells[0].value,{}).get(str(row_cells[2].value),QtraceSkip(None,None,None)).valid)
