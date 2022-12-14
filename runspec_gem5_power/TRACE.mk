@@ -124,7 +124,7 @@ cpi: $(EXECUTABLE)
 		[ $${flag} == true ] \
 		&& [ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
-		||echo "restore results maybe with problem!, ckp, ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
+		||echo "restore results maybe with problem!, $(FILE), ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
 		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
 	done;
@@ -182,7 +182,7 @@ cpi_2: $(EXECUTABLE)
 		&& cpi0=`grep "system.switch_cpus0.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus1.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& cpi1=`grep "system.switch_cpus1.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
-		||echo "restore results maybe with problem!, ckp, ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
+		||echo "restore results maybe with problem!, $(FILE), ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
 		#cpi=`echo $${cpi0} $${cpi1} | awk '{printf "%.2f", $$1+$$2}'`;\
 		echo ckp$${i} $${simpts} $${weights} $${cpi0} $${cpi1} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
@@ -264,7 +264,7 @@ cpi_4: $(EXECUTABLE)
 		&& cpi2=`grep "system.switch_cpus2.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus3.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& cpi3=`grep "system.switch_cpus3.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
-		||echo "restore results maybe with problem!, ckp, ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
+		||echo "restore results maybe with problem!, $(FILE), ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
 		#cpi=`echo $${cpi0} $${cpi1} $${cpi2} $${cpi3}| awk '{printf "%.6f", $$1+$$2+$$3+$$4}'`;\
 		echo ckp$${i} $${simpts} $${weights} $${cpi0} $${cpi1} $${cpi2} $${cpi3} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
@@ -350,7 +350,7 @@ cpi_8: $(EXECUTABLE)
 		&& cpi6=`grep "system.switch_cpus6.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus7.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& cpi7=`grep "system.switch_cpus7.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
-		||echo "restore results maybe with problem!, ckp, ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
+		||echo "restore results maybe with problem!, $(FILE), ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have cpi"| tee -a ./$(FILE)_CKPS_CPI_Err.log;\
 		#cpi=`echo $${cpi0} $${cpi1} $${cpi2} $${cpi3} $${cpi4} $${cpi5} $${cpi6} $${cpi7} | awk '{printf "%.6f", $$1+$$2+$$3+$$4+$$5+$$6+$$7+$$8}'`;\
 		echo ckp$${i} $${simpts} $${weights} $${cpi0} $${cpi1} $${cpi2} $${cpi3} $${cpi4} $${cpi5} $${cpi6} $${cpi7} >> ./$(FILE)_CKPS_CPI.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
@@ -428,7 +428,7 @@ mkpi: $(EXECUTABLE)
 		&& miss=`grep "system.ruby.l2_cntrl0.L2cache.m_demand_misses.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.ruby.l2_cntrl0.L2cache.m_demand_accesses" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& access=`grep "system.ruby.l2_cntrl0.L2cache.m_demand_accesses.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
-		||echo "restore results maybe with problem!, ckp, ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have miss & access"| tee -a ./$(FILE)_CKPS_L2_MISS_ACCESS_Err.log;\
+		||echo "restore results maybe with problem!, $(FILE), ckp$${i}, simpts, $${simpts}, weights, $${weights}, not have miss & access"| tee -a ./$(FILE)_CKPS_L2_MISS_ACCESS_Err.log;\
 		echo ckp$${i} $${simpts} $${weights} $${miss} $${access} >> ./$(FILE)_CKPS_L2_MISS_ACCESS.log;\
 		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log;\
 	done;

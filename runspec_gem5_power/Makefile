@@ -25,14 +25,19 @@ checkpoints_all_cases_8: checkpoints_500_8 checkpoints_502_8 checkpoints_503_8 c
 restore_all_cases: restore_all_500 restore_all_502 restore_all_503 restore_all_505 restore_all_507 restore_all_508 restore_all_510 restore_all_511 restore_all_519 restore_all_520 restore_all_521 restore_all_523 restore_all_525 restore_all_526 restore_all_527 restore_all_531 restore_all_538 restore_all_541 restore_all_544 restore_all_548 restore_all_549 restore_all_554 restore_all_557 restore_all_999
 
 cpi_all_cases: cpi_500 cpi_502 cpi_503 cpi_505 cpi_507 cpi_508 cpi_510 cpi_511 cpi_519 cpi_520 cpi_521 cpi_523 cpi_525 cpi_526 cpi_527 cpi_531 cpi_538 cpi_541 cpi_544 cpi_548 cpi_549 cpi_554 cpi_557 cpi_999
+	@-make collect_all_cases_CKPS_CPI_Err
 
 cpi_all_cases_2: cpi_500_2 cpi_502_2 cpi_503_2 cpi_505_2 cpi_507_2 cpi_508_2 cpi_510_2 cpi_511_2 cpi_519_2 cpi_520_2 cpi_521_2 cpi_523_2 cpi_525_2 cpi_526_2 cpi_527_2 cpi_531_2 cpi_538_2 cpi_541_2 cpi_544_2 cpi_548_2 cpi_549_2 cpi_554_2 cpi_557_2 cpi_999_2
+	@-make collect_all_cases_CKPS_CPI_Err
 
 cpi_all_cases_4: cpi_500_4 cpi_502_4 cpi_503_4 cpi_505_4 cpi_507_4 cpi_508_4 cpi_510_4 cpi_511_4 cpi_519_4 cpi_520_4 cpi_521_4 cpi_523_4 cpi_525_4 cpi_526_4 cpi_527_4 cpi_531_4 cpi_538_4 cpi_541_4 cpi_544_4 cpi_548_4 cpi_549_4 cpi_554_4 cpi_557_4 cpi_999_4
+	@-make collect_all_cases_CKPS_CPI_Err
 
 cpi_all_cases_8: cpi_500_8 cpi_502_8 cpi_503_8 cpi_505_8 cpi_507_8 cpi_508_8 cpi_510_8 cpi_511_8 cpi_519_8 cpi_520_8 cpi_521_8 cpi_523_8 cpi_525_8 cpi_526_8 cpi_527_8 cpi_531_8 cpi_538_8 cpi_541_8 cpi_544_8 cpi_548_8 cpi_549_8 cpi_554_8 cpi_557_8 cpi_999_8
+	@-make collect_all_cases_CKPS_CPI_Err 
 
 mkpi_l2_all_cases: mkpi_500 mkpi_502 mkpi_503 mkpi_505 mkpi_507 mkpi_508 mkpi_510 mkpi_511 mkpi_519 mkpi_520 mkpi_521 mkpi_523 mkpi_525 mkpi_526 mkpi_527 mkpi_531 mkpi_538 mkpi_541 mkpi_544 mkpi_548 mkpi_549 mkpi_554 mkpi_557 mkpi_999
+	@-make collect_all_cases_CKPS_L2_MISS_ACCESS_Err
 
 log-pre:
 	@LOG_DIR=$(DATE); \
@@ -978,6 +983,63 @@ collect_all_cases_MKPI_L2:
 	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MKPI.csv;
 	@rm -rf All_case_L2_Miss_Access.log;
 	@gedit All_case_L2_MKPI.csv &
+
+collect_all_cases_CKPS_CPI_Err:
+	@rm -rf ./All_case_CKPS_CPI_Err.log;
+	@-cat ./500*/*_CKPS_CPI_Err.log >  ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./502*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./505*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./520*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./523*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./525*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./531*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./541*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./548*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./557*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./503*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./507*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./508*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./510*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./511*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./519*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./521*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./526*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./527*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./538*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./544*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./549*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./554*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-cat ./999*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
+	@-gedit ./All_case_CKPS_CPI_Err.log &
+
+collect_all_cases_CKPS_L2_MISS_ACCESS_Err:
+	@rm -rf ./All_case_CKPS_L2_MISS_ACCESS_Err.log;
+	@-cat ./500*/*_CKPS_L2_MISS_ACCESS_Err.log >  ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./502*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./505*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./520*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./523*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./525*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./531*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./541*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./548*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./557*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./503*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./507*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./508*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./510*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./511*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./519*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./521*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./526*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./527*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./538*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./544*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./549*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./554*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@-cat ./999*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
+	@gedit ./All_case_CKPS_L2_MISS_ACCESS_Err.log &
+
 
 collect_all_checkpoints_data:
 	@cat ./500*/*.csv > ./Each_case_ckp_data.csv;
