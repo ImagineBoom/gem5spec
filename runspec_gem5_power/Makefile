@@ -1010,7 +1010,7 @@ collect_all_cases_CKPS_CPI_Err:
 	@-cat ./549*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
 	@-cat ./554*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
 	@-cat ./999*/*_CKPS_CPI_Err.log >> ./All_case_CKPS_CPI_Err.log 2>/dev/null;
-	@-gedit ./All_case_CKPS_CPI_Err.log &
+	@-cat ./All_case_CKPS_CPI_Err.log
 
 collect_all_cases_CKPS_L2_MISS_ACCESS_Err:
 	@rm -rf ./All_case_CKPS_L2_MISS_ACCESS_Err.log;
@@ -1038,7 +1038,7 @@ collect_all_cases_CKPS_L2_MISS_ACCESS_Err:
 	@-cat ./549*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
 	@-cat ./554*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
 	@-cat ./999*/*_CKPS_L2_MISS_ACCESS_Err.log >> ./All_case_CKPS_L2_MISS_ACCESS_Err.log 2>/dev/null;
-	@gedit ./All_case_CKPS_L2_MISS_ACCESS_Err.log &
+	@-cat ./All_case_CKPS_L2_MISS_ACCESS_Err.log
 
 
 collect_all_checkpoints_data:

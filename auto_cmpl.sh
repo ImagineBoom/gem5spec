@@ -1,50 +1,4 @@
-#判断选项
-is_m1=false
-is_gem5=false
-is_host=false
-is_myexe=false
-is_spec2017=false
-is_control=false
-with_all_benchmarks=false
-with_entire_all_benchmarks=false
-with_entire=false
-
-#判断参数个数选择不同模式
-with_all_steps=false
-with_itrace=false
-with_qtrace=false
-with_run_timer=false
-with_pipe_view=false
-with_i_insts=false
-with_q_jump=false
-with_q_convert=false
-with_r_insts=false
-with_r_cpi_interval=false
-with_r_reset_stats=false
-with_r_pipe_type=false
-with_r_pipe_begin=false
-with_r_pipe_end=false
-with_max_insts=false
-with_slice_len=false
-with_gen_txt=false
-
-with_restore_case=false
-with_restore_all=false
-with_restore_all_2=false
-with_restore_all_4=false
-with_restore_all_8=false
-with_cpi_all=false
-with_kill_restore_all=false
-with_control_gem5=false
-with_control_m1=false
-
-with_add_job=false
-with_add_job_10=false
-with_reduce_job=false
-with_reduce_job_10=false
-with_del_job_pool=false
-with_get_job_pool_size=false
-with_func_gen_restore_compare_excel=false
+source ./scripts/params.sh
 
 cmd_gem5_m1_control(){
   for option in "${COMP_WORDS[@]}";do
@@ -283,54 +237,7 @@ cmd_control(){
 
 cmd_hub(){
   COMPREPLY=()
-  #判断选项
-  is_m1=false
-  is_gem5=false
-  is_control=false
-
-  is_host=false
-  is_myexe=false
-  is_spec2017=false
-  with_all_benchmarks=false
-  with_entire_all_benchmarks=false
-  with_entire=false
-
-  #判断参数个数选择不同模式
-  with_all_steps=false
-  with_itrace=false
-  with_qtrace=false
-  with_run_timer=false
-  with_pipe_view=false
-  with_i_insts=false
-  with_q_jump=false
-  with_q_convert=false
-  with_r_insts=false
-  with_r_cpi_interval=false
-  with_r_reset_stats=false
-  with_r_pipe_type=false
-  with_r_pipe_begin=false
-  with_r_pipe_end=false
-  with_max_insts=false
-  with_slice_len=false
-  with_restore_case=false
-  with_restore_all=false
-  with_restore_all_2=false
-  with_restore_all_4=false
-  with_restore_all_8=false
-  with_cpi_all=false
-  with_kill_restore_all=false
-  with_control_gem5=false
-  with_control_m1=false
-  with_gen_txt=false
-
-
-  with_add_job=false
-  with_add_job_10=false
-  with_reduce_job=false
-  with_reduce_job_10=false
-  with_del_job_pool=false
-  with_get_job_pool_size=false
-  with_func_gen_restore_compare_excel=false
+  source ./scripts/params.sh
 
   local cur=${COMP_WORDS[COMP_CWORD]};
   local pre=${COMP_WORDS[COMP_CWORD-1]};

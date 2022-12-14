@@ -18,6 +18,7 @@ version,verbose,help \
 [ $? -ne 0 ] && exit 1
 eval set -- "${getopt_cmd}"
 
+source ./scripts/params.sh
 source ./scripts/utils.sh
 source ./scripts/job_control.sh
 
@@ -55,6 +56,7 @@ case "${1#*=}" in
     ;;
   --control)
     is_control=true
+    WORK_DIR=$(cd "$(dirname "${0}")" && pwd )/runspec_gem5_power
     shift
     ;;
   --)
@@ -580,6 +582,7 @@ elif [[ $is_control == true ]]; then
     elif [[ $with_control_m1 == true ]]; then
       killobj="valgrind|simpoint|vgi2qt|run_timer|otimer|itrace|ScrollPipeViewer"
     fi
+#    echo "${killobj}" "${FLOODGATE}"
     func_kill_restore_all_jobs "${killobj}" "${FLOODGATE}"
   else
     exit 1
