@@ -6,6 +6,7 @@ import sys
 import os
 from collections import defaultdict
 from collections import namedtuple
+from typing import Dict, Any
 
 import openpyxl
 from pandas import read_csv
@@ -24,6 +25,15 @@ M1_ckp_results_csv = "./data/M1/each_bm_cpt_m1.csv"
 # 改
 gen_file="./data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
 # gen_file="../data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
+
+class QtraceSkip:
+    def __init__(self,expectSkipVgi,realSkipVgi,Valid):
+        self.expectSkipVgi=expectSkipVgi
+        self.realSkipVgi=realSkipVgi
+        self.valid=Valid
+
+# qtskip[500.perlbench_r][simpts].
+qtskip: Dict[str, Dict[str, QtraceSkip]] = {}
 
 
 def runcmd(command):
@@ -44,7 +54,7 @@ def auto_set_column_width(worksheet):
         for cell in row:
             # 跳过公式
             if cell.value:
-                if cell.value[0]=="=":
+                if str(cell.value)[0]=="=":
                     # print(cell.value)
                     continue
                 # 遍历整个表格，把该列所有的单元格文本进行长度对比，找出最长的单元格
@@ -139,6 +149,21 @@ def copy_sheet(src_xlsx,dst_xlsx,src_sheetname="Sheet1",dst_sheetname="Sheet1"):
     dw.save(f'{dst_xlsx}')
 
 
+def read_qt_skip(qtskip_excel_file="./data/meta/20221214-qt-skip.xlsx"):
+    workbook = load_workbook(filename=qtskip_excel_file, data_only=True)
+    sheet=workbook.active
+    for row_num,row_cells in enumerate(sheet["2:"+str(sheet.max_row)],start=2):
+        qtskip.setdefault(row_cells[0].value,{}).setdefault(
+            str(row_cells[1].value),
+            QtraceSkip(
+                str(row_cells[2].value),
+                str(row_cells[3].value),
+                str(row_cells[4].value))
+        )
+    # print(qtskip.get("500.perlbench_r",{}).get("359",QtraceSkip(None,None,None)).realSkipVgi)
+    pass
+
+
 def data_pre(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ckp_results_csv,template_excel_path="./data/meta/gem5_statistics_result_template.xlsx"):
     # 改
     runcmd("mkdir -p ./data/gem5/"+begin_time)
@@ -160,7 +185,6 @@ def data_pre(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ck
     sheet.move_range("M1:"+"M"+str(sheet.max_row),rows=0,cols=-7)
     sheet.move_range("N1:"+"N"+str(sheet.max_row),rows=0,cols=-6)
     sheet.delete_cols(9,4)
-    sheet.insert_cols(9)
     sheet.cell(1,9).value="WeightedCPI Err(Ckp gem5/M1)"
     merge_cols=[]
     delete_rows=[]
@@ -172,6 +196,17 @@ def data_pre(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ck
             delete_rows.append(row_num)
     for row_num in delete_rows[::-1]:
         sheet.delete_rows(row_num)
+
+    # add qt skip info
+    read_qt_skip()
+
+    print(sheet.max_row)
+    print(sheet.max_column)
+    for row_num,row_cells in enumerate(sheet["2:"+str(sheet.max_row)],start=2):
+        if qtskip.get(row_cells[0].value,{}).get(str(row_cells[2].value),QtraceSkip(None,None,None)).realSkipVgi!=None:
+            sheet.cell(row_num,column_index_from_string("J")).value=int(qtskip.get(row_cells[0].value,{}).get(str(row_cells[2].value),QtraceSkip(None,None,None)).valid)
+            sheet.cell(row_num,column_index_from_string("K")).value=int(qtskip.get(row_cells[0].value,{}).get(str(row_cells[2].value),QtraceSkip(None,None,None)).expectSkipVgi)
+            sheet.cell(row_num,column_index_from_string("L")).value=int(qtskip.get(row_cells[0].value,{}).get(str(row_cells[2].value),QtraceSkip(None,None,None)).realSkipVgi)
     workbook.save(excel_path)
 
     workbook2 = load_workbook(filename=template_excel_path)
@@ -223,7 +258,7 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
                 # print("Y",next_row_idx,next_row_cells[0].value)
                 bm_end_row=bm_begin_row+next_row_idx
                 for col,cell in enumerate(next_row_cells,start=1):
-                    if col >2 :
+                    if col >2 and col <9 :
                         cell.data_type='float'
                     if col == 9:
                         cell.number_format='0.000%'
@@ -240,7 +275,7 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
                     # print(cell)
                     cell.border = Border(top=Side(border_style="thin", color="999999"))
                 area="A"+str(bm_begin_row)+":"+"A"+str(bm_end_row)
-                sheet2.merge_cells(area)
+                # sheet2.merge_cells(area)
                 for sheet1row_num,sheet1row_cells in enumerate(sheet1.rows,start=1):
                     if sheet1row_cells[1].value == bm:
                         sheet1row_cells[2].value="=SUMIFS(" \
@@ -280,7 +315,7 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     # 样式处理
 
     # 过滤非0
-    sheet2.auto_filter.ref = "A1:I"+str(sheet2.max_row)
+    sheet2.auto_filter.ref = "A1:J"+str(sheet2.max_row)
     filter_data=[]
     for cells in sheet2["E1"+":"+"E"+str(sheet2.max_row)]:
         if cells[0].value!='0':
@@ -294,8 +329,13 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     sheet2.cell(1,column_index_from_string("F")).value="CPI(Ckp gem5)"
     sheet2.cell(1,column_index_from_string("G")).value="WeightedCPI(Ckp M1)"
     sheet2.cell(1,column_index_from_string("H")).value="WeightedCPI(Ckp gem5)"
+    sheet2.cell(1,column_index_from_string("J")).value="Valid"
+    sheet2.cell(1,column_index_from_string("K")).value="Expect Skipped # vgi binary records"
+    sheet2.cell(1,column_index_from_string("L")).value="Real Skipped # vgi binary records"
 
     # 条件格式
+    rule3 = FormulaRule(formula=['J2=1'], fill=PatternFill(end_color='0099ff'))
+    sheet2.conditional_formatting.add("J2:"+"J"+str(sheet2.max_row-1),rule3)
     rule2=CellIsRule(operator='between',formula=[-0.25,0.25],fill=PatternFill(end_color='33cc33'))#筛选25%以内的绿色显示
     sheet2.conditional_formatting.add("I1:"+"I"+str(sheet2.max_row-1),rule2)
     rule3 = FormulaRule(formula=['AND(I2>-0.25,I2<0.25)'], fill=PatternFill(end_color='33cc33'))
