@@ -127,7 +127,7 @@ restore_all: $(EXECUTABLE)
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 
-restore_all_2: $(EXECUTABLE) $(ARGS); $(ARGS);
+restore_all_2: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./output_ckp*;
 	@rm -rf ./$(FILE)_CKPS_CPI.log;
