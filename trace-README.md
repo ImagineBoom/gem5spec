@@ -398,7 +398,8 @@ make collect_checkpoints_number
 7. xxx_bbv: 保存通过gem5生成的BBV文件，以及生成过程的仿真数据(stats.txt)
 8. m5out: 保存生成的checkpoints的与生成checkpoints过程的仿真数据(stats.txt)
 9. out_ckpN: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，N表示第N个checkpoint
-
+10.xxx_CKPS_CPI_Err.log: 记录在执行make cpi, cpi_2, cpi_4, cpi_8 时发现的异常ckp信息
+11.xxx_CKPS_L2_MISS_ACCESS_Err.log: 记录在执行make mkpi 时发现的异常ckp信息
 ------
 
 ## scripts
