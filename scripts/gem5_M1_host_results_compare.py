@@ -23,7 +23,7 @@ begin_time=str(sys.argv[1])
 gem5_ckp_results_csv = "./data/gem5/"+begin_time+"/Each_case_ckp_data.csv"
 M1_ckp_results_csv = "./data/M1/each_bm_cpt_m1.csv"
 # 改
-gen_file="./data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
+gen_file="./data/gem5/"+begin_time+"-comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
 # gen_file="../data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx"
 
 class QtraceSkip:
@@ -380,12 +380,12 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     sheet2.freeze_panes = 'A2'
     workbook.active=sheet0
     workbook.save(gen_file)
-    print("")
-    print("")
+    # print("#")
     print("==================================================================================================")
-    print("result Excel: ",os.getcwd()+"/data/gem5/"+begin_time+"_comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx")
+    print("* result Excel:")
+    print(os.getcwd()+"/data/gem5/"+begin_time+"-comparison_M1_gem5_SPEC2017_sampling_results" + ".xlsx")
     print("==================================================================================================")
-    print("")
+    # print("")
     # print(sheet1.max_column)
 data_pre()
 gen_cmp_results()

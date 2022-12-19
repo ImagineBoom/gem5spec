@@ -503,6 +503,8 @@ func_with_restore_all_benchmarks(){
   begin_time=${2}
   WORK_DIR=${3}
   parallel_jobs=${4}
+  gem5_py_opt=${5}
+  label=${6}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
   for FILE in ${bm[@]}
   do
@@ -510,9 +512,12 @@ func_with_restore_all_benchmarks(){
     {
       echo >&6
       if [[ $is_gem5 == true ]]; then
-        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-        opt="make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
-        ${opt} >>nohup.out 2>&1
+        if [[ ${label} == ""  ]]; then
+          mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+        else
+          mkdir -p ./data/gem5/"${begin_time}-${label}"/"${FILE}"
+        fi
+        make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} GEM5_PY_OPT="${gem5_py_opt}" >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
         func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
@@ -547,12 +552,17 @@ func_with_restore_all_benchmarks(){
   # backup
   if [[ $is_gem5 == true ]]; then
     # 统计数据
-    func_gen_restore_compare_excel "${begin_time}"
+    if [[ ${label} == ""  ]]; then
+      func_gen_restore_compare_excel "${begin_time}"
+    else
+      func_gen_restore_compare_excel "${begin_time}-${label}"
+    fi
     # 备份数据
     for FILE in ${bm[@]}
     do
         mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
         find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
+        find ./runspec_gem5_power/"${FILE}"/ -name "*_restore_ckp*.log" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
         # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
         # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
         # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
