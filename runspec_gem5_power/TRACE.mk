@@ -346,7 +346,7 @@ cpi_8: $(EXECUTABLE)
 		&& [ `grep "system.switch_cpus4.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& cpi4=`grep "system.switch_cpus4.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus5.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-		&& cpi5=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
+		&& cpi5=`grep "system.switch_cpus5.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus6.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
 		&& cpi6=`grep "system.switch_cpus6.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`\
 		&& [ `grep "system.switch_cpus7.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
