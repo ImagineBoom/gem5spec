@@ -398,7 +398,7 @@ cpi_8: $(EXECUTABLE)
 	echo $(FILE) $${result0} $${result1} $${result2} $${result3} $${result4} $${result5} $${result6} $${result7} >$(FILE)_Total_Result_CPI.log;
 	@echo ---------------------cpi handle $(FILE) Finished ---------------------->>$(FILE)_trace.log;
 
-mkpi: $(EXECUTABLE)
+mpki: $(EXECUTABLE)
 	@echo ---------------------mkpi handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
 	@rm -rf ./$(FILE)_CKPS_Weighted_L2_MISS_ACCESS.log
 	@rm -rf ./$(FILE)_CKPS_L2_MISS_ACCESS.log

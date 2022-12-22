@@ -36,7 +36,7 @@ cpi_all_cases_4: cpi_500_4 cpi_502_4 cpi_503_4 cpi_505_4 cpi_507_4 cpi_508_4 cpi
 cpi_all_cases_8: cpi_500_8 cpi_502_8 cpi_503_8 cpi_505_8 cpi_507_8 cpi_508_8 cpi_510_8 cpi_511_8 cpi_519_8 cpi_520_8 cpi_521_8 cpi_523_8 cpi_525_8 cpi_526_8 cpi_527_8 cpi_531_8 cpi_538_8 cpi_541_8 cpi_544_8 cpi_548_8 cpi_549_8 cpi_554_8 cpi_557_8 cpi_999_8
 	@-make collect_all_cases_CKPS_CPI_Err 
 
-mkpi_l2_all_cases: mkpi_500 mkpi_502 mkpi_503 mkpi_505 mkpi_507 mkpi_508 mkpi_510 mkpi_511 mkpi_519 mkpi_520 mkpi_521 mkpi_523 mkpi_525 mkpi_526 mkpi_527 mkpi_531 mkpi_538 mkpi_541 mkpi_544 mkpi_548 mkpi_549 mkpi_554 mkpi_557 mkpi_999
+mpki_l2_all_cases: mpki_500 mpki_502 mpki_503 mpki_505 mpki_507 mpki_508 mpki_510 mpki_511 mpki_519 mpki_520 mkpi_521 mpki_523 mpki_525 mpki_526 mpki_527 mpki_531 mpki_538 mpki_541 mpki_544 mpki_548 mpki_549 mpki_554 mpki_557 mpki_999
 	@-make collect_all_cases_CKPS_L2_MISS_ACCESS_Err
 
 log-pre:
@@ -776,54 +776,54 @@ cpi_557_8:
 cpi_999_8:
 	@-make cpi_8 -C 999.specrand_ir
 
-mkpi_500:
-	@-make mkpi -C 500.perlbench_r
-mkpi_502:
-	@-make mkpi -C 502.gcc_r
-mkpi_503:
-	@-make mkpi -C 503.bwaves_r
-mkpi_505:
-	@-make mkpi -C 505.mcf_r
-mkpi_507:
-	@-make mkpi -C 507.cactuBSSN_r
-mkpi_508:
-	@-make mkpi -C 508.namd_r
-mkpi_510:
-	@-make mkpi -C 510.parest_r
-mkpi_511:
-	@-make mkpi -C 511.povray_r
-mkpi_519:
-	@-make mkpi -C 519.lbm_r
-mkpi_520:
-	@-make mkpi -C 520.omnetpp_r
-mkpi_521:
-	@-make mkpi -C 521.wrf_r
-mkpi_523:
-	@-make mkpi -C 523.xalancbmk_r
-mkpi_525:
-	@-make mkpi -C 525.x264_r
-mkpi_526:
-	@-make mkpi -C 526.blender_r
-mkpi_527:
-	@-make mkpi -C 527.cam4_r
-mkpi_531:
-	@-make mkpi -C 531.deepsjeng_r
-mkpi_538:
-	@-make mkpi -C 538.imagick_r
-mkpi_541:
-	@-make mkpi -C 541.leela_r
-mkpi_544:
-	@-make mkpi -C 544.nab_r
-mkpi_548:
-	@-make mkpi -C 548.exchange2_r
-mkpi_549:
-	@-make mkpi -C 549.fotonik3d_r
-mkpi_554:
-	@-make mkpi -C 554.roms_r
-mkpi_557:
-	@-make mkpi -C 557.xz_r
-mkpi_999:
-	@-make mkpi -C 999.specrand_ir
+mpki_500:
+	@-make mpki -C 500.perlbench_r
+mpki_502:
+	@-make mpki -C 502.gcc_r
+mpki_503:
+	@-make mpki -C 503.bwaves_r
+mpki_505:
+	@-make mpki -C 505.mcf_r
+mpki_507:
+	@-make mpki -C 507.cactuBSSN_r
+mpki_508:
+	@-make mpki -C 508.namd_r
+mpki_510:
+	@-make mpki -C 510.parest_r
+mpki_511:
+	@-make mpki -C 511.povray_r
+mpki_519:
+	@-make mpki -C 519.lbm_r
+mpki_520:
+	@-make mpki -C 520.omnetpp_r
+mpki_521:
+	@-make mpki -C 521.wrf_r
+mpki_523:
+	@-make mpki -C 523.xalancbmk_r
+mpki_525:
+	@-make mpki -C 525.x264_r
+mpki_526:
+	@-make mpki -C 526.blender_r
+mpki_527:
+	@-make mpki -C 527.cam4_r
+mpki_531:
+	@-make mpki -C 531.deepsjeng_r
+mpki_538:
+	@-make mpki -C 538.imagick_r
+mpki_541:
+	@-make mpki -C 541.leela_r
+mpki_544:
+	@-make mpki -C 544.nab_r
+mpki_548:
+	@-make mpki -C 548.exchange2_r
+mpki_549:
+	@-make mpki -C 549.fotonik3d_r
+mpki_554:
+	@-make mpki -C 554.roms_r
+mpki_557:
+	@-make mpki -C 557.xz_r
+mpki_999:
+	@-make mpki -C 999.specrand_ir
 
 collect_all_cases_CPI:
 	@find ./*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > weightedCPI_results.log;
@@ -955,7 +955,7 @@ collect_all_cases_IPC_8:
 	@rm -rf All_case_IPC.log;
 	@gedit All_case_IPC_smt8.csv &
 
-collect_all_cases_MKPI_L2:
+collect_all_cases_MPKI_L2:
 	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
 	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
@@ -980,9 +980,9 @@ collect_all_cases_MKPI_L2:
 	@cat ./549*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./554*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
-	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MKPI.csv;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI.csv;
 	@rm -rf All_case_L2_Miss_Access.log;
-	@gedit All_case_L2_MKPI.csv &
+	@gedit All_case_L2_MPKI.csv &
 
 collect_all_cases_CKPS_CPI_Err:
 	@rm -rf ./All_case_CKPS_CPI_Err.log;
