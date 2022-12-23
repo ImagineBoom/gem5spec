@@ -169,7 +169,11 @@ def grep_cache_data_gem5(benchmark="",simpt="",num="",gem5spec_path="."):
     L2cache_hits, L2cache_misses, L2cache_accesses = '', '', ''
     L3cache_hits, L3cache_misses, L3cache_accesses = '', '', ''
     validstats=0
-    L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate= None, None, None, None
+    L1Icache_miss_rate,L1Icache_miss,L1Icache_access,L1Icache_MPKI, \
+    L1Dcache_miss_rate,L1Dcache_miss,L1Dcache_access,L1Dcache_MPKI, \
+    L2cache_miss_rate,L2cache_miss,L2cache_access,L2cache_MPKI, \
+    L3cache_miss_rate,L3cache_miss,L3cache_access,L3cache_MPKI= \
+    None, None, None, None,None,None,None,None,None,None,None,None,None,None,None,None
 
     try:
         with open(f"{gem5spec_path}/runspec_gem5_power/{benchmark}/output_ckp{num}/stats.txt", 'r', encoding='utf-8') as f:
@@ -276,17 +280,34 @@ def grep_cache_data_gem5(benchmark="",simpt="",num="",gem5spec_path="."):
         # )
         if L1Icache_hits!='' and L1Icache_misses!='' and L1Icache_accesses!='':
             L1Icache_miss_rate=float(L1Icache_misses)/(float(L1Icache_accesses))
+            L1Icache_miss=float(L1Icache_misses)
+            L1Icache_access=float(L1Icache_accesses)
+            L1Icache_MPKI=1000*float(L1Icache_miss)/5000000
+
         if L1Dcache_hits!='' and L1Dcache_misses!='' and L1Dcache_accesses!='':
             L1Dcache_miss_rate=float(L1Dcache_misses)/(float(L1Dcache_accesses))
+            L1Dcache_miss=float(L1Dcache_misses)
+            L1Dcache_access=float(L1Dcache_accesses)
+            L1Dcache_MPKI=1000*float(L1Dcache_miss)/5000000
 
         if L2cache_hits!='' and L2cache_misses!='' and L2cache_accesses!='':
             L2cache_miss_rate=float(L2cache_misses)/(float(L2cache_accesses))
+            L2cache_miss=float(L2cache_misses)
+            L2cache_access=float(L2cache_accesses)
+            L2cache_MPKI=1000*float(L2cache_miss)/5000000
 
         if L3cache_hits!='' and L3cache_misses!='' and L3cache_accesses!='':
             L3cache_miss_rate=float(L3cache_misses)/(float(L3cache_accesses))
+            L3cache_miss=float(L3cache_misses)
+            L3cache_access=float(L3cache_accesses)
+            L3cache_MPKI=1000*float(L3cache_miss)/5000000
 
         # print("gem5:",L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate)
-        return L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate
+        return \
+            L1Icache_miss_rate,L1Icache_miss,L1Icache_access,L1Icache_MPKI, \
+            L1Dcache_miss_rate,L1Dcache_miss,L1Dcache_access,L1Dcache_MPKI, \
+            L2cache_miss_rate,L2cache_miss,L2cache_access,L2cache_MPKI, \
+            L3cache_miss_rate,L3cache_miss,L3cache_access,L3cache_MPKI
 
 def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongping/prj/gem5spec_v0_M1"):
     validstats=0
@@ -296,7 +317,12 @@ def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongpi
     L3_1cache_loads, L3_1cache_stores = '', ''
     Memory_cache_loads, Memory_cache_stores = '', ''
 
-    L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate= None, None, None, None
+    L1Icache_miss_rate,L1Icache_miss,L1Icache_access,L1Icache_MPKI,\
+    L1Dcache_miss_rate,L1Dcache_miss,L1Dcache_access,L1Dcache_MPKI,\
+    L2cache_miss_rate,L2cache_miss,L2cache_access,L2cache_MPKI,\
+    L3cache_miss_rate,L3cache_miss,L3cache_access,L3cache_MPKI=\
+    None, None, None, None,None,None,None,None,None,None,None,None,None,None,None,None
+
     validstats=0
     try:
         with open(f"{gem5spec_M1_v0_path}/runspec_gem5_power/{benchmark}/M1_result/{simpt}_5000000_{benchmark}.results", 'r', encoding='utf-8') as f:
@@ -360,13 +386,23 @@ def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongpi
         #     L2cache_loads, L2cache_stores,L3cache_loads, L3cache_stores,L3_1cache_loads, L3_1cache_stores,Memory_cache_loads, Memory_cache_stores,
         # )
         if L2cache_loads!='' and L2cache_stores!='' and L3cache_loads!='' and L3cache_stores!='' and L3_1cache_loads!='' and L3_1cache_stores!=''and Memory_cache_loads!=''and Memory_cache_stores!='':
-            L2cache_miss_rate=1-(float(L2cache_loads)+float(L2cache_stores))/(float(L2cache_loads)+float(L2cache_stores)+float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores)+float(Memory_cache_loads)+float(Memory_cache_stores))
+            L2cache_access=(float(L2cache_loads)+float(L2cache_stores)+float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores)+float(Memory_cache_loads)+float(Memory_cache_stores))
+            L2cache_miss=L2cache_access-(float(L2cache_loads)+float(L2cache_stores))
+            L2cache_miss_rate=L2cache_miss/L2cache_access
+            L2cache_MPKI=1000*L2cache_miss/5000000
 
         if L3cache_loads!='' and L3cache_stores!='' and L3_1cache_loads!='' and L3_1cache_stores!=''and Memory_cache_loads!=''and Memory_cache_stores!='':
-            L3cache_miss_rate=1-(float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores))/(float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores)+float(Memory_cache_loads)+float(Memory_cache_stores))
+            L3cache_access=(float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores)+float(Memory_cache_loads)+float(Memory_cache_stores))
+            L3cache_miss=L3cache_access-(float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores))
+            L3cache_miss_rate=L3cache_miss/L3cache_access
+            L3cache_MPKI=1000*L3cache_miss/5000000
 
         # print("M1:",L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate)
-        return L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate
+        return \
+            L1Icache_miss_rate,L1Icache_miss,L1Icache_access,L1Icache_MPKI, \
+            L1Dcache_miss_rate,L1Dcache_miss,L1Dcache_access,L1Dcache_MPKI, \
+            L2cache_miss_rate,L2cache_miss,L2cache_access,L2cache_MPKI, \
+            L3cache_miss_rate,L3cache_miss,L3cache_access,L3cache_MPKI
 
 def data_pre(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ckp_results_csv,template_excel_path="./data/meta/gem5_statistics_result_template.xlsx"):
     # 改
@@ -446,10 +482,15 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
 
     initial_data=[["","Benchmark",
                    "Sum Weighted L1I CMR(Ckp M1)","Sum Weighted L1I CMR(Ckp gem5)","Total Weighted L1I CMR(Ckp gem5)",
+                   "Sum Weighted L1I MPKI(Ckp M1)","Sum Weighted L1I MPKI(Ckp gem5)","Total Weighted L1I MPKI(Ckp gem5)",
                    "Sum Weighted L1D CMR(Ckp M1)","Sum Weighted L1D CMR(Ckp gem5)","Total Weighted L1D CMR(Ckp gem5)",
+                   "Sum Weighted L1D MPKI(Ckp M1)","Sum Weighted L1D MPKI(Ckp gem5)","Total Weighted L1D MPKI(Ckp gem5)",
                    "Sum Weighted L2 CMR(Ckp M1)","Sum Weighted L2 CMR(Ckp gem5)","Total Weighted L2 CMR(Ckp gem5)",
+                   "Sum Weighted L2 MPKI(Ckp M1)","Sum Weighted L2 MPKI(Ckp gem5)","Total Weighted L2 MPKI(Ckp gem5)",
                    "Sum Weighted L3 CMR(Ckp M1)","Sum Weighted L3 CMR(Ckp gem5)","Total Weighted L3 CMR(Ckp gem5)",
-                   "Credibility(Ckp M1)"],
+                   "Sum Weighted L3 MPKI(Ckp M1)","Sum Weighted L3 MPKI(Ckp gem5)","Total Weighted L3 MPKI(Ckp gem5)",
+                   "Credibility(Ckp M1)"
+                   ],
                   ["int","500.perlbench_r"],["int","502.gcc_r"],["int","505.mcf_r"],["int","520.omnetpp_r"],["int","523.xalancbmk_r"],["int","525.x264_r"],["int","531.deepsjeng_r"],["int","541.leela_r"],["int","548.exchange2_r"],["int","557.xz_r"],
                   ["fp","503.bwaves_r"],["fp","507.cactuBSSN_r"],["fp","508.namd_r"],["fp","510.parest_r"],["fp","511.povray_r"],["fp","519.lbm_r"],
                   ["fp","521.wrf_r"],["fp","526.blender_r"],["fp","527.cam4_r"],["fp","538.imagick_r"],["fp","544.nab_r"],["fp","549.fotonik3d_r"],["fp","554.roms_r"],["","999.specrand_ir"]]
@@ -502,6 +543,153 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
 
                 # print(bm,simpt)
 
+                sheet2_CKPs.cell(1,column_index_from_string("M")).value="L1I CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("N")).value="L1I CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("O")).value="Weighted L1I CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("P")).value="Weighted L1I CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("Q")).value="L1I miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("R")).value="L1I miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("S")).value="Weighted L1I miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("T")).value="Weighted L1I miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("U")).value="L1I access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("V")).value="L1I access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("W")).value="Weighted L1I access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("X")).value="Weighted L1I access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("Y")).value="Weighted L1I MPKI(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("Z")).value="Weighted L1I MPKI(Ckp gem5)"
+
+                sheet2_CKPs.cell(1,column_index_from_string("AA")).value="L1D CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AB")).value="L1D CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AC")).value="Weighted L1D CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AD")).value="Weighted L1D CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AE")).value="L1D miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AF")).value="L1D miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AG")).value="Weighted L1D miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AH")).value="Weighted L1D miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AI")).value="L1D access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AJ")).value="L1D access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AK")).value="Weighted L1D access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AL")).value="Weighted L1D access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AM")).value="Weighted L1D MPKI(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AN")).value="Weighted L1D MPKI(Ckp gem5)"
+
+
+                sheet2_CKPs.cell(1,column_index_from_string("AO")).value="L2 CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AP")).value="L2 CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AQ")).value="Weighted L2 CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AR")).value="Weighted L2 CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AS")).value="L2 miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AT")).value="L2 miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AU")).value="Weighted L2 miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AV")).value="Weighted L2 miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AW")).value="L2 access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AX")).value="L2 access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("AY")).value="Weighted L2 access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("AZ")).value="Weighted L2 access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("BA")).value="Weighted L2 MPKI(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BB")).value="Weighted L2 MPKI(Ckp gem5)"
+
+                sheet2_CKPs.cell(1,column_index_from_string("BC")).value="L3 CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BD")).value="L3 CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("BE")).value="Weighted L3 CMR(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BF")).value="Weighted L3 CMR(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("BG")).value="L3 miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BH")).value="L3 miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("BI")).value="Weighted L3 miss(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BJ")).value="Weighted L3 miss(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("BK")).value="L3 access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BL")).value="L3 access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("BM")).value="Weighted L3 access(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BN")).value="Weighted L3 access(Ckp gem5)"
+                sheet2_CKPs.cell(1,column_index_from_string("BO")).value="Weighted L3 MPKI(Ckp M1)"
+                sheet2_CKPs.cell(1,column_index_from_string("BP")).value="Weighted L3 MPKI(Ckp gem5)"
+
+                # 抓取并计算M1 ckp中cache miss rate
+                # 检查是否存在有效数据
+                M1CPI=next_row_cells[4].value
+                if M1CPI!="0":
+                    L1Icache_miss_rate,L1Icache_miss,L1Icache_access,L1Icache_MPKI,\
+                        L1Dcache_miss_rate,L1Dcache_miss,L1Dcache_access,L1Dcache_MPKI,\
+                        L2cache_miss_rate,L2cache_miss,L2cache_access,L2cache_MPKI,\
+                        L3cache_miss_rate,L3cache_miss,L3cache_access,L3cache_MPKI=grep_cache_data_M1(bm,simpt)
+
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("M")).value="L1I CMR(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('M')).value=L1Icache_miss_rate
+                    # sheet2_CKPs.cell(1,column_index_from_string("O")).value="Weighted L1I CMR(Ckp M1)"
+                    if L1Icache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('O')).value=f"=D{bm_end_row}*M{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("Q")).value="L1I miss(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('Q')).value=L1Icache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("S")).value="Weighted L1I miss(Ckp M1)"
+                    if L1Icache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('S')).value=f"=D{bm_end_row}*Q{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("U")).value="L1I access(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('U')).value=L1Icache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("W")).value="Weighted L1I access(Ckp M1)"
+                    if L1Icache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('W')).value=f"=D{bm_end_row}*U{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("Y")).value="Weighted L1I MPKI(Ckp M1)"
+                    if L1Icache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('Y')).value=f"=D{bm_end_row}*{L1Icache_MPKI}"
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("AA")).value="L1D CMR(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AA')).value=L1Dcache_miss_rate
+                    # sheet2_CKPs.cell(1,column_index_from_string("AC")).value="Weighted L1D CMR(Ckp M1)"
+                    if L1Dcache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AC')).value=f"=D{bm_end_row}*AA{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AE")).value="L1D miss(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AE')).value=L1Dcache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("AG")).value="Weighted L1D miss(Ckp M1)"
+                    if L1Dcache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AG')).value=f"=D{bm_end_row}*AE{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AI")).value="L1D access(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AI')).value=L1Dcache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("AK")).value="Weighted L1D access(Ckp M1)"
+                    if L1Dcache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AK')).value=f"=D{bm_end_row}*AI{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AM")).value="Weighted L1D MPKI(Ckp M1)"
+                    if L1Dcache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AM')).value=f"=D{bm_end_row}*{L1Dcache_MPKI}"
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("AO")).value="L2 CMR(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AO')).value=L2cache_miss_rate
+                    # sheet2_CKPs.cell(1,column_index_from_string("AQ")).value="Weighted L2 CMR(Ckp M1)"
+                    if L2cache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AQ')).value=f"=D{bm_end_row}*AO{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AS")).value="L2 miss(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AS')).value=L2cache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("AU")).value="Weighted L2 miss(Ckp M1)"
+                    if L2cache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AU')).value=f"=D{bm_end_row}*AS{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AW")).value="L2 access(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AW')).value=L2cache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("AY")).value="Weighted L2 access(Ckp M1)"
+                    if L2cache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AY')).value=f"=D{bm_end_row}*AW{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BA")).value="Weighted L2 MPKI(Ckp M1)"
+                    if L2cache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BA')).value=f"=D{bm_end_row}*{L2cache_MPKI}"
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("BC")).value="L3 CMR(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('BC')).value=L3cache_miss_rate
+                    # sheet2_CKPs.cell(1,column_index_from_string("BE")).value="Weighted L3 CMR(Ckp M1)"
+                    if L3cache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BE')).value=f"=D{bm_end_row}*BC{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BG")).value="L3 miss(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('BG')).value=L3cache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("BI")).value="Weighted L3 miss(Ckp M1)"
+                    if L3cache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BI')).value=f"=D{bm_end_row}*BG{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BK")).value="L3 access(Ckp M1)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('BK')).value=L3cache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("BM")).value="Weighted L3 access(Ckp M1)"
+                    if L3cache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BM')).value=f"=D{bm_end_row}*BK{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BO")).value="Weighted L3 MPKI(Ckp M1)"
+                    if L3cache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BO')).value=f"=D{bm_end_row}*{L3cache_MPKI}"
+
                 # 抓取并计算gem5 ckp中cache miss rate
                 # 检查是否存在有效数据
                 gem5CPI=next_row_cells[5].value
@@ -516,29 +704,87 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
                                 num=index
                                 # print(index,simpt)
                                 break
-                    L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate=grep_cache_data_gem5(bm,simpt,num)
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('N')).value=L1Icache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('P')).value=f"=D{bm_end_row}*N{bm_end_row}"
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('R')).value=L1Dcache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('T')).value=f"=D{bm_end_row}*R{bm_end_row}"
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('V')).value=L2cache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('X')).value=f"=D{bm_end_row}*V{bm_end_row}"
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('Z')).value=L3cache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AB')).value=f"=D{bm_end_row}*Z{bm_end_row}"
+                    L1Icache_miss_rate,L1Icache_miss,L1Icache_access,L1Icache_MPKI, \
+                        L1Dcache_miss_rate,L1Dcache_miss,L1Dcache_access,L1Dcache_MPKI, \
+                        L2cache_miss_rate,L2cache_miss,L2cache_access,L2cache_MPKI, \
+                        L3cache_miss_rate,L3cache_miss,L3cache_access,L3cache_MPKI=grep_cache_data_gem5(bm,simpt,num)
 
-                # 抓取并计算M1 ckp中cache miss rate
-                # 检查是否存在有效数据
-                M1CPI=next_row_cells[4].value
-                if M1CPI!="0":
-                    L1Icache_miss_rate,L1Dcache_miss_rate,L2cache_miss_rate,L3cache_miss_rate=grep_cache_data_M1(bm,simpt)
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('M')).value=L1Icache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('O')).value=f"=D{bm_end_row}*M{bm_end_row}"
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('Q')).value=L1Dcache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('S')).value=f"=D{bm_end_row}*Q{bm_end_row}"
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('U')).value=L2cache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('W')).value=f"=D{bm_end_row}*U{bm_end_row}"
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('Y')).value=L3cache_miss_rate
-                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AA')).value=f"=D{bm_end_row}*Y{bm_end_row}"
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("N")).value="L1I CMR(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('N')).value=L1Icache_miss_rate
+                     # sheet2_CKPs.cell(1,column_index_from_string("P")).value="Weighted L1I CMR(Ckp gem5)"
+                    if L1Icache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('P')).value=f"=D{bm_end_row}*N{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("R")).value="L1I miss(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('R')).value=L1Icache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("T")).value="Weighted L1I miss(Ckp gem5)"
+                    if L1Icache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('T')).value=f"=D{bm_end_row}*R{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("V")).value="L1I access(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('V')).value=L1Icache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("X")).value="Weighted L1I access(Ckp gem5)"
+                    if L1Icache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('X')).value=f"=D{bm_end_row}*V{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("Z")).value="Weighted L1I MPKI(Ckp gem5)"
+                    if L1Icache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('Z')).value=f"=D{bm_end_row}*{L1Icache_MPKI}"
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("AB")).value="L1D CMR(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AB')).value=L1Dcache_miss_rate
+                    # sheet2_CKPs.cell(1,column_index_from_string("AD")).value="Weighted L1D CMR(Ckp gem5)"
+                    if L1Dcache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AD')).value=f"=D{bm_end_row}*AB{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AF")).value="L1D miss(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AF')).value=L1Dcache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("AH")).value="Weighted L1D miss(Ckp gem5)"
+                    if L1Dcache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AH')).value=f"=D{bm_end_row}*AF{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AJ")).value="L1D access(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AJ')).value=L1Dcache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("AL")).value="Weighted L1D access(Ckp gem5)"
+                    if L1Dcache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AL')).value=f"=D{bm_end_row}*AJ{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AN")).value="Weighted L1D MPKI(Ckp gem5)"
+                    if L1Dcache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AN')).value=f"=D{bm_end_row}*{L1Dcache_MPKI}"
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("AP")).value="L2 CMR(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AP')).value=L2cache_miss_rate
+                    # sheet2_CKPs.cell(1,column_index_from_string("AR")).value="Weighted L2 CMR(Ckp gem5)"
+                    if L2cache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AR')).value=f"=D{bm_end_row}*AP{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AT")).value="L2 miss(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AT')).value=L2cache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("AV")).value="Weighted L2 miss(Ckp gem5)"
+                    if L2cache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AV')).value=f"=D{bm_end_row}*AT{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("AX")).value="L2 access(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('AX')).value=L2cache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("AZ")).value="Weighted L2 access(Ckp gem5)"
+                    if L2cache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('AZ')).value=f"=D{bm_end_row}*AX{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BB")).value="Weighted L2 MPKI(Ckp gem5)"
+                    if L2cache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BB')).value=f"=D{bm_end_row}*{L2cache_MPKI}"
+
+                    # sheet2_CKPs.cell(1,column_index_from_string("BD")).value="L3 CMR(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('BD')).value=L3cache_miss_rate
+                    # sheet2_CKPs.cell(1,column_index_from_string("BF")).value="Weighted L3 CMR(Ckp gem5)"
+                    if L3cache_miss_rate!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BF')).value=f"=D{bm_end_row}*BD{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BH")).value="L3 miss(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('BH')).value=L3cache_miss
+                    # sheet2_CKPs.cell(1,column_index_from_string("BJ")).value="Weighted L3 miss(Ckp gem5)"
+                    if L3cache_miss!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BJ')).value=f"=D{bm_end_row}*BH{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BL")).value="L3 access(Ckp gem5)"
+                    sheet2_CKPs.cell(bm_end_row,column_index_from_string('BL')).value=L3cache_access
+                    # sheet2_CKPs.cell(1,column_index_from_string("BN")).value="Weighted L3 access(Ckp gem5)"
+                    if L3cache_access!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BN')).value=f"=D{bm_end_row}*BL{bm_end_row}"
+                    # sheet2_CKPs.cell(1,column_index_from_string("BP")).value="Weighted L3 MPKI(Ckp gem5)"
+                    if L3cache_MPKI!=None:
+                        sheet2_CKPs.cell(bm_end_row,column_index_from_string('BP')).value=f"=D{bm_end_row}*{L3cache_MPKI}"
 
             # 进入下一个测例
             else:
@@ -586,47 +832,99 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
                         # Total Weighted L1I CMR(Ckp gem5)
                         sheet3_cache.cell(row_num,column_index_from_string('E')).value=f"=SUM(" \
                                                                                        f"CKPs!P{bm_begin_row}:P{bm_end_row})"
-                        # Sum Weighted L1D CMR(Ckp M1)
+                        # Sum Weighted L1I MPKI(Ckp M1)
                         sheet3_cache.cell(row_num,column_index_from_string('F')).value=f"=SUMIFS(" \
-                                                                                       f"CKPs!S{bm_begin_row}:S{bm_end_row}," \
+                                                                                       f"CKPs!Y{bm_begin_row}:Y{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Sum Weighted L1I MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('G')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!Z{bm_begin_row}:Z{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Total Weighted L1I MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('H')).value=f"=SUM(" \
+                                                                                       f"CKPs!Z{bm_begin_row}:Z{bm_end_row})"
+                        # Sum Weighted L1D CMR(Ckp M1)
+                        sheet3_cache.cell(row_num,column_index_from_string('I')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!AC{bm_begin_row}:AC{bm_end_row}," \
                                                                                        f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
                                                                                        f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
                         # Sum Weighted L1D CMR(Ckp gem5)
-                        sheet3_cache.cell(row_num,column_index_from_string('G')).value=f"=SUMIFS(" \
-                                                                                       f"CKPs!T{bm_begin_row}:T{bm_end_row}," \
+                        sheet3_cache.cell(row_num,column_index_from_string('J')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!AD{bm_begin_row}:AD{bm_end_row}," \
                                                                                        f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
                                                                                        f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
                         # Total Weighted L1D CMR(Ckp gem5)
-                        sheet3_cache.cell(row_num,column_index_from_string('H')).value=f"=SUM(" \
-                                                                                       f"CKPs!T{bm_begin_row}:T{bm_end_row})"
+                        sheet3_cache.cell(row_num,column_index_from_string('K')).value=f"=SUM(" \
+                                                                                       f"CKPs!AD{bm_begin_row}:AD{bm_end_row})"
+                        # Sum Weighted L1D MPKI(Ckp M1)
+                        sheet3_cache.cell(row_num,column_index_from_string('L')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!AM{bm_begin_row}:AM{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Sum Weighted L1D MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('M')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!AN{bm_begin_row}:AN{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Total Weighted L1D MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('N')).value=f"=SUM(" \
+                                                                                       f"CKPs!AN{bm_begin_row}:AN{bm_end_row})"
                         # Sum Weighted L2 CMR(Ckp M1)
-                        sheet3_cache.cell(row_num,column_index_from_string('I')).value=f"=SUMIFS(" \
-                                                                                       f"CKPs!W{bm_begin_row}:W{bm_end_row}," \
+                        sheet3_cache.cell(row_num,column_index_from_string('O')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!AQ{bm_begin_row}:AQ{bm_end_row}," \
                                                                                        f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
                                                                                        f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
                         # Sum Weighted L2 CMR(Ckp gem5)
-                        sheet3_cache.cell(row_num,column_index_from_string('J')).value=f"=SUMIFS(" \
-                                                                                       f"CKPs!X{bm_begin_row}:X{bm_end_row}," \
+                        sheet3_cache.cell(row_num,column_index_from_string('P')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!AR{bm_begin_row}:AR{bm_end_row}," \
                                                                                        f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
                                                                                        f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
                         # Total Weighted L2 CMR(Ckp gem5)
-                        sheet3_cache.cell(row_num,column_index_from_string('K')).value=f"=SUM(" \
-                                                                                       f"CKPs!X{bm_begin_row}:X{bm_end_row})"
+                        sheet3_cache.cell(row_num,column_index_from_string('Q')).value=f"=SUM(" \
+                                                                                       f"CKPs!AR{bm_begin_row}:AR{bm_end_row})"
+                        # Sum Weighted L2 MPKI(Ckp M1)
+                        sheet3_cache.cell(row_num,column_index_from_string('R')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!BA{bm_begin_row}:BA{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Sum Weighted L2 MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('S')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!BB{bm_begin_row}:BB{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Total Weighted L2 MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('T')).value=f"=SUM(" \
+                                                                                       f"CKPs!BB{bm_begin_row}:BB{bm_end_row})"
                         # Sum Weighted L3 CMR(Ckp M1)
-                        sheet3_cache.cell(row_num,column_index_from_string('L')).value=f"=SUMIFS(" \
-                                                                                       f"CKPs!AA{bm_begin_row}:AA{bm_end_row}," \
+                        sheet3_cache.cell(row_num,column_index_from_string('U')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!BE{bm_begin_row}:BE{bm_end_row}," \
                                                                                        f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
                                                                                        f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
                         # Sum Weighted L3 CMR(Ckp gem5)
-                        sheet3_cache.cell(row_num,column_index_from_string('M')).value=f"=SUMIFS(" \
-                                                                                       f"CKPs!AB{bm_begin_row}:AB{bm_end_row}," \
+                        sheet3_cache.cell(row_num,column_index_from_string('V')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!BF{bm_begin_row}:BF{bm_end_row}," \
                                                                                        f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
                                                                                        f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
                         # Total Weighted L3 CMR(Ckp gem5)
-                        sheet3_cache.cell(row_num,column_index_from_string('N')).value=f"=SUM(" \
-                                                                                       f"CKPs!AB{bm_begin_row}:AB{bm_end_row})"
+                        sheet3_cache.cell(row_num,column_index_from_string('W')).value=f"=SUM(" \
+                                                                                       f"CKPs!BF{bm_begin_row}:BF{bm_end_row})"
+                        # Sum Weighted L3 MPKI(Ckp M1)
+                        sheet3_cache.cell(row_num,column_index_from_string('X')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!BO{bm_begin_row}:BO{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Sum Weighted L3 MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('Y')).value=f"=SUMIFS(" \
+                                                                                       f"CKPs!BP{bm_begin_row}:BP{bm_end_row}," \
+                                                                                       f"CKPs!E{bm_begin_row}:E{bm_end_row},\"<>0\"," \
+                                                                                       f"CKPs!F{bm_begin_row}:F{bm_end_row},\"<>0\")"
+                        # Total Weighted L3 MPKI(Ckp gem5)
+                        sheet3_cache.cell(row_num,column_index_from_string('Z')).value=f"=SUM(" \
+                                                                                       f"CKPs!BP{bm_begin_row}:BP{bm_end_row})"
                         # Credibility(Ckp M1)
-                        sheet3_cache.cell(row_num,column_index_from_string('O')).value=f"=SUMIFS(" \
+                        sheet3_cache.cell(row_num,column_index_from_string('AA')).value=f"=SUMIFS(" \
                                                                                        f"'CKPs'!D{bm_begin_row}:D{bm_end_row}," \
                                                                                        f"'CKPs'!E{bm_begin_row}:E{bm_end_row},\"<>0\")"
 
@@ -670,22 +968,6 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     sheet2_CKPs.cell(1,column_index_from_string("J")).value="Valid"
     sheet2_CKPs.cell(1,column_index_from_string("K")).value="Expect Skipped # vgi binary records"
     sheet2_CKPs.cell(1,column_index_from_string("L")).value="Real Skipped # vgi binary records"
-    sheet2_CKPs.cell(1,column_index_from_string("M")).value="L1I CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("N")).value="L1I CMR(Ckp gem5)"
-    sheet2_CKPs.cell(1,column_index_from_string("O")).value="Weighted L1I CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("P")).value="Weighted L1I CMR(Ckp gem5)"
-    sheet2_CKPs.cell(1,column_index_from_string("Q")).value="L1D CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("R")).value="L1D CMR(Ckp gem5)"
-    sheet2_CKPs.cell(1,column_index_from_string("S")).value="Weighted L1D CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("T")).value="Weighted L1D CMR(Ckp gem5)"
-    sheet2_CKPs.cell(1,column_index_from_string("U")).value="L2 CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("V")).value="L2 CMR(Ckp gem5)"
-    sheet2_CKPs.cell(1,column_index_from_string("W")).value="Weighted L2 CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("X")).value="Weighted L2 CMR(Ckp gem5)"
-    sheet2_CKPs.cell(1,column_index_from_string("Y")).value="L3 CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("Z")).value="L3 CMR(Ckp gem5)"
-    sheet2_CKPs.cell(1,column_index_from_string("AA")).value="Weighted L3 CMR(Ckp M1)"
-    sheet2_CKPs.cell(1,column_index_from_string("AB")).value="Weighted L3 CMR(Ckp gem5)"
 
     # 条件格式
     rule3 = FormulaRule(formula=['J2=1'], fill=PatternFill(end_color='0099ff'))
