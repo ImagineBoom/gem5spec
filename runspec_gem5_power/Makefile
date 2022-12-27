@@ -36,7 +36,7 @@ cpi_all_cases_4: cpi_500_4 cpi_502_4 cpi_503_4 cpi_505_4 cpi_507_4 cpi_508_4 cpi
 cpi_all_cases_8: cpi_500_8 cpi_502_8 cpi_503_8 cpi_505_8 cpi_507_8 cpi_508_8 cpi_510_8 cpi_511_8 cpi_519_8 cpi_520_8 cpi_521_8 cpi_523_8 cpi_525_8 cpi_526_8 cpi_527_8 cpi_531_8 cpi_538_8 cpi_541_8 cpi_544_8 cpi_548_8 cpi_549_8 cpi_554_8 cpi_557_8 cpi_999_8
 	@-make collect_all_cases_CKPS_CPI_Err 
 
-mpki_l2_all_cases: mpki_500 mpki_502 mpki_503 mpki_505 mpki_507 mpki_508 mpki_510 mpki_511 mpki_519 mpki_520 mkpi_521 mpki_523 mpki_525 mpki_526 mpki_527 mpki_531 mpki_538 mpki_541 mpki_544 mpki_548 mpki_549 mpki_554 mpki_557 mpki_999
+mpki_l2_all_cases: mpki_500 mpki_502 mpki_503 mpki_505 mpki_507 mpki_508 mpki_510 mpki_511 mpki_519 mpki_520 mpki_521 mpki_523 mpki_525 mpki_526 mpki_527 mpki_531 mpki_538 mpki_541 mpki_544 mpki_548 mpki_549 mpki_554 mpki_557 mpki_999
 	@-make collect_all_cases_CKPS_L2_MISS_ACCESS_Err
 
 log-pre:
