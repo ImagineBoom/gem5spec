@@ -312,10 +312,10 @@ def grep_cache_data_gem5(benchmark="",simpt="",num="",gem5spec_path="."):
 def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongping/prj/gem5spec_v0_M1"):
     validstats=0
 
-    L2cache_loads, L2cache_stores = '', ''
-    L3cache_loads, L3cache_stores = '', ''
-    L3_1cache_loads, L3_1cache_stores = '', ''
-    Memory_cache_loads, Memory_cache_stores = '', ''
+    L2cache_loads, L2cache_stores, L2cache_l1touches, L2cache_l2touches = '', '', '', ''
+    L3cache_loads, L3cache_stores, L3cache_l1touches, L3cache_l2touches = '', '', '', ''
+    L3_1cache_loads, L3_1cache_stores, L3_1cache_l1touches, L3_1cache_l2touches = '', '', '', ''
+    Memory_cache_loads, Memory_cache_stores, Memory_cache_l1touches, Memory_cache_l2touches = '', '', '', ''
 
     L1Icache_miss_rate,L1Icache_miss,L1Icache_access,L1Icache_MPKI,\
     L1Dcache_miss_rate,L1Dcache_miss,L1Dcache_access,L1Dcache_MPKI,\
@@ -338,7 +338,7 @@ def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongpi
 
                     # L1D
                     _L1Dcache_miss_rate = re.search(
-                        r'(?P<itemName>a load that has never been rejected will hit in L1)\s+=\s+(?P<itemValue>((\-|\+)?\d+(\.\d+)?))\s+(?P<itemComments>.*)',
+                        r'(?P<itemName>any load will hit in L1 \(includes rejected loads\))\s+=\s+(?P<itemValue>((\-|\+)?\d+(\.\d+)?))\s+(?P<itemComments>.*)',
                         line)
                     if _L1Dcache_miss_rate:
                         L1Dcache_miss_rate = 1-float(_L1Dcache_miss_rate.group("itemValue"))
@@ -346,38 +346,46 @@ def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongpi
 
                     # L2
                     l2cache = re.search(
-                        r'(?P<itemName>L2)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(\-|\+)?\d+(\.\d+)?\s+(\-|\+)?\d+(\.\d+)?\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
+                        r'(?P<itemName>L2)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(?P<l1touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<l2touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
                         line)
                     if l2cache:
                         L2cache_loads = l2cache.group("loads")
                         L2cache_stores = l2cache.group("stores")
+                        L2cache_l1touches=l2cache.group("l1touches")
+                        L2cache_l2touches=l2cache.group("l2touches")
                         continue
 
                     # L3
                     l3cache = re.search(
-                        r'(?P<itemName>L3)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(\-|\+)?\d+(\.\d+)?\s+(\-|\+)?\d+(\.\d+)?\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
+                        r'(?P<itemName>L3)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(?P<l1touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<l2touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
                         line)
                     if l3cache:
                         L3cache_loads = l3cache.group("loads")
                         L3cache_stores = l3cache.group("stores")
+                        L3cache_l1touches=l3cache.group("l1touches")
+                        L3cache_l2touches=l3cache.group("l2touches")
                         continue
 
                     # L3.1
                     l3_1cache = re.search(
-                        r'(?P<itemName>L3.1)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(\-|\+)?\d+(\.\d+)?\s+(\-|\+)?\d+(\.\d+)?\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
+                        r'(?P<itemName>L3.1)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(?P<l1touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<l2touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
                         line)
                     if l3_1cache:
                         L3_1cache_loads = l3_1cache.group("loads")
                         L3_1cache_stores = l3_1cache.group("stores")
+                        L3_1cache_l1touches=l3_1cache.group("l1touches")
+                        L3_1cache_l2touches=l3_1cache.group("l2touches")
                         continue
 
                     # Memory
                     memory_cache = re.search(
-                        r'(?P<itemName>Memory)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(\-|\+)?\d+(\.\d+)?\s+(\-|\+)?\d+(\.\d+)?\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
+                        r'(?P<itemName>Memory)\s+(?P<loads>((\-|\+)?\d+(\.\d+)?))\s+(?P<l1touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<l2touches>((\-|\+)?\d+(\.\d+)?))\s+(?P<stores>((\-|\+)?\d+(\.\d+)?))',
                         line)
                     if memory_cache:
                         Memory_cache_loads = memory_cache.group("loads")
                         Memory_cache_stores = memory_cache.group("stores")
+                        Memory_cache_l1touches=memory_cache.group("l1touches")
+                        Memory_cache_l2touches=memory_cache.group("l2touches")
                         break
     except IOError:
         print(f"M1 file Exception: {gem5spec_M1_v0_path}/runspec_gem5_power/{benchmark}/M1_result/{simpt}_5000000_{benchmark}.results")
@@ -385,15 +393,25 @@ def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongpi
         # print("M1:",
         #     L2cache_loads, L2cache_stores,L3cache_loads, L3cache_stores,L3_1cache_loads, L3_1cache_stores,Memory_cache_loads, Memory_cache_stores,
         # )
-        if L2cache_loads!='' and L2cache_stores!='' and L3cache_loads!='' and L3cache_stores!='' and L3_1cache_loads!='' and L3_1cache_stores!=''and Memory_cache_loads!=''and Memory_cache_stores!='':
-            L2cache_access=(float(L2cache_loads)+float(L2cache_stores)+float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores)+float(Memory_cache_loads)+float(Memory_cache_stores))
-            L2cache_miss=L2cache_access-(float(L2cache_loads)+float(L2cache_stores))
+        if L2cache_loads!='' and L2cache_stores!='' and L2cache_l2touches!='' and\
+                L3cache_loads!='' and L3cache_stores!='' and L3cache_l2touches!='' and\
+                L3_1cache_loads!='' and L3_1cache_stores!='' and L3_1cache_l2touches!='' and\
+                Memory_cache_loads!=''and Memory_cache_stores!='' and Memory_cache_l2touches!='':
+            L2cache_access=(float(L2cache_loads)+float(L2cache_stores)+float(L2cache_l2touches)+
+                            float(L3cache_loads)+float(L3cache_stores)+float(L3cache_l2touches)+
+                            float(L3_1cache_loads)+float(L3_1cache_stores)+float(L3_1cache_l2touches)+
+                            float(Memory_cache_loads)+float(Memory_cache_stores)+float(Memory_cache_l2touches))
+            L2cache_miss=L2cache_access-(float(L2cache_loads)+float(L2cache_stores)+float(L2cache_l2touches))
             L2cache_miss_rate=L2cache_miss/L2cache_access
             L2cache_MPKI=1000*L2cache_miss/5000000
 
-        if L3cache_loads!='' and L3cache_stores!='' and L3_1cache_loads!='' and L3_1cache_stores!=''and Memory_cache_loads!=''and Memory_cache_stores!='':
-            L3cache_access=(float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores)+float(Memory_cache_loads)+float(Memory_cache_stores))
-            L3cache_miss=L3cache_access-(float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores))
+        if L3cache_loads!='' and L3cache_stores!='' and L3cache_l2touches!='' and \
+                L3_1cache_loads!='' and L3_1cache_stores!=''and L3_1cache_l2touches!='' and \
+                Memory_cache_loads!=''and Memory_cache_stores!=''and Memory_cache_l2touches!='':
+            L3cache_access=(float(L3cache_loads)+float(L3cache_stores)+float(L3cache_l2touches)+
+                            float(L3_1cache_loads)+float(L3_1cache_stores)+float(L3_1cache_l2touches)+
+                            float(Memory_cache_loads)+float(Memory_cache_stores)+float(Memory_cache_l2touches))
+            L3cache_miss=L3cache_access-(float(L3cache_loads)+float(L3cache_stores)+float(L3_1cache_loads)+float(L3_1cache_stores)+float(L3cache_l2touches)+float(L3_1cache_l2touches))
             L3cache_miss_rate=L3cache_miss/L3cache_access
             L3cache_MPKI=1000*L3cache_miss/5000000
 
