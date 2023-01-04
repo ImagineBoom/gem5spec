@@ -30,8 +30,8 @@ with_max_insts=false
 with_slice_len=false
 with_gen_txt=false
 
-gem5_py_opt=""
-# label的值会影响Excel表格的命名，日期之后插入。可以自定义一个名称来区分当前这一组gem5_py_opts定义的任务。默认是数组长度。
+gem5_ckp_py_opt=""
+# label的值会影响Excel表格的命名，日期之后插入。可以自定义一个名称来区分当前这一组gem5_ckp_py_opts定义的任务。默认是数组长度。
 label=""
 with_restore_case=false
 with_restore_all=false

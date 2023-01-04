@@ -36,11 +36,15 @@ SCROLL_END      = 200
 pipeFILE        =$(resultsFILE)
 pipeARGS        =
 
-# gem5配置部分
+# gem5 ckp 配置部分
+# gem5 参数
 GEM5_RESTORE_OPT =
+# se.py 参数
 CPU_CLOCK = 4GHz
 CPU_TYPE = P8CPU
 CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128 --topology=Crossbar
+# se.py 其余参数
+GEM5_CKP_PY_OPT +=
 
 TIME = /usr/bin/time --format="Consumed Time: %E  --  $$(basename $${PWD})"
 

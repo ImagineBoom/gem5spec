@@ -27,10 +27,10 @@ source auto_cmpl.sh
           ```shell
           ./run.sh --gem5 --spec2017 --restore_all -j 10 --label "test"
           ```
-        - 全部测例, 带标签，并且指定gem5 se.py后CPU的相关配置
+        - 全部测例, 带标签，并且指定gem5 se.py后CPU的相关配置(会覆盖TRACE.mk中的GEM5_CKP_PY_OPT)
 
           ```shell
-          ./run.sh --gem5 --spec2017 --restore_all -j 10 --gem5_py_opt "--cpu-clock=8GHz" --label "test"
+          ./run.sh --gem5 --spec2017 --restore_all -j 10 --gem5_ckp_py_opt "--cpu-clock=8GHz" --label "test"
           ```
 
         - 单个测例
@@ -38,7 +38,9 @@ source auto_cmpl.sh
           ```shell
           ./run.sh --gem5 --spec2017 --restore_case 502 -j 4
           ```
-
+          ```shell
+          ./run.sh --gem5 --spec2017 --restore_case 502 -j 6 --gem5_ckp_py_opt "--cpu-clock=8GHz" --label "test"
+          ```
 - 增加并行数
 
 ```bash
