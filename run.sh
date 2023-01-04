@@ -7,7 +7,7 @@ getopt_cmd=$(getopt \
 -o aiqrphvVc:b:e:j: \
 -l m1,gem5,spec2017:,myexe:,\
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,gen_txt,not_gen_txt,\
-all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gem5_ckp_py_opt:,\
+all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gem5_ckp_py_opt:,timeout:,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
 restore_case:,restore_all,restore_all_2,restore_all_4,restore_all_8,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,label:,\
 control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
@@ -247,6 +247,10 @@ case "${1#*=}" in
           label=${2}
           shift 2
           ;;
+        --timeout)
+          timeout=${2}
+          shift 2
+          ;;
         --)
           shift
           ;;
@@ -271,6 +275,10 @@ case "${1#*=}" in
           ;;
         --label)
           label=${2}
+          shift 2
+          ;;
+        --timeout)
+          timeout=${2}
           shift 2
           ;;
         --)
@@ -447,11 +455,13 @@ elif [[ $is_gem5 == true ]]; then
       func_set_job_n_default ${add_job}
 
       if [[ $gem5_ckp_py_opt == "" ]];then
-         #echo "450, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        (func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_ckp_py_opt}" "${label}" 2>&1 &)
+        #echo $timeout
+        #echo "450, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
+        (func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1 &)
       else
-         #echo "453, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_ckp_py_opt}" "${label}" 2>&1
+        #echo $timeout
+        #echo "453, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
+        func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1
       fi
 
     elif [[ $with_restore_all == true ]]; then
@@ -486,11 +496,13 @@ elif [[ $is_gem5 == true ]]; then
       func_set_job_n_default ${add_job}
 
       if [[ $gem5_ckp_py_opt == "" ]];then
-         #echo "489, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_ckp_py_opt}" "${label}" 2>&1 &)
+        #echo $timeout
+        #echo "489, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
+        (func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1 &)
       else
-         #echo "492, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_ckp_py_opt}" "${label}" 2>&1
+        #echo $timeout
+        #echo "492, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
+        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1
       fi
     elif [[ $with_restore_all_2 == true ]]; then
       # echo "PIDIS $$"

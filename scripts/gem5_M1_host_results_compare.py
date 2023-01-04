@@ -268,7 +268,8 @@ def grep_cache_data_gem5(benchmark="",simpt="",num="",gem5spec_path="."):
                         L3cache_accesses = l3cache_accesses.group("itemValue")
                         break
     except IOError:
-        print(f"gem5 file exception: {gem5spec_path}/runspec_gem5_power/{benchmark}/output_ckp{num}/stats.txt")
+        # print(f"gem5 file exception: {gem5spec_path}/runspec_gem5_power/{benchmark}/output_ckp{num}/stats.txt")
+        pass
     finally:
 
         # print(

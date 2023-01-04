@@ -44,6 +44,8 @@ with_control_gem5=false
 with_control_m1=false
 with_func_gen_restore_compare_excel=false
 parallel_jobs=5
+# ckp超时判定,seconds
+timeout=7200
 
 #m1需要的变量
 #itrace
