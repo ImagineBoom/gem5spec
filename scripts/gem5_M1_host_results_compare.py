@@ -310,7 +310,7 @@ def grep_cache_data_gem5(benchmark="",simpt="",num="",gem5spec_path="."):
             L2cache_miss_rate,L2cache_miss,L2cache_access,L2cache_MPKI, \
             L3cache_miss_rate,L3cache_miss,L3cache_access,L3cache_MPKI
 
-def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongping/prj/gem5spec_v0_M1"):
+def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="./data/M1/gem5spec_v0_M1"):
     validstats=0
 
     L2cache_loads, L2cache_stores, L2cache_l1touches, L2cache_l2touches = '', '', '', ''
@@ -389,7 +389,8 @@ def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="/home/lizongpi
                         Memory_cache_l2touches=memory_cache.group("l2touches")
                         break
     except IOError:
-        print(f"M1 file Exception: {gem5spec_M1_v0_path}/runspec_gem5_power/{benchmark}/M1_result/{simpt}_5000000_{benchmark}.results")
+        # print(f"M1 file Exception: {gem5spec_M1_v0_path}/runspec_gem5_power/{benchmark}/M1_result/{simpt}_5000000_{benchmark}.results")
+        pass
     finally:
         # print("M1:",
         #     L2cache_loads, L2cache_stores,L3cache_loads, L3cache_stores,L3_1cache_loads, L3_1cache_stores,Memory_cache_loads, Memory_cache_stores,

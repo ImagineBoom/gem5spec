@@ -1,0 +1,1109 @@
+[jtrace] - Set to turn undefined ops into NOPs.
+[jtrace] - run error limit set to 1.
+
+AS400 mode: tags inactive
+
++----- Cache Configs -----
+|
+| -- L1 Data Cache --
+| Size:      65536 bytes
+| Assoc:     8 way
+| Latency:   3 cycles
+| Line Size: 128 bytes
+|
+| -- L1 Instruction Cache --
+| Size:      32768 bytes
+| Assoc:     8 way
+| Latency:   3 cycles
+| Line Size: 128 bytes
+|
+| -- L2 Cache --
+| Size:      524288 bytes
+| Assoc:     8 way
+| Latency:   10.5 cycles
+| Line Size: 128 bytes
+|
+| -- L3 Cache --
+| Size:      8388608 bytes
+| Assoc:     8 way
+| Latency:   27.5 cycles
+| Line Size: 128 bytes
+|
+| -- L3.1 Cache --
+| Size:      disabled
+| Assoc:     disabled
+| Latency:   disabled
+| Line Size: disabled
+|
+| -- Memory --
+| Size:    n/a
+| Assoc:   n/a
+| Latency: 339.5 cycles
+|
+| -- IERAT --
+| Size:    64 entries
+| Assoc:   64 way
+| Latency (tlb hit): 18 cycles
+|
+| -- DERAT --
+| Size:    48 entries
+| Assoc:   48 way
+| Latency (tlb hit): 19 cycles
+|
+| -- TLB --
+| Size:    2048 entries
+| Assoc:   4 way
+|
+| -- Core Frequency --
+| Speed:   4.0 GHz
+|
++--------------------------
+
+|---- M1 VERSION = 2626 ----|
+ trace 0 ended on read_inst returns false last arch inst 5000000 at time 6029634.000000
+ arch inst 4999804  time 6029634.000000 
+ trace 0 lpar 0 completed arch 4999804 int 5296802 
+   cumulative total lines from mem  5121 core0 5121 
+   cumulative total lines to   mem  718 core0 718 
+   split CPI ------------------------------------          1.20597 
+ CMPL: CPI---------------------------------------          1.20597 
+
+IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL
+
+
+
+***********************************************************************************
+*                    Timer Statistics Generated During Run                        *
+***********************************************************************************
+
+
++---------------------------------------------------------------------------------+
+|                          Branch Prediction Stats                                |
++---------------------------------------------------------------------------------+
+
+
+BHT (Branch History Table) accuracy for completed branches 
+---------------------------------------------------------- 
+Probability the BHT guessed correctly for thread 0:
+Non Taken Unconditional Branch Immediate =    nan
+    Taken Unconditional Branch Immediate = 1.0000
+Non Taken Conditional Branch Immediate   = 0.8876
+    Taken Conditional Branch Immediate   = 0.8851
+Non Taken Unconditional Branch to Link   =    nan
+    Taken Unconditional Branch to Link   = 0.9997
+Non Taken Conditional Branch to Link     =    nan
+    Taken Conditional Branch to Link     =    nan
+Non Taken Unconditional Branch to Count  =    nan
+    Taken Unconditional Branch to Count  =    nan
+Non Taken Conditional Branch to Count    =    nan
+    Taken Conditional Branch to Count    =    nan
+
+
+Summary of BHT accuracy for completed branches for all threads
+---------------------------------------------------------------
+Probability the BHT guessed taken and the branch was taken          = 0.8851 
+Probability the BHT guessed NOT taken and the branch was NOT taken  = 0.8876 
+Probability the Link Stack was correct                              = 0.9997 
+
+Count Cache Stats: at prediction time for all threads 
+------------------------------------------------------ 
+Probability conditional branch to count hits in count cache         =    nan 
+Probability conditional branch to count hits and cache is correct   =    nan 
+Probability unconditional branch to count hits in count cache       =    nan
+Probability unconditional branch to count hits and cache is correct =    nan 
+
+
+
+
+ global/local count cache stats 
+ winner 1 wr/lr wr/lw ww/lr ww/lw         0         0         0         0  
+ winner 2 wr/lr wr/lw ww/lr ww/lw         0         0         0         0  
+ both miss        0 
+ global/local count cache stats w. branch_and_link
+ winner 1 wr/lr wr/lw ww/lr ww/lw         0         0         0         0  
+ winner 2 wr/lr wr/lw ww/lr ww/lw         0         0         0         0  
+ both miss        0 
+
+
+
+Number of branch mispredict flushes  =     7027
+
+
++---------------------------------------------------------------------------------+
+|                                Ifetch Stats                                     |
++---------------------------------------------------------------------------------+
+
++--------------------------+ 
+| Ifetch translation stats | 
++--------------------------+ 
+
+Ifetches for thread 0
+---------------------
+Ifetch hits in the i-erat  =   665350
+Ifetch misses in the i-erat=       11
+Ifetch hits in the TLB     =        5
+Ifetch misses in the TLB   =        0
+
+
+Ifetch translation summary for all threads
+------------------------------------------
+Probability ifetch request hits in i-erat                    = 0.9992
+Probability ifetch request misses in i-erat but hits in TLB  = 1.0000
+
+
+Upon TLB miss, location i-fetch translation data was sourced for thread 0
+-------------------------------------------------------------------------
+Location                  Number sourced
+--------                  --------------
+L2                                 0    
+L3                                 0    
+L3.1                               0    
+Memory                             0    
+
+
+
++--------------+ 
+| Icache stats | 
++--------------+ 
+
+Icache summary for all threads
+-------------------------------
+Probability ifetch request hits in L1                               = 0.0000
+Probability ifetch request misses in L1 but hits in prefetch buffer =    nan
+Probability ifetch request misses in L1 but hits in L2              = 0.0000
+Average time an ifetch miss waits until data back                   = 102.9277
+
+
+Upon icache miss, location i-fetch data was sourced for thread 0
+----------------------------------------------------------------
+Location                  Number sourced
+--------                  --------------
+L2                                 0    
+L3                                 0    
+L3.1                               6    
+Memory                            15    
+
+Upon i-prefetch generation, location i-prefetch data was sourced for thread 0
+           (i-prefetches are installed in the prefetch buffer)
+-----------------------------------------------------------------------------
+Location                  Number sourced
+--------                  --------------
+L2                                 0    
+L3                                 0    
+L3.1                               0    
+Memory                            36    
+
++---------------------------------------------------------------------------------+
+|                                Dfetch Stats                                     |
++---------------------------------------------------------------------------------+
+
++-----------------------------+ 
+| Data side translation stats | 
++-----------------------------+ 
+
+Translation summary stats for thread 0
+--------------------------------------
+Probability a load  will hit in the erat on its first try    = 0.9997
+Probability a store will hit in the erat on its first try    = 0.9992
+Probability any LSU op will hit in the erat on its first try = 0.9996
+Probability a load  will hit in the erat at any time         = 0.9995
+Probability a store will hit in the erat at any time         = 0.9959
+Probability any LSU op will hit in the erat at any time      = 0.9984
+Probability of erat miss hitting in the TLB                  = 1.0000
+
+
+Upon TLB miss, location translation data was sourced for thread 0
+-----------------------------------------------------------------
+Location                Loads              Stores            All   
+--------              ---------           --------         --------
+L2                         0                  0                0
+L3                         0                  0                0
+L3.1                       0                  0                0
+Memory                     0                  0                0
+
+
++---------------------+ 
+| Data prefetch stats | 
++---------------------+ 
+
+Data prefetch stream summary stats
+----------------------------------
+Stream number    Average number of cycles L2 when out before L1     Average L2 distance ahead
+-------------    ----------------------------------------------     -------------------------
+ 0                                nan                                        nan
+
+
+Data prefetch behavior stats
+----------------------------
+
+STREAM ALLOCATION STATS - GOOD
+------------------------------
+a load miss, missed prefetch request queue (PRQ) and allocated a new load stream                      =         0
+a load, hit on a load stream in the PRQ and advanced it                                               =         0
+a store, missed prefetch request queue (PRQ) and allocated a new store stream                         =         0
+a store, hit on a store stream in the PRQ and advanced it                                             =         0
+allocated a stream going up                                                                           =         0
+allocated a stream going up but ws convereted to a downward stream                                    =         0
+a load miss, missed prefetch request queue (PRQ) and allocated a new stride N load steam              =         0
+a load, hit on a stride N stream in the PRQ and advanced it                                           =         0
+STREAM ALLOCATION STATS - BAD
+-----------------------------
+a load miss, matched in the PRQ, if it already has a steam why did it miss?                           =         0
+a load that hit the PRQ found a duplicate load stream and cleared it                                  =         0
+a store that hit the PRQ found a duplicate store stream and cleared it                                =         0
+a stream that was in the process of being hit on was clear by another stream                          =         0
+a stream crossed a page boundry and was cleared                                                       =         0
+a stream being alocated crossed a page boundry and was halted                                         =         0
+
+L1 PREFETCH STATS
+-----------------
+number of L1 touches created                                                                          =         0
+number of L1 touches sent                                                                             =         0
+number of L1 touches shifted in L1 touch table                                                        =         0
+number of L1 touches overwritten in L1 touch table                                                    =         0
+number of L1 touches killed due to crossing a page                                                    =         0
+number of L1 touches rejected from LSU pipe due to congruence class conflict in LMQ                   =         0
+number of L1 touches rejected from LSU pipe due to no LMQ entry                                       =         0
+
+L2 PREFETCH STATS
+-----------------
+number of cycles the L2 touch scheduler was blocked from sending due to max L2 touch rate limit       =         0
+number of cycles the L2 touch scheduler was blocked from sending due to translation request           =         0
+number of cycles the L2 touch scheduler was blocked from sending due to hold off signal               =         0
+number of cycles the L2 touch scheduler was blocked from sending due L2 touch table empty             =   3014816
+number of L2 touches sent                                                                             =         0
+average time in between L2 touches                                                                    =      0.00
+
+
++------------------+ 
+| Data cache stats | 
++------------------+ 
+
+L1 Data cache summary stats, Probability that:
+----------------------------------------------
+a load that has never been rejected will hit in L1                                  = 0.9882
+any load will hit in L1 (includes rejected loads)                                   = 0.9798
+a load that has never been rejected will hit on an LMQ entry                        = 0.0318
+any load will hit on an LMQ entry (includes rejected loads)                         = 0.4413
+a load that has never been rejected will hit on an LMQ entry and won't be rejected  = 0.0000
+any load will hit on an LMQ entry and won't be rejected (includes rejected loads)   = 0.0000
+a load that misses L1 will hit in L2                                                = 0.9465
+Average time a load miss waits for its first sector back                            = 662.4698
+Average time a load hit reload waits for its first sector to return form memory     =    nan
+
+
+Upon L1 dcache miss / L1 dcache prefetch, location data was sourced for thread 0
+--------------------------------------------------------------------------------
+Location                 Loads             L1 Touches          L2 Touches           Stores
+--------               ---------           ----------          ----------           ------
+L2                           61                    0                1829               108910 
+L3                         6859                    0                 169                55747 
+L3.1                        327                    0                 897                 1221 
+Memory                      348                    0                 929                 1200 
+
+
+    Cast Outs  
+----------------
+
+Level                    Clean               Dirty
+--------               ---------           ----------
+L2                         7477                56465
+L3                            0                  718
+L3.1                          0                    0
+
+
++---------------------------------------------------------------------------------+
+|                              Resource usage stats                               |
++---------------------------------------------------------------------------------+
+
++----------------------+ 
+| Execution unit stats | 
++----------------------+ 
+
+Execution unit issue summary
+----------------------------
+
+
+Execution_unit_issue_cycles_busy: 
+
+                            number / fraction of cycles     number / fraction of cycles     number / fraction of cycles
+    Unit                      an op was issued to unit       an op was finished in unit     an op was completed in unit
+   ------                  ----------------------------    ----------------------------    ----------------------------
+
+   fx0                          176152 0.029214                  160057 0.026545                  143876 0.023861 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                 124468 0.020643                  120147 0.019926                  106176 0.017609 
+      single cycle               51684 0.008572                   39910 0.006619                   37700 0.006252 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   fx1                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                      0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   fx2                          175130 0.029045                  159215 0.026405                  143011 0.023718 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                 123689 0.020514                  119440 0.019809                  105314 0.017466 
+      single cycle               51441 0.008531                   39775 0.006597                   37697 0.006252 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   fx3                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                      0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   fx4                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                      0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   fx5                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                      0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   fx6                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                      0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   fx7                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      simple fx                      0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+
+   ls0                          184893 0.030664                  172352 0.028584                  168406 0.027930 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                160573 0.026631                  150219 0.024913                  147655 0.024488 
+      load                       15579 0.002584                   13872 0.002301                   13668 0.002267 
+      fxu op                      8741 0.001450                    8261 0.001370                    7083 0.001175 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+
+   ls1                          465710 0.077237                  371343 0.061586                  354235 0.058749 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                     0 0.000000                       0 0.000000                       0 0.000000 
+      load                      435258 0.072186                  342248 0.056761                  327995 0.054397 
+      fxu op                     14398 0.002388                   13309 0.002207                   10454 0.001734 
+      stdata                     16054 0.002663                   15786 0.002618                   15786 0.002618 
+
+   ls2                          184281 0.030563                  171716 0.028479                  167793 0.027828 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                160057 0.026545                  149734 0.024833                  147196 0.024412 
+      load                       15591 0.002586                   13800 0.002289                   13624 0.002260 
+      fxu op                      8633 0.001432                    8182 0.001357                    6973 0.001156 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+
+   ls3                          466992 0.077449                  371426 0.061600                  354403 0.058777 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                     0 0.000000                       0 0.000000                       0 0.000000 
+      load                      436724 0.072430                  342725 0.056840                  328481 0.054478 
+      fxu op                     14163 0.002349                   13050 0.002164                   10272 0.001704 
+      stdata                     16105 0.002671                   15651 0.002596                   15650 0.002596 
+
+   ls4                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                     0 0.000000                       0 0.000000                       0 0.000000 
+      load                           0 0.000000                       0 0.000000                       0 0.000000 
+      fxu op                         0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+
+   ls5                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                     0 0.000000                       0 0.000000                       0 0.000000 
+      load                           0 0.000000                       0 0.000000                       0 0.000000 
+      fxu op                         0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+
+   ls6                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                     0 0.000000                       0 0.000000                       0 0.000000 
+      load                           0 0.000000                       0 0.000000                       0 0.000000 
+      fxu op                         0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+
+   ls7                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store agen                     0 0.000000                       0 0.000000                       0 0.000000 
+      load                           0 0.000000                       0 0.000000                       0 0.000000 
+      fxu op                         0 0.000000                       0 0.000000                       0 0.000000 
+      stdata                         0 0.000000                       0 0.000000                       0 0.000000 
+
+   fp0                         2263551 0.375404                 1951007 0.323570                 1941914 0.322062 
+   ------------------         -----------------                -----------------                -----------------
+      store  data               343852 0.057027                   89613 0.014862                   88250 0.014636 
+      single cycle             1903804 0.315741                 1686066 0.279630                 1680277 0.278670 
+      multi  cycle               15895 0.002636                   10500 0.001741                   10457 0.001734 
+        -------------         ----------                       ----------                       ----------
+        binary fp              2043884 0.338973                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                  129714 0.021513                  121156 0.020093                  119311 0.019787 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                89953 0.014918                   43672 0.007243                   43619 0.007234 
+
+   fp1                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store  data                    0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+        -------------         ----------                       ----------                       ----------
+        binary fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                       0 0.000000                       0 0.000000                       0 0.000000 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                    0 0.000000                       0 0.000000                       0 0.000000 
+
+   fp2                         2264211 0.375514                 1951438 0.323641                 1942459 0.322152 
+   ------------------         -----------------                -----------------                -----------------
+      store  data               343040 0.056892                   89390 0.014825                   88040 0.014601 
+      single cycle             1905245 0.315980                 1687190 0.279816                 1681425 0.278860 
+      multi  cycle               15926 0.002641                   10478 0.001738                   10442 0.001732 
+        -------------         ----------                       ----------                       ----------
+        binary fp              2045787 0.339289                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                  129325 0.021448                  120830 0.020039                  119046 0.019743 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                89099 0.014777                   43550 0.007223                   43506 0.007215 
+
+   fp3                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store  data                    0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+        -------------         ----------                       ----------                       ----------
+        binary fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                       0 0.000000                       0 0.000000                       0 0.000000 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                    0 0.000000                       0 0.000000                       0 0.000000 
+
+   fp4                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store  data                    0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+        -------------         ----------                       ----------                       ----------
+        binary fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                       0 0.000000                       0 0.000000                       0 0.000000 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                    0 0.000000                       0 0.000000                       0 0.000000 
+
+   fp5                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store  data                    0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+        -------------         ----------                       ----------                       ----------
+        binary fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                       0 0.000000                       0 0.000000                       0 0.000000 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                    0 0.000000                       0 0.000000                       0 0.000000 
+
+   fp6                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store  data                    0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+        -------------         ----------                       ----------                       ----------
+        binary fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                       0 0.000000                       0 0.000000                       0 0.000000 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                    0 0.000000                       0 0.000000                       0 0.000000 
+
+   fp7                               0 0.000000                       0 0.000000                       0 0.000000 
+   ------------------         -----------------                -----------------                -----------------
+      store  data                    0 0.000000                       0 0.000000                       0 0.000000 
+      single cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+      multi  cycle                   0 0.000000                       0 0.000000                       0 0.000000 
+        -------------         ----------                       ----------                       ----------
+        binary fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        permute                      0 0.000000                       0 0.000000                       0 0.000000 
+        simple                       0 0.000000                       0 0.000000                       0 0.000000 
+        complex                      0 0.000000                       0 0.000000                       0 0.000000 
+        vector fp                    0 0.000000                       0 0.000000                       0 0.000000 
+        crypto                       0 0.000000                       0 0.000000                       0 0.000000 
+        fp store                     0 0.000000                       0 0.000000                       0 0.000000 
+        vsx store                    0 0.000000                       0 0.000000                       0 0.000000 
+
+   br0                           70845 0.011749                   68745 0.011401                   65233 0.010819 
+   br1                               0 0.000000                       0 0.000000                       0 0.000000 
+
+   cr                             3360 0.000557                    3360 0.000557                    2787 0.000462 
+
+
+
+
++----------------------------+ 
+| Queue resource usage stats | 
++----------------------------+ 
+
+Information queue usage stats, Average number of:
+-------------------------------------------------
+EMQ (Erat Miss Queue) entries in use                                      = 0.0006
+PRQ (Data Prefetch Request Queue) entries in use                          = 0.0000
+CLB (Instruction Fetch Buffer) entries in use for thread 0 -              = 14.2086
+GCT (Global Completion Table) entries in use for thread 0                 = 16.6873
+LRQ (Load Reorder Queue) entries in use for thread 0                      = 18.1752
+SRQ (Load Reorder Queue) entries in use for thread 0                      = 6.2933
+Architected ops in the system (from dispatch to completion)               = 76.1086
+Internal ops in the system (from dispatch to completion)                  = 79.6724
+
+
+Issue queue usage stats, Average number of ops in the:
+------------------------------------------------------
+Branch Issue Queue                                                        = 0.3182
+Unified Issue Queue                                                       = 9.8552
+
+
++-----------------------------+ 
+| Rename Resource usage stats | 
++-----------------------------+ 
+
+Rename Resource usage stats, Average number of:
+-------------------------------------------------
+GPR renames in use        = 37.0201
+FPR/VMX renames in use    = 130.6910
+CR renames in use         = 9.1728
+Link/Count renames in use = 2.0342
+XER renames in use        = 6.0000
+FPSCR renames in use      = 1.0960
+
+TOTAL FXU b2b (back to back): 0
+
+header_ops
++---------------------------------------------------------------------------------+
+|                             Instruction Frequency                               |
++---------------------------------------------------------------------------------+
+
+
+This table counts architected instructions
+
++-------------------------------ARCH-OP-FREQUENCIES------------------------------+
++----MNEMONIC-----+--------ARCH-OPS---------+--------EXPANSIONS-------+---RATIO--+
++-----------------+----COUNT---+--FREQUENCY-+----COUNT---+--FREQUENCY-+----------+
+|    arch op name | # of arch  | % of total |  # of iops | % of total | ratio of |
+|                 |    ops     |   arch ops | created by |    iops    | iop/arch |
+|                 |  executed  |  executed  |  these ops |  executed  | executed |
++-----------------+------------+------------+------------+------------+----------+
+
+This table counts internal instructions
+
++---------------------------------IOP-FREQUENCIES--------------------------------------+
++----MNEMONIC-----+-----FROM-ANY-OP------+--FROM-NON-EXPANDED---+-----FROM-EXPANDED----+
++-----------------+---COUNT--+-FREQUENCY-+---COUNT--+-FREQUENCY-+---COUNT--+-FREQUENCY-+
+| internal op name| # created| % of any  | # created| % of non  | # created|   % of    |
+|                 | from any |  op total | from non | expanded  |    from  |  expanded |
+|                 |    op    |           | expanded | op total  | expanded |  op total |
++-----------------+----------+-----------+----------+-----------+----------+-----------+
+
+
+
+
+IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL
+
+
++-------------------------------ARCH-OP-FREQUENCIES------------------------------+-----+
++----MNEMONIC-----+--------ARCH-OPS---------+--------EXPANSIONS-------+---RATIO--+TYPE-+
++-----------------+----COUNT---+--FREQUENCY-+----COUNT---+--FREQUENCY-+----------+-----+
+|       xsmaddadp |    1198485 |    23.9707 |    1198485 |    22.6358 |    1.000 |  A  |
+|           fmadd |     677079 |    13.5421 |     677079 |    12.7880 |    1.000 |  A  |
+|         xsmuldp |     567803 |    11.3565 |     567803 |    10.7241 |    1.000 |  A  |
+|             lfd |     501267 |    10.0257 |     501267 |     9.4674 |    1.000 |  A  |
+|            fmul |     288207 |     5.7644 |     288207 |     5.4434 |    1.000 |  A  |
+|           xxlor |     201847 |     4.0371 |     201847 |     3.8123 |    1.000 |  A  |
+|            addi |     164378 |     3.2877 |     164378 |     3.1046 |    1.000 |  A  |
+|       xsmaddmdp |     161830 |     3.2367 |     161830 |     3.0565 |    1.000 |  A  |
+|            stfd |     120562 |     2.4113 |     241124 |     4.5541 |    2.000 |  C  |
+|          stxsdx |      87125 |     1.7426 |     174250 |     3.2911 |    2.000 |  C  |
+|              ld |      83943 |     1.6789 |      83943 |     1.5854 |    1.000 |  A  |
+|           lxsdx |      74586 |     1.4918 |      74586 |     1.4087 |    1.000 |  A  |
+|           fmsub |      63350 |     1.2671 |      63350 |     1.1965 |    1.000 |  A  |
+|           addis |      60877 |     1.2176 |      60877 |     1.1498 |    1.000 |  A  |
+|           stfdx |      55728 |     1.1146 |     111456 |     2.1051 |    2.000 |  C  |
+|             fmr |      53606 |     1.0722 |      53606 |     1.0125 |    1.000 |  A  |
+|          fnmadd |      48025 |     0.9605 |      48025 |     0.9070 |    1.000 |  A  |
+|            fadd |      47571 |     0.9515 |      47571 |     0.8985 |    1.000 |  A  |
+|         xsadddp |      45662 |     0.9133 |      45662 |     0.8624 |    1.000 |  A  |
+|       xsmsubadp |      45282 |     0.9057 |      45282 |     0.8552 |    1.000 |  A  |
+|      xsnmaddadp |      41796 |     0.8360 |      41796 |     0.7894 |    1.000 |  A  |
+|        bc.011zy |      39815 |     0.7963 |      39815 |     0.7520 |    1.000 |  A  |
+|            fsub |      34539 |     0.6908 |      34539 |     0.6523 |    1.000 |  A  |
+|             std |      27953 |     0.5591 |      55906 |     1.0559 |    2.000 |  C  |
+|         xssubdp |      27532 |     0.5507 |      27532 |     0.5200 |    1.000 |  A  |
+|            lfdx |      23801 |     0.4760 |      23801 |     0.4495 |    1.000 |  A  |
+|            fneg |      22975 |     0.4595 |      22975 |     0.4339 |    1.000 |  A  |
+|             ori |      17464 |     0.3493 |      17464 |     0.3298 |    1.000 |  A  |
+|         xsnegdp |      17418 |     0.3484 |      17418 |     0.3290 |    1.000 |  A  |
+|           fcmpu |      16511 |     0.3302 |      16511 |     0.3118 |    1.000 |  A  |
+|              or |      14004 |     0.2801 |      14004 |     0.2645 |    1.000 |  A  |
+|         xsdivdp |      13933 |     0.2787 |      13933 |     0.2632 |    1.000 |  A  |
+|          rldicr |      13853 |     0.2771 |      13853 |     0.2616 |    1.000 |  A  |
+|           extsw |      13853 |     0.2771 |      13853 |     0.2616 |    1.000 |  A  |
+|          mfvsrd |      13602 |     0.2721 |      13602 |     0.2569 |    1.000 |  A  |
+|        bc.001zy |      10870 |     0.2174 |      10870 |     0.2053 |    1.000 |  A  |
+|            cmpw |      10495 |     0.2099 |      10495 |     0.1982 |    1.000 |  A  |
+|          rldicl |      10160 |     0.2032 |      10160 |     0.1919 |    1.000 |  A  |
+|               b |       7581 |     0.1516 |       7581 |     0.1432 |    1.000 |  A  |
+|          mtfsb0 |       6968 |     0.1394 |       6968 |     0.1316 |    1.000 |  A  |
+|           andi. |       6384 |     0.1277 |       6384 |     0.1206 |    1.000 |  A  |
+|          xxlxor |       6229 |     0.1246 |       6229 |     0.1176 |    1.000 |  A  |
+|           cmpdi |       3484 |     0.0697 |       3484 |     0.0658 |    1.000 |  A  |
+|          andis. |       3484 |     0.0697 |       3484 |     0.0658 |    1.000 |  A  |
+|       xsmsubmdp |       3484 |     0.0697 |       3484 |     0.0658 |    1.000 |  A  |
+|             blr |       3484 |     0.0697 |       3484 |     0.0658 |    1.000 |  A  |
+|            xor. |       3484 |     0.0697 |       3484 |     0.0658 |    1.000 |  A  |
+|            mffs |       3484 |     0.0697 |       3484 |     0.0658 |    1.000 |  A  |
+|               b |       3483 |     0.0697 |       3483 |     0.0658 |    1.000 |  A  |
+|            cmpl |       3483 |     0.0697 |       3483 |     0.0658 |    1.000 |  A  |
+|            stdu |       3483 |     0.0697 |       6966 |     0.1316 |    2.000 |  C  |
+|            fdiv |       3483 |     0.0697 |       3483 |     0.0658 |    1.000 |  A  |
+|           fsqrt |       3483 |     0.0697 |       3483 |     0.0658 |    1.000 |  A  |
+|          rlwinm |       3442 |     0.0688 |       3442 |     0.0650 |    1.000 |  A  |
+|            fabs |       3358 |     0.0672 |       3358 |     0.0634 |    1.000 |  A  |
+|          cmplwi |       3192 |     0.0638 |       3192 |     0.0603 |    1.000 |  A  |
+|            cror |       2787 |     0.0557 |       2787 |     0.0526 |    1.000 |  A  |
+|          fcpsgn |       2703 |     0.0541 |       2703 |     0.0511 |    1.000 |  A  |
+|         xsabsdp |        292 |     0.0058 |        292 |     0.0055 |    1.000 |  A  |
+|       xscpsgndp |        250 |     0.0050 |        250 |     0.0047 |    1.000 |  A  |
+|             lwz |        170 |     0.0034 |        170 |     0.0032 |    1.000 |  A  |
+|        xscmpudp |        168 |     0.0034 |        168 |     0.0032 |    1.000 |  A  |
+|             add |         87 |     0.0017 |         87 |     0.0016 |    1.000 |  A  |
+|            subf |         83 |     0.0017 |         83 |     0.0016 |    1.000 |  A  |
++-----------------+------------+------------+------------+------------+----------+-----+
+|          *Total |    4999800 |   100.0000 |    5294651 |   100.0000 |    1.059 |
++-----------------+------------+------------+------------+------------+----------+-----+
+ * The Total includes 1 unconditional branches that were inserted to fix trace
+   address discontinuities.
+
+
++---------------------------------IOP-FREQUENCIES--------------------------------------+
++----MNEMONIC-----+-----FROM-ANY-OP------+--FROM-NON-EXPANDED---+-----FROM-EXPANDED----+
++-----------------+---COUNT--+-FREQUENCY-+---COUNT--+-FREQUENCY-+---COUNT--+-FREQUENCY-+
+|       xsmaddadp |  1198485 |   22.6358 |  1198485 |   25.4729 |        0 |    0.0000 |
+|           fmadd |   677079 |   12.7880 |   677079 |   14.3908 |        0 |    0.0000 |
+|         xsmuldp |   567803 |   10.7241 |   567803 |   12.0682 |        0 |    0.0000 |
+|             lfd |   501267 |    9.4674 |   501267 |   10.6540 |        0 |    0.0000 |
+|          STAGEN |   294851 |    5.5688 |        0 |    0.0000 |   294851 |   50.0000 |
+|            fmul |   288207 |    5.4434 |   288207 |    6.1256 |        0 |    0.0000 |
+|           xxlor |   201847 |    3.8123 |   201847 |    4.2901 |        0 |    0.0000 |
+|            addi |   164378 |    3.1046 |   164378 |    3.4937 |        0 |    0.0000 |
+|       xsmaddmdp |   161830 |    3.0565 |   161830 |    3.4396 |        0 |    0.0000 |
+|            stfd |   120562 |    2.2771 |        0 |    0.0000 |   120562 |   20.4446 |
+|          stxsdx |    87125 |    1.6455 |        0 |    0.0000 |    87125 |   14.7744 |
+|              ld |    83943 |    1.5854 |    83943 |    1.7841 |        0 |    0.0000 |
+|           lxsdx |    74586 |    1.4087 |    74586 |    1.5853 |        0 |    0.0000 |
+|           fmsub |    63350 |    1.1965 |    63350 |    1.3465 |        0 |    0.0000 |
+|           addis |    60877 |    1.1498 |    60877 |    1.2939 |        0 |    0.0000 |
+|           stfdx |    55728 |    1.0525 |        0 |    0.0000 |    55728 |    9.4502 |
+|             fmr |    53606 |    1.0125 |    53606 |    1.1394 |        0 |    0.0000 |
+|              bc |    50685 |    0.9573 |    50685 |    1.0773 |        0 |    0.0000 |
+|          fnmadd |    48025 |    0.9070 |    48025 |    1.0207 |        0 |    0.0000 |
+|            fadd |    47571 |    0.8985 |    47571 |    1.0111 |        0 |    0.0000 |
+|         xsadddp |    45662 |    0.8624 |    45662 |    0.9705 |        0 |    0.0000 |
+|       xsmsubadp |    45282 |    0.8552 |    45282 |    0.9624 |        0 |    0.0000 |
+|      xsnmaddadp |    41796 |    0.7894 |    41796 |    0.8883 |        0 |    0.0000 |
+|            fsub |    34539 |    0.6523 |    34539 |    0.7341 |        0 |    0.0000 |
+|             std |    27953 |    0.5279 |        0 |    0.0000 |    27953 |    4.7402 |
+|         xssubdp |    27532 |    0.5200 |    27532 |    0.5852 |        0 |    0.0000 |
+|            lfdx |    23801 |    0.4495 |    23801 |    0.5059 |        0 |    0.0000 |
+|            fneg |    22975 |    0.4339 |    22975 |    0.4883 |        0 |    0.0000 |
+|             ori |    17464 |    0.3298 |    17464 |    0.3712 |        0 |    0.0000 |
+|         xsnegdp |    17418 |    0.3290 |    17418 |    0.3702 |        0 |    0.0000 |
+|           fcmpu |    16511 |    0.3118 |    16511 |    0.3509 |        0 |    0.0000 |
+|              or |    14004 |    0.2645 |    14004 |    0.2976 |        0 |    0.0000 |
+|         xsdivdp |    13933 |    0.2632 |    13933 |    0.2961 |        0 |    0.0000 |
+|           extsw |    13853 |    0.2616 |    13853 |    0.2944 |        0 |    0.0000 |
+|          rldicr |    13853 |    0.2616 |    13853 |    0.2944 |        0 |    0.0000 |
+|          mfvsrd |    13602 |    0.2569 |    13602 |    0.2891 |        0 |    0.0000 |
+|            cmpw |    10495 |    0.1982 |    10495 |    0.2231 |        0 |    0.0000 |
+|          rldicl |    10160 |    0.1919 |    10160 |    0.2159 |        0 |    0.0000 |
+|               b |     7581 |    0.1432 |     7581 |    0.1611 |        0 |    0.0000 |
+|          mtfsb0 |     6968 |    0.1316 |     6968 |    0.1481 |        0 |    0.0000 |
+|           andi. |     6384 |    0.1206 |     6384 |    0.1357 |        0 |    0.0000 |
+|          xxlxor |     6229 |    0.1176 |     6229 |    0.1324 |        0 |    0.0000 |
+|            mffs |     3484 |    0.0658 |     3484 |    0.0740 |        0 |    0.0000 |
+|            bclr |     3484 |    0.0658 |     3484 |    0.0740 |        0 |    0.0000 |
+|            xor. |     3484 |    0.0658 |     3484 |    0.0740 |        0 |    0.0000 |
+|       xsmsubmdp |     3484 |    0.0658 |     3484 |    0.0740 |        0 |    0.0000 |
+|          andis. |     3484 |    0.0658 |     3484 |    0.0740 |        0 |    0.0000 |
+|           cmpdi |     3484 |    0.0658 |     3484 |    0.0740 |        0 |    0.0000 |
+|           fsqrt |     3483 |    0.0658 |     3483 |    0.0740 |        0 |    0.0000 |
+|            fdiv |     3483 |    0.0658 |     3483 |    0.0740 |        0 |    0.0000 |
+|            stdu |     3483 |    0.0658 |        0 |    0.0000 |     3483 |    0.5906 |
+|            cmpl |     3483 |    0.0658 |     3483 |    0.0740 |        0 |    0.0000 |
+|              bl |     3483 |    0.0658 |     3483 |    0.0740 |        0 |    0.0000 |
+|          rlwinm |     3442 |    0.0650 |     3442 |    0.0732 |        0 |    0.0000 |
+|            fabs |     3358 |    0.0634 |     3358 |    0.0714 |        0 |    0.0000 |
+|          cmplwi |     3192 |    0.0603 |     3192 |    0.0678 |        0 |    0.0000 |
+|            cror |     2787 |    0.0526 |     2787 |    0.0592 |        0 |    0.0000 |
+|          fcpsgn |     2703 |    0.0511 |     2703 |    0.0575 |        0 |    0.0000 |
+|         xsabsdp |      292 |    0.0055 |      292 |    0.0062 |        0 |    0.0000 |
+|       xscpsgndp |      250 |    0.0047 |      250 |    0.0053 |        0 |    0.0000 |
+|             lwz |      170 |    0.0032 |      170 |    0.0036 |        0 |    0.0000 |
+|        xscmpudp |      168 |    0.0032 |      168 |    0.0036 |        0 |    0.0000 |
+|             add |       87 |    0.0016 |       87 |    0.0018 |        0 |    0.0000 |
+|            subf |       83 |    0.0016 |       83 |    0.0018 |        0 |    0.0000 |
++-----------------+----------+-----------+----------+-----------+----------+-----------+
+|           Total |  5294651 |   100.0000|  4704949 |   100.0000|   589702 |   100.0000|
++-----------------+----------+-----------+----------+-----------+----------+-----------+
+
+
++---------------------------------------------------------------------------------+
+|                                  CPI Stack                                      |
++---------------------------------------------------------------------------------+
+
+   The CPI stack which follows breaks down the final CPI of the run into 
+   various CPI components.  The view is from the front end of the machine back.
+   In each cycle the machine either completes a group or does not, so for
+   each cycle in which no group completed the timer will try and account for why.
+   There are 3 modes of counting.  The first is when there are no groups waiting
+   to complete (groups begin waiting as soon as they are dispatched).  During this
+   time the pipeline is empty and the cycles will be counted in a bucket under 
+   "pipeline_empty".  The second mode of counting occurs when a group has been
+   dispatched and is waiting to complete but has experienced no stall events in the
+   pipelines so the cycles are counted under "pipeline_refill".  The final and
+   most common mode of counting is when there are groups waiting to complete and they
+   experienced stall conditions during their lifetime. If the group cannot complete
+   on the cycle in which it became eligible the timer will look back over the life of all
+   instructions in the group that have not finished from dispatch and moving towards finish and it
+   will find the instruction within that group that went the deepest into the machine
+   before encountering a stall condition.  The timer will then begin examining the
+   stall events that happened to that instruction beginning with dispatch and
+   incrementing that reasons bucket and decrement that stall condition.  If that
+   instruction's stalls are exhausted before the group completes the next instruction
+   yet to finish will be chosen in a similar manner.  If there is a tie the older instruction is
+   chosen.  If all instrucitons have finished then the timer looks at the last instruciton to finish   and pulls stall events off starting at the end of the instuctions life.On the cycle when a group    does completes it is counted in the "Complete_current_grp" bucket.
+
+   In the end the timer has made a count for each cycle simulated in one of the many
+   reason counts.  This allows the timer to figure the fraction of the CPI for various
+   stalls.  This can be used to compare against similar runs to provide insight into the
+   behavior of the machine.  Please note that not all stall reasons are valid for a given
+   timer configuration.
+
+   Here is a break down of the various reason counts:
+
+............................ pipeline_contention......... = This mode of counting occurs 
+                                                            when there is a group waiting
+                                                            to complete
+CMPL: Wait_for_dispatch_requirements                      = groups was held at dispatch 
+                                                            waiting for dispatch requirements
+CMPL: Wait_for_execution_unit                             = sum of waiting for one of the 
+                                                            following type of execution units 
+                                                            (pipelines) to be free
+CMPL:      cr_unit/vmx_unit                               = conditional register logical unit or
+                                                            a VMX unit (store,simple,complex,float,
+                                                            permute)
+CMPL:      br_unit                                        = branch unit
+CMPL:      fpu_unit                                       = floating point unit
+CMPL:      fxu_unit                                       = fixed point unit
+CMPL:      lsu_unit                                       = load store unit
+CMPL: Wait_for_sources                                    = waiting a source register to be written
+                                                            by one of the following type of op
+CMPL:      written_by_br                                  = branch
+CMPL:      written_by_cr                                  = conditional logical
+CMPL:      written_by_fp                                  = floating point
+CMPL:      written_by_fp_store                            = floating point store
+CMPL:      written_by_fp_load                             = floating point load
+CMPL:      written_by_fx                                  = fixed point
+CMPL:      written_by_fx_store_agen                       = fixed point store address generation
+CMPL:      written_by_fx_store_data                       = fixed point store data
+CMPL:      written_by_fx_load                             = fixed point load
+CMPL:      written_by_vmx                                 = VMX
+CMPL: Wait_for_serializer_to_be_next_group                = waiting for op to be next to complete (NTC)
+CMPL: Wait_for_agen                                       = sum of ops waiting in the address generation
+                                                            of the LSU pipe for the following reasons
+CMPL:      result_bus_busy_store                          = store rejected due to the result bus being busy
+CMPL:      result_bus_busy_load                           = load  rejected due to the result bus being busy
+CMPL:      erat_dir_update_store                          = store rejected due to the erat directory being 
+                                                            busy with an update
+CMPL:      erat_dir_update_load                           = load  rejected due to the erat directory being
+                                                            busy with an update
+CMPL:      L1D_dir_update_store                           = store rejected due to the L1 data cache directory
+                                                            being busy with an update
+CMPL:      L1D_dir_update_load                            = load  rejected due to the L1 data cache directory
+                                                            being busy with an update
+CMPL: Wait_for_translation                                = sum of ops waiting due to various address
+                                                            translation problems
+CMPL:      erat_miss_store                                = store rejected due to missing the erat
+CMPL:      tlb_miss_store                                 = store rejected due to missing the erat and TLB
+CMPL:      erat_miss_load                                 = load  rejected due to missing the erat
+CMPL:      tlb_miss_load                                  = load  rejected due to missing the erat and TLB
+CMPL:      erat_miss_store_guarded                        = guarded store waits rejected to missing the erat
+CMPL:      tlb_miss_store_guarded                         = guarded store waits rejected to missing the TLB
+CMPL:      erat_miss_load_guarded                         = guarded load  waits rejected to missing the erat
+CMPL:      tlb_miss_load_guarded                          = guarded load  waits rejected to missing the TLB
+CMPL: Wait_load_rejected                                  = sum of load waiting rejected to being rejected 
+                                                            because of one of the following reasons
+CMPL:      load_hit_dcbz                                  = load hits a dcbz or if dcache is interleaved then
+                                                            the bank is busy
+CMPL:      load_hit_stwcx                                 = load hits a stwcx
+CMPL:      load_hit_lwarx                                 = load hits a lwarx
+CMPL:      lwarx_hit_earlier_lwarx                        = lwarx hits earlier lwarx
+CMPL:      load_hit_store_diff_grp_contained_sdq_not_read = load hits a store in a different group and the
+                                                            load's address is contained by the store's
+                                                            but the store's data is not ready
+CMPL:      load_hit_store_diff_grp_overlap_not_contained  = load hit store in a different group but the load's
+                                                            address is not contained by the store's
+CMPL:      load_defers_to_prefetch                        = load  defers to a L1 touch using memory interface 
+CMPL:      store_defers_to_prefetch                       = store defers to a L1 touch using memory interface 
+CMPL:      load_hit_reload_lmq_full                       = a load miss hits in the LMQ (Load Miss Queue) but
+                                                            there are too many misses on that LMQ entry
+CMPL:      load_hit_reload_both_from_same_side            = a load miss hits in the LMQ but the load miss already
+                                                            there is from the same side
+CMPL:      load_hit_reload_store_invalidated              = a load miss hits in the LMQ but a store has
+                                                            invalidated the entry as is had newer data
+CMPL:      load_hit_reload_sector_already_came            = a load miss hits in the LMQ but it's sectors have
+                                                            already begun coming back form memory
+CMPL:      load_hit_reload_on_same_cycle                  = a load miss hits in the LMQ but the entry was
+                                                            allocated on the same cycle
+CMPL:      load_miss_congruence_class_busy                = a load misses L1 but there are too many outstanding
+                                                            misses for its congruence class
+CMPL:      load_miss_with_addr_compare_other_side_cyc     = a load miss' address matches EA bits 52-56 with
+                                                            another op in the other LSU
+CMPL:      load_miss_all_lmqs_used                        = a load miss finds all the LMQ entries used
+CMPL:      load_miss_2nd_gps_request_this_cycle_side      = a load miss tries to make a memory request but another
+                                                            op has already made a request
+CMPL:      load_issued_with_virtual_lrq                   = a load was issued with a virtual LRQ
+                                                            (Load  Reorder Queue) entry
+CMPL:      store_issued_with_virtual_srq                  = a load was issued with a virtual SRQ
+                                                            (Store Reorder Queue) entry
+CMPL:      load_miss_while_load_ntc_rejecting             = a load saw a NTC load rejecting
+CMPL: Wait_reject_fp_results_bus_busy                     = fp/vsx op rejeted due to a conflict with another op's finish
+CMPL: Wait_reject_fx_results_bus_busy                     = fx op rejeted due to a conflict with another op's finish
+CMPL: Wait_no_real_lrq                                    = issue hold as a load  waits for virtual LRQ to become real
+CMPL: Wait_no_real_srq                                    = issue hold as a store waits for virtual SRQ to become real
+CMPL: Wait_lmq_reject_issue_hold                          = issue hold as a LSU op after LMQ reject while wait for wakeup
+CMPL: Wait_emq_reject_issue_hold                          = issue hold as a LSU op after erat reject while wait for wakeup
+CMPL: Wait_ntc_rejecting_issue_hold                       = issue hold since next to finish op has not issued recentlly
+CMPL: Wait_load_miss                                      = waiting on a load miss
+CMPL: Wait_load_hit_reload                                = waiting on a load miss for which this load merged in
+                                                            the LMQ with (Load Hit Reload)
+CMPL: Wait_load_for_hit_store_path                        = waiting for store forward
+CMPL: Wait_lwarx_gps_complete                             = waiting for lwarx to complete
+CMPL: Wait_stwcx_gps_complete                             = waiting for stwcx to complete
+CMPL: Wait_sync_gps_complete                              = waiting for sync to complete
+CMPL: Wait_completion_serializer                          = waiting to become next to complete (NTC)
+
+............................ pipeline_empty  ............ = this mode of counting is when no groups are in the
+                                                            system (between dispatch and completion)
+CMPL: Wait_for_ifetch                                     = waiting for ifetch (cache or translation miss)
+CMPL: Wait_for_dispatch_requirements                      = waiting for dispatch requirements to be satisfied
+CMPL: Wait_for_re_ifetch_on_branch_mis_predict            = sum of waiting for a re-ifetch after a branch 
+                                                            mispredict flush for one of these branch types
+                                                            (can include subsequent cache or translation miss)
+CMPL:    unconditional_immediate                          = unconditional immediate
+CMPL:    conditional_immediate                            = conditional immediate
+CMPL:    unconditional_link                               = unconditional link
+CMPL:    conditional_link                                 = conditional link
+CMPL:    unconditional_count                              = unconditional count
+CMPL:    conditional_count                                = conditional count
+CMPL: Wait_for_re_ifetch_on_other_flushes                 = sum of waiting for a re-ifetch after one of the
+                                                            following types of flushes
+                                                            (can include subsequent cache or translation miss)
+CMPL:    load_hit_store_same_grp_overlap_or_no_sdq        = load hit store in the same group with address not
+                                                            contained or store data was not ready
+CMPL:    load_value_mispredict                            = misaligned store flush
+CMPL:    store_hit_load_same_grp                          = store hit load in the same group
+CMPL:    store_hit_load_diff_grp                          = store hit load different group
+CMPL:    lwarx_hits_later_load_same_line                  = lwarx hits later load in the same line
+CMPL:    lwarx_hits_later_lwarx                           = lwarx hits older lwarx
+CMPL:    isync_on_context_switch                          = isync flushed due to seeing a context switch
+CMPL:    flush_misalligned_load                           = misaligned load
+
+............................ pipeline_refill ............ = this mode of counting is when there is a group waiting
+                                                            to complete but there are no stall
+                                                            reasons for the group so the delay is simply due to
+                                                            refilling the pipeline
+CMPL: No_wait_after_dispatch_grp                          = sum of the below reasons (basically the last reason
+                                                            before this group became NTC)
+CMPL:    trace_start                                      = initial startup (includes icache misses or i-translation
+                                                            misses suffered by the first group)
+CMPL:    ifetch_miss_and..                                = refilling after ifetch miss, translation miss or spr
+                                                            scorebaording
+CMPL:    br_wrong_guess_flushes                           = refilling after a mispredict branch flush
+CMPL:    all_non_branch_flushes                           = refilling after all other flushes (LSU,sync...)
+CMPL:    logjam                                           = refilling due to the decode pipe being held due to a
+                                                            dispatch hold by another group
+CMPL:    spr_reader_waits_for_writer_dispatched           = refilling due to a SPR reader who had to wait at dispatch
+                                                            for a writer to finish
+CMPL:    isync_dispatched                                 = refilling after dispatching an isync
+CMPL:    sync_dispatched                                  = refilling after dispatching a sync
+CMPL:    other_waits_at_dispatch_for_req                  = refilling due to another group being held at dispatch
+                                                            waiting for requirements
+
+CMPL: Complete_current_grp                                = every cycle in which a group completed is counted here
+CMPL: CPI----------------------------------- X  inst Y    = X = CPI and Y = number of architected instructions completed
+CMPL: Total_internal_inst                    W  time Z    = W = internal op count and Z = total number of cycles executed
+
+
+
+
+
+IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL
+
+ Completion_Unit_CPI_STACK___________________________________CPI________CYC 
+ _________________________________________________________________________
+
+............................. pipeline_contention..............................
+ CMPL: Wait_for_dispatch_requirements                      0.10000     499965
+ CMPL: Wait_for_execution_unit                             0.02643     132145
+ CMPL:      cr_unit/vmx_unit                                 0.00000          0
+ CMPL:      br_unit                                          0.00000          5
+ CMPL:      fpu_unit                                         0.00375      18772
+ CMPL:      fxu_unit                                         0.00004        218
+ CMPL:      lsu_unit                                         0.02263     113150
+ CMPL: Wait_for_sources                                    0.30196    1509716
+ CMPL:      cant_use_dispatch_bypass                         0.06956     347773
+ CMPL:      written_by_br                                    0.00000          0
+ CMPL:      written_by_cr                                    0.00000          0
+ CMPL:      written_by_fp                                    0.19722     986048
+ CMPL:      written_by_fp_load                               0.00000          0
+ CMPL:      written_by_fx                                    0.00018        910
+ CMPL:      written_by_fx_store_agen                         0.00317      15847
+ CMPL:      written_by_fx_store_data                         0.00000          0
+ CMPL:      written_by_fx_load                               0.02774     138675
+ CMPL:      written_by_vmx                                   0.00409      20463
+ CMPL: Wait_for_serializer_to_be_next_group                0.00000          0
+ CMPL: Wait_for_next_to_finish_to_issue                    0.00446      22314
+ CMPL: Wait_store_data_wait_after_agen_issue               0.00000          0
+ CMPL: Wait_for_agen                                       0.00067       3341
+ CMPL:      result_bus_busy_store                            0.00000          0
+ CMPL:      result_bus_busy_load                             0.00063       3128
+ CMPL:      erat_dir_update_store                            0.00002        119
+ CMPL:      erat_dir_update_load                             0.00002         94
+ CMPL:      L1D_dir_update_load_store                        0.00000          0
+ CMPL:      retry_issue_constraints                          0.00000          0
+ CMPL: Wait_for_translation                                0.00055       2743
+ CMPL:      erat_miss_store                                  0.00034       1722
+ CMPL:      tlb_miss_store                                   0.00000          0
+ CMPL:      erat_miss_load                                   0.00020       1021
+ CMPL:      tlb_miss_load                                    0.00000          0
+ CMPL:      erat_miss_store_guarded                          0.00000          0
+ CMPL:      tlb_miss_store_guarded                           0.00000          0
+ CMPL:      erat_miss_load_guarded                           0.00000          0
+ CMPL:      tlb_miss_load_guarded                            0.00000          0
+ CMPL: Wait_load_rejected                                  0.01909      95436
+ CMPL:      load_hit_dcbz                                    0.00000          0
+ CMPL:      load_hit_stwcx                                   0.00000          0
+ CMPL:      load_hit_lwarx                                   0.00000          0
+ CMPL:      lwarx_hit_earlier_lwarx                          0.00000          0
+ CMPL:      load_hit_store_diff_grp_contained_sdq_not_ready  0.00001         41
+ CMPL:      load_hit_store_diff_grp_overlap_not_contained    0.01589      79471
+ CMPL:      load_defers_to_prefetch                          0.00000          0
+ CMPL:      store_defers_to_prefetch                         0.00000          0
+ CMPL:      load_hit_reload_lmq_full                         0.00012        603
+ CMPL:      load_hit_reload_both_from_same_side              0.00000          0
+ CMPL:      load_hit_reload_store_invalidated                0.00000          0
+ CMPL:      load_hit_reload_sector_already_came              0.00000          0
+ CMPL:      load_hit_reload_on_same_cycle                    0.00000          0
+ CMPL:      load_miss_congruence_class_busy                  0.00000          0
+ CMPL:      load_miss_with_addr_compare_other_side_cyc       0.00000          0
+ CMPL:      load_miss_all_lmqs_used                          0.00306      15321
+ CMPL:      load_miss_2nd_gps_request_this_cycle_side        0.00000          0
+ CMPL:      load_issued_with_virtual_lrq                     0.00000          0
+ CMPL:      store_issued_with_virtual_srq                    0.00000          0
+ CMPL:      load_miss_while_load_ntc_rejecting               0.00000          0
+ CMPL: Wait_reject_fp_results_bus_busy                     0.00000          1
+ CMPL: Wait_reject_fx_results_bus_busy                     0.00000          0
+ CMPL: Wait_no_real_lrq                                    0.00000          0
+ CMPL: Wait_no_real_srq                                    0.00158       7913
+ CMPL: Wait_lmq_reject_issue_hold                          0.00012        592
+ CMPL: Wait_emq_reject_issue_hold                          0.00002        103
+ CMPL: Wait_ntc_rejecting_issue_hold                       0.00000          0
+ CMPL: Wait_load_miss                                      0.48404    2420101
+ CMPL: Wait_load_hit_reload                                0.00000          0
+ CMPL: Wait_load_for_hit_store_path                        0.00001         59
+ CMPL: Wait_lwarx_gps_complete                             0.00000          0
+ CMPL: Wait_stwcx_gps_complete                             0.00000          0
+ CMPL: Wait_sync_gps_complete                              0.00000          0
+ CMPL: Wait_completion_serializer                          0.00000          0
+
+............................. pipeline_empty  ..............................
+ CMPL: Wait_for_ifetch_in_pipe                             0.00137       6852
+ CMPL: Wait_for_ifetch_in_pipe_stall                       0.00108       5376
+ CMPL: Wait_for_ifetch_translate                           0.00000          0
+ CMPL: Wait_for_ifetch_miss                                0.00070       3516
+ CMPL: Wait_for_ifetch_other                               0.00000          0
+ CMPL: Wait_for_re_ifetch_on_branch_mis_predict            0.00036       1792
+ CMPL:    unconditional_immediate                             0.00000          0
+ CMPL:    conditional_immediate                               0.00036       1792
+ CMPL:    unconditional_link                                  0.00000          0
+ CMPL:    conditional_link                                    0.00000          0
+ CMPL:    unconditional_count                                 0.00000          0
+ CMPL:    conditional_count                                   0.00000          0
+ CMPL: Wait_for_re_ifetch_on_other_flushes                 0.00000         17
+ CMPL:    load_hit_store_same_grp_overlap_or_no_sdq           0.00000         17
+ CMPL:    mis_store+scv_etc                                   0.00000          0
+ CMPL:    store_hit_load_same_grp                             0.00000          0
+ CMPL:    store_hit_load_diff_grp                             0.00000          0
+ CMPL:    lwarx_hits_later_load_same_line                     0.00000          0
+ CMPL:    lwarx_hits_later_lwarx                              0.00000          0
+ CMPL:    isync_on_context_switch                             0.00000          0
+ CMPL:    flush_misalligned_load                              0.00000          0
+
+............................. pipeline_refill ..............................
+ CMPL: No_wait_after_dispatch_grp                          0.26354    1317651
+ CMPL:    trace_start                                         0.00009        433
+ CMPL:    ifetch_miss_and..                                   0.09446     472291
+ CMPL:    br_wrong_guess_flushes                              0.00171       8536
+ CMPL:    all_non_branch_flushes                              0.00000          9
+ CMPL:    logjam                                              0.16535     826718
+ CMPL:    spr_reader_waits_for_writer_dispatched              0.00000          0
+ CMPL:    isync_dispatched                                    0.00000          0
+ CMPL:    sync_dispatched                                     0.00000          0
+ CMPL:    other_waits_at_dispatch_for_req                     0.00000          0
+
+ CMPL: Complete_current_grp                                0.00000          0
+ CMPL: CPI---------------------------------------          1.20597 inst  4999804
+
+ CMPL: Total_internal_inst                                 5296802 time  6029634
+
+
+ CMPL: Old Complete_current_grp                                0.23088    1154368
+
+IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL - IBM CONFIDENTIAL
+
+ arch inst 5000001  time 6030091.000000 
+ trace 0 lpar 0 completed arch 5000001 int 5297021 
+   cumulative total lines from mem  5122 core0 5122 
+   cumulative total lines to   mem  718 core0 718 
+   split CPI ------------------------------------          2.31980 
+ CMPL: CPI---------------------------------------          1.20602 
+ trace ended on max inst 5000000 at time 6030092.000000
