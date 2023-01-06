@@ -13,7 +13,7 @@ gem5spec目录已有checkpoint数据
 ```bash
 source auto_cmpl.sh
 ```
-
+- gem5 restore checkpoint 的配置项在TRACE.mk中# gem5 ckp 配置部分
 
 - 执行restore ckp, -j指定并行数, 执行完后会自动进行对比，得到与gem5与M1对比的Excel
     - 全部测例

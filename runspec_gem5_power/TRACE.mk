@@ -40,11 +40,11 @@ pipeARGS        =
 # gem5 参数
 GEM5_RESTORE_OPT =
 # se.py 参数
-CPU_CLOCK = 4GHz
+CPU_CLOCK = 4.0GHz
 CPU_TYPE = P8CPU
-CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128 --topology=Crossbar
+CACHE_OPT += --ruby --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=128
 # se.py 其余参数
-GEM5_CKP_PY_OPT +=
+GEM5_CKP_PY_OPT += --ruby-clock=4.0GHz --mem-size=16384MB --mem-type=DDR4_2933_16x4 --enable-mem-param-override=True --dram-addr-mapping=RoCoRaBaCh --dram-max-accesses-per-row=16 --dram-page-policy close_adaptive --dram-read-buffer-size=128 --dram-write-buffer-size=64 --mc-be-latency=10ns --mc-fe-latency=35ns --mc-mem-sched-policy=frfcfs
 
 TIME = /usr/bin/time --format="Consumed Time: %E  --  $$(basename $${PWD})"
 
