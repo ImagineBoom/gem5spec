@@ -339,7 +339,7 @@ def grep_cache_data_M1(benchmark="",simpt="",gem5spec_M1_v0_path="./data/M1/gem5
 
                     # L1D
                     _L1Dcache_miss_rate = re.search(
-                        r'(?P<itemName>any load will hit in L1 \(includes rejected loads\))\s+=\s+(?P<itemValue>((\-|\+)?\d+(\.\d+)?))\s+(?P<itemComments>.*)',
+                        r'(?P<itemName>a load that has never been rejected will hit in L1)\s+=\s+(?P<itemValue>((\-|\+)?\d+(\.\d+)?))\s+(?P<itemComments>.*)',
                         line)
                     if _L1Dcache_miss_rate:
                         L1Dcache_miss_rate = 1-float(_L1Dcache_miss_rate.group("itemValue"))
