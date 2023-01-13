@@ -2,7 +2,7 @@
 version="1.0.0"
 
 #解析命令行选项<optstring>及参数<parameters>
-echo ${@}
+#echo ${@}
 getopt_cmd=$(getopt \
 -o aiqrphvVc:b:e:j: \
 --long m1,gem5,spec2017,myexe:,\
@@ -17,7 +17,7 @@ version,verbose,help \
 
 [ $? -ne 0 ] && exit 1
 eval set -- "${getopt_cmd}"
-echo ${getopt_cmd}
+#echo ${getopt_cmd}
 source ./scripts/params.sh
 source ./scripts/utils.sh
 source ./scripts/job_control.sh

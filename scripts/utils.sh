@@ -489,7 +489,7 @@ func_with_restore_case(){
     fi
     # 运行前 git diff 
     make git_diff -C runspec_gem5_power >/dev/null 2>&1 
-    
+    make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
     if [[ $gem5_ckp_py_opt == "" ]];then
       make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} >>nohup.out 2>&1
     else
@@ -576,6 +576,7 @@ func_with_restore_all_benchmarks(){
 
   # 运行前 git diff 
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+  make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
 
   for FILE in ${bm[@]}
   do
@@ -677,6 +678,7 @@ func_with_restore_all_benchmarks_n2(){
 
   # 运行前 git diff 
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+  make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
 
   for FILE in ${bm[@]}
   do
@@ -762,6 +764,7 @@ func_with_restore_all_benchmarks_n4(){
 
   # 运行前 git diff 
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+  make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
 
   for FILE in ${bm[@]}
   do
@@ -845,8 +848,9 @@ func_with_restore_all_benchmarks_n8(){
   parallel_jobs=${4}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
 
-  # 运行前 git diff 
+  # 运行前 git diff
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+  make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
 
   for FILE in ${bm[@]}
   do
