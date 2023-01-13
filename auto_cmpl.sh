@@ -1,7 +1,8 @@
 source ./scripts/params.sh
 
 cmd_gem5_m1_control(){
-  for option in "${COMP_WORDS[@]}";do
+  for (( i=0;i<${#COMP_WORDS[@]}-1;i++ ));do
+    option=${COMP_WORDS[i]}
     case "${option}" in
       --m1)
         is_m1=true
@@ -51,6 +52,18 @@ cmd_gem5_m1_control(){
       --restore_all)
         with_restore_all=true
         ;;
+      --restore_case)
+        with_restore_case=true
+        ;;
+      --restore_all_2)
+        with_restore_all_2=true
+        ;;
+      --restore_all_4)
+        with_restore_all_4=true
+        ;;
+      --restore_all_8)
+        with_restore_all_8=true
+        ;;
       --cpi_all)
         with_cpi_all=true
         ;;
@@ -59,6 +72,16 @@ cmd_gem5_m1_control(){
         ;;
       --not_gen_txt)
         with_gen_txt=false
+        ;;
+      -j)
+        if [[ ${COMP_WORDS[i+1]} =~ ^[0-9]+$ ]];then
+          parallel_jobs=${COMP_WORDS[i+1]}
+        fi
+        ;;
+      --build_gem5_j)
+        if [[ ${COMP_WORDS[i+1]} =~ ^[0-9]+$ ]];then
+          build_gem5_j=${COMP_WORDS[i+1]}
+        fi
         ;;
       *)
         ;;
@@ -161,9 +184,9 @@ cmd_m1_myexe(){
   elif [[ $pre == -p || $pre == --pipe_view ]]; then
     options="--gen_txt --not_gen_txt"
     #缺省模式
-#  elif [[ $with_all_benchmarks == false && $with_entire_all_benchmarks == false && $with_all_steps == false && $with_itrace == false && $with_qtrace == false && $with_run_timer == false && $with_pipe_view == false ]];then
-#    options="-b -e"
-#    COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
+    #  elif [[ $with_all_benchmarks == false && $with_entire_all_benchmarks == false && $with_all_steps == false && $with_itrace == false && $with_qtrace == false && $with_run_timer == false && $with_pipe_view == false ]];then
+    #    options="-b -e"
+    #    COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
   else
     cmd_m1_steps
   fi
@@ -175,7 +198,7 @@ cmd_m1_spec2017(){
   local pre=${COMP_WORDS[COMP_CWORD-1]};
   cmd_gem5_m1_control
   if [[ $pre == "--spec2017" ]];then
-    options="502 999 538 523 557 526 525 511 500 519 544 503 520 554 507 541 505 510 531 521 549 508 548 527 --restore_all"
+    options="--restore_all"
   elif [[ $pre == "--all_benchmarks" ]];then
     options="--q_jump --q_convert --r_pipe_begin --r_pipe_end"
   elif [[ $pre == "--entire_all_benchmarks" ]]; then
@@ -195,9 +218,9 @@ cmd_m1_spec2017(){
   elif [[ $pre == -p || $pre == --pipe_view ]]; then
     options=""
     #缺省模式
-#  elif [[ $with_all_benchmarks == false && $with_entire_all_benchmarks == false && $with_all_steps == false && $with_itrace == false && $with_qtrace == false && $with_run_timer == false && $with_pipe_view == false ]];then
-#    options="-b -e"
-#    COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
+    #  elif [[ $with_all_benchmarks == false && $with_entire_all_benchmarks == false && $with_all_steps == false && $with_itrace == false && $with_qtrace == false && $with_run_timer == false && $with_pipe_view == false ]];then
+    #    options="-b -e"
+    #    COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
   else
     cmd_m1_steps
   fi
@@ -214,10 +237,24 @@ cmd_gem5_spec2017(){
     options="502 999 538 523 557 526 525 511 500 519 544 503 520 554 507 541 505 510 531 521 549 508 548 527"
   elif [[ $pre == [0-9][0-9][0-9] ]]; then
     if [[ ${COMP_WORDS[COMP_CWORD-2]} == "--restore_case" ]];then
-      options="-j"
+      options="-j --build_gem5_j"
     fi
-  elif [[ $pre == "--restore_all" || $pre == "--restore_all_2" || $pre == "--restore_all_4" || $pre == "--restore_all_8" ]]; then
-    options="-j"
+  elif [[ $with_restore_case || $with_restore_all || $with_restore_all_2 || $with_restore_all_4 || $with_restore_all_8 ]]; then
+    options="-j --build_gem5_j"
+    for (( i=0;i<${#COMP_WORDS[@]}-1;i++ ));do
+      option=${COMP_WORDS[i]}
+      if [[ $option == -j && $parallel_jobs == -1 ]];then
+        # echo 1
+        options=""
+      elif [[ $option == --build_gem5_j && $build_gem5_j == -1 ]];then
+        # echo 2
+        options=""
+      else
+        # echo $build_gem5_j
+        options=${options/${option}/}
+      fi
+    done 
+
   else
     options=""
   fi

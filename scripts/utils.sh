@@ -487,6 +487,9 @@ func_with_restore_case(){
     else
       mkdir -p ./data/gem5/"${begin_time}-${label}"/"${FILE}"
     fi
+    # 运行前 git diff 
+    make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+    
     if [[ $gem5_ckp_py_opt == "" ]];then
       make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} >>nohup.out 2>&1
     else
@@ -538,6 +541,7 @@ func_with_restore_case(){
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
     mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
     mv ./ckps.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
   elif [[ $is_m1 == true ]]; then
     func_collect_handle_all_m1_restore_data
     for FILE in ${bm[@]}
@@ -570,6 +574,9 @@ func_with_restore_all_benchmarks(){
   date1=$(date +"%Y-%m-%d %H:%M:%S")
   echo > ./ckps.log
 
+  # 运行前 git diff 
+  make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+
   for FILE in ${bm[@]}
   do
     read -u6
@@ -580,7 +587,7 @@ func_with_restore_all_benchmarks(){
           mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
         else
           mkdir -p ./data/gem5/"${begin_time}-${label}"/"${FILE}"
-        fi
+        fi      
         if [[ $gem5_ckp_py_opt == "" ]];then
           make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} >>nohup.out 2>&1
         else
@@ -638,6 +645,7 @@ func_with_restore_all_benchmarks(){
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
     mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
     mv ./ckps.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   elif [[ $is_m1 == true ]]; then
     func_collect_handle_all_m1_restore_data
@@ -666,6 +674,10 @@ func_with_restore_all_benchmarks_n2(){
   WORK_DIR=${3}
   parallel_jobs=${4}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
+
+  # 运行前 git diff 
+  make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+
   for FILE in ${bm[@]}
   do
     read -u6
@@ -747,6 +759,10 @@ func_with_restore_all_benchmarks_n4(){
   WORK_DIR=${3}
   parallel_jobs=${4}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
+
+  # 运行前 git diff 
+  make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+
   for FILE in ${bm[@]}
   do
     read -u6
@@ -828,6 +844,10 @@ func_with_restore_all_benchmarks_n8(){
   WORK_DIR=${3}
   parallel_jobs=${4}
   date1=$(date +"%Y-%m-%d %H:%M:%S")
+
+  # 运行前 git diff 
+  make git_diff -C runspec_gem5_power >/dev/null 2>&1 
+
   for FILE in ${bm[@]}
   do
     read -u6

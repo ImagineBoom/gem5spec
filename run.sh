@@ -2,12 +2,12 @@
 version="1.0.0"
 
 #解析命令行选项<optstring>及参数<parameters>
-
+echo ${@}
 getopt_cmd=$(getopt \
 -o aiqrphvVc:b:e:j: \
--l m1,gem5,spec2017:,myexe:,\
+--long m1,gem5,spec2017,myexe:,\
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,gen_txt,not_gen_txt,\
-all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gem5_ckp_py_opt:,timeout:,\
+all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gem5_ckp_py_opt:,timeout:,build_gem5_j:,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
 restore_case:,restore_all,restore_all_2,restore_all_4,restore_all_8,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,label:,\
 control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
@@ -17,7 +17,7 @@ version,verbose,help \
 
 [ $? -ne 0 ] && exit 1
 eval set -- "${getopt_cmd}"
-
+echo ${getopt_cmd}
 source ./scripts/params.sh
 source ./scripts/utils.sh
 source ./scripts/job_control.sh
@@ -236,8 +236,21 @@ case "${1#*=}" in
           shift 1
           ;;
         -j)
-          parallel_jobs=${2#*=}
-          shift 2
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            parallel_jobs=${2#*=}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;
+        --build_gem5_j)
+          with_build_gem5=true
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            build_gem5_j=${2}
+            shift 2
+          else
+            shift 1
+          fi
           ;;
         --gem5_ckp_py_opt)
           gem5_ckp_py_opt=${2}
@@ -266,8 +279,21 @@ case "${1#*=}" in
     while [ -n "${1#*=}" ]; do
       case "${1#*=}" in
         -j)
-          parallel_jobs=${2#*=}
-          shift 2
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            parallel_jobs=${2#*=}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;
+        --build_gem5_j)
+          with_build_gem5=true
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            build_gem5_j=${2}
+            shift 2
+          else
+            shift 1
+          fi
           ;;
         --gem5_ckp_py_opt)
           gem5_ckp_py_opt=${2}
@@ -280,7 +306,7 @@ case "${1#*=}" in
         --timeout)
           timeout=${2}
           shift 2
-          ;;
+          ;;       
         --)
           shift
           ;;
@@ -294,50 +320,95 @@ case "${1#*=}" in
   --restore_all_2)
     with_restore_all_2=true
     shift
-    case "${1#*=}" in
-      -j)
-        parallel_jobs=${2#*=}
-        shift 2
-        ;;
-      --)
-        shift
-        ;;
-      *)
-        exit 1
-        ;;
-    esac
+    while [ -n "${1#*=}" ]; do
+      case "${1#*=}" in
+        -j)
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            parallel_jobs=${2#*=}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;
+        --build_gem5_j)
+          with_build_gem5=true
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            build_gem5_j=${2}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;      
+        --)
+          shift
+          ;;
+        *)
+          exit 1
+          ;;
+      esac
+    done
     ;;
   --restore_all_4)
     with_restore_all_4=true
     shift
-    case "${1#*=}" in
-      -j)
-        parallel_jobs=${2#*=}
-        shift 2
-        ;;
-      --)
-        shift
-        ;;
-      *)
-        exit 1
-        ;;
-    esac
+    while [ -n "${1#*=}" ]; do
+      case "${1#*=}" in
+        -j)
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            parallel_jobs=${2#*=}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;
+        --build_gem5_j)
+          with_build_gem5=true
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            build_gem5_j=${2}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;      
+        --)
+          shift
+          ;;
+        *)
+          exit 1
+          ;;
+      esac
+    done
     ;;
   --restore_all_8)
     with_restore_all_8=true
     shift
-    case "${1#*=}" in
-      -j)
-        parallel_jobs=${2#*=}
-        shift 2
-        ;;
-      --)
-        shift
-        ;;
-      *)
-        exit 1
-        ;;
-    esac
+    while [ -n "${1#*=}" ]; do
+      case "${1#*=}" in
+        -j)
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            parallel_jobs=${2#*=}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;
+        --build_gem5_j)
+          with_build_gem5=true
+          if [[ ${2} =~ ^[0-9]+$ ]];then
+            build_gem5_j=${2}
+            shift 2
+          else
+            shift 1
+          fi
+          ;;     
+        --)
+          shift
+          ;;
+        *)
+          exit 1
+          ;;
+      esac
+    done
     ;;
   --gen_restore_compare_excel)
     with_func_gen_restore_compare_excel=true
@@ -437,7 +508,7 @@ elif [[ $is_gem5 == true ]]; then
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY])
+          [yY]|"")
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -453,6 +524,11 @@ elif [[ $is_gem5 == true ]]; then
         exit 1
       fi
       func_set_job_n_default ${add_job}
+
+      # 运行前 build gem5
+      if [[ $with_build_gem5 == true ]];then
+        make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
+      fi
 
       if [[ $gem5_ckp_py_opt == "" ]];then
         #echo $timeout
@@ -478,7 +554,7 @@ elif [[ $is_gem5 == true ]]; then
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY])
+          [yY|""])
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -495,6 +571,11 @@ elif [[ $is_gem5 == true ]]; then
       fi
       func_set_job_n_default ${add_job}
 
+      # 运行前 build gem5
+      if [[ $with_build_gem5 == true ]];then
+        make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
+      fi
+      
       if [[ $gem5_ckp_py_opt == "" ]];then
         #echo $timeout
         #echo "489, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
@@ -518,7 +599,7 @@ elif [[ $is_gem5 == true ]]; then
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY])
+          [yY|""])
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -534,6 +615,12 @@ elif [[ $is_gem5 == true ]]; then
         exit 1
       fi
       func_set_job_n_default ${add_job}
+
+      # 运行前 build gem5
+      if [[ $with_build_gem5 == true ]];then
+        make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
+      fi
+            
       (func_with_restore_all_benchmarks_n2 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_restore_all_4 == true ]]; then
       # echo "PIDIS $$"
@@ -549,7 +636,7 @@ elif [[ $is_gem5 == true ]]; then
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY])
+          [yY|""])
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -565,6 +652,12 @@ elif [[ $is_gem5 == true ]]; then
         exit 1
       fi
       func_set_job_n_default ${add_job}
+
+      # 运行前 build gem5
+      if [[ $with_build_gem5 == true ]];then
+        make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
+      fi
+      
       (func_with_restore_all_benchmarks_n4 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_restore_all_8 == true ]]; then
       # echo "PIDIS $$"
@@ -580,7 +673,7 @@ elif [[ $is_gem5 == true ]]; then
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY])
+          [yY|""])
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -596,6 +689,12 @@ elif [[ $is_gem5 == true ]]; then
         exit 1
       fi
       func_set_job_n_default ${add_job}
+
+      # 运行前 build gem5
+      if [[ $with_build_gem5 == true ]];then
+        make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
+      fi
+            
       (func_with_restore_all_benchmarks_n8 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)

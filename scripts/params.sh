@@ -43,9 +43,12 @@ with_kill_restore_all=false
 with_control_gem5=false
 with_control_m1=false
 with_func_gen_restore_compare_excel=false
-parallel_jobs=5
+parallel_jobs=-1
 # ckp超时判定,seconds
 timeout=7200
+#是否从编译开始
+with_build_gem5=false
+build_gem5_j=-1
 
 #m1需要的变量
 #itrace

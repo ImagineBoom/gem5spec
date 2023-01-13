@@ -1,6 +1,5 @@
 DATE = $(shell date +%Y%m%d%H%M%S)
-GEM5_REPO_PATH ?= $(shell awk '$$1=="GEM5_REPO_PATH"{print $$3}' Makefile.inc)
-
+include ./Makefile.inc
 .PHONY: all
 
 all: help
@@ -1105,3 +1104,11 @@ classify_result:
 	@sed -i 's/ /,/' ./Sort_All_case_weightedCPI.csv;
 	@sed -i '1i "SpecCase#","Checkpoints#"' ./Sort_All_case_weightedCPI.csv;
 	@gedit ./Sort_All_case_weightedCPI.csv &
+
+git_diff:
+	@git -C $(GEM5_REPO_PATH) log --max-count=1 > ./git_diff.log
+	@echo >> ./git_diff.log
+	@git -C $(GEM5_REPO_PATH) diff >> ./git_diff.log
+
+build_gem5: git_diff
+	scons -C $(GEM5_REPO_PATH) $(GEM5) -j $(BUILD_GEM5_J) 1>/dev/null
