@@ -474,10 +474,21 @@ def data_pre(M1_source_csv_file=M1_ckp_results_csv, gem5_source_csv_file=gem5_ck
     sheet1_CPI=workbook2.create_sheet("summaryCPI",1)
     sheet2_CKPs=workbook2.create_sheet("CKPs",3)
     sheet3=workbook2.create_sheet("summaryCMR",2)
+    sheet4=workbook2.create_sheet("gitLog",4)
     workbook2.save(gen_file)
 
     copy_sheet("./temp.xlsx",gen_file,"Sheet1","CKPs")
     runcmd('rm -rf ./temp.xlsx')
+
+def getGitLog(sheet,gitFile="./runspec_gem5_power/git_diff.log"):
+    try:
+        with open(f'{gitFile}', 'r+', encoding='utf-8') as f:
+            for row,line in enumerate(f.readlines(),start=1):
+                sheet.cell(row,column_index_from_string("A")).value=line
+    except IOError:
+        # print(f"file exception: {gem5spec_path}/runspec_gem5_power/git_diff.log")
+        pass
+
 
 def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta/gem5_statistics_result_template.xlsx"):
     M1_gem5_ckp_class = namedtuple('M1_gem5_ckp_class',
@@ -490,6 +501,7 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     sheet1_CPI=workbook["summaryCPI"]
     sheet2_CKPs=workbook["CKPs"]
     sheet3_cache=workbook["summaryCMR"]
+    sheet4_git=workbook["gitLog"]
     # 处理sheet0
 
     # 处理sheet1_CPI
@@ -534,6 +546,9 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
     bm_end_row=0
     bm=""
     # print(sheet2_CKPs.max_row)
+
+    # 处理sheet4 git
+    getGitLog(sheet4_git)
 
     # 数据处理
     bm_begin_row=2
