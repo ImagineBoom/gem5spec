@@ -38,7 +38,7 @@ func_cp_merge(){
   [502]="502.gcc_r" [999]="999.specrand_ir" [538]="538.imagick_r" [523]="523.xalancbmk_r" [557]="557.xz_r" [526]="526.blender_r" [525]="525.x264_r" [511]="511.povray_r" \
   [500]="500.perlbench_r" [519]="519.lbm_r" [544]="544.nab_r" [503]="503.bwaves_r" [520]="520.omnetpp_r" [554]="554.roms_r" [507]="507.cactuBSSN_r" [541]="541.leela_r" \
   [505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
-  TARGET="/home/lizongping/prj/data/gem5spec_5m_x86_backup/runspec_gem5_power"
+  TARGET="/home/lizongping/prj/data/runspec_gem5_power"
   rm -rf ./runspec_gem5_power/*r/*.merge
   cp -r ${TARGET}/${bm[502]}/${bm[502]}.merge ./runspec_gem5_power/${bm[502]}/${bm[502]}.merge
   cp -r ${TARGET}/${bm[999]}/${bm[999]}.merge ./runspec_gem5_power/${bm[999]}/${bm[999]}.merge
@@ -72,7 +72,7 @@ func_cp_simpts_weights(){
   [502]="502.gcc_r" [999]="999.specrand_ir" [538]="538.imagick_r" [523]="523.xalancbmk_r" [557]="557.xz_r" [526]="526.blender_r" [525]="525.x264_r" [511]="511.povray_r" \
   [500]="500.perlbench_r" [519]="519.lbm_r" [544]="544.nab_r" [503]="503.bwaves_r" [520]="520.omnetpp_r" [554]="554.roms_r" [507]="507.cactuBSSN_r" [541]="541.leela_r" \
   [505]="505.mcf_r" [510]="510.parest_r" [531]="531.deepsjeng_r" [521]="521.wrf_r" [549]="549.fotonik3d_r" [508]="508.namd_r" [548]="548.exchange2_r" [527]="527.cam4_r")
-  TARGET="/home/lizongping/prj/data/gem5spec_5m_x86_backup/runspec_gem5_power"
+  TARGET="/home/lizongping/prj/data/runspec_gem5_power"
   rm -rf ./runspec_gem5_power/*r/*.simpts ./runspec_gem5_power/*r/*.weights
   cp -r ${TARGET}/${bm[502]}/${bm[502]}.simpts ./runspec_gem5_power/${bm[502]}/${bm[502]}.simpts
   cp -r ${TARGET}/${bm[999]}/${bm[999]}.simpts ./runspec_gem5_power/${bm[999]}/${bm[999]}.simpts
