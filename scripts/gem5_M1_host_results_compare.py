@@ -973,6 +973,10 @@ def gen_cmp_results(write_path="",write_name="",template_excel_path="./data/meta
                 break
 
     # 刷新sheet0
+    # M1 ckp CPI
+    for index,row_cells in enumerate(sheet0["P2:P25"],start=2):
+        for cell in row_cells:
+            cell.value="=summaryCPI!C"+str(index)
     # gem5 total ckp CPI
     for index,row_cells in enumerate(sheet0["N2:N25"],start=2):
         for cell in row_cells:
