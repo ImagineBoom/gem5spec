@@ -567,8 +567,8 @@ func_with_restore_case(){
     # 每运行完一个benchmark做出统计
     # wait
     func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false ${timeout}
-    opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
-    ${opt} >/dev/null 2>&1
+    # opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
+    # ${opt} >/dev/null 2>&1
   elif [[ $is_m1 == true ]]; then
     mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
     opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
@@ -658,7 +658,7 @@ func_with_restore_all_benchmarks(){
         else
           mkdir -p ./data/gem5/"${begin_time}-${label}"/"${FILE}"
         fi      
-        if [[ $gem5_ckp_py_opt == "" ]];then
+        if [[ $gem5_ckp_py_opt == "" ]]; then
           make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} >>nohup.out 2>&1
         else
           make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} GEM5_CKP_PY_OPT="${gem5_ckp_py_opt}" >>nohup.out 2>&1
@@ -666,8 +666,8 @@ func_with_restore_all_benchmarks(){
         # 每运行完一个benchmark做出统计
         # wait
         func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false ${timeout}
-        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
-        ${opt} >/dev/null 2>&1
+        # opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
+        # ${opt} >/dev/null 2>&1
       elif [[ $is_m1 == true ]]; then
         mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
         #opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
@@ -678,7 +678,7 @@ func_with_restore_all_benchmarks(){
   # wait
 
   # 检测是否被中断，如果被中断则不存在FLOODGATE，程序退出
-  if [[ ! -p ${FLOODGATE} ]];then
+  if [[ ! -p ${FLOODGATE} ]]; then
     exit 1
   fi
   if [[ $is_m1 == true ]]; then
