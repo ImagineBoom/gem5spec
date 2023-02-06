@@ -604,7 +604,7 @@ func_with_restore_case(){
     # 备份数据
     mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
     find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
-    # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
+    cp -r ./runspec_gem5_power/"${FILE}"/output*/ ./data/gem5/"${begin_time}"/"${FILE}"
     # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
     # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
     mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
@@ -710,7 +710,7 @@ func_with_restore_all_benchmarks(){
         mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
         find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
         find ./runspec_gem5_power/"${FILE}"/ -name "*_restore_ckp*.log" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
-        # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
+        cp -r ./runspec_gem5_power/"${FILE}"/output*/ ./data/gem5/"${begin_time}"/"${FILE}"
         # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
         # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
     done
