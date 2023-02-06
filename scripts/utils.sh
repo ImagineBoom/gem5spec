@@ -344,7 +344,7 @@ func_collect_handle_all_m1_restore_data(){
         #  print FILE,"COMPLETED",FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
         #else
         #  print FILE,"UN-COMPLETED:%"sum_weight*100,FILE,"Credibility:%"cred*100,"SumWeightedCPI:"sum;
-        :
+
       }' >>each_bm_cpt_m1.csv
     echo >> each_bm_cpt_m1.csv
   done
@@ -430,6 +430,75 @@ func_detect_restore_bg(){
             echo "RUNNING: ${run_name}..."
           fi
         fi
+      done
+    else
+      break
+    fi
+  done
+}
+
+# 检查当前后台m1 restore运行情况
+func_detect_restore_bg_m1(){
+  detect_task_regex=${1}
+  is_print=${2}
+  # seconds,如果设置了timeout，则在超过timeout秒之后的ckp会被kill
+  timeout=${3}
+  if [[ ${is_print} == true ]];then
+    echo "DETECTING background tasks..."
+  fi
+
+  while : ; do
+    # kill run job
+    if [[ ${timeout} =~ ^[0-9]+$ ]];then
+      # echo "utils.sh 380"
+      ps -o pid,etime,command -u $(whoami)|grep -P "$detect_task_regex" | grep -v grep|awk '{print $1, $2, $5}'| while read pid runtime cmd
+      do
+            # echo "pid {$pid} has run {$runtime}, ${cmd}"
+
+            time_field_count=`echo $runtime | awk -F[-:] '{print NF}'`
+
+            day=0
+            hour=0
+            min=0
+            sec=0
+
+            if [[ $time_field_count == 2 ]];then
+              min=$(echo $runtime|awk '{print int(substr($0,1,2))}')
+              sec=$(echo $runtime|awk '{print int(substr($0,4,2))}')
+            elif [[ $time_field_count == 3 ]];then
+              hour=$(echo $runtime|awk '{print int(substr($0,1,2))}')
+              min=$(echo $runtime|awk '{print int(substr($0,4,2))}')
+              sec=$(echo $runtime|awk '{print int(substr($0,7,2))}')
+            elif [[ $time_field_count == 4 ]];then
+              day=$(echo $runtime|awk '{print int(substr($0,1,2))}')
+              hour=$(echo $runtime|awk '{print int(substr($0,4,2))}')
+              min=$(echo $runtime|awk '{print int(substr($0,7,2))}')
+              sec=$(echo $runtime|awk '{print int(substr($0,10,2))}')
+            fi
+
+            # echo "substring {$runtime} get day: {$day} hour: {$hour}  min: {$min} sec: {$sec}"
+
+            c=$(($day * 3600* 24+ $hour*3600 + $min * 60 + $sec))
+            #echo "运行时间（秒）: "$c
+
+            if [ "$c" -ge "$timeout" ]
+            then
+                kill ${pid} >/dev/null 2>&1
+                grep ${cmd} ./ckps.log >/dev/null || echo "${cmd} was killed {$runtime}, pid ${pid}" >> ./ckps.log 2>&1
+                # wait
+            fi
+      done
+    fi
+
+    run_names=(`ps -o pid,time,command -u $(whoami) | grep -oP "${1}" |sort -u`)
+    run_nums=(`ps -o pid,time,command -u $(whoami) | grep -P "${detect_task_regex}" | grep -v grep| awk '{print \$1}'`)
+    if [[ ${#run_nums[@]} -gt 0 ]]; then
+      :
+      sleep 1s
+      for run_name in ${run_names[@]}; do
+          if [[ ${is_print} == true ]];then
+            echo "RUNNING: ${run_name}..."
+          fi
       done
     else
       break
@@ -601,8 +670,8 @@ func_with_restore_all_benchmarks(){
         ${opt} >/dev/null 2>&1
       elif [[ $is_m1 == true ]]; then
         mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
-        opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
-        ${opt} >>nohup.out 2>&1
+        #opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
+        make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE} >>nohup.out 2>&1
       fi
     }&
   done
@@ -612,7 +681,9 @@ func_with_restore_all_benchmarks(){
   if [[ ! -p ${FLOODGATE} ]];then
     exit 1
   fi
-
+  if [[ $is_m1 == true ]]; then
+      func_detect_restore_bg_m1 "valgrind|simpoint|vgi2qt|run_timer|otimer|itrace|ScrollPipeViewer" false 172800
+  fi
   func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/[\/\w\.]+/output_ckp\d+" false ${timeout}
   echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
   date2=$(date +"%Y-%m-%d %H:%M:%S")

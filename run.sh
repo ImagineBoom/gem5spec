@@ -458,6 +458,7 @@ if [[ $is_m1 == true ]]; then
     elif [[ $with_entire_all_benchmarks == true ]]; then
       (func_with_entire_all_benchmarks >>nohup.out 2>&1 &)
     elif [[ $with_restore_all == true ]]; then
+      func_set_job_n_default 5
       (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.out 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)

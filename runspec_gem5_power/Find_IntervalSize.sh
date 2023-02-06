@@ -14,8 +14,9 @@ NUM_INSNS_TO_COLLECT=1500m
 Sum_WeightedCPI=0
 
 source ../Set_IntervalSize.sh
-source ../../scripts/thread_control.sh
-set_thread_pool "${8}"
+source ../../scripts/job_control.sh
+source ../../scripts/utils.sh
+func_set_job_pool "${8}"
 #echo >&6
 
 #if [[ ! -f ${FILE}.vgi ]];then

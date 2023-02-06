@@ -1,5 +1,5 @@
 
-#线程控制
+#任务控制
 #FLOODGATE=$1
 #FLOODGATE=./run-p8-m1/running/run.fifo
 
@@ -16,7 +16,7 @@ func_add_job(){
   (( max_jobs=origin_max_jobs+1 ))
   echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (+1)"
   if [[ -p ${FLOODGATE} ]];then
-    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+    mv "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
   fi
 }
 
@@ -38,7 +38,7 @@ func_set_job_n_default(){
     # echo "max_jobs=${max_jobs}"
   done
   if [[ -p ${FLOODGATE} ]];then
-    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+    mv "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
   fi
   echo "max_jobs is set to ${max_jobs}"
 }
@@ -61,7 +61,7 @@ func_set_job_n_quiet(){
     # echo "max_jobs=${max_jobs}"
   done
   if [[ -p ${FLOODGATE} ]];then
-    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+    mv "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
   fi
 }
 
@@ -83,7 +83,7 @@ func_add_job_n(){
     # echo "max_jobs=${max_jobs}"
   done
   if [[ -p ${FLOODGATE} ]];then
-    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+    mv "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
   fi
   echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (+${add_num}"
 }
@@ -108,7 +108,7 @@ func_add_job_10(){
     max_jobs=$(find $(dirname ${FLOODGATE})/runJobPoolSize_*.log -exec basename {} \;|grep -oP "\d+")
     ((max_jobs+=1))
     if [[ -p ${FLOODGATE} ]];then
-      rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+      mv "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
     fi
   done
   echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (+10)"
@@ -130,7 +130,7 @@ func_reduce_job(){
           exit 0
         fi
         echo "max_jobs from ${origin_max_jobs} to ${max_jobs} (-1, min=1)"
-        rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+        mv "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
       fi
     else
       echo "min=1, not reduce!"
@@ -172,7 +172,7 @@ func_reduce_job_10(){
     fi
     (( max_jobs=origin_max_jobs-reduce_num ))
     echo "reduce done, max_jobs from ${origin_max_jobs} to ${max_jobs} (-${reduce_num}, min=1)"
-    rename "s/runJobPoolSize_\d+/runJobPoolSize_${max_jobs}/" "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log
+    mv "$(dirname ${FLOODGATE})"/runJobPoolSize_*.log "$(dirname ${FLOODGATE})"/runJobPoolSize_${max_jobs}.log
   }&
 }
 
