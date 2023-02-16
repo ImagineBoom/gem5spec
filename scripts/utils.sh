@@ -559,6 +559,9 @@ func_with_restore_case(){
     # 运行前 git diff 
     make git_diff -C runspec_gem5_power >/dev/null 2>&1 
     make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
+    mkdir -p ./data/gem5/"${begin_time}"/
+    cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+
     if [[ $gem5_ckp_py_opt == "" ]];then
       make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} >>nohup.out 2>&1
     else
@@ -646,6 +649,8 @@ func_with_restore_all_benchmarks(){
   # 运行前 git diff 
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
   make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
+  mkdir -p ./data/gem5/"${begin_time}"/
+  cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   for FILE in ${bm[@]}
   do
@@ -750,6 +755,8 @@ func_with_restore_all_benchmarks_n2(){
   # 运行前 git diff 
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
   make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
+  mkdir -p ./data/gem5/"${begin_time}"/
+  cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   for FILE in ${bm[@]}
   do
@@ -836,6 +843,8 @@ func_with_restore_all_benchmarks_n4(){
   # 运行前 git diff 
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
   make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
+  mkdir -p ./data/gem5/"${begin_time}"/
+  cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   for FILE in ${bm[@]}
   do
@@ -922,6 +931,8 @@ func_with_restore_all_benchmarks_n8(){
   # 运行前 git diff
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
   make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
+  mkdir -p ./data/gem5/"${begin_time}"/
+  cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   for FILE in ${bm[@]}
   do
