@@ -1067,6 +1067,33 @@ collect_all_checkpoints_data:
 	@cat ./999*/*.csv >> ./Each_case_ckp_data.csv;
 	#@gedit ./Each_case_ckp_data.csv &
 
+restore_backup_data:
+	@make clean-restore;
+	@cp -r ../data/gem5/runspec_gem5_power/500*/* ./500*/;
+	@cp -r ../data/gem5/runspec_gem5_power/502*/* ./502*/;
+	@cp -r ../data/gem5/runspec_gem5_power/505*/* ./505*/;
+	@cp -r ../data/gem5/runspec_gem5_power/520*/* ./520*/;
+	@cp -r ../data/gem5/runspec_gem5_power/523*/* ./523*/;
+	@cp -r ../data/gem5/runspec_gem5_power/525*/* ./525*/;
+	@cp -r ../data/gem5/runspec_gem5_power/531*/* ./531*/;
+	@cp -r ../data/gem5/runspec_gem5_power/541*/* ./541*/;
+	@cp -r ../data/gem5/runspec_gem5_power/548*/* ./548*/;
+	@cp -r ../data/gem5/runspec_gem5_power/557*/* ./557*/;
+	@cp -r ../data/gem5/runspec_gem5_power/503*/* ./503*/;
+	@cp -r ../data/gem5/runspec_gem5_power/507*/* ./507*/;
+	@cp -r ../data/gem5/runspec_gem5_power/508*/* ./508*/;
+	@cp -r ../data/gem5/runspec_gem5_power/510*/* ./510*/;
+	@cp -r ../data/gem5/runspec_gem5_power/511*/* ./511*/;
+	@cp -r ../data/gem5/runspec_gem5_power/519*/* ./519*/;
+	@cp -r ../data/gem5/runspec_gem5_power/521*/* ./521*/;
+	@cp -r ../data/gem5/runspec_gem5_power/526*/* ./526*/;
+	@cp -r ../data/gem5/runspec_gem5_power/527*/* ./527*/;
+	@cp -r ../data/gem5/runspec_gem5_power/538*/* ./538*/;
+	@cp -r ../data/gem5/runspec_gem5_power/544*/* ./544*/;
+	@cp -r ../data/gem5/runspec_gem5_power/549*/* ./549*/;
+	@cp -r ../data/gem5/runspec_gem5_power/554*/* ./554*/;
+	@cp -r ../data/gem5/runspec_gem5_power/999*/* ./999*/;
+
 collect_checkpoints_number:
 	@find ./*/*.merge -exec basename {} \; | awk -F"[_]" '{print $$1}' > temp1.log;
 	@sed -i '$$a Total' temp1.log;
