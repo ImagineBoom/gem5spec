@@ -50,10 +50,10 @@ GEM5_CKP_PY_OPT += --ruby-clock=4.0GHz --mem-size=16384MB --mem-type=DDR4_2933_1
 # smt se.py config
 #CPU_CLOCK = 3.0GHz
 #GEM5_CKP_PY_OPT += --ruby-clock=3.0GHz --mem-size=16384MB --mem-type=DDR5_5600_8x8 --enable-mem-param-override=True --dram-addr-mapping=RoCoRaBaCh --dram-max-accesses-per-row=16 --dram-page-policy close_adaptive --dram-read-buffer-size=64 --dram-write-buffer-size=128 --mc-be-latency=10ns --mc-fe-latency=35ns --mc-mem-sched-policy=frfcfs
-#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0
-#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=32kB --l1d_assoc=8 --l1i_size=16kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0
-#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=16kB --l1d_assoc=8 --l1i_size=8kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0
-#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=8kB --l1d_assoc=8 --l1i_size=4kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0
+#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=64kB --l1d_assoc=8 --l1i_size=32kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0 --random_replacement=0
+#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=32kB --l1d_assoc=8 --l1i_size=16kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0 --random_replacement=0
+#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=16kB --l1d_assoc=8 --l1i_size=8kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0 --random_replacement=0
+#CACHE_OPT += --ruby --mem-size=16384MB --caches --l1d_size=8kB --l1d_assoc=8 --l1i_size=4kB --l1i_assoc=8 --l2cache --l2_size=512kB --l2_assoc=8 --l3_size=8MB --l3_assoc=8 --cacheline_size=64 --network=garnet --topology=CrossbarGarnet --l2_hit_latency=3 --enable_l3prefetch=0 --random_replacement=0
 
 TIME = /usr/bin/time --format="Consumed Time: %E  --  $$(basename $${PWD})"
 
