@@ -674,9 +674,9 @@ func_with_restore_all_benchmarks(){
       echo >&6
       if [[ $is_gem5 == true ]]; then
         if [[ ${label} == ""  ]]; then
-          mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+          mkdir -p ./data/gem5/"${begin_time}"/
         else
-          mkdir -p ./data/gem5/"${begin_time}-${label}"/"${FILE}"
+          mkdir -p ./data/gem5/"${begin_time}-${label}"/
         fi      
         if [[ $gem5_ckp_py_opt == "" ]]; then
           make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} >>nohup.out 2>&1
@@ -721,23 +721,33 @@ func_with_restore_all_benchmarks(){
     # 统计数据
     if [[ ${label} == ""  ]]; then
       func_gen_restore_compare_excel "${begin_time}"
+      func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
+      cp --parent ./runspec_gem5_power/Makefile ./data/gem5/"${begin_time}"/
+      cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
+      cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
+      cp --parent ./*.log ./data/gem5/"${begin_time}"/
     else
       func_gen_restore_compare_excel "${begin_time}-${label}"
+      func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
+      cp --parent ./runspec_gem5_power/Makefile ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
     fi
     # 备份数据
-    for FILE in ${bm[@]}
-    do
-        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-        find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
-        find ./runspec_gem5_power/"${FILE}"/ -name "*_restore_ckp*.log" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
-        cp -r ./runspec_gem5_power/"${FILE}"/output*/ ./data/gem5/"${begin_time}"/"${FILE}"
-        # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-        # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-    done
-    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
-    mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
-    mv ./ckps.log ./data/gem5/"${begin_time}"/ 2>/dev/null
-    cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # for FILE in ${bm[@]}
+    # do
+    #     mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+    #     find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
+    #     find ./runspec_gem5_power/"${FILE}"/ -name "*_restore_ckp*.log" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
+    #     cp -r ./runspec_gem5_power/"${FILE}"/output*/ ./data/gem5/"${begin_time}"/"${FILE}"
+    #     # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+    #     # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
+    # done
+    # mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # mv ./ckps.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   elif [[ $is_m1 == true ]]; then
     func_collect_handle_all_m1_restore_data
