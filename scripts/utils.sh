@@ -781,7 +781,7 @@ func_with_restore_all_benchmarks_n2(){
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
   make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
   mkdir -p ./data/gem5/"${begin_time}"/
-  cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+  # cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   for FILE in ${bm[@]}
   do
@@ -789,18 +789,13 @@ func_with_restore_all_benchmarks_n2(){
     {
       echo >&6
       if [[ $is_gem5 == true ]]; then
-        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
         opt="make restore_all_2 -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
         ${opt} >>nohup.out 2>&1
         # 每运行完一个benchmark做出统计
         wait
         func_detect_restore_bg "gem5.\w+ .*-d ${WORK_DIR}/${FILE}/output_ckp\d+" false
-#        opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
-#        ${opt} >/dev/null 2>&1
-#      elif [[ $is_m1 == true ]]; then
-#        mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
-#        opt="make find_interval_size -C runspec_gem5_power/${FILE} BACKUP_PATH=$(cd "$(dirname "${0}")" && pwd )/data/M1/${begin_time}/${FILE}/ FLOODGATE=${FLOODGATE}"
-#        ${opt} >>nohup.out 2>&1
+        # opt="make cpi -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR}"
+        # ${opt} >/dev/null 2>&1
       fi
     }&
   done
@@ -823,37 +818,41 @@ func_with_restore_all_benchmarks_n2(){
   HMS=`echo ${hour}:${min}:${sec}`
   echo "restore_all_2 finished!"
   echo "restore_all_2 consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
-#  # backup
-#  if [[ $is_gem5 == true ]]; then
-#    # 统计数据
-#    func_gen_restore_compare_excel "${begin_time}"
-#    # 备份数据
-#    for FILE in ${bm[@]}
-#    do
-#        mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-#        find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
-#        # cp -r ./runspec_gem5_power/"${FILE}"/gem5_stats.log ./data/gem5/"${begin_time}"/"${FILE}"
-#        # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-#        # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-#    done
-#    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
-#    mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
-#  elif [[ $is_m1 == true ]]; then
-#    func_collect_handle_all_m1_restore_data
-#    for FILE in ${bm[@]}
-#    do
-#      mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
-#      mv ./runspec_gem5_power/"${FILE}"/*.csv ./data/M1/"${begin_time}"/"${FILE}"/ 2>/dev/null
-#    done
-#    mv *.csv ./data/M1/"${begin_time}"/ 2>/dev/null
-#    mv ./nohup.out ./data/M1/"${begin_time}"/ 2>/dev/null
-#    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/M1/"${begin_time}"/ 2>/dev/null
-#  fi
+  # backup
+  if [[ $is_gem5 == true ]]; then
+    # 统计数据
+    if [[ ${label} == ""  ]]; then
+      func_gen_restore_compare_excel "${begin_time}"
+      func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
+      cp --parent ./runspec_gem5_power/Makefile ./data/gem5/"${begin_time}"/
+      cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
+      cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
+      cp --parent ./*.log ./data/gem5/"${begin_time}"/
+    else
+      func_gen_restore_compare_excel "${begin_time}-${label}"
+      func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
+      cp --parent ./runspec_gem5_power/Makefile ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
+    fi
+  elif [[ $is_m1 == true ]]; then
+    # func_collect_handle_all_m1_restore_data
+    # for FILE in ${bm[@]}
+    # do
+    #   mkdir -p ./data/M1/"${begin_time}"/"${FILE}"
+    #   mv ./runspec_gem5_power/"${FILE}"/*.csv ./data/M1/"${begin_time}"/"${FILE}"/ 2>/dev/null
+    # done
+    # mv *.csv ./data/M1/"${begin_time}"/ 2>/dev/null
+    # mv ./nohup.out ./data/M1/"${begin_time}"/ 2>/dev/null
+    # mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/M1/"${begin_time}"/ 2>/dev/null
+  fi
   exec 6>&-
   exec 6<&-
   # delete job pool
   rm -rf $(dirname ${FLOODGATE})
 }
+
 func_with_restore_all_benchmarks_n4(){
   bm=(
     "500.perlbench_r" "502.gcc_r" "505.mcf_r" "520.omnetpp_r" "523.xalancbmk_r" "525.x264_r" "531.deepsjeng_r" "541.leela_r" "548.exchange2_r" "557.xz_r"
