@@ -522,6 +522,13 @@ func_gen_restore_compare_excel(){
   echo "python3 ./scripts/gem5_M1_host_results_compare.py ${begin_time} done @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
 }
 
+# 在24个case的上级目录执行
+func_backup_gem5_data(){
+  source_path="${1}"
+  target_path="${2}"
+  find "${source_path}" -not -path "./*r/m5out/*" -not -type l -type f -exec cp --parent {} "${target_path}" \;
+}
+
 #gem5spec目录下执行
 # 运行完会备份结果
 # gem5: -->./data/"${begin_time}"/gem5/"${FILE}
@@ -552,15 +559,15 @@ func_with_restore_case(){
   echo > ./ckps.log
   if [[ $is_gem5 == true ]]; then
     if [[ ${label} == ""  ]]; then
-      mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
+      mkdir -p ./data/gem5/"${begin_time}"/
     else
-      mkdir -p ./data/gem5/"${begin_time}-${label}"/"${FILE}"
+      mkdir -p ./data/gem5/"${begin_time}-${label}"/
     fi
     # 运行前 git diff 
     make git_diff -C runspec_gem5_power >/dev/null 2>&1 
     make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
     mkdir -p ./data/gem5/"${begin_time}"/
-    cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
     if [[ $gem5_ckp_py_opt == "" ]];then
       make restore_all -C runspec_gem5_power/${FILE} FLOODGATE=${FLOODGATE} WORK_DIR=${WORK_DIR} >>nohup.out 2>&1
@@ -601,19 +608,27 @@ func_with_restore_case(){
     # 统计数据
     if [[ ${label} == ""  ]]; then
       func_gen_restore_compare_excel "${begin_time}"
+      func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
+      cp --parent ./runspec_gem5_power/Makefile ./data/gem5/"${begin_time}"/
+      cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
+      cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
+      cp --parent ./*.log ./data/gem5/"${begin_time}"/
     else
       func_gen_restore_compare_excel "${begin_time}-${label}"
+      func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
+      cp --parent ./runspec_gem5_power/Makefile ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
+      cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
     fi
     # 备份数据
-    mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
-    find ./runspec_gem5_power/"${FILE}"/ -name "*.csv" -exec cp -r {} ./data/gem5/"${begin_time}"/"${FILE}" \;
-    cp -r ./runspec_gem5_power/"${FILE}"/output*/ ./data/gem5/"${begin_time}"/"${FILE}"
+    # mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
     # cp -r ./runspec_gem5_power/"${FILE}"/stdout_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
     # cp -r ./runspec_gem5_power/"${FILE}"/stderr_gem5.log ./data/gem5/"${begin_time}"/"${FILE}"
-    mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
-    mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
-    mv ./ckps.log ./data/gem5/"${begin_time}"/ 2>/dev/null
-    cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # mv ./runspec_gem5_power/restore_all_consumed_time.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # mv ./nohup.out ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # mv ./ckps.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+    # cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
   elif [[ $is_m1 == true ]]; then
     func_collect_handle_all_m1_restore_data
     for FILE in ${bm[@]}
@@ -650,7 +665,7 @@ func_with_restore_all_benchmarks(){
   make git_diff -C runspec_gem5_power >/dev/null 2>&1 
   make print_config -C runspec_gem5_power/500.perlbench_r |tee -a ./runspec_gem5_power/git_diff.log
   mkdir -p ./data/gem5/"${begin_time}"/
-  cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
+  # cp -r ./runspec_gem5_power/git_diff.log ./data/gem5/"${begin_time}"/ 2>/dev/null
 
   for FILE in ${bm[@]}
   do
