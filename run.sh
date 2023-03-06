@@ -26,7 +26,7 @@ FLOODGATE=$(cd "$(dirname "${0}")" && pwd )/running/run.fifo
 
 func_set_job_pool "${FLOODGATE}"
 
-#rm -rf nohup.out 2>/dev/null
+#rm -rf nohup.log 2>/dev/null
 
 #echo ${@}
 
@@ -454,14 +454,14 @@ if [[ $is_m1 == true ]]; then
     fi
   elif [[ $is_spec2017 == true ]]; then
     if [[ $with_all_benchmarks == true ]]; then
-      (func_with_all_benchmarks >>nohup.out 2>&1 &)
+      (func_with_all_benchmarks >>nohup.log 2>&1 &)
     elif [[ $with_entire_all_benchmarks == true ]]; then
-      (func_with_entire_all_benchmarks >>nohup.out 2>&1 &)
+      (func_with_entire_all_benchmarks >>nohup.log 2>&1 &)
     elif [[ $with_restore_all == true ]]; then
       func_set_job_n_default 5
-      (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.out 2>&1 &)
+      (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.log 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
-      (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
+      (func_with_cpi_all_benchmarks >>nohup.log 2>&1 &)
     else
       #完整参数模式
       if [[ $with_all_steps == true ]] ; then
@@ -498,11 +498,11 @@ elif [[ $is_gem5 == true ]]; then
     if [[ $with_restore_case == true ]]; then
       # echo "PIDIS $$"
       # 清空
-      echo >nohup.out
+      echo >nohup.log
       func_delete_job_pool >/dev/null 2>&1
       make clean-restore -C runspec_gem5_power/${bm[${spec2017_bm}]} >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
-      echo "func_with_restore_case_${bm[${spec2017_bm}]} ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      echo "func_with_restore_case_${bm[${spec2017_bm}]} ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.log 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
         func_set_job_n_quiet 5
         (( add_job = parallel_jobs-5 ))
@@ -544,18 +544,18 @@ elif [[ $is_gem5 == true ]]; then
     elif [[ $with_restore_all == true ]]; then
       # echo "PIDIS $$"
       # 清空
-      echo >nohup.out
+      echo >nohup.log
       func_delete_job_pool >/dev/null 2>&1
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
-      echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      echo "func_with_restore_all_benchmarks ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.log 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
         func_set_job_n_quiet 5
         (( add_job = parallel_jobs-5 ))
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY|""])
+          [yY]|"")
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -565,7 +565,7 @@ elif [[ $is_gem5 == true ]]; then
           *)
             read -p "Invalid input, please enter any key to exit" _
             exit 0
-        esac # end case
+        esac # en end case
       else
         echo "ERROR: -j must > 0 & integer"
         exit 1
@@ -589,18 +589,18 @@ elif [[ $is_gem5 == true ]]; then
     elif [[ $with_restore_all_2 == true ]]; then
       # echo "PIDIS $$"
       # 清空
-      echo >nohup.out
+      echo >nohup.log
       func_delete_job_pool >/dev/null 2>&1
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
-      echo "func_with_restore_all_benchmarks_n2 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      echo "func_with_restore_all_benchmarks_n2 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.log 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
         func_set_job_n_quiet 5
         (( add_job = parallel_jobs-5 ))
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY|""])
+          [yY]|"")
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -626,18 +626,18 @@ elif [[ $is_gem5 == true ]]; then
     elif [[ $with_restore_all_4 == true ]]; then
       # echo "PIDIS $$"
       # 清空
-      echo >nohup.out
+      echo >nohup.log
       func_delete_job_pool >/dev/null 2>&1
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
-      echo "func_with_restore_all_benchmarks_n4 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      echo "func_with_restore_all_benchmarks_n4 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.log 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
         func_set_job_n_quiet 5
         (( add_job = parallel_jobs-5 ))
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY|""])
+          [yY]|"")
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -663,18 +663,18 @@ elif [[ $is_gem5 == true ]]; then
     elif [[ $with_restore_all_8 == true ]]; then
       # echo "PIDIS $$"
       # 清空
-      echo >nohup.out
+      echo >nohup.log
       func_delete_job_pool >/dev/null 2>&1
       make clean-restore -C runspec_gem5_power >/dev/null 2>&1
       begin_time=$(date +"%Y%m%d%H%M%S")
-      echo "func_with_restore_all_benchmarks_n8 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.out 2>&1
+      echo "func_with_restore_all_benchmarks_n8 ${FLOODGATE} ${begin_time} start @ $(date +"%Y-%m-%d %H:%M:%S.%N"| cut -b 1-23)" >>nohup.log 2>&1
       if [[ $parallel_jobs -gt 5 ]]; then
         func_set_job_n_quiet 5
         (( add_job = parallel_jobs-5 ))
       elif [[ $parallel_jobs -gt 0 && $parallel_jobs -le 5 ]]; then
         read -p "WARNING: -j <= 5. Do you want to use the default -j 5? [Y/n]" para
         case $para in
-          [yY|""])
+          [yY]|"")
             # echo "use default -j 5"
             add_job=5
             ;;
@@ -698,7 +698,7 @@ elif [[ $is_gem5 == true ]]; then
             
       (func_with_restore_all_benchmarks_n8 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
     elif [[ $with_cpi_all == true ]]; then
-      (func_with_cpi_all_benchmarks >>nohup.out 2>&1 &)
+      (func_with_cpi_all_benchmarks >>nohup.log 2>&1 &)
     elif [[ $with_func_gen_restore_compare_excel == true ]]; then
       (func_gen_restore_compare_excel "$(date +"%Y%m%d%H%M%S")" 2>&1)
     else

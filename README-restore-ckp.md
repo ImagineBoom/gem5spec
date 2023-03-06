@@ -91,7 +91,7 @@ source auto_cmpl.sh
 |   |   |-- 502.gcc_r_Final_Result_1.61804.csv								
 |   |   `-- 502.gcc_r_restore_ckp1.log
 |   |-- Each_case_ckp_data.csv	#gem5的中间数据(不可删除)，汇总所有测例的所有ckp数据，用于生成对比表格
-|   |-- nohup.out	#run.sh的运行过程记录
+|   |-- nohup.log	#run.sh的运行过程记录
 |   `-- restore_all_consumed_time.log	#每次restore ckp的时间记录
 |-- 20221219213837-2-comparison_M1_gem5_SPEC2017_sampling_results.xlsx	#最终结果gem5 ckp metrics 对比表格
 `-- M1_gem5_paste.csv	#M1的中间数据(不可删除)，汇总所有测例的所有ckp数据，用于生成对比表格
