@@ -142,7 +142,7 @@ benchmark和自定义程序皆可
 ### 3. NOTION
 
 ```
-1.Desc: run some spec2017 benchmarks and custom programs help
+  1.Desc: run some spec2017 benchmarks and custom programs help
   2.Notion: )表示输入的上一级命令, []内表示可选, |表示选择一个, <>内表示必填项
   3.Usage: ./run.sh  [MAIN_OPTS]  [FIR_OPTS]  [SEC_OPTS]
 
@@ -158,10 +158,10 @@ benchmark和自定义程序皆可
       --gem5)
               --spec2017                                                                使用spec2017全部
       --control)
-              --add_thread|--add_thread_10                                              增加可运行的线程数
-              --reduce_thread|--reduce_thread_10                                        减少可运行的线程数
-              --del_thread_pool                                                         删除线程池
-              --kill_restore_all                                                        kill restore_all 的任务
+              --add_job|--add_job_10                                                    增加可运行的线程数
+              --reduce_job|--reduce_job_10                                              减少可运行的线程数
+              --del_job_pool                                                            删除线程池
+              --kill_restore_all_jobs                                                   kill restore_all 的任务
 
     [SEC_OPTS]:
       --myexe)
@@ -199,6 +199,15 @@ benchmark和自定义程序皆可
       --r_pipe_begin    | --SCROLL_BEGIN          | -b                                  流水线图指令区间起始位置
       --r_pipe_end      | --SCROLL_END            | -e                                  流水线图指令区间结束位置
 
+    --gem5
+      --gen_restore_compare_excel                                                       ST模式下生成表格
+      --restore_case                                                                    ST模式下运行单个SPEC2017测例
+      --restore_all                                                                     ST模式下运行SPEC2017 上述24个测例
+      --restore_all_2                                                                   SMT2模式下运行SPEC2017 上述24个测例
+      --restore_all_4                                                                   SMT4模式下运行SPEC2017 上述24个测例
+      --restore_all_8                                                                   SMT8模式下运行SPEC2017 上述24个测例
+      --build_gem5_j                                                                    运行gem5前编译指定的线程数，可选
+      -j                                                                                restore时并行运行的gem5个数
   5.RUN:
     PATTERN-1: 完整参数模式
 
@@ -206,17 +215,31 @@ benchmark和自定义程序皆可
        ./run.sh --m1 --spec2017 999 -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
        ./run.sh --m1 --myexe ./test -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
 
-    *  所有的benchmark执行指令数均为5,000,000(q_convert\r_insts),itrace按最大指令数转换,流水线区间为[jump+1,jump+400]
-       ./run.sh --m1 --spec2017 --all_benchmarks --q_jump=9999 --q_convert=5000000 --r_pipe_begin=1 --r_pipe_end=400
+    * 运行gem5 restore
+    配置runspec_gem5_power/TRACE.mk
+      ./run.sh --gem5 --spec2017 --restore_all --build_gem5_j 10 -j 20      # ST
+      ./run.sh --gem5 --spec2017 --restore_case 502 --build_gem5_j 10 -j 20 # ST case 502
+      ./run.sh --gem5 --spec2017 --restore_all_2 --build_gem5_j 10 -j 20    # SMT2
+      ./run.sh --gem5 --spec2017 --restore_all_4 --build_gem5_j 10 -j 20    # SMT4
+      ./run.sh --gem5 --spec2017 --restore_all_8 --build_gem5_j 10 -j 20    # SMT8
 
-    PATTERN-2: 缺省参数模式【推荐】
+    * kill restore_all_*(ctrl+C无效)
+      ./run.sh --control --kill_restore_all_jobs --gem5
+
+    PATTERN-2: 缺省参数模式
 
     *  运行m1的整个流程,生成前最大指令数的itrace,qtrace区间为[begin,end],执行400条(end-begin+1),流水线区间为[begin,end]
        ./run.sh --m1 --spec2017 999 -b=1 -e=400
        ./run.sh --m1 --myexe ./test -b=1 -e=400
 
-  :)END
+    * 运行gem5 restore
+      ./run.sh --gem5 --spec2017 --restore_all -j 20      # ST
+      ./run.sh --gem5 --spec2017 --restore_case 502 -j 20 # ST case 502
+      ./run.sh --gem5 --spec2017 --restore_all_2 -j 20    # SMT2
+      ./run.sh --gem5 --spec2017 --restore_all_4 -j 20    # SMT4
+      ./run.sh --gem5 --spec2017 --restore_all_8 -j 20    # SMT8
 
+  :)END
 ```
 
 ### 4. 输出文件/目录说明
@@ -230,6 +253,8 @@ gem5spec_v0_M1/runspec_gem5_power/*r/
 ------
 
 ## Simpoint
+
+`version: 3.2`
 
 ### 1. 生成BBV文件并使用Simpoint分类
 
@@ -374,7 +399,7 @@ make cpi_all_cases
 为方便后期根据CPI数据选择片段，可以在`runspec_gem5_power`目录下使用以下命令
 
 ```bash
-make collect_all_checkpoints_data
+make collect_all_cases_CPI
 ```
 
 该命令会遍历每个测例的综合权重CPI数据，并将统计结果保存到`All_case_weightedCPI.csv`中

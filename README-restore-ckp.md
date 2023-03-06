@@ -121,11 +121,11 @@ source auto_cmpl.sh
 │   ├── consume_time.log
 │   ├── Each_case_ckp_data.csv
 │   ├── Find_IntervalSize.sh
-│   ├── git_diff.log # 记录gem5当前运行的commit信息和本地代码的diff信息
+│   ├── git_diff.log  # 记录gem5当前运行的commit信息和本地代码的diff信息
 │   ├── Makefile
-│   ├── Makefile.inc
+│   ├── Makefile.inc  # 用于配置完整运行gem5
 │   ├── Set_IntervalSize.sh
-│   └── TRACE.mk
+│   └── TRACE.mk      # 用于配置gem5 restore
 ├── scripts
 │   ├── gem5_data_handler.py
 │   ├── gem5_exelatency_handler.py

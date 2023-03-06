@@ -184,6 +184,15 @@ func_help(){
       --r_pipe_begin    | --SCROLL_BEGIN          | -b                                  流水线图指令区间起始位置
       --r_pipe_end      | --SCROLL_END            | -e                                  流水线图指令区间结束位置
 
+    --gem5
+      --gen_restore_compare_excel                                                       ST模式下生成表格
+      --restore_case                                                                    ST模式下运行单个SPEC2017测例
+      --restore_all                                                                     ST模式下运行SPEC2017 上述24个测例
+      --restore_all_2                                                                   SMT2模式下运行SPEC2017 上述24个测例
+      --restore_all_4                                                                   SMT4模式下运行SPEC2017 上述24个测例
+      --restore_all_8                                                                   SMT8模式下运行SPEC2017 上述24个测例
+      --build_gem5_j                                                                    运行gem5前编译指定的线程数，可选
+      -j                                                                                restore时并行运行的gem5个数
   5.RUN:
     PATTERN-1: 完整参数模式
 
@@ -191,24 +200,29 @@ func_help(){
        ./run.sh --m1 --spec2017 999 -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
        ./run.sh --m1 --myexe ./test -a --i_insts=2000000 -j=9999 -c=10000 --r_insts=10000 -b=1 -e=400
 
-    *  所有的benchmark执行指令数均为5,000,000(q_convert\r_insts),itrace按最大指令数转换,流水线区间为[jump+1,jump+400]
-       ./run.sh --m1 --spec2017 --all_benchmarks --q_jump=9999 --q_convert=5000000 --r_pipe_begin=1 --r_pipe_end=400
+    * 运行gem5 restore
+    配置runspec_gem5_power/TRACE.mk
+      ./run.sh --gem5 --spec2017 --restore_all --build_gem5_j 10 -j 20      # ST
+      ./run.sh --gem5 --spec2017 --restore_case 502 --build_gem5_j 10 -j 20 # ST case 502
+      ./run.sh --gem5 --spec2017 --restore_all_2 --build_gem5_j 10 -j 20    # SMT2
+      ./run.sh --gem5 --spec2017 --restore_all_4 --build_gem5_j 10 -j 20    # SMT4
+      ./run.sh --gem5 --spec2017 --restore_all_8 --build_gem5_j 10 -j 20    # SMT8
 
-    *  所有的benchmark按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
-       ./run.sh --m1 --spec2017 --entire_all_benchmarks
-       ./run.sh --m1 --spec2017 --entire_all_benchmarks --max_insts
+    * kill restore_all_*(ctrl+C无效)
+      ./run.sh --control --kill_restore_all_jobs --gem5
 
-    *  所有的benchmark按1000条指令分段执行
-       ./run.sh --m1 --spec2017 --entire_all_benchmarks --slice_len=1000
-
-    *  test-p8按最大指令数执行,超过700,000,000条指令的将按照700,000,000分段执行
-       ./run.sh --m1 --myexe ./test-p8 --entire
-
-    PATTERN-2: 缺省参数模式【推荐】
+    PATTERN-2: 缺省参数模式
 
     *  运行m1的整个流程,生成前最大指令数的itrace,qtrace区间为[begin,end],执行400条(end-begin+1),流水线区间为[begin,end]
        ./run.sh --m1 --spec2017 999 -b=1 -e=400
        ./run.sh --m1 --myexe ./test -b=1 -e=400
+
+    * 运行gem5 restore
+      ./run.sh --gem5 --spec2017 --restore_all -j 20      # ST
+      ./run.sh --gem5 --spec2017 --restore_case 502 -j 20 # ST case 502
+      ./run.sh --gem5 --spec2017 --restore_all_2 -j 20    # SMT2
+      ./run.sh --gem5 --spec2017 --restore_all_4 -j 20    # SMT4
+      ./run.sh --gem5 --spec2017 --restore_all_8 -j 20    # SMT8
 
   :)END
 EOF
