@@ -983,6 +983,93 @@ collect_all_cases_MPKI_L2:
 	@rm -rf All_case_L2_Miss_Access.log;
 	@gedit All_case_L2_MPKI.csv &
 
+collect_all_cases_MPKI_2_L2:
+	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
+	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./520*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./523*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./525*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./531*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./541*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./548*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./557*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./503*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./507*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./508*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./510*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./511*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./519*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./521*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./526*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./527*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./538*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./544*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./549*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./554*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","L2MPKI","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2/5000/2,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI.csv;
+	@rm -rf All_case_L2_Miss_Access.log;
+	@gedit All_case_L2_MPKI.csv &
+
+collect_all_cases_MPKI_4_L2:
+	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
+	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./520*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./523*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./525*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./531*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./541*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./548*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./557*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./503*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./507*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./508*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./510*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./511*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./519*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./521*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./526*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./527*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./538*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./544*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./549*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./554*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","L2MPKI","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2/5000/4,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI.csv;
+	@rm -rf All_case_L2_Miss_Access.log;
+	@gedit All_case_L2_MPKI.csv &
+
+collect_all_cases_MPKI_8_L2:
+	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
+	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./520*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./523*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./525*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./531*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./541*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./548*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./557*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./503*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./507*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./508*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./510*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./511*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./519*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./521*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./526*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./527*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./538*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./544*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./549*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./554*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
+	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","L2MPKI","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2/5000/8,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI.csv;
+	@rm -rf All_case_L2_Miss_Access.log;
+	@gedit All_case_L2_MPKI.csv &
+
 collect_all_cases_CKPS_CPI_Err:
 	@rm -rf ./All_case_CKPS_CPI_Err.log;
 	@-cat ./500*/*_CKPS_CPI_Err.log >  ./All_case_CKPS_CPI_Err.log 2>/dev/null;
