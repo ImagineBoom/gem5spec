@@ -45,7 +45,7 @@ with_control_m1=false
 with_func_gen_restore_compare_excel=false
 parallel_jobs=-1
 # ckp超时判定,seconds
-timeout=7200
+timeout=1800
 #是否从编译开始
 with_build_gem5=false
 build_gem5_j=-1
