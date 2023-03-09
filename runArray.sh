@@ -2,25 +2,69 @@
 version="1.0.0"
 
 # =========================================================================================================== #
-# gem5_ckp_py_opts是一个数组，数组中的一项代表一次任务中gem5的参数配置。这里的一次任务，表示调用一次./run.sh。
-# 默认只需要填充gem5_ckp_py_opts数组即可，然后运行此脚本。
-# 没有修改的部分保持默认配置，默认配置见gem5spec/runspec_gem5_power/TRACE.mk 中"# gem5配置部分"
-gem5_ckp_py_opts=(
-  "--cpu-clock=4GHz"
-  "--cpu-type=P8CPU --cpu-clock=8GHz"
+# override_gem5_ckp_py_opts是一个数组，数组中的一项代表一次任务中gem5的参数配置。这里的一次任务，表示调用一次./run.sh。
+# 默认只需要填充 override_gem5_ckp_py_opts数组即可，然后运行此脚本。
+# =========================================================================================================== #
+
+# In this ARRAY mode, configurations in gem5spec/runspec_gem5_power/TRACE.mk "# gem5配置部分" will not be effective anymore.
+# Copy/Edit it here as the baseline configuration.
+base_ckp_py_opts="--ruby-clock=4.0GHz --mem-size=16384MB --mem-type=DDR4_2933_16x4 --enable-mem-param-override=True --dram-addr-mapping=RoCoRaBaCh --dram-max-accesses-per-row=16 --dram-page-policy close_adaptive --dram-read-buffer-size=128 --dram-write-buffer-size=64 --mc-be-latency=10ns --mc-fe-latency=35ns --mc-mem-sched-policy=frfcfs"
+
+
+# This is the param array for param exploration.
+# Params listed here will overide the same params in BASE_CKP_PY_OPTS.
+# 没有修改的部分保持默认 BASE_CKP_PY_OPTS 配置
+# Example configurations:
+override_gem5_ckp_py_opts=(
+  # leave the first element empty for running the baseline configuraion
+  ""
+  "--dram-page-policy=open --dram-addr-mapping=RoRaBaChCo"
+  "--dram-page-policy=open --dram-addr-mapping=RoRaBaCoCh"
+  "--dram-page-policy=open_adaptive --dram-addr-mapping=RoRaBaChCo"
+  "--dram-page-policy=open_adaptive -dram-addr-mapping=RoRaBaCoCh"
+  "--dram-page-policy=close --dram-addr-mapping=RoCoRaBaCh"
+  "--dram-page-policy=close_adaptive --dram-addr-mapping=RoCoRaBaCh"
+
+#  "--dram-page-policy=open"
+#  "--dram-page-policy=close"
+#  "--dram-page-policy=open_adaptive"
+#  "--dram-page-policy=close_adaptive"
+  "--mc-fe-latency=95ns"
+  "--mc-fe-latency=60ns"
+  "--mc-fe-latency=35ns"
+  "--mc-fe-latency=10ns"
+#  "--mc-mem-sched-policy=frfcfs"
+#  "--mc-mem-sched-policy=fcfs"
+#  "--dram-addr-mapping=RoRaBaChCo"
+#  "--dram-addr-mapping=RoRaBaCoCh"
+#  "--dram-addr-mapping=RoCoRaBaCh"
+#  "--dram-max-accesses-per-row=8"
+#  "--dram-max-accesses-per-row=32"
+#  "--dram-read-buffer-size=8"
+#  "--dram-read-buffer-size=16"
+#  "--dram-read-buffer-size=32"
+#  "--dram-read-buffer-size=64"
+#  "--dram-read-buffer-size=128"
+#  "--dram-read-buffer-size=256"
+#  "--dram-write-buffer-size=8"
+#  "--dram-write-buffer-size=16"
+#  "--dram-write-buffer-size=32"
+#  "--dram-write-buffer-size=64"
+#  "--dram-write-buffer-size=128"
+#  "--dram-write-buffer-size=256"
 )
 # =========================================================================================================== #
 
 date1=$(date +"%Y-%m-%d %H:%M:%S")
-for ((i=0; i<${#gem5_ckp_py_opts[@]}; i++))
+for ((i=0; i<${#override_gem5_ckp_py_opts[@]}; i++))
 do
-    gem5_ckp_py_opt=${gem5_ckp_py_opts[$i]}
+    override_gem5_ckp_py_opt=${override_gem5_ckp_py_opts[$i]}
 
     echo "the $[i+1] times begin"
-    echo "gem5_ckp_py_opt= '${gem5_ckp_py_opt}'"
-    # label的值会影响Excel表格的命名，日期之后插入。可以自定义一个名称来区分当前这一组gem5_ckp_py_opts定义的任务。默认是数组长度。
-    ./run.sh --gem5 --spec2017 --restore_all -j 24 --gem5_ckp_py_opt "${gem5_ckp_py_opt}" --label "${#gem5_ckp_py_opts[@]}"
-    # ./run.sh --gem5 --spec2017 --restore_case 502 -j 6 --gem5_ckp_py_opt "${gem5_ckp_py_opt}" --label "${#gem5_ckp_py_opts[@]}"
+    echo "gem5_ckp_py_opt= '${override_gem5_ckp_py_opt}'"
+    # label的值会影响Excel表格的命名，日期之后插入。可以自定义一个名称来区分当前这一组 override_gem5_ckp_py_opts定义的任务。默认是数组长度。
+    ./run.sh --gem5 --spec2017 --restore_all -j 30 --gem5_ckp_py_opt "${base_ckp_py_opts} ${override_gem5_ckp_py_opt}" --label "${#override_gem5_ckp_py_opts[@]}"
+    # ./run.sh --gem5 --spec2017 --restore_case 502 -j 6 --gem5_ckp_py_opt "${gem5_ckp_py_opt}" --label "${#override_gem5_ckp_py_opts[@]}"
     echo "the $[i+1] times end"
     echo
 done
