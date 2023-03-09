@@ -1,8 +1,13 @@
 #!/usr/bin/bash
 
-# Run this script to fix paths after you copy ckp files from another folder.
+# Run this script to fix paths if you copied ckp files from another folder.
 # This is because write permission is needed in the following ckps.
 
+# EDIT this variable before run. This is the original path where CKPs are genarated.
+original_path=/home/yutianhao/Dev/gem5spec_final_test
+
+
+# Update this file list if simpoint is updated.
 FILE_LIST=(
 runspec_gem5_power/511.povray_r/m5out/config.ini
 runspec_gem5_power/511.povray_r/m5out/config.json
@@ -29,7 +34,7 @@ runspec_gem5_power/520.omnetpp_r/m5out/cpt.simpoint_22_inst_13244000000_weight_0
 
 for F in ${FILE_LIST[*]}
 do
-	# Modify the origianal path where ckps are generated before doing substitution
-	sed -i 's#/home/yutianhao/Dev/gem5spec_final_test#'`pwd`'#g' $F
+	# Make sure the original path is correct before doing substitution
+	sed -i 's#${original_path}#'`pwd`'#g' $F
 done
 
