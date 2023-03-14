@@ -621,7 +621,7 @@ func_with_restore_case(){
   echo "restore_case ${FILE} consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
   # backup
   if [[ $is_gem5 == true ]]; then
-    # 统计数据
+    # 备份数据
     if [[ ${label} == ""  ]]; then
       func_gen_restore_compare_excel "${begin_time}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
@@ -629,6 +629,7 @@ func_with_restore_case(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}"/
+      ( cd data/gem5/"${begin_time}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
     else
       func_gen_restore_compare_excel "${begin_time}-${label}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
@@ -636,6 +637,7 @@ func_with_restore_case(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
+      ( cd data/gem5/"${begin_time}-${label}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
     fi
     # 备份数据
     # mkdir -p ./data/gem5/"${begin_time}"/"${FILE}"
@@ -734,7 +736,7 @@ func_with_restore_all_benchmarks(){
   echo "restore_all consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
   # backup
   if [[ $is_gem5 == true ]]; then
-    # 统计数据
+    # 备份数据
     if [[ ${label} == ""  ]]; then
       func_gen_restore_compare_excel "${begin_time}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
@@ -742,6 +744,10 @@ func_with_restore_all_benchmarks(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     else
       func_gen_restore_compare_excel "${begin_time}-${label}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
@@ -749,6 +755,10 @@ func_with_restore_all_benchmarks(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}-${label}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     fi
     # 备份数据
     # for FILE in ${bm[@]}
@@ -836,7 +846,7 @@ func_with_restore_all_benchmarks_n2(){
   echo "restore_all_2 consumed time : ${HMS} at ${date1} "|tee ./runspec_gem5_power/restore_all_consumed_time.log
   # backup
   if [[ $is_gem5 == true ]]; then
-    # 统计数据
+    # 备份数据
     if [[ ${label} == ""  ]]; then
       # func_gen_restore_compare_excel "${begin_time}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
@@ -844,6 +854,10 @@ func_with_restore_all_benchmarks_n2(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     else
       # func_gen_restore_compare_excel "${begin_time}-${label}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
@@ -851,6 +865,10 @@ func_with_restore_all_benchmarks_n2(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}-${label}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     fi
   fi
   exec 6>&-
@@ -914,7 +932,7 @@ func_with_restore_all_benchmarks_n4(){
   
   # backup
   if [[ $is_gem5 == true ]]; then
-    # 统计数据
+    # 备份数据
     if [[ ${label} == ""  ]]; then
       # func_gen_restore_compare_excel "${begin_time}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
@@ -922,6 +940,10 @@ func_with_restore_all_benchmarks_n4(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     else
       # func_gen_restore_compare_excel "${begin_time}-${label}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
@@ -929,6 +951,10 @@ func_with_restore_all_benchmarks_n4(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}-${label}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     fi
   fi
   exec 6>&-
@@ -992,7 +1018,7 @@ func_with_restore_all_benchmarks_n8(){
   
   # backup
   if [[ $is_gem5 == true ]]; then
-    # 统计数据
+    # 备份数据
     if [[ ${label} == ""  ]]; then
       # func_gen_restore_compare_excel "${begin_time}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}"
@@ -1000,6 +1026,10 @@ func_with_restore_all_benchmarks_n8(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     else
       # func_gen_restore_compare_excel "${begin_time}-${label}"
       func_backup_gem5_data "./runspec_gem5_power" "./data/gem5/${begin_time}-${label}"
@@ -1007,6 +1037,10 @@ func_with_restore_all_benchmarks_n8(){
       cp --parent ./runspec_gem5_power/Makefile.inc ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./runspec_gem5_power/TRACE.mk ./data/gem5/"${begin_time}-${label}"/
       cp --parent ./*.log ./data/gem5/"${begin_time}-${label}"/
+      for FILE in ${bm[@]}
+      do
+        ( cd data/gem5/"${begin_time}-${label}"/runspec_gem5_power/${FILE}/; ln -s ../../../../../runspec_gem5_power/${FILE}/m5out ./ )
+      done
     fi
   fi
   
