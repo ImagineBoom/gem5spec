@@ -74,15 +74,15 @@ source auto_cmpl.sh
 
 输出文件保存路径为gem5spec/${myexe}/
 
-| 输出文件                                                     | 解释                                                     |
-| :----------------------------------------------------------- | -------------------------------------------------------- |
-| ${myexe}.vgi                                                 | itrace, 使用valgrind-itrace生成                          |
-| ${myexe}.qt                                                  | qtrace，m1所识别的trace文件，使用vgi2qt生成              |
-| ${myexe}.pipe                                                | 调用scrollpv所需的文件，用于展示流水线图形化或者生成文本 |
-| ${myexe}.config                                              | 配置文件                                                 |
-| ${myexe}.results                                             | m1运行时的统计参数及性能指标                             |
-| ${myexe}.inst.log                                                         | ${myexe}的指令数说明，使用valgrind-exp-bbv生成 |                                                          |
-| ${myexe}.txt                                                 | ${myexe}的流水线文本文件                                 |
+| 输出文件          | 解释                                                     |
+| :---------------- | -------------------------------------------------------- |
+| ${myexe}.vgi      | itrace, 使用valgrind-itrace生成                          |
+| ${myexe}.qt       | qtrace，m1所识别的trace文件，使用vgi2qt生成              |
+| ${myexe}.pipe     | 调用scrollpv所需的文件，用于展示流水线图形化或者生成文本 |
+| ${myexe}.config   | 配置文件                                                 |
+| ${myexe}.results  | m1运行时的统计参数及性能指标                             |
+| ${myexe}.inst.log | ${myexe}的指令数说明，使用valgrind-exp-bbv生成           |
+| ${myexe}.txt      | ${myexe}的流水线文本文件                                 |
 
 **完整参数模式**
 
@@ -254,11 +254,13 @@ gem5spec_v0_M1/runspec_gem5_power/*r/
 
 ## Simpoint
 
-`version: 3.2`
+```
+version: 3.2
+```
 
 ### 1. 生成BBV文件并使用Simpoint分类
 
-在使用Simpoint前，需要进入`runspec_gem5_power`目录下编辑`TRACE.mk`文件，指定`interval_size`、`maxK`、`Warmup`参数的值(第8-10行)。其中`maxK`的大小，默认设定为通过获取interval的个数，并对该值开根后设为`maxK`的值。如果不想使用该方式设定`maxK`，可以将`TRACK.mk`中的48、49注释掉，并将50行的注释取消，在第9行可以指定`maxK`的大小。
+在使用Simpoint前，需要进入`runspec_gem5_power`目录下编辑`TRACE.mk`文件，指定`interval_size`、`maxK`、`Warmup`参数的值(第8-10行)。其中`maxK`的大小，默认设定为通过获取interval的个数，并对该值开根后设为`maxK`的值。如果不想使用该方式设定`maxK`，可以将`TRACK.mk`中的48、49注释掉，并将50行的注释取消，在第9行可以指定`maxK`的大小
 
 进入到某个spec2017测例的目录后，执行如下命令
 
@@ -266,7 +268,7 @@ gem5spec_v0_M1/runspec_gem5_power/*r/
 make simpoint
 ```
 
-该命令会自动完成使用Gem5的`NonCachingSimpleCPU`模型对程序分割片段生成Basic Block Vector(BBV)文件，Simpoint对该文件进行分类生成`.simpts`和`.weights`文件。同时脚本中还会对Simpoint结果进行合并排序操作，并将结果保存到`.merge`文件中，方便阅读Simpoint分类后的结果。
+此命令会自动完成使用Gem5的`NonCachingSimpleCPU`模型对程序分割片段生成Basic Block Vector(BBV)文件，Simpoint对该文件进行分类生成`.simpts`和`.weights`文件。同时脚本中还会对Simpoint结果进行合并排序操作，并将结果保存到`.merge`文件中，方便阅读Simpoint分类后的结果
 
 如果想一次对24个测例同时生成BBV文件，在`runspec_gem5_power`目录下执行如下命令
 
@@ -296,7 +298,7 @@ make collect_checkpoints_number
 make checkpoints
 ```
 
-该命令会使用Gem5读取`.simpts`和`.weights`文件，并使用Gem5的`AtomicSimpleCPU`模型完整执行完一遍程序后，生成对应的Checkpoints在`m5out`目录下。
+此命令会使用Gem5读取`.simpts`和`.weights`文件，并使用Gem5的`AtomicSimpleCPU`模型完整执行完一遍程序后，生成对应的Checkpoints在`m5out`目录下
 
 如果想一次对24个测例同时生成Checkpoints文件，在`runspec_gem5_power`目录下执行如下命令
 
@@ -312,9 +314,9 @@ make checkpoints_all_cases_X -j24
 
 其中X可以指定为2、4、8，分别代表双核、四核、八核
 
-### 3.使用Gem5恢复Checkpoints
+### 3. 使用Gem5恢复Checkpoints
 
-#### 3.1恢复某一个Checkpoint
+#### 3.1 恢复某一个Checkpoint
 
 得到Checkpoints后，使用Gem5恢复某一个Checkpoint，可以在测例的目录下使用如下命令
 
@@ -322,13 +324,13 @@ make checkpoints_all_cases_X -j24
 make restore NUM_CKP=1
 ```
 
-参数`NUM_CKP`用于指定`restore`Checkpoint的序号，注意该参数的值从1开始，而`m5out`目录下的Checkpoint是从0开始，因此在指定该参数时需要加偏移量1。
+参数`NUM_CKP`用于指定`restore`Checkpoint的序号，注意该参数的值从1开始，而`m5out`目录下的Checkpoint是从0开始，因此在指定该参数时需要加偏移量1
 
-参数`CPU_TYPE`用于指定`resotre` Checkpoint使用哪种类型的CPU模型。如果不指定，则会使用默认CPU类型`P8CPU`。*注意，这里不能使用`AtomicSimpleCPU`来恢复`Checkpoints`。*
+参数`CPU_TYPE`用于指定`resotre` Checkpoint使用哪种类型的CPU模型。如果不指定，则会使用默认CPU类型`P8CPU`。*注意，这里不能使用`AtomicSimpleCPU`来恢复`Checkpoints`*
 
-恢复结束后的输出文件会重定向到当前目录下的`output_ckp'n'`目录下，其中`n`与`NUM_CKP`的值相同。
+恢复结束后的输出文件会重定向到当前目录下的`output_ckp'n'`目录下，其中`n`与`NUM_CKP`的值相同
 
-#### 3.2恢复某个测例全部的Checkpoints
+#### 3.2 恢复某个测例全部的Checkpoints
 
 ~~进入`runspec_gem5_power`目录下某个测例的文件后，输入以下命令~~
 
@@ -359,7 +361,7 @@ source auto_cmpl.sh #激活自动补全
 >
 > 这里的N指定的是线程池最大的线程数量，可根据机器硬件情况和当前任务量决定
 
-#### 3.3恢复所有测例全部的Checkpoints
+#### 3.3 恢复所有测例全部的Checkpoints
 
 在`gem5spec`目录下输入以下命令可以对全部测例的每个Checkpoint进行`restore`操作
 
@@ -370,17 +372,19 @@ source auto_cmpl.sh #激活自动补全
 
 > 这里的N指定的是线程池最大的线程数量，可根据机器硬件情况和当前任务量决定
 
-在单核模式下，所有的checkpoints完成restore后，会自动生成存放统计数据表格的路径。
+在单核模式下，所有的Checkpoints完成restore后，会自动生成存放统计数据表格的路径
 
-如果想要用多核模式restore checkpoints可以使用下面的命令(checkpoints也需要是多核模式生成的)
+如果想要用多核模式restore checkpoints可以使用下面的命令(Checkpoints也需要对应的多核模式生成)
 
 ```bash
 ./run.sh --gem5 --spec2017 --restore_all_X -j N
 ```
 
-执行该命令后，任务会放入后台执行，根据指定的线程数量循环restore所有测例的全部checkpoints。
+执行此命令后，任务会放入后台执行，根据指定的线程数量循环restore所有测例的全部checkpoints
 
-### 4.CPI统计
+其中X可以指定为2、4、8，分别代表双核、四核、八核
+
+### 4. CPI统计
 
 由于在步骤3.2中生成的`xxx_CKPS_CPI.log`中只有每个Checkpoint的CPI，没有与权重相乘，使用以下命令可以进行计算
 
@@ -388,7 +392,7 @@ source auto_cmpl.sh #激活自动补全
 make cpi
 ```
 
-该命令会对`xxx_CKPS_CPI.log`中每一个Checkpoint的权重与CPI进行乘法运算，并将结果插入到第四列中，保存到`xxx_CKPS_Weighted_CPI.log`中。除此以外，该命令还会对每个带有权重的CPI的进行求和，得到该测例综合的CPI结果，并生成一个新的csv文件保存上述结果，文件名为`xxx_final_result_N.csv`(xxx为当前测例的名字；N为权重CPI的总和)。
+此命令会对`xxx_CKPS_CPI.log`中每一个Checkpoint的权重与CPI进行乘法运算，并将结果插入到第四列中，保存到`xxx_CKPS_Weighted_CPI.log`中。除此以外，此命令还会对每个带有权重的CPI的进行求和，得到该测例综合的CPI结果，并生成一个新的csv文件保存上述结果，文件名为`xxx_final_result_N.csv`(xxx为当前测例的名字；N为权重CPI的总和)
 
 如果需要一次让所有的测例生成`xxx_final_result_N.csv`数据记录，可以在`runspec_gem5_power`目录下使用以下命令
 
@@ -396,21 +400,75 @@ make cpi
 make cpi_all_cases
 ```
 
-为方便后期根据CPI数据选择片段，可以在`runspec_gem5_power`目录下使用以下命令
+为方便后期根据CPI数据选择片段，可以在`runspec_gem5_power`目录下使用如下命令
 
 ```bash
-make collect_all_cases_CPI
+make collect_all_cases_CPI -j24
 ```
 
-该命令会遍历每个测例的综合权重CPI数据，并将统计结果保存到`All_case_weightedCPI.csv`中
+此命令会遍历每个测例的综合权重CPI数据，并将统计结果保存到`All_case_weightedCPI.csv`中
+
+使用如下命令会遍历每个测例的`xxx_final_result_N.csv`文件，并将数据整合到文件`Each_case_ckp_data.csv`
 
 ```bash
 make collect_checkpoints_number
 ```
 
-该命令会遍历每个测例的`xxx_final_result_N.csv`文件，并将数据整合到文件`Each_case_ckp_data.csv`。因此该文件会记录所有测例的全部checkpoints的CPI数据信息
+因此`Each_case_ckp_data.csv`会记录所有测例的全部checkpoints的CPI数据信息
 
-### 5.输出文件/目录说明
+### 5. IPC统计
+
+#### 5.1 单核模式
+
+由于IPC统计时不能直接将IPC结果与Checkpoint的权重一起计算，需要先生成带权重的CPI数据，因此在`runspec_gem5_power`目录下先执行如下命令生成每个测例带权重的CPI数据
+
+```bash
+make cpi_all_cases -j24
+```
+
+然后使用下面的命令来获取每个测例的IPC数据，统计结果会保存到`All_case_IPC_st.csv`文件中
+
+```bash
+make collect_all_cases_IPC
+```
+
+#### 5.2 多核模式
+
+与单核模式过程相同，需要先汇总多核模式下带权重的CPI数据，可以使用如下面命令（其中X可以指定为2、4、8，分别代表双核、四核、八核）
+
+```bash
+make cpi_all_cases_X -j24
+```
+
+然后使用如下命令统计多核模式下的IPC数据，统计结果会保存到`All_case_IPC_smtX.csv`文件中
+
+```bash
+make collect_all_cases_IPC_X
+```
+
+> 目前IPC数据统计只支持全部测例的数据汇总，不支持单个测例的IPC统计
+
+### 6. L2 Cache MissRate & MPKI统计
+
+统计每个测例中L2 Cache的Miss#、Weighted Miss#、Access#、Weighted Access#可以使用如下命令
+
+```bash
+make mpki_l2_all_cases -j 24
+```
+
+然后在使用如下命令来统计每个测例的L2 Cache Miss Rate和MPKI，统计结果会保存到`All_case_L2_MPKI_st.csv`文件中
+
+```bash
+make collect_all_cases_MPKI_L2
+```
+
+如果需要统计多核模式下的IPC数据使用如下命令（其中X可以指定为2、4、8，分别代表双核、四核、八核），统计结果会保存到`All_case_L2_MPKI_smtX.csv`文件中
+
+```bash
+make collect_all_cases_MPKI_X_L2
+```
+
+### 7.输出文件/目录说明
 
 上述不同功能都会在当前测例目录下产生相应的输出文件/目录，以便查看和记录每个步骤的输出结果。
 
@@ -423,8 +481,9 @@ make collect_checkpoints_number
 7. xxx_bbv: 保存通过gem5生成的BBV文件，以及生成过程的仿真数据(stats.txt)
 8. m5out: 保存生成的checkpoints的与生成checkpoints过程的仿真数据(stats.txt)
 9. out_ckpN: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，N表示第N个checkpoint
-10.xxx_CKPS_CPI_Err.log: 记录在执行make cpi, cpi_2, cpi_4, cpi_8 时发现的异常ckp信息
-11.xxx_CKPS_L2_MISS_ACCESS_Err.log: 记录在执行make mkpi 时发现的异常ckp信息
+   10.xxx_CKPS_CPI_Err.log: 记录在执行make cpi, cpi_2, cpi_4, cpi_8 时发现的异常ckp信息
+   11.xxx_CKPS_L2_MISS_ACCESS_Err.log: 记录在执行make mkpi 时发现的异常ckp信息
+
 ------
 
 ## scripts
