@@ -981,7 +981,7 @@ collect_all_cases_MPKI_L2:
 	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","L2MPKI","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2/5000,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI_st.csv;
 	@rm -rf All_case_L2_Miss_Access.log;
-	@gedit All_case_L2_MPKI.csv &
+	@gedit All_case_L2_MPKI_st.csv &
 
 collect_all_cases_MPKI_2_L2:
 	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
@@ -1010,7 +1010,7 @@ collect_all_cases_MPKI_2_L2:
 	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","L2MPKI","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2/5000/2,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI_smt2.csv;
 	@rm -rf All_case_L2_Miss_Access.log;
-	@gedit All_case_L2_MPKI.csv &
+	@gedit All_case_L2_MPKI_smt2.csv &
 
 collect_all_cases_MPKI_4_L2:
 	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
@@ -1039,7 +1039,7 @@ collect_all_cases_MPKI_4_L2:
 	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","L2MPKI","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2/5000/4,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI_smt4.csv;
 	@rm -rf All_case_L2_Miss_Access.log;
-	@gedit All_case_L2_MPKI.csv &
+	@gedit All_case_L2_MPKI_smt4.csv &
 
 collect_all_cases_MPKI_8_L2:
 	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
@@ -1068,7 +1068,7 @@ collect_all_cases_MPKI_8_L2:
 	@cat ./999*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@awk 'NR==1 {OFS=",";print "SpecCase#","L2MissRate","L2MPKI","WeightedMiss#","WeightedAccess#"} {OFS=",";print $$1,$$2/$$3,$$2/5000/8,$$2,$$3}' All_case_L2_Miss_Access.log > All_case_L2_MPKI_smt8.csv;
 	@rm -rf All_case_L2_Miss_Access.log;
-	@gedit All_case_L2_MPKI.csv &
+	@gedit All_case_L2_MPKI_smt8.csv &
 
 collect_all_cases_CKPS_CPI_Err:
 	@rm -rf ./All_case_CKPS_CPI_Err.log;
