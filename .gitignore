@@ -8,4 +8,4 @@
 !runspec_gem5_power/*
 !*.md
 !.gitignore
-!scripts
+!scripts/*
