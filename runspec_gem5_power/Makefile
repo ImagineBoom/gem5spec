@@ -983,7 +983,7 @@ collect_all_cases_MPKI_L2:
 	@rm -rf All_case_L2_Miss_Access.log;
 	@gedit All_case_L2_MPKI_st.csv &
 
-collect_all_cases_MPKI_2_L2:
+collect_all_cases_MPKI_L2_2:
 	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
 	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
@@ -1012,7 +1012,7 @@ collect_all_cases_MPKI_2_L2:
 	@rm -rf All_case_L2_Miss_Access.log;
 	@gedit All_case_L2_MPKI_smt2.csv &
 
-collect_all_cases_MPKI_4_L2:
+collect_all_cases_MPKI_L2_4:
 	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
 	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
@@ -1041,7 +1041,7 @@ collect_all_cases_MPKI_4_L2:
 	@rm -rf All_case_L2_Miss_Access.log;
 	@gedit All_case_L2_MPKI_smt4.csv &
 
-collect_all_cases_MPKI_8_L2:
+collect_all_cases_MPKI_L2_8:
 	@cat ./500*/*_Total_Result_L2_Miss_Access.log > ./All_case_L2_Miss_Access.log;
 	@cat ./502*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
 	@cat ./505*/*_Total_Result_L2_Miss_Access.log >> ./All_case_L2_Miss_Access.log;
