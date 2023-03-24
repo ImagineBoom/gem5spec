@@ -465,7 +465,7 @@ make collect_all_cases_MPKI_L2
 如果需要统计多核模式下的IPC数据使用如下命令（其中X可以指定为2、4、8，分别代表双核、四核、八核），统计结果会保存到`All_case_L2_MPKI_smtX.csv`文件中
 
 ```bash
-make collect_all_cases_MPKI_X_L2
+make collect_all_cases_MPKI_L2_X
 ```
 
 ### 7.输出文件/目录说明
