@@ -55,13 +55,13 @@ func_CPI_breakdown(){
 
               #从拷贝进来的.result文件中grep出CPI_breakdown的数据，并存入新建的M1.results文件中
               echo "Parameters(GEM5)"" ""CPI(M1)">>$Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
-              grep "Wait_for_ifetch_in_pipe" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==2''{print $2}'| awk '{print $1,$2}'  >> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
-              grep "Wait_for_ifetch_miss" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: '{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
-              grep "Wait_for_translation" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==2''{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
-              grep "Wait_for_ifetch_other" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: '{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
-              grep "Wait_for_dispatch_requirements" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==3''{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
-              grep "Wait_for_execution_unit" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==2''{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
-              grep "Wait_for_re_ifetch_on_other_flushes" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num//$M1_result_file | awk -F: 'NR==2''{print $2}' | awk '{print $1,$2}'>>$Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
+              grep -w "Wait_for_ifetch_in_pipe" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==2''{print $2}'| awk '{print $1,$2}'  >> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
+              grep -w "Wait_for_ifetch_miss" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: '{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
+              grep -w "Wait_for_translation" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==2''{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
+              grep -w "Wait_for_ifetch_other" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: '{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
+              grep -w "Wait_for_dispatch_requirements" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==3''{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
+              grep -w "Wait_for_execution_unit" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/$M1_result_file | awk -F: 'NR==2''{print $2}' | awk '{print $1,$2}'>> $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
+              grep -w "Wait_for_re_ifetch_on_other_flushes" $Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num//$M1_result_file | awk -F: 'NR==2''{print $2}' | awk '{print $1,$2}'>>$Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
               
               #部分state.txt中的数据未在M1.result文件中未找到与之对应项，先把变量名称列出来
               echo "decodeBlockCpi" >>$Path_of_gem5/runspec_gem5_power/$Spec_Name/output_ckp$Line_num/temp.txt
