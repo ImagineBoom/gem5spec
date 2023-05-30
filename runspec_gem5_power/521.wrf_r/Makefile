@@ -87,7 +87,7 @@ checkpoints_8: $(EXECUTABLE)
 
 restore: $(EXECUTABLE)
 	@echo ---------------------rscpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIMEG) $(GEM5) $(GEM5_OPT) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$(NUM_CKP).log 2>&1
+	$(TIMEG) $(GEM5) $(GEM5_OPT) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) 2>&1 |tee -a $(FILE)_restore_ckp$(NUM_CKP).log
 	@echo ---------------------rscpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$(NUM_CKP).log >> $(FILE)_trace_err.log; true
 
