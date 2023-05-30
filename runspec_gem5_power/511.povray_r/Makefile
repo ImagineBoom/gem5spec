@@ -97,7 +97,7 @@ restore_all: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) $(GEM5_OPT) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) $(GEM5_OPT) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) 2>&1 |tee -a $(FILE)_restore_ckp$${i}.log;\
 		grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
 		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
@@ -118,7 +118,7 @@ restore_all_2: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 2 -c "$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 2 -c "$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS)" $(GEM5_PY_OPT) 2>&1 |tee -a $(FILE)_restore_ckp$${i}.log;\
 		echo >&6 )& \
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
@@ -131,7 +131,7 @@ restore_all_4: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 4 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 4 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS)" $(GEM5_PY_OPT) 2>&1 |tee -a $(FILE)_restore_ckp$${i}.log;\
 		echo >&6 )& \
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
@@ -144,7 +144,7 @@ restore_all_8: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 8 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 8 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS)" $(GEM5_PY_OPT) 2>&1 |tee -a $(FILE)_restore_ckp$${i}.log;\
 		echo >&6 )& \
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
