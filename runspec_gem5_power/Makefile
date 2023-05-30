@@ -1002,7 +1002,7 @@ collect_checkpoints_number:
 	@paste temp1.log temp2.log > temp.log;
 	@awk 'NR==1 {OFS=",";print "SpecCase#","Checkpoints#"} {OFS=",";print $$1,$$2}' temp.log > Checkpoint_Num.csv;
 	@rm -rf temp*;
-	@gedit Checkpoint_Num.csv &
+	@cat Checkpoint_Num.csv
 
 classify_result:
 	@find ./500*/*.csv -exec basename {} \; | awk -F"[_]" '{print $$1,$$5}' > ./Sort_All_case_weightedCPI.csv;
