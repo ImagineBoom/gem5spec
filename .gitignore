@@ -1,7 +1,6 @@
 *
 !*Makefile
 !params.mk
-!generate_spec_makefile.py
 !spec-config
 !*.cfg
 !runspec_gem5_power/
