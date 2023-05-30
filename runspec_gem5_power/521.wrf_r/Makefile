@@ -51,10 +51,10 @@ include ../common.mk
 
 simpoint: $(EXECUTABLE)
 	@echo ---------------------bbv_simpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	@$(TIMEG) $(GEM5) --outdir=$(FILE)_bbv $(GEM5_PY) --simpoint-profile --simpoint-interval=$(INTERVAL_SIZE) -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=NonCachingSimpleCPU --mem-size=16384MB >$(FILE)_gem5_bbv.log 2>&1;\
+	@$(TIMEG) $(GEM5) --outdir=$(FILE)_bbv $(GEM5_PY) --simpoint-profile --simpoint-interval=$(INTERVAL_SIZE) -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=NonCachingSimpleCPU --mem-size=16384MB 2>&1 |tee -a $(FILE)_gem5_bbv.log;\
 	gunzip -c ./$(FILE)_bbv/simpoint.bb.gz >./$(FILE)_bbv/simpoint.bb;\
 	MAXK=`wc -l ./$(FILE)_bbv/simpoint.bb | awk 'END{print sqrt($$1)}'`;\
-	$(SIMPOINT_EXE) -loadFVFile ./$(FILE)_bbv/simpoint.bb.gz -maxK $${MAXK} -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights -inputVectorsGzipped >$(FILE)_simpoint.log 2>&1;\
+	$(SIMPOINT_EXE) -loadFVFile ./$(FILE)_bbv/simpoint.bb.gz -maxK $${MAXK} -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights -inputVectorsGzipped 2>&1 |tee -a $(FILE)_simpoint.log;\
 	#$(SIMPOINT_EXE) -loadFVFile $(FILE).bb.out -maxK $(MAXK) -saveSimpoints ./$(FILE).simpts -saveSimpointWeights ./$(FILE).weights >>$(FILE)_trace.log 2>&1 ; \
 	paste $(FILE).simpts $(FILE).weights | awk '{printf "%-20d %-20d %-15.5f\n",$$2,$$1,$$3}' 1>$(FILE).merge;\
 	sort $(FILE).merge -n -k 2 -o $(FILE).merge
