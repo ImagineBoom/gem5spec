@@ -1,9 +1,10 @@
-
-include ../Makefile.inc
+include ../params.mk
 
 EXECUTABLE      = povray_r_base.$(LABEL)
 BENCH_PATH      = $(SPEC_HOME)/benchspec/CPU/511.povray_r
 ARGS            = $(BENCH_PATH)/data/test/input/SPEC-benchmark-test.ini
+
+FILE           	= $$(basename $(BENCH_PATH))
 
 host: $(EXECUTABLE)
 	$(TIMEH) ./$(EXECUTABLE) $(ARGS) 1> host_out.log 2> host_err.log
@@ -44,7 +45,7 @@ clean:
 clean-all:
 	find ./* ! -name Makefile -exec rm -rf {} \+
 
-include ../TRACE.mk
+include ../common.mk
 
 simpoint: $(EXECUTABLE)
 	@echo ---------------------bbv_simpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
@@ -84,28 +85,9 @@ checkpoints_8: $(EXECUTABLE)
 
 restore: $(EXECUTABLE)
 	@echo ---------------------rscpt handle $(FILE) beginning ---------------------->>$(FILE)_trace.log
-	$(TIMEG) $(GEM5) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$(NUM_CKP).log 2>&1
+	$(TIMEG) $(GEM5) $(GEM5_OPT) -d ./output_ckp$(NUM_CKP) $(GEM5_PY) --restore-simpoint-checkpoint -r $(NUM_CKP) --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$(NUM_CKP).log 2>&1
 	@echo ---------------------rscpt handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 	@-grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$(NUM_CKP).log >> $(FILE)_trace_err.log; true
-
-#restore_case: $(EXECUTABLE)
-#	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
-#	@rm -rf ./output_ckp*;
-#	@rm -rf ./$(FILE)_CKPS_CPI.log;
-#	@rm -rf ./$(FILE)_RS_NUM.log;
-#	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
-#	for i in `seq $${m}`; do (\
-#		$(TIMEG) $(GEM5) -d ./output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) $(CACHE_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
-#		grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
-#		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
-#		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
-#		cpi=0;\
-#		[ `grep "system.switch_cpus.totalCpi" ./output_ckp$${i}/stats.txt | wc -l` == 2 ] \
-#		&& cpi=`grep "system.switch_cpus.totalCpi.*" ./output_ckp$${i}/stats.txt | awk 'END{print $$2}'`;\
-#		echo ckp$${i} $${simpts} $${weights} $${cpi} >> ./$(FILE)_CKPS_CPI.log;\
-#		echo Finshed_Restore_CKP_$${i} >> ./$(FILE)_RS_NUM.log)& \
-#	done;
-#	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
 
 restore_all: $(EXECUTABLE)
 	@echo ---------------------rscpt_all handle $(FILE) beginning ---------------------->>$(FILE)_trace.log;
@@ -115,7 +97,7 @@ restore_all: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) $(GEM5_RESTORE_OPT) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" --cpu-type=$(CPU_TYPE) --cpu-clock=$(CPU_CLOCK) $(CACHE_OPT) $(GEM5_CKP_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) $(GEM5_OPT) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -c $(EXECUTABLE) -o " $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
 		grep -niE "FAIL|ERR|FAULT" $(FILE)_restore_ckp$${i}.log >> $(FILE)_trace_err.log; true;\
 		simpts=`sed -n "$${i}p" $(FILE).merge | awk '{print $$2}'`;\
 		weights=`sed -n "$${i}p" $(FILE).merge | awk '{print $$3}'`;\
@@ -136,7 +118,7 @@ restore_all_2: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 2 -c "$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS)" --cpu-type=$(CPU_TYPE) --cpu-clock=$(CPU_CLOCK) $(CACHE_OPT) $(GEM5_CKP_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 2 -c "$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
 		echo >&6 )& \
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
@@ -149,7 +131,7 @@ restore_all_4: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 4 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS)" --cpu-type=$(CPU_TYPE) --cpu-clock=$(CPU_CLOCK) $(CACHE_OPT) $(GEM5_CKP_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 4 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
 		echo >&6 )& \
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log
@@ -162,7 +144,7 @@ restore_all_8: $(EXECUTABLE)
 	@m=(`awk 'END {print NR}' ./$(FILE).merge`);\
 	exec 6<>$(FLOODGATE);\
 	for i in `seq $${m}`; do read -u6; (\
-		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 8 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS)" --cpu-type=$(CPU_TYPE) --cpu-clock=$(CPU_CLOCK) $(CACHE_OPT) $(GEM5_CKP_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
+		$(TIMEG) $(GEM5) -d $(WORK_DIR)/$(FILE)/output_ckp$${i} $(GEM5_PY) --restore-simpoint-checkpoint -r $${i} --checkpoint-dir ./m5out -n 8 -c "$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE);$(EXECUTABLE)" -o " $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS); $(ARGS)" $(GEM5_PY_OPT) >$(FILE)_restore_ckp$${i}.log 2>&1;\
 		echo >&6 )& \
 	done;
 	@echo ---------------------rscpt_all handle $(FILE) Finished ---------------------->>$(FILE)_trace.log

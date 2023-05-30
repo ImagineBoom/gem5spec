@@ -7,7 +7,7 @@ getopt_cmd=$(getopt \
 -o aiqrphvVc:b:e:j: \
 --long m1,gem5,spec2017,myexe:,\
 all,all_steps,entire,itrace,qtrace,run_timer,pipe_view,gen_txt,not_gen_txt,\
-all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gem5_ckp_py_opt:,timeout:,build_gem5_j:,\
+all_benchmarks,entire_all_benchmarks,max_insts,slice_len:,gem5_py_opt:,timeout:,build_gem5_j:,\
 i_insts:,q_jump:,q_convert:,r_insts:,r_cpi_interval:,r_pipe_type:,r_pipe_begin:,r_pipe_end:,\
 restore_case:,restore_all,restore_all_2,restore_all_4,restore_all_8,cpi_all,kill_restore_all_jobs,gen_restore_compare_excel,label:,\
 control,add_job,reduce_job,del_job_pool,add_job_10,reduce_job_10,get_job_pool_size,\
@@ -149,82 +149,6 @@ case "${1#*=}" in
 esac
 
 case "${1#*=}" in
-  --entire)
-    with_entire=true
-    target=entire
-    shift 1
-    func_m1_args_parser $@
-    ;;
-  -a|--all|--all_steps)
-    with_all_steps=true
-    if [[ $is_m1 == true ]]; then
-      target=all
-    elif [[ $is_spec2017 == true ]]; then
-      target=trace
-    else
-      exit 1
-    fi
-    shift 1
-    func_m1_args_parser $@
-    ;;
-  -i|--itrace)
-    with_itrace=true
-    target=itrace
-    shift 1
-    func_m1_args_parser $@
-    ;;
-  -q|--qtrace)
-    with_qtrace=true
-    target=qtrace
-    shift 1
-    func_m1_args_parser $@
-    ;;
-  -r|--run_timer)
-    with_run_timer=true
-    if [[ $is_m1 == true ]]; then
-      target=run_timer
-    elif [[ $is_spec2017 == true ]]; then
-      target=m1
-    else
-      exit 1
-    fi
-    shift 1
-    func_m1_args_parser $@
-    ;;
-  -p|--pipe_view)
-    with_pipe_view=true
-    target=m1_pipeview
-    shift 1
-    func_m1_args_parser $@
-    ;;
-  --all_benchmarks)
-    with_all_benchmarks=true
-    shift 1
-    func_m1_args_parser $@
-    ;;
-  --entire_all_benchmarks) #用于查看整体CPI等数据
-    with_entire_all_benchmarks=true
-    shift 1
-    while [ -n "${1#*=}" ]; do
-      case "${1#*=}" in
-        --max_insts)
-          with_max_insts=true
-          shift
-          ;;
-        --slice_len)
-          slice_len="${2#*=}"
-          with_slice_len=true
-          shift 2
-          ;;
-        --)
-          shift
-          ;;
-        *)
-          break
-          ;;
-      esac
-    done
-    ;;
   --restore_case)
     with_restore_case=true
     shift
@@ -252,8 +176,8 @@ case "${1#*=}" in
             shift 1
           fi
           ;;
-        --gem5_ckp_py_opt)
-          gem5_ckp_py_opt=${2}
+        --gem5_py_opt)
+          gem5_py_opt=${2}
           shift 2
           ;;
         --label)
@@ -295,8 +219,8 @@ case "${1#*=}" in
             shift 1
           fi
           ;;
-        --gem5_ckp_py_opt)
-          gem5_ckp_py_opt=${2}
+        --gem5_py_opt)
+          gem5_py_opt=${2}
           shift 2
           ;;
         --label)
@@ -418,11 +342,6 @@ case "${1#*=}" in
     with_cpi_all=true
     shift
     ;;
-  -b|--r_pipe_begin|--SCROLL_BEGIN|-e|--r_pipe_end|--SCROLL_END|--gen_txt|--not_gen_txt) #缺省参数模式
-    # echo "225"
-    func_m1_args_parser $@
-    # echo $args
-    ;;
   --)
     shift 1
     ;;
@@ -432,68 +351,7 @@ case "${1#*=}" in
 esac
 
 #根据解析的参数判断执行
-if [[ $is_m1 == true ]]; then
-  if [[ $is_myexe == true ]]; then
-    #完整参数模式
-    if [[ $with_all_steps == true || $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true || $with_entire == true ]] ; then
-      if [[ "${CPI_INTERVAL}" == "-1" ]];then
-        CPI_INTERVAL="${NUM_INST}"
-      fi
-    ./p8-m1.sh "${EXE}" --${target} "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}" "$with_gen_txt"
-    #缺省参数模式1
-    elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
-      (( SCROLL_BEGIN = SCROLL_BEGIN - 1 ))
-      (( insts = SCROLL_END - SCROLL_BEGIN ))
-      JUMP_NUM=${SCROLL_BEGIN}
-      CONVERT_NUM_Vgi_RECS=${insts}
-      NUM_INST=${insts}
-      CPI_INTERVAL="${NUM_INST}"
-      SCROLL_BEGIN=1
-      SCROLL_END=${insts}
-      ./p8-m1.sh "${EXE}" -- "${NUM_INSNS_TO_COLLECT}" "${JUMP_NUM}" "${CONVERT_NUM_Vgi_RECS}" "${NUM_INST}" "${CPI_INTERVAL}" "${RESET_STATS}" "${SCROLL_PIPE}" "${SCROLL_BEGIN}" "${SCROLL_END}" "$with_gen_txt"
-    fi
-  elif [[ $is_spec2017 == true ]]; then
-    if [[ $with_all_benchmarks == true ]]; then
-      (func_with_all_benchmarks >>nohup.log 2>&1 &)
-    elif [[ $with_entire_all_benchmarks == true ]]; then
-      (func_with_entire_all_benchmarks >>nohup.log 2>&1 &)
-    elif [[ $with_restore_all == true ]]; then
-      func_set_job_n_default 5
-      (func_with_restore_all_benchmarks "${FLOODGATE}" >>nohup.log 2>&1 &)
-    elif [[ $with_cpi_all == true ]]; then
-      (func_with_cpi_all_benchmarks >>nohup.log 2>&1 &)
-    else
-      #完整参数模式
-      if [[ $with_all_steps == true ]] ; then
-        if [[ ${CPI_INTERVAL} == -1 ]];then
-          CPI_INTERVAL=${NUM_INST}
-        fi
-        make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${NUM_INSNS_TO_COLLECT} JUMP_NUM=${JUMP_NUM} CONVERT_NUM_Vgi_RECS=${CONVERT_NUM_Vgi_RECS} NUM_INST=${NUM_INST} CPI_INTERVAL=${CPI_INTERVAL} RESET_STATS=${RESET_STATS} SCROLL_PIPE=${SCROLL_PIPE} SCROLL_BEGIN=${SCROLL_BEGIN} SCROLL_END=${SCROLL_END}
-        make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
-      elif [[ $with_itrace == true || $with_qtrace == true || $with_run_timer == true || $with_pipe_view == true  ]]; then
-        make ${target} -C runspec_gem5_power/"${bm[${spec2017_bm}]}" ${args}
-      #缺省参数模式1
-      elif [[ $with_r_pipe_begin == true && $with_r_pipe_end == true ]]; then
-        #args=("${args}")
-        #pipe_b="${args[0]##*=}"
-        #pipe_e="${args[1]##*=}"
-        pipe_b=$(echo "${args[@]}" | grep -oP "SCROLL_BEGIN=\d+" | grep -oP "\d+")
-        (( pipe_b=pipe_b-1 ))
-        pipe_e=$(echo "${args[@]}" | grep -oP "SCROLL_END=\d+" | grep -oP "\d+")
-        (( insts = pipe_e - pipe_b ))
-        # make trace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
-        if [[ ! -e runspec_gem5_power/"${bm[${spec2017_bm}]}"/"${bm[${spec2017_bm}]}".vgi ]]; then
-          make itrace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
-        fi
-        make qtrace -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
-        make m1 -C runspec_gem5_power/"${bm[${spec2017_bm}]}" NUM_INSNS_TO_COLLECT=${bm_insts[${spec2017_bm}]} JUMP_NUM=${pipe_b} CONVERT_NUM_Vgi_RECS=${insts} NUM_INST=${insts} CPI_INTERVAL=${insts} RESET_STATS=1 SCROLL_PIPE=1 SCROLL_BEGIN=1 SCROLL_END=${insts}
-        make m1_pipeview -C runspec_gem5_power/"${bm[${spec2017_bm}]}"
-      fi
-    fi
-  else
-    exit 1
-  fi
-elif [[ $is_gem5 == true ]]; then
+if [[ $is_gem5 == true ]]; then
   if [[ $is_spec2017 == true ]];then
     if [[ $with_restore_case == true ]]; then
       # echo "PIDIS $$"
@@ -531,14 +389,14 @@ elif [[ $is_gem5 == true ]]; then
         make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
       fi
 
-      if [[ $gem5_ckp_py_opt == "" ]];then
+      if [[ $gem5_py_opt == "" ]];then
         #echo $timeout
-        #echo "450, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1
+        #echo "450, gem5_py_opt=${gem5_py_opt},label=${label}"
+        func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_py_opt}" "${label}" ${timeout} 2>&1
       else
         #echo $timeout
-        #echo "453, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1
+        #echo "453, gem5_py_opt=${gem5_py_opt},label=${label}"
+        func_with_restore_case "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${bm[${spec2017_bm}]}" "${gem5_py_opt}" "${label}" ${timeout} 2>&1
       fi
 
     elif [[ $with_restore_all == true ]]; then
@@ -577,14 +435,14 @@ elif [[ $is_gem5 == true ]]; then
         make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
       fi
 
-      if [[ $gem5_ckp_py_opt == "" ]];then
+      if [[ $gem5_py_opt == "" ]];then
         #echo $timeout
-        #echo "489, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1
+        #echo "489, gem5_py_opt=${gem5_py_opt},label=${label}"
+        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_py_opt}" "${label}" ${timeout} 2>&1
       else
         #echo $timeout
-        #echo "492, gem5_ckp_py_opt=${gem5_ckp_py_opt},label=${label}"
-        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_ckp_py_opt}" "${label}" ${timeout} 2>&1
+        #echo "492, gem5_py_opt=${gem5_py_opt},label=${label}"
+        func_with_restore_all_benchmarks "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" "${gem5_py_opt}" "${label}" ${timeout} 2>&1
       fi
     elif [[ $with_restore_all_2 == true ]]; then
       # echo "PIDIS $$"
