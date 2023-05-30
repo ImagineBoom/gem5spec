@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#SBATCH --job-name=ST-N2-n21
+#SBATCH --nodes=2
+#SBATCH --nodelist=cluster[1,2]
+#SBATCH -n 21
+#SBATCH --cpus-per-task=1
+./run.sh --gem5 --spec2017 --restore_all -j 21
