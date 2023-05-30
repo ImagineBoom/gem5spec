@@ -4,11 +4,11 @@ func_help(){
   2.Notion: )表示输入的上一级命令, []内表示可选, |表示选择一个, <>内表示必填项
   3.Usage: ./run.sh  [MAIN_OPTS]  [FIR_OPTS]  [SEC_OPTS]
 
-    [MAIN_OPTS]:
+    <MAIN_OPTS>:
       --gem5                                                                            使用gem5模拟器
       --control                                                                         线程控制
 
-    [FIR_OPTS]:
+    <Level 2>:
       --gem5)
               --spec2017                                                                使用spec2017全部
       --control)
@@ -17,20 +17,11 @@ func_help(){
               --del_job_pool                                                            删除线程池
               --kill_restore_all_jobs                                                   kill restore_all 的任务
 
-    [SEC_OPTS]:
+    <Level 3>:
       --spec2017)
               <benchmark num>                                                           [502|999|538|523|557|526|525|511|500|519|544|503|520|554|507|541|505|510|531|521|549|508|548|527]
-              --restore_all                                                             run all benchmark checkpoints segments
-              -a --i_insts=<num> -j=<num> -c=<num> --r_insts=<num> -b=<num> -e=<num>
-              -i --i_insts=<num>                                                        生成i_insts条指令的itrace
-              -q -j=<num> -c=<num>                                                      生成[j,j+c]指令区间的qtrace
-              -r --r_insts=<num> -b=<num> -e=<num>                                      在qtrace区间中执行r_insts条指令,流水线图指令区间为[j+b,j+e-b+1]
-              -p                                                                        查看流水线图
-              -b=<num> -e=<num>                                                         缺省参数模式
 
-  4.OPTS解释:
-    --gem5
-      --gen_restore_compare_excel                                                       ST模式下生成表格
+    <Level 4>:
       --restore_case                                                                    ST模式下运行单个SPEC2017测例
       --restore_all                                                                     ST模式下运行SPEC2017 上述24个测例
       --restore_all_2                                                                   SMT2模式下运行SPEC2017 上述24个测例
@@ -38,7 +29,8 @@ func_help(){
       --restore_all_8                                                                   SMT8模式下运行SPEC2017 上述24个测例
       --build_gem5_j                                                                    运行gem5前编译指定的线程数，可选
       -j                                                                                restore时并行运行的gem5个数
-  5.RUN:
+
+  4.RUN:
     PATTERN-1: 完整参数模式
 
     * 运行gem5 restore
@@ -49,7 +41,7 @@ func_help(){
       ./run.sh --gem5 --spec2017 --restore_all_4 --build_gem5_j 10 -j 20                # SMT4
       ./run.sh --gem5 --spec2017 --restore_all_8 --build_gem5_j 10 -j 20                # SMT8
 
-    * kill restore_all_*(ctrl+C无效)
+    * kill restore_all_* (ctrl+C无效)
       ./run.sh --control --kill_restore_all_jobs --gem5
 
     PATTERN-2: 缺省参数模式

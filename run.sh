@@ -480,7 +480,7 @@ if [[ $is_gem5 == true ]]; then
         make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
       fi
             
-      (func_with_restore_all_benchmarks_n2 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
+      func_with_restore_all_benchmarks_n2 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1
     elif [[ $with_restore_all_4 == true ]]; then
       # echo "PIDIS $$"
       # 清空
@@ -517,7 +517,7 @@ if [[ $is_gem5 == true ]]; then
         make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
       fi
       
-      (func_with_restore_all_benchmarks_n4 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
+      func_with_restore_all_benchmarks_n4 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1
     elif [[ $with_restore_all_8 == true ]]; then
       # echo "PIDIS $$"
       # 清空
@@ -554,7 +554,7 @@ if [[ $is_gem5 == true ]]; then
         make build_gem5 -C runspec_gem5_power BUILD_GEM5_J=${build_gem5_j}
       fi
             
-      (func_with_restore_all_benchmarks_n8 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1 &)
+      func_with_restore_all_benchmarks_n8 "${FLOODGATE}" "${begin_time}" "${WORK_DIR}" "${add_job}" 2>&1
     elif [[ $with_cpi_all == true ]]; then
       (func_with_cpi_all_benchmarks >>nohup.log 2>&1 &)
     elif [[ $with_func_gen_restore_compare_excel == true ]]; then
