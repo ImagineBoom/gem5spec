@@ -1,299 +1,286 @@
-## 项目配置
 
-所有的配置项都在`runspec_gem5_power/params.mk`文件中指定
+---
 
-✅ 确保已经成功[编译SPEC2017](https://github.com/griffin-warrior/gem5spec)
-- 配置`SPEC_HOME`，确保`SPEC_HOME`所在路径符合`$(SPEC_HOME)/benchspec/CPU/541.leela_r`的类似规则
-- 根据编译平台设置`LABEL`,`LABEL`的值需在编译SPEC时设置为可执行文件的后缀
+English | [简体中文](./README-ZH.md)
 
-✅ 确保gem5已经build成功，确认执行的选项和参数
-- `GEM5_REPO_PATH`配置为gem5仓库的根路径
-- `GEM5`配置为gem5编译结果所在的路径
-- `BUILD_GEM5_J`若通过此脚本编译gem5，需要指定并行编译数
-- `GEM5_OPT`gem5.opt的直接参数
-- `GEM5_PY`se.py所在路径
-- `GEM5_PY_OPT`se.py的选项和参数
+---
 
-✅ 确保已经成功安装Simpoint·`version: 3.2`
-- `SIMPOINT_EXE`simpoint可执行文件的路径
+
+## Project Configuration
+
+All configuration items are specified in the `runspec_gem5_power/params.mk` file
+
+✅ Make sure that SPEC2017 has been successfully [compiled](https://github.com/griffin-warrior/gem5spec)
+- Configure `SPEC_HOME` and make sure the path where `SPEC_HOME` is located matches a similar rule to `$(SPEC_HOME)/benchspec/CPU/541.leela_r`
+- Set `LABEL` according to the compilation platform, the value of `LABEL` will be set to the suffix of the executable when compiling SPEC2017. 
+
+✅ Make sure that gem5 has been built successfully, and confirm the options and parameters below
+- `GEM5_REPO_PATH`: Configure as the root path for gem5 repository
+- `GEM5`: Confiture the path where the compiled results of gem5 are located, such as `gem5.opt`
+- `BUILD_GEM5_J`: If gem5 is compiled from the script, you need to specify the number of parallel compilations
+- `GEM5_OPT`: Direct parameters of `gem5.opt[fast..]`
+- `GEM5_PY`: Path to `se.py`
+- `GEM5_PY_OPT`: Options and parameters for `se.py`
+
+✅ Make sure Simpoint`version: 3.2` has been successfully installed
+- `SIMPOINT_EXE`: Path to the simpoint executable
 - INTERVAL_SIZE
 - WARMUP_LENGTH
-- `NUM_CKP`: 使用make restore只运行一个checkpoint时，指定的checkpoint编号
+- `NUM_CKP`: The checkpoint number specified when using make restore to run only one checkpoint
 
-- [ ] 可选：Valgrind，统计指令数
-
-- `VALGRIND_EXE`valgrind可执行文件的路径
+- [ ] Optional: Valgrind, count the number of instructions
+- `VALGRIND_EXE`: Path to valgrind executable
 
 ## Simpoint
 
-### 1. 生成BBV文件并使用Simpoint分类
+### 1. Generate BBV files and classify them using simpoint
 
-其中`maxK`的大小，默认为interval的个数开根后的值。
+The size of 'maxK' defaults to the value of the arithmetic square root of the number of intervals.
 
-在单个spec2017测例的目录下执行如下命令
+Run the following command in the directory of a single SPEC2017 test case
 
 ```shell
 make simpoint
 ```
 
-此命令会使用gem5的`NonCachingSimpleCPU`模型对程序分割片段，生成Basic Block Vector(BBV)文件。然后使用Simpoint对该文件进行分类生成`.simpts`和`.weights`文件。为了方便解析，脚本随后会对这两个文件进行合并排序(按指令顺序由小到大)操作，并将结果保存到`.merge`文件中。
+This command will use the `NonCachingSimpleCPU` model of gem5 to generate representative points for the program and generate a Basic Block Vector(BBV) file. Then use simpoint to classify the file and generate `.simpts` and `.weights` files. For the convenience of parsing, this script will then merge and sort these two files(in ascending order of starting instruction position), and save the results to the `.merge` file
 
-如果想一次对24个测例同时生成BBV文件，在`runspec_gem5_power`目录下执行如下命令
+If you want to generate `.merge` files for 24 test cases at once, run the following command in the  `runspec_gem5_power` directory.
 
 ```bash
 make simpoints_all_cases -j24
 ```
 
-> - 对于一些不知道指令数目的程序，可以修改下面的命令，通过使用Valgrind获取程序的指令数，以便决定interval的大小
+> - For some programs that don't know the number of instructions, you can modify the following command to obtain the program's number of instruction by using valgrind to determine the size of the `interval`
 >
 >   ```sh
 >   $VALGRIND_EXE --tool=exp-bbv --instr-count-only=yes --bb-out-file=/dev/null $EXECUTABLE $ARGS
 >   ```
 >
-> - 如果想查看每个测例有多少个片段，可以在`runspec_gem5_power`目录下执行如下命令，结果保存在Checkpoint_Num.csv中
+> - If you want to see how many representative points each test case has, you can execute the following command in the "runspec_gem5_power" directory, and the results will be saved in Checkpoint_Num.csv file.
 >
 >   ```sh
 >   make collect_checkpoints_number
 >   ```
 
-- *_gem5_bbv.log：gem5生成bbv的运行日志
-- *_simpoint.log：simpoint的运行日志
-- *_trace.log：记录target开始和结束的时间
+- *_gem5_bbv.log：Log file that records the process of gem5 generating BBV
+- *_simpoint.log：Log file recording the execution process of simpoint
+- *_trace.log：Log file recording the start and end time of the target
 
 ## Checkpoint
 
-### 2. 读取Simpoint结果使用gem5生成Checkpoints
+### 2. Read simpoint results to generate Checkpoints using gem5
 
-得到Simpoint的结果后，可以使用gem5去生成对应的Checkpoints。在同一个测例的目录，执行如下命令
+After getting the simpoint results, you can use gem5 to generate the corresponding checkpoints by run the following command in the same case directory
 
 ```shell
 make checkpoints
 ```
 
-此命令会使用gem5读取`.simpts`和`.weights`文件，并使用gem5的`AtomicSimpleCPU`模型完整执行完一遍程序后，生成对应的Checkpoints在`m5out`目录下
+This command will make gem5 read the `.simpts` and `.weights` files,  and generate the corresponding checkpoints in the `m5out/` directory after complete execution of program using gem5's AtomicSimpleCPU
 
-如果想一次对24个测例同时生成Checkpoints文件，在`runspec_gem5_power`目录下执行如下命令
-
+If you want to generate checkpoints for 24 test cases at once, run the following command in the runspec_gem5_power` directory
 ```shell
 make checkpoints_all_cases -j24
 ```
 
-如果使用多核模式生成24个测例的Checkpoints文件，在`runspec_gem5_power`目录下执行如下命令
+If you use gem5's replicated multi-core mode to generate checkpoints file of 24 test cases, run the following command in the `runspec_gem5_power` directory
 
 ```bash
 make checkpoints_all_cases_X -j24
 ```
 
-其中X可以指定为2、4、8，分别代表双核、四核、八核
+Where `X` can be specified as 2,4,8, representing dual-core, qurd-core, octa-core respectively.
 
-- *_checkpoints.log: gem5生成checkpoints的运行日志
+- *_checkpoints.log: Logging of checkpoints generated by gem5
 
 ## Restore
 
-### 3. 使用gem5恢复Checkpoints
+### 3. Restore checkpoint using gem5
 
-#### 3.1 恢复某一个Checkpoint
+#### 3.1 Restore only one checkpoint
 
-得到Checkpoints后，使用gem5恢复某一个Checkpoint，可以在测例的目录下使用如下命令
-
+After getting checkpoints, you can use gem5 to restore a checkpoint by using the following command in the directory of the test case
 ```bash
 make restore NUM_CKP=1
 ```
 
-参数`NUM_CKP`用于指定`restore`Checkpoint的序号，注意该参数的值从1开始，而`m5out`目录下的Checkpoint是从0开始，因此在指定该参数时需要加偏移量1
+The parameter `NUM_CKP` is used to specify the serial number of the `restore` checkpoint, note that the value of this parameter starts from 1, while the checkpoint in the `m5out` directory starts from 0, so you need to add offset 1 when specifying this parameter
 
-默认CPU类型`P8CPU`。*注意，这里不能使用`AtomicSimpleCPU`来恢复`Checkpoints`*
+Default CPU type `P8CPU`. *Note that `AtomicSimpleCPU` cannot be used here to recover checkpoints*
 
-gem5的输出文件会重定向到当前目录下的`output_ckp'n'`目录下，其中`n`与`NUM_CKP`的值相同
+The output file of gem5 will be redirected to the `output_ckp'n'` directory in the current directory, where `n` has the same value as `NUM_CKP`
 
-- *_restore_ckp'n'.log: gem5 restore第n 个checkpoint 的运行日志
+- *_restore_ckp'n'.log: Record the log of the nth checkpoint of gem5 restore
 
-#### 3.2 恢复某个测例全部的Checkpoints
+#### 3.2 Restore all checkpoints of a test case
 
-在`gem5spec`目录下输入以下命令可以对某个测例的所有Checkpoint进行`restore`操作
-
+Enter the following command in the `gem5spec` directory to `restore` all checkpoints of a test case
 ```bash
 source auto_cmpl.sh 
 ./run.sh --gem5 --spec2017 --restore_case XXX -j N
 ```
 
-> - XXX表示需要被restore的测例号，例：500
+> - `XXX` represents the test case number that needs to be restored, e.g. 500
 >
-> - 这里的N指定的是最大并行数，可根据机器硬件情况和当前任务量决定
+> - Here `N` specifies the maximum number of parallelism, which can be determined according to the machine hardware situation and the current amount of tasks
 >
-> - `source auto_cmpl.sh`命令用于自动补全提示，后续用到`run.sh`的地方都可以使用自动补全来加速命令输入
+> - The 'source auto_cmpl.sh' command is used to autocomplete prompts, and auto-completion can be used to speed up command input wherever 'run.sh' is used later
 >
-> - 使用run.sh的方式进行restore的操作，数据将被备份在`${GEM5_REPO_PATH}/data/gem5/${restore_begin_time}`的目录下
+> - If you use the run.sh method to restore the operation, the data will be backed up in the directory '${GEM5_REPO_PATH}/data/gem5/${restore_begin_time}'
 
-可以使用`make restore_status`查看当前测例是否执行完毕所有的checkpoints
+You can use `make restore_status` to see if all checkpoints have been executed for the current test case
 
-- *_RS_NUM.log: 保存已运行完的checkpoint Number。每运行完一个checkpoint就会将对应的Num追加到此文件中，通过对比此文件和.merge的行数判断是否全部执行完。（注：不支持下述X=2,4,8的方式）
-- `runspec_gem5_power`/git_diff.log: 每次使用run.sh执行restore操作时，保存git diff信息
-- *_CKPS_CPI.log: 总共4列，分别是checkpoint num, simpts, weights, cpi。（注：不支持下述X=2,4,8的方式）
+- *_RS_NUM.log: Save the number of checkpoints that have been run, and append the corresponding Num to this file for each completed checkpoint, and compare the number of lines in this file with the .merge file to determine if all of them have been executed. (Note: the following X=2,4,8 method is not supported)
+- `runspec_gem5_power`/git_diff.log: Save the git diff information each time you perform a restore operation with run.sh
+- *_CKPS_CPI.log: Total 4 columns, checkpoint num, simpts, weights, cpi.(Note: the following X=2,4,8 is not supported)
 
-> 使用run.sh时可以动态调节同时并行的数量
+> The number of simultaneous parallelisms can be dynamically adjusted when using run.sh
 >
-> - 增加并行数
+> - Increase the number of parallelism
 >
 >   ```sh
 >   ./run.sh --control --add_job_10
 >   ```
 >
-> - 减少并行数。（⚠️竞争式减少，目前没有优先级划分，只有当有的checkpoint结束时，会竞争执行权，竞争成功后即释放，以此达到减少并行数的目的。不会杀死已经执行或等待执行的任务）
+> - Reduce the number of parallelism. (⚠️ competitive reduction, currently there is no priority division, only when the checkpoint ends, the competition for execution rights will be carried out, and the execution rights will be released immediately after successful competition, and will do nothing, so as to achieve the purpose of reducing the number of parallelism. It doesn't kill jobs that are already executed or waiting to be executed)
 >
 >   ```sh
 >   ./run.sh --control --reduce_job_10
 >   ```
 >
-> - kill所有restore ckp相关进程(执行或等待执行的任务)
+> - kill all "restore ckp"-related processes (jobs that are executing or waiting to be executed)
 >
 >   ```sh
 >   ./run.sh --control --kill_restore_all_jobs --gem5
 >   ```
 
-#### 3.3 恢复所有测例全部的Checkpoints
+#### 3.3 Restore all checkpoints for all test cases
 
-在`gem5spec`目录下输入以下命令可以对全部测例的每个Checkpoint进行`restore`操作
+Enter the following command in the `gem5spec` directory to `restore` the checkpoints for all test cases
 
 ```bash
 ./run.sh --gem5 --spec2017 --restore_all -j N
 ```
 
-> 这里的N指定的是线程池最大的线程数量，可根据机器硬件情况和当前任务量决定
+> The `N` here specifies the maximum number of parallelism, which can be determined by the machine hardware and the number of current tasks
 
-如果想要用多核模式restore checkpoints可以使用下面的命令(Checkpoints也需要对应的多核模式生成)
-
+If you want to restore checkpoints with a replicated multicore mode you can use the following command (checkpoints also need to be generated in the corresponding multicore mode)
 ```bash
 ./run.sh --gem5 --spec2017 --restore_all_X -j N
 ```
+where X can be specified as 2, 4, 8, representing dual-core, quad-core and octa-core respectively
 
-执行此命令后，任务会放入后台执行，根据指定的线程数量循环restore所有测例的全部checkpoints
+- If you need to compile gem5 automatically before running, you can use `--build_gem5_j` N
 
-其中X可以指定为2、4、8，分别代表双核、四核、八核
+- If you need to modify gem5 parameters from the command line, you can use `--gem5_py_opt "--cpu-clock=8GHz"` (Note: X=2,4,8 is not supported)
 
-- 如果需要在运行前自动编译gem5，可以使用`--build_gem5_j` N 的方式
+- If you need to add some distinguishing marks to the backup directory in the data directory, you can use, for example, `--label "test"`, this way will modify the backup directory to `${GEM5_REPO_PATH}/data/gem5/${restore_begin_time}-${label}` (Note: not support X=2,4,8)
+#### 3.4 Configure multiple continuous executions
 
-- 如果需要从命令行修改gem5的参数，可是使用例如`--gem5_py_opt "--cpu-clock=8GHz"`的方式（注：不支持X=2,4,8的方式）
+Use `. /runArray.sh`, configure it and then run
 
-- 如果需要将data目录下的备份目录添加一些区别的标识，可以使用例如`--label "test"`的方式，此方式会将备份目录修改为`${GEM5_REPO_PATH}/data/gem5/${restore_begin_time}-${label}`（注：不支持X=2,4,8的方式）
+#### 3.5 Support slurm mode execution
 
-#### 3.4 配置多次并连续运行
+Use `. /runSlurm`, configure and then run
 
-使用`./runArray.sh`, 配置后再运行
+> #SBATCH --job-name=JOBNAME      %Specify the job name 
+> #SBATCH --partition=debug       %Specify partition     
+> #SBATCH --nodes=2               %Specify the number of nodes   
+> #SBATCH --cpus-per-task=1       %Specify the number of cores used per process, default is 1 if not specified      
+> #SBATCH -n 32                   %Specifies the total number of processes; without cpus-per-task, it is understood that the number of processes is the number of cores   
+> #SBATCH --ntasks-per-node=16    %Specify the number of processes/nodes per node, use the -n parameter (higher priority) to change to the maximum number of tasks per node   
+> #SBATCH --nodelist=node[3,4]    %Specify the priority node to be used   
+> #SBATCH --exclude=node[1,5-6]   %Specify the nodes to avoid   
 
-#### 3.5 slurm运行脚本
+## Statistics
 
-使用`./runSlurm`，配置后再运行
+### 4. CPI Statistics
 
-> #SBATCH --job-name=JOBNAME      %指定作业名称   
-> #SBATCH --partition=debug       %指定分区   
-> #SBATCH --nodes=2               %指定节点数量   
-> #SBATCH --cpus-per-task=1       %指定每个进程使用核数，不指定默认为1   
-> #SBATCH -n 32                   %指定总进程数；不使用cpus-per-task，可理解为进程数即为核数   
-> #SBATCH --ntasks-per-node=16    %指定每个节点进程数/核数,使用-n参数（优先级更高），变为每个节点最多运行的任务数   
-> #SBATCH --nodelist=node[3,4]    %指定优先使用节点   
-> #SBATCH --exclude=node[1,5-6]   %指定避免使用节点   
-
-## 统计信息
-
-### 4. CPI统计
-
-由于在步骤3.2中生成的`xxx_CKPS_CPI.log`中只有每个Checkpoint的CPI，没有与权重相乘，使用以下命令可以进行计算
-
+Since the `xxx_CKPS_CPI.log` generated in step 3.2 contains only the CPI of each checkpoint, which is not multiplied with the weights, the calculation can be performed using the following command
 ```bash
 make cpi
 ```
 
-此命令会对`xxx_CKPS_CPI.log`中每一个Checkpoint的权重与CPI进行乘法运算，并将结果插入到第四列中，保存到`xxx_CKPS_Weighted_CPI.log`中。
+This command will multiply the weight of each checkpoint in `xxx_CKPS_CPI.log` with CPI and insert the result into the fourth column and save it to `xxx_CKPS_Weighted_CPI.log`.
 
-除此以外，此命令还会对每个带有权重的CPI的进行求和，得到该测例综合的CPI结果，并生成一个新的csv文件保存上述结果，文件名为`xxx_final_result_N.csv`(xxx为当前测例的名字；N为权重CPI的总和)
+In addition, this command also sums up the CPI of each test case with weights, and generates a new csv file to save the above results, named `xxx_final_result_N.csv` (xxx is the name of the current test case; N is the sum of the weighted CPI)
 
-如果需要一次让所有的测例生成`xxx_final_result_N.csv`数据记录，可以在`runspec_gem5_power`目录下使用以下命令
-
+If you need to have all test cases generate `xxx_final_result_N.csv` data records at once, you can use the following command in the `runspec_gem5_power` directory
 ```bash
 make cpi_all_cases
 ```
 
-为方便后期根据CPI数据选择片段，可以在`runspec_gem5_power`目录下使用如下命令
-
+To facilitate the selection of representative points based on CPI data at a later stage, you can use the following command in the `runspec_gem5_power` directory
 ```bash
 make collect_all_cases_CPI -j24
 ```
 
-此命令会遍历每个测例的综合权重CPI数据，并将统计结果保存到`All_case_weightedCPI.csv`中
+This command iterates through the combined weighted CPI data of each case and saves the statistics to `All_case_weightedCPI.csv`.
 
-使用如下命令会遍历每个测例的`xxx_final_result_N.csv`文件，并将数据整合到文件`Each_case_ckp_data.csv`
-
+Using the following command will iterate through the `xxx_final_result_N.csv` file for each test case and consolidate the data into the file `Each_case_ckp_data.csv`
 ```bash
 make collect_checkpoints_number
 ```
 
-因此`Each_case_ckp_data.csv`会记录所有测例的全部checkpoints的CPI数据信息
+So `Each_case_ckp_data.csv` will record the CPI data information of all checkpoints of all test cases
+### 5. IPC Statistics
 
-### 5. IPC统计
+#### 5.1 Single-core mode
 
-#### 5.1 单核模式
-
-由于IPC统计时不能直接将IPC结果与Checkpoint的权重一起计算，需要先生成带权重的CPI数据，因此在`runspec_gem5_power`目录下先执行如下命令生成每个测例带权重的CPI数据
-
+Since IPC statistics cannot be calculated directly with the weight of checkpoint, it is necessary to generate CPI data with weights in the `runspec_gem5_power` directory first.
 ```bash
 make cpi_all_cases -j24
 ```
 
-然后使用下面的命令来获取每个测例的IPC数据，统计结果会保存到`All_case_IPC_st.csv`文件中
-
+Then use the following command to get the IPC data for each case, and the statistics will be saved to the `All_case_IPC_st.csv` file
 ```bash
 make collect_all_cases_IPC
 ```
 
-#### 5.2 多核模式
+#### 5.2 Multi-core mode
 
-与单核模式过程相同，需要先汇总多核模式下带权重的CPI数据，可以使用如下面命令（其中X可以指定为2、4、8，分别代表双核、四核、八核）
-
+The same process as single-core mode, you need to first aggregate the CPI data with weights in multi-core mode, you can use the following command (where X can be specified as 2, 4, 8, representing dual-core, quad-core, octa-core, respectively)
 ```bash
 make cpi_all_cases_X -j24
 ```
 
-然后使用如下命令统计多核模式下的IPC数据，统计结果会保存到`All_case_IPC_smtX.csv`文件中
-
+Then use the following command to count the IPC data in multi-core mode, the statistics will be saved to the `All_case_IPC_smtX.csv` file
 ```bash
 make collect_all_cases_IPC_X
 ```
 
-> 目前IPC数据统计只支持全部测例的数据汇总，不支持单个测例的IPC统计
+> At present, IPC statistics only support the data summary of all test cases, and do not support the IPC statistics of individual test cases.
 
-### 6. L2 Cache MissRate & MPKI统计
+### 6. L2 Cache MissRate & MPKI Statistics
 
-统计每个测例中L2 Cache的Miss#、Weighted Miss#、Access#、Weighted Access#可以使用如下命令
-
+To count the Miss#, Weighted Miss#, Access#, Weighted Access# of L2 Cache in each test case, you can use the following command
 ```bash
 make mpki_l2_all_cases -j 24
 ```
 
-然后在使用如下命令来统计每个测例的L2 Cache Miss Rate和MPKI，统计结果会保存到`All_case_L2_MPKI_st.csv`文件中
-
+Then use the following command to count the L2 Cache Miss Rate and MPKI for each case, the statistics will be saved to the `All_case_L2_MPKI_st.csv` file
 ```bash
 make collect_all_cases_MPKI_L2
 ```
 
-如果需要统计多核模式下的IPC数据使用如下命令（其中X可以指定为2、4、8，分别代表双核、四核、八核），统计结果会保存到`All_case_L2_MPKI_smtX.csv`文件中
-
+If you need to count the IPC data in multi-core mode use the following command (where X can be specified as 2, 4, 8, representing dual-core, quad-core and octa-core respectively), the statistics will be saved to the `All_case_L2_MPKI_smtX.csv` file
 ```bash
 make collect_all_cases_MPKI_L2_X
 ```
 
-### 7.输出文件/目录说明
+### 7.Output file/directory description
 
-上述不同功能都会在当前测例目录下产生相应的输出文件/目录，以便查看和记录每个步骤的输出结果。
+Each of the different functions mentioned above generates a corresponding output file/directory in order to view and record the output results of each step.
 
-1. xxx_gem5_bbv.log: 使用gem5生成basic block vector(BBV)过程的输出信息
-2. xxx_simpoints.log:使用Simpoint对BBV分类过程的输出信息
-3. xxx_checkpoints.log: 使用gem5生成checkpoints过程的输出信息
-4. xxx_restore.log: 使用gem5恢复checkpoint过程的输出信息
-5. xxx_trace.log: 记录执行过的命令以及部分命令的输出信息
-6. xxx_trace_error.log: 记录发生错误的命令
-7. xxx_bbv: 保存通过gem5生成的BBV文件，以及生成过程的仿真数据(stats.txt)
-8. m5out: 保存生成的checkpoints的与生成checkpoints过程的仿真数据(stats.txt)
-9. out_ckpN: 保存恢复某个checkpoint过程的仿真数据(stats.txt)与模拟器的配置信息(config)，N表示第N个checkpoint
-10. xxx_CKPS_CPI_Err.log: 记录在执行make cpi, cpi_2, cpi_4, cpi_8 时发现的异常ckp信息
-11. xxx_CKPS_L2_MISS_ACCESS_Err.log: 记录在执行make mkpi 时发现的异常ckp信息
+1. xxx_gem5_bbv.log: Output information of the basic block vector (BBV) process using gem5
+2. xxx_simpoints.log: The output of the BBV classification process using Simpoint
+3. xxx_checkpoints.log: Output of the checkpoints process using gem5
+4. xxx_restore.log: Output of the checkpoint process restored using gem5
+5. xxx_trace.log: Logs the executed commands and the output of some of them
+6. xxx_trace_error.log: Logs the commands that resulted in errors
+7. xxx_bbv: Save the BBV file generated by gem5 and the simulation data of the generation process (stats.txt)
+8. m5out: Save the generated checkpoints and the simulation data of the checkpoints generation process (stats.txt)
+9. out_ckpN: Save the simulation data (stats.txt) of the process of recovering a checkpoint and the configuration information (config) of the simulator, N means the Nth checkpoint
+10. xxx_CKPS_CPI_Err.log: Record the abnormal ckp information found during the execution of make cpi, cpi_2, cpi_4, cpi_8
+11. xxx_CKPS_L2_MISS_ACCESS_Err.log: Record the abnormal ckp information found when make mkpi is executed
