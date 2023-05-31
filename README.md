@@ -2,18 +2,19 @@
 
 所有的配置项都在`runspec_gem5_power/params.mk`文件中指定
 
-- [x] 确保已经成功[编译SPEC2017](https://github.com/griffin-warrior/gem5spec)
+✅ 确保已经成功[编译SPEC2017](https://github.com/griffin-warrior/gem5spec)
 - 配置`SPEC_HOME`，确保`SPEC_HOME`所在路径符合`$(SPEC_HOME)/benchspec/CPU/541.leela_r`的类似规则
 - 根据编译平台设置`LABEL`,`LABEL`的值需在编译SPEC时设置为可执行文件的后缀
-- [x] 确保gem5已经build成功，确认执行的选项和参数
+
+✅ 确保gem5已经build成功，确认执行的选项和参数
 - `GEM5_REPO_PATH`配置为gem5仓库的根路径
 - `GEM5`配置为gem5编译结果所在的路径
 - `BUILD_GEM5_J`若通过此脚本编译gem5，需要指定并行编译数
 - `GEM5_OPT`gem5.opt的直接参数
 - `GEM5_PY`se.py所在路径
 - `GEM5_PY_OPT`se.py的选项和参数
-- [x] 确保已经成功安装Simpoint·`version: 3.2`
 
+✅ 确保已经成功安装Simpoint·`version: 3.2`
 - `SIMPOINT_EXE`simpoint可执行文件的路径
 - INTERVAL_SIZE
 - WARMUP_LENGTH
