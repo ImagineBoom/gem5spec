@@ -107,7 +107,7 @@ make restore NUM_CKP=1
 
 The parameter `NUM_CKP` is used to specify the serial number of the `restore` checkpoint, note that the value of this parameter starts from 1, while the checkpoint in the `m5out` directory starts from 0, so you need to add offset 1 when specifying this parameter
 
-Default CPU type `P8CPU`. *Note that `AtomicSimpleCPU` cannot be used here to recover checkpoints*
+Default CPU type `O3CPU`. *Note that `AtomicSimpleCPU` cannot be used here to recover checkpoints*
 
 The output file of gem5 will be redirected to the `output_ckp'n'` directory in the current directory, where `n` has the same value as `NUM_CKP`
 
