@@ -109,7 +109,7 @@ make restore NUM_CKP=1
 
 参数`NUM_CKP`用于指定`restore`Checkpoint的序号，注意该参数的值从1开始，而`m5out`目录下的Checkpoint是从0开始，因此在指定该参数时需要加偏移量1
 
-默认CPU类型`P8CPU`。*注意，这里不能使用`AtomicSimpleCPU`来恢复`Checkpoints`*
+默认CPU类型`O3CPU`。*注意，这里不能使用`AtomicSimpleCPU`来恢复`Checkpoints`*
 
 gem5的输出文件会重定向到当前目录下的`output_ckp'n'`目录下，其中`n`与`NUM_CKP`的值相同
 
